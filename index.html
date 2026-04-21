@@ -691,29 +691,20 @@
     <div id="toast"></div>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    
     <script>
-        // ── IMAGE DATA ──
+        // ── OPTIMIZED IMAGE CONFIG — MATCHES YOUR UPLOADED FILENAMES ──
         const IMG = {
-            // Hero & Story Main Shots
-            fullBoard: '/images/board-basic.jpg',
-            resourceCards: '/images/card-shot.jpg',
-            devCards: '/images/devcards-shot.jpg',
-            heroWithBox: '/images/hero-boxed.jpg',
-            heroLowAngle: '/images/hero-lowangle.jpg',
-            heroMain: '/images/hero-main.jpg',
-            heroNoBox: '/images/hero-nobox.jpg',
-
-
-            // Ingame shots
-            ingameShotRobber: '/images/ingame-shot-1.jpg',
-            ingameore: '/images/ingame-shot-oretile.jpg',
-            ingamegrass: '/images/ingame-shot-grasstile.jpg',
+            fullBoard: '/images/ingame-shot-bricktile.jpg',
+            heroShot: '/images/ingame-shot-grasstile.jpg',
+            ore: '/images/ingame-shot-oretile.jpg',
+            grass: '/images/ingame-shot-grasstile.jpg',
 
             // Hex Tiles
             hexWheat: '/images/tile-wheat.jpg',
             hexBrick: '/images/tile-brick.jpg',
             hexSheep: '/images/tile-sheep.jpg',
-            hexForest: '/images/tile-wood.jpg',     // assuming wood = forest
+            hexForest: '/images/tile-wood.jpg',
             hexOre: '/images/tile-ore.jpg',
             hexDesert: '/images/tile-desert.jpg',
 
@@ -721,31 +712,31 @@
             oceanTop: '/images/tile-water.jpg',
             oceanMagnet: '/images/tile-waterside.jpg',
 
-            // Ports (Harbors)
-            port3forany: '/images/port-3forany.jpg',   // adjust if you have specific color ones
+            // Ports
+            port3forany: '/images/port-3forany.jpg',
             portBrick: '/images/port-brick.jpg',
-            portOre: '/images/port-ore.jpg',
             portSheep: '/images/port-sheep.jpg',
-            portWood: '/images/port-wood.jpg',
-            portWheat: '/images/port-wheat.jpg',
+            portOre: '/images/port-ore.jpg',
 
             // Robber
             robberFront: '/images/robber-front.jpg',
             robberSide: '/images/robber-side.jpg',
             robberBack: '/images/robber-back.jpg',
 
-            // Player Pieces & Cards
-            piecesBlue: '/images/pieces-blue.jpg',
-            piecesRed: '/images/pieces-red.jpg',
-            piecesWhite: '/images/pieces-white.jpg',
-            piecesYellow: '/images/pieces-yellow.jpg',
-
-            // Tier Card Photos
-            cleanBoard: '/images/token-shot.jpg',     // or use a full clean board shot
-            // Add any extra keys your original gallery uses
+            // Tier cards / other
+            tierCraftImg: '/images/hero-main.jpg',      // or ingame-shot-1.jpg if you prefer
+            tierLegacyImg: '/images/hero-boxed.jpg'
         };
 
-        // ── UPDATED setImg (uses your real files) ──
+        // ── LIVE STRIPE LINKS ──
+        const STRIPE_LINKS = {
+            'The Craft': 'https://buy.stripe.com/dRm3cvgbp7ZV4vj1CVeIw00',
+            'The Custom Legacy': 'https://buy.stripe.com/bJe6oHbV92FB7HvbdveIw01'
+        };
+
+        let piecesLeft = 25;   // ← Change this number to update scarcity bar
+
+        // ── UPDATED setImg ──
         function setImg(id, key) {
             const el = document.getElementById(id);
             if (el && IMG[key]) {
@@ -753,291 +744,168 @@
             }
         }
 
-        // Hero — use the full board shot (best contextual photo)
-        setImg('heroImg', 'heroMain');
-        // Story
-        setImg('storyHeroImg', 'fullBoard');
-        setImg('storyOreImg', 'ore');
-        setImg('storyGrassImg', 'grass');
-        // Hex tiles
-        setImg('hexWheat', 'hexWheat');
-        setImg('hexBrick', 'hexBrick');
-        setImg('hexSheep', 'hexSheep');
-        setImg('hexForest', 'hexForest');
-        setImg('hexOre', 'hexOre');
-        setImg('hexDesert', 'hexDesert');
-        // Ocean
-        setImg('oceanTop', 'oceanTop');
-        setImg('oceanMagnet', 'oceanMagnet');
-        // Ports
-        setImg('port3forany', 'port3forany');
-        setImg('portBrick', 'portBrick');
-        setImg('portSheep', 'portSheep');
-        setImg('portOre', 'portOre');
-        // Robber
-        setImg('robberFront', 'robberFront');
-        setImg('robberSide', 'robberSide');
-        setImg('robberBack', 'robberBack');
-        // Tier cards — 1 photo each
-        setImg('tierCraftImg', 'cleanBoard');
-        setImg('tierLegacyImg', 'robberFront');
+        // ── MODAL (clean version - no _activeStripeLink) ──
+        let currentTier = '';
 
-        // ── GALLERY STRIP — detail/piece/card photos only (no hero wide shots) ──
-        const GALLERY_IMGS = [
-            { src: IMG.cards, alt: 'Resource Cards' },
-            { src: IMG.devCards, alt: 'Dev Cards' },
-            { src: IMG.blue, alt: 'Blue Player Pieces' },
-            { src: IMG.red, alt: 'Red Player Pieces' },
-            { src: IMG.white, alt: 'White Player Pieces' },
-            { src: IMG.yellow, alt: 'Yellow Pieces' },
-            { src: IMG.hexWheat, alt: 'Wheat Hex Tile' },
-            { src: IMG.hexBrick, alt: 'Brick Hex Tile' },
-            { src: IMG.hexSheep, alt: 'Sheep Hex Tile' },
-            { src: IMG.hexForest, alt: 'Forest Hex Tile' },
-            { src: IMG.hexOre, alt: 'Ore Mountain Tile' },
-            { src: IMG.hexDesert, alt: 'Desert Tile' },
-            { src: IMG.port3forany, alt: '3 For Any Harbor Port' },
-            { src: IMG.portBrick, alt: 'Brick Harbor Port' },
-            { src: IMG.portSheep, alt: 'Sheep Harbor Port' },
-            { src: IMG.portOre, alt: 'Ore Port' },
-            { src: IMG.robberFront, alt: 'Robber Figurine Front' },
-            { src: IMG.robberSide, alt: 'Robber Figurine Side' },
-            { src: IMG.robberBack, alt: 'Robber Figurine Back' },
-            { src: IMG.oceanTop, alt: 'Ocean Frame Tile' },
-            { src: IMG.oceanMagnet, alt: 'Magnetic System' },
-            { src: IMG.ore, alt: 'Ore Detail' },
-            { src: IMG.grass, alt: 'Forest Detail' },
-            { src: IMG.pieces, alt: 'Piece Detail' },
-        ];
+        function openModal(tierName, price) {
+            currentTier = tierName;
+            const nameEl = document.getElementById('modalTierName');
+            const priceEl = document.getElementById('modalTierPrice');
+            if (nameEl) nameEl.textContent = tierName;
+            if (priceEl) priceEl.textContent = '$' + price;
 
-        (function () {
-            const track = document.getElementById('galleryTrack');
-            [...GALLERY_IMGS, ...GALLERY_IMGS].forEach(({ src, alt }) => {
-                const img = document.createElement('img');
-                img.className = 'gallery-thumb';
-                img.src = src;
-                img.alt = alt + ' – George Pags Catan';
-                img.loading = 'lazy';
-                img.onclick = () => openLightbox(img, alt);
-                img.style.cursor = 'zoom-in';
-                track.appendChild(img);
-            });
-        })();
+            // Reset button state
+            const btn = document.querySelector('.modal-submit');
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Confirm Pre-Order →';
+            }
 
-        // ── SCARCITY — edit PIECES_REMAINING to set your current count ──
-        const PIECES_REMAINING = 25; // ← change this number to update the bar
-        let piecesLeft = PIECES_REMAINING;
-        document.getElementById('piecesLeft').textContent = piecesLeft;
+            document.getElementById('orderModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
 
-        // ── STRIPE PAYMENT LINKS ──
-        const STRIPE_LINKS = {
-            'The Craft': 'https://buy.stripe.com/dRm3cvgbp7ZV4vj1CVeIw00',
-            'The Custom Legacy': 'https://buy.stripe.com/bJe6oHbV92FB7HvbdveIw01',
+        function closeModal() {
+            document.getElementById('orderModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function handleModalClick(e) {
+            if (e.target === document.getElementById('orderModal')) closeModal();
+        }
+
+        // ── FORM SUBMIT → DIRECT STRIPE REDIRECT (clean & reliable) ──
+        function submitOrder() {
+            const name = document.getElementById('form-name') ? document.getElementById('form-name').value.trim() : '';
+            const email = document.getElementById('form-email') ? document.getElementById('form-email').value.trim() : '';
+
+            if (!name || !email) {
+                showToast('⚠ Please fill in your name and email.', true);
+                return;
+            }
+
+            const url = STRIPE_LINKS[currentTier] || STRIPE_LINKS['The Craft'];
+            if (!url) {
+                showToast('⚠ Could not determine tier. Please try again.', true);
+                return;
+            }
+
+            // Loading state
+            const btn = document.querySelector('.modal-submit');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Redirecting to Stripe…';
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+            }
+
+            // Decrement scarcity
+            if (piecesLeft > 0) {
+                piecesLeft--;
+                const countEl = document.getElementById('piecesLeft');
+                if (countEl) countEl.textContent = piecesLeft;
+            }
+
+            // Prefill email if possible
+            let finalUrl = url;
+            try {
+                const u = new URL(url);
+                u.searchParams.set('prefilled_email', email);
+                finalUrl = u.toString();
+            } catch (e) { }
+
+            setTimeout(() => {
+                window.location.href = finalUrl;
+            }, 400);
+        }
+
+        function showToast(msg, isError) {
+            const t = document.getElementById('toast');
+            if (t) {
+                t.textContent = msg;
+                t.style.borderColor = isError ? 'var(--red-dim)' : 'var(--green)';
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 3600);
+            }
+        }
+
+        // ── LIGHTBOX (your original) ──
+        function openLightbox(imgEl, caption) {
+            document.getElementById('lightbox-img').src = imgEl.src || imgEl;
+            document.getElementById('lightbox-caption').textContent = caption || imgEl.alt || '';
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(e) {
+            if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // ── THEME SWITCHER (your original) ──
+        const THEMES = ['forge', 'parchment', 'midnight', 'obsidian'];
+        function setTheme(t) {
+            document.documentElement.setAttribute('data-theme', t);
+            document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.t === t));
+            localStorage.setItem('gp-theme', t);
+        }
+
+        // ── SCROLL REVEAL (your original) ──
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+        // ── INITIALIZE ON PAGE LOAD ──
+        window.onload = function () {
+            // Set real images — FIXED MAPPINGS
+            setImg('heroImg', 'fullBoard');
+            setImg('storyHeroImg', 'heroShot');
+            setImg('storyOreImg', 'ore');
+            setImg('storyGrassImg', 'grass');
+
+            setImg('hexWheat', 'hexWheat');
+            setImg('hexBrick', 'hexBrick');
+            setImg('hexSheep', 'hexSheep');
+            setImg('hexForest', 'hexForest');
+            setImg('hexOre', 'hexOre');
+            setImg('hexDesert', 'hexDesert');
+
+            setImg('oceanTop', 'oceanTop');
+            setImg('oceanMagnet', 'oceanMagnet');
+
+            setImg('port3forany', 'port3forany');
+            setImg('portBrick', 'portBrick');
+            setImg('portSheep', 'portSheep');
+            setImg('portOre', 'portOre');
+
+            setImg('robberFront', 'robberFront');
+            setImg('robberSide', 'robberSide');
+            setImg('robberBack', 'robberBack');
+
+            setImg('tierCraftImg', 'tierCraftImg');
+            setImg('tierLegacyImg', 'tierLegacyImg');
+
+            // Scarcity counter
+            document.getElementById('piecesLeft').textContent = piecesLeft;
+
+            // Restore saved theme
+            const savedTheme = localStorage.getItem('gp-theme');
+            if (savedTheme && THEMES.includes(savedTheme)) setTheme(savedTheme);
         };
-        let piecesLeft = 25; // ← Change this number to update scarcity bar live
 
-   <script>
-  // ── FINAL OPTIMIZED IMAGE CONFIG — EXACT MATCH TO YOUR UPLOADED FILES ──
-  const IMG = {
-    // Hero & Main Shots
-    fullBoard: '/images/hero-main.jpg',
-    heroShot: '/images/hero-lowangle.jpg',
-    ore: '/images/ingame-shot-oretile.jpg',
-    grass: '/images/ingame-shot-grasstile.jpg',
+        // Keyboard ESC support
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeLightbox();
+            }
+        });
 
-    // Hex Tiles (for pieces grid + gallery)
-    hexWheat: '/images/tile-wheat.jpg',
-    hexBrick: '/images/tile-brick.jpg',
-    hexSheep: '/images/tile-sheep.jpg',
-    hexForest: '/images/tile-wood.jpg',
-    hexOre: '/images/tile-ore.jpg',
-    hexDesert: '/images/tile-desert.jpg',
-
-    // Ocean / Frame
-    oceanTop: '/images/tile-water.jpg',
-    oceanMagnet: '/images/tile-waterside.jpg',
-
-    // Ports (updated to your exact filenames)
-    port3forany: '/images/port-3forany.jpg',
-    portBrick: '/images/port-brick.jpg',
-    portOre: '/images/port-ore.jpg',
-    portSheep: '/images/port-sheep.jpg',
-    portWood: '/images/port-wood.jpg',
-    portWheat: '/images/port-wheat.jpg',
-
-    // Robber
-    robberFront: '/images/robber-front.jpg',
-    robberSide: '/images/robber-side.jpg',
-    robberBack: '/images/robber-back.jpg',
-
-    // Player Pieces
-    blue: '/images/pieces-blue.jpg',
-    red: '/images/pieces-red.jpg',
-    white: '/images/pieces-white.jpg',
-    yellow: '/images/pieces-yellow.jpg',
-
-    // Cards & Misc
-    cards: '/images/card-shot.jpg',
-    devCards: '/images/devcards-shot.jpg',
-    cleanBoard: '/images/token-shot.jpg',
-    pieces: '/images/token-shot.jpg'   // fallback for any generic piece detail
-  };
-
-  // ── LIVE STRIPE LINKS ──
-  const STRIPE_LINKS = {
-    'The Craft': 'https://buy.stripe.com/dRm3cvgbp7ZV4vj1CVeIw00',
-    'The Custom Legacy': 'https://buy.stripe.com/bJe6oHbV92FB7HvbdveIw01'
-  };
-
-  let piecesLeft = 25;
-
-  // ── setImg HELPER ──
-  function setImg(id, key) {
-    const el = document.getElementById(id);
-    if (el && IMG[key]) {
-      el.src = IMG[key];
-    }
-  }
-
-  // ── MODAL (clean, no _activeStripeLink) ──
-  let currentTier = '';
-
-  function openModal(tierName, price) {
-    currentTier = tierName;
-    const nameEl = document.getElementById('modalTierName');
-    const priceEl = document.getElementById('modalTierPrice');
-    if (nameEl) nameEl.textContent = tierName;
-    if (priceEl) priceEl.textContent = '$' + price;
-
-    const btn = document.querySelector('.modal-submit');
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = 'Confirm Pre-Order →';
-    }
-
-    document.getElementById('orderModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    document.getElementById('orderModal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  function handleModalClick(e) {
-    if (e.target === document.getElementById('orderModal')) closeModal();
-  }
-
-  // ── SUBMIT ORDER ──
-  function submitOrder() {
-    const name = document.getElementById('form-name') ? document.getElementById('form-name').value.trim() : '';
-    const email = document.getElementById('form-email') ? document.getElementById('form-email').value.trim() : '';
-
-    if (!name || !email) {
-      showToast('⚠ Please fill in your name and email.', true);
-      return;
-    }
-
-    const url = STRIPE_LINKS[currentTier] || STRIPE_LINKS['The Craft'];
-    if (!url) {
-      showToast('⚠ Could not determine tier. Please try again.', true);
-      return;
-    }
-
-    const btn = document.querySelector('.modal-submit');
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = 'Redirecting to Stripe…';
-      btn.style.opacity = '0.7';
-      btn.style.cursor = 'not-allowed';
-    }
-
-    if (piecesLeft > 0) {
-      piecesLeft--;
-      const countEl = document.getElementById('piecesLeft');
-      if (countEl) countEl.textContent = piecesLeft;
-    }
-
-    let finalUrl = url;
-    try {
-      const u = new URL(url);
-      u.searchParams.set('prefilled_email', email);
-      finalUrl = u.toString();
-    } catch(e) {}
-
-    setTimeout(() => {
-      window.location.href = finalUrl;
-    }, 400);
-  }
-
-  function showToast(msg, isError) {
-    const t = document.getElementById('toast');
-    if (t) {
-      t.textContent = msg;
-      t.style.borderColor = isError ? 'var(--red-dim)' : 'var(--green)';
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3600);
-    }
-  }
-
-  // ── LIGHTBOX (your original) ──
-  function openLightbox(imgEl, caption) {
-    document.getElementById('lightbox-img').src = imgEl.src || imgEl;
-    document.getElementById('lightbox-caption').textContent = caption || imgEl.alt || '';
-    document.getElementById('lightbox').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeLightbox(e) {
-    if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  // ── THEME SWITCHER (your original) ──
-  const THEMES = ['forge','parchment','midnight','obsidian'];
-  function setTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.t === t));
-    localStorage.setItem('gp-theme', t);
-  }
-
-  // ── SCROLL REVEAL (your original) ──
-  const obs = new IntersectionObserver(entries => {
-     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-  // ── INITIALIZE ──
-  window.onload = function() {
-    // Set main hero & story images
-    setImg('heroImg', 'fullBoard');
-    setImg('storyHeroImg', 'heroShot');
-    setImg('storyOreImg', 'ore');
-    setImg('storyGrassImg', 'grass');
-
-    // Scarcity
-    document.getElementById('piecesLeft').textContent = piecesLeft;
-
-    // Gallery population — your original code should still work
-    // If you have a GALLERY_IMGS array, update it to use IMG keys like this:
-    // { src: IMG.hexWheat, alt: 'Wheat Hex Tile' }, etc.
-
-    // Restore theme
-    const savedTheme = localStorage.getItem('gp-theme');
-    if (savedTheme && THEMES.includes(savedTheme)) setTheme(savedTheme);
-  };
-
-  // Keyboard support
-  document.addEventListener('keydown', e => { 
-    if (e.key === 'Escape') { 
-      closeModal(); 
-      closeLightbox(); 
-    } 
-  });
-
-  document.addEventListener('click', handleModalClick);
-</script>
+        // Click outside modal to close
+        document.addEventListener('click', handleModalClick);
+    </script>
 
     <!-- THEME SWITCHER -->
     <div class="theme-switcher" id="themeSwitcher">
