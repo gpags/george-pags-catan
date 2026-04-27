@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Realized Prints — Premium 3D Printed Heirlooms & Collectibles</title>
+<meta name="description" content="Family-crafted 3D printed Catan sets, anime figurines, blind bag collectibles, and cat scratchers. Made with obsessive care in the USA.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          forest: { 50:'#ecfdf5', 100:'#d1fae5', 700:'#047857', 800:'#065f46', 900:'#064e3b' },
+          sand: { 50:'#fbf8f3', 100:'#f5efe4', 200:'#ebe1cc', 300:'#dbcaa8' },
+          sage: { 400:'#8aa68a', 500:'#6e8a6e', 600:'#566e56' },
+          honey: { 400:'#f59e0b', 500:'#d97706', 600:'#b45309', 700:'#92400e' },
+        },
+        fontFamily: {
+          serif: ['Georgia','ui-serif','serif'],
+          sans: ['ui-sans-serif','system-ui','sans-serif'],
+        },
+        boxShadow: {
+          soft: '0 10px 30px -12px rgba(6,95,70,0.18)',
+          glow: '0 20px 50px -20px rgba(180,83,9,0.45)',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { background: #fbf8f3; color: #064e3b; }
+  .grain::before {
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.06;
+    background-image: radial-gradient(rgba(0,0,0,0.6) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+  .btn-primary { background:#065f46; color:#fbf8f3; transition:all .25s ease; }
+  .btn-primary:hover { background:#b45309; transform:translateY(-1px); box-shadow:0 12px 30px -12px rgba(180,83,9,.5); }
+  .btn-ghost { border:1px solid #065f46; color:#065f46; transition:all .25s ease; }
+  .btn-ghost:hover { background:#065f46; color:#fbf8f3; }
+  .card-hover { transition: transform .35s ease, box-shadow .35s ease; }
+  .card-hover:hover { transform: translateY(-6px); box-shadow:0 25px 50px -20px rgba(6,95,70,.25); }
+  .fade-in { opacity:0; transform:translateY(16px); transition:all .8s ease; }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body class="font-sans text-forest-900 antialiased">
+
+<!-- ============ NAVBAR ============ -->
+<header id="nav" class="sticky top-0 z-50 bg-sand-50/90 backdrop-blur border-b border-sand-200">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-18 py-3">
+    <a href="#" class="flex items-center gap-2 group">
+      <span class="w-9 h-9 rounded-lg bg-forest-800 text-sand-50 flex items-center justify-center font-serif text-lg group-hover:bg-honey-600 transition">R</span>
+      <span class="font-serif text-xl tracking-tight">Realized <span class="text-honey-600">Prints</span></span>
+    </a>
+    <nav class="hidden lg:flex items-center gap-9 text-sm font-medium">
+      <a href="#collections" class="hover:text-honey-600 transition">Shop</a>
+      <a href="#collections" class="hover:text-honey-600 transition">Collections</a>
+      <a href="#story" class="hover:text-honey-600 transition">About</a>
+      <a href="#footer" class="hover:text-honey-600 transition">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="#collections" class="hidden sm:inline-flex btn-primary px-5 py-2.5 rounded-full text-sm font-semibold">Shop Now</a>
+      <button id="menuBtn" class="lg:hidden p-2" aria-label="Open menu">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden border-t border-sand-200 bg-sand-50">
+    <div class="px-5 py-4 flex flex-col gap-3 text-sm font-medium">
+      <a href="#collections" class="py-2">Shop</a>
+      <a href="#collections" class="py-2">Collections</a>
+      <a href="#story" class="py-2">About</a>
+      <a href="#footer" class="py-2">Contact</a>
+      <a href="#collections" class="btn-primary px-5 py-3 rounded-full text-center">Shop Now</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="relative overflow-hidden grain">
+  <div class="absolute inset-0 bg-gradient-to-br from-sand-50 via-sand-100 to-sand-200"></div>
+  <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-12 gap-12 items-center">
+    <div class="lg:col-span-6 fade-in">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sand-200 text-xs font-medium text-honey-600 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+        Handcrafted by a Father & Son Team
+      </div>
+      <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight">
+        Heirloom Catan Sets, <br class="hidden md:block">
+        <span class="text-honey-600 italic">Made to Outlast</span> Generations.
+      </h1>
+      <p class="mt-6 text-lg text-forest-900/80 max-w-xl leading-relaxed">
+        Magnetic, signed & numbered. Designed at our family workshop, printed with obsessive care, and shipped to your table — ready to become tradition.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#collections" class="btn-primary px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+          Shop Catan Collection
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#story" class="btn-ghost px-7 py-4 rounded-full text-sm font-semibold">Meet the Family</a>
+      </div>
+      <div class="mt-10 flex items-center gap-6 text-xs text-forest-900/70">
+        <div class="flex -space-x-2">
+          <img class="w-9 h-9 rounded-full border-2 border-sand-50" src="https://picsum.photos/seed/customer1/80/80" alt="Happy customer portrait">
+          <img class="w-9 h-9 rounded-full border-2 border-sand-50" src="https://picsum.photos/seed/customer2/80/80" alt="Happy customer portrait">
+          <img class="w-9 h-9 rounded-full border-2 border-sand-50" src="https://picsum.photos/seed/customer3/80/80" alt="Happy customer portrait">
+        </div>
+        <div>
+          <div class="flex text-honey-600">★★★★★</div>
+          <div>Loved by 2,400+ families</div>
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-6 relative fade-in">
+      <div class="relative rounded-3xl overflow-hidden shadow-glow aspect-[4/5] bg-forest-900">
+        <img src="https://picsum.photos/seed/catanheirloom/900/1100" alt="Premium 3D printed Catan game set with magnetic hex tiles displayed on wooden table" class="w-full h-full object-cover">
+        <div class="absolute bottom-5 left-5 right-5 bg-sand-50/95 backdrop-blur rounded-2xl p-4 flex items-center gap-3 shadow-soft">
+          <div class="w-12 h-12 rounded-xl bg-honey-600/10 flex items-center justify-center text-honey-600 text-lg">✦</div>
+          <div>
+            <div class="font-serif text-sm font-semibold">Signed & Numbered</div>
+            <div class="text-xs text-forest-900/70">Each set authenticated by hand</div>
+          </div>
+        </div>
+      </div>
+      <div class="hidden md:block absolute -top-6 -left-6 bg-sand-50 rounded-2xl p-4 shadow-soft border border-sand-200 max-w-[180px]">
+        <div class="text-xs uppercase tracking-wider text-honey-600 font-semibold mb-1">Limited Run</div>
+        <div class="font-serif text-sm leading-snug">Only 250 Founder's Edition sets crafted this year.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST BAR ============ -->
+<section class="bg-forest-900 text-sand-100">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+    <div class="flex items-center gap-3 justify-center md:justify-start">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dbcaa8" stroke-width="1.8"><path d="M3 7h13l4 4v6h-3M3 7v10h12M3 7L1 9M16 17a2 2 0 104 0 2 2 0 00-4 0zM6 17a2 2 0 104 0 2 2 0 00-4 0z"/></svg>
+      <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs text-sand-300/70">2–4 day delivery</div></div>
+    </div>
+    <div class="flex items-center gap-3 justify-center md:justify-start">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dbcaa8" stroke-width="1.8"><path d="M3 6h18v12H3z M3 10h18 M7 14h4"/></svg>
+      <div class="text-sm"><div class="font-semibold">Made in the USA</div><div class="text-xs text-sand-300/70">From our home workshop</div></div>
+    </div>
+    <div class="flex items-center gap-3 justify-center md:justify-start">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dbcaa8" stroke-width="1.8"><path d="M12 2l3 6 6 1-4.5 4.5 1 6.5L12 17l-5.5 3 1-6.5L3 9l6-1 3-6z"/></svg>
+      <div class="text-sm"><div class="font-semibold">30-Day Happiness</div><div class="text-xs text-sand-300/70">Love it or send it back</div></div>
+    </div>
+    <div class="flex items-center gap-3 justify-center md:justify-start">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dbcaa8" stroke-width="1.8"><path d="M9 11a3 3 0 116 0 3 3 0 01-6 0z M5 21v-1a4 4 0 014-4h6a4 4 0 014 4v1 M3 8l3-3 3 3 M21 8l-3-3-3 3"/></svg>
+      <div class="text-sm"><div class="font-semibold">Family Owned</div><div class="text-xs text-sand-300/70">Father & son craftsmen</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUR STORY ============ -->
+<section id="story" class="py-20 lg:py-28">
+  <div class="max-w-6xl mx-auto px-5 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
+    <div class="relative fade-in">
+      <div class="rounded-3xl overflow-hidden shadow-soft aspect-[4/5]">
+        <img src="https://picsum.photos/seed/familyworkshop/800/1000" alt="Father and son working together at their 3D printing workshop bench" class="w-full h-full object-cover">
+      </div>
+      <div class="absolute -bottom-6 -right-6 bg-honey-600 text-sand-50 rounded-2xl p-5 shadow-glow max-w-[200px] hidden md:block">
+        <div class="font-serif italic text-sm leading-snug">"We print every order like it's going to our own family."</div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">Our Story</div>
+      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">
+        Two generations. <br>One workshop. <br><span class="italic text-honey-600">Zero shortcuts.</span>
+      </h2>
+      <p class="mt-6 text-forest-900/80 leading-relaxed text-lg">
+        It started with a Catan set Dad printed for our first family game night. Six prototypes later, a customer asked if they could buy one — and Realized Prints was born.
+      </p>
+      <p class="mt-4 text-forest-900/80 leading-relaxed">
+        Today, my dad and I run every print, every finish, and every shipment from our shared workshop. No factories. No outsourcing. Just two people who actually care if your tile sits flat and your figurine's eyes line up.
+      </p>
+      <div class="mt-8 flex items-center gap-4">
+        <div class="font-serif text-3xl text-honey-600">12k+</div>
+        <div class="text-sm text-forest-900/70">prints crafted by hand,<br>one piece at a time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURED COLLECTIONS ============ -->
+<section id="collections" class="py-20 lg:py-28 bg-sand-100/60 border-y border-sand-200">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+    <div class="max-w-2xl mb-14 fade-in">
+      <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">Featured Collections</div>
+      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">Pick your obsession.</h2>
+      <p class="mt-4 text-forest-900/70 text-lg">Four collections, each crafted with the same workshop care. Heirlooms for game night, characters that belong on your shelf, surprises in every scoop, and a perch your cat will actually use.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
+
+      <!-- Catan -->
+      <article class="group bg-sand-50 rounded-3xl overflow-hidden card-hover shadow-soft fade-in">
+        <div class="relative aspect-[16/10] overflow-hidden">
+          <img src="https://picsum.photos/seed/cataneditions/900/600" alt="Three premium tiers of magnetic 3D printed Catan game sets" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+          <div class="absolute top-4 left-4 bg-forest-800 text-sand-50 text-xs px-3 py-1.5 rounded-full font-semibold">Flagship</div>
+        </div>
+        <div class="p-7 lg:p-8">
+          <h3 class="font-serif text-2xl lg:text-3xl">Catan Artisan Collection</h3>
+          <p class="mt-3 text-forest-900/80">Magnetic, signed & numbered heirloom game sets. 3 premium tiers + full customization.</p>
+          <p class="mt-4 italic text-honey-600 font-serif">"Turn family game night into a lasting tradition."</p>
+          <a href="#" class="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold">
+            Shop Catan Collection
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Anime -->
+      <article class="group bg-sand-50 rounded-3xl overflow-hidden card-hover shadow-soft fade-in">
+        <div class="relative aspect-[16/10] overflow-hidden">
+          <img src="https://picsum.photos/seed/animefigures/900/600" alt="Custom 3D printed anime figurines DIY kits and finished pieces" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+          <div class="absolute top-4 left-4 bg-sage-600 text-sand-50 text-xs px-3 py-1.5 rounded-full font-semibold">Custom</div>
+        </div>
+        <div class="p-7 lg:p-8">
+          <h3 class="font-serif text-2xl lg:text-3xl">Custom Anime Figurines</h3>
+          <p class="mt-3 text-forest-900/80">Bring your favorite characters to life — DIY kits or fully finished.</p>
+          <p class="mt-4 italic text-honey-600 font-serif">"3 ways to own your anime world."</p>
+          <a href="#" class="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold">
+            Design Your Figurine
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Lucky Scoops -->
+      <article class="group bg-sand-50 rounded-3xl overflow-hidden card-hover shadow-soft fade-in">
+        <div class="relative aspect-[16/10] overflow-hidden">
+          <img src="https://picsum.photos/seed/blindbags/900/600" alt="Colorful 3D printed blind bag toys and lucky scoop collectibles" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+          <div class="absolute top-4 left-4 bg-honey-600 text-sand-50 text-xs px-3 py-1.5 rounded-full font-semibold">Live on WhatsNot</div>
+        </div>
+        <div class="p-7 lg:p-8">
+          <h3 class="font-serif text-2xl lg:text-3xl">Lucky Scoops & Blind Bags</h3>
+          <p class="mt-3 text-forest-900/80">Meow Meows • Ninja • Fruit Collections. Live unboxings on WhatsNot.</p>
+          <p class="mt-4 italic text-honey-600 font-serif">"Every scoop is a surprise 3D-printed collectible."</p>
+          <a href="#" class="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold">
+            Grab Lucky Scoops
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Cat Scratchers -->
+      <article class="group bg-sand-50 rounded-3xl overflow-hidden card-hover shadow-soft fade-in">
+        <div class="relative aspect-[16/10] overflow-hidden">
+          <img src="https://picsum.photos/seed/catscratcher/900/600" alt="Modern 3D printed cat scratcher furniture with refill posts" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+          <div class="absolute top-4 left-4 bg-forest-700 text-sand-50 text-xs px-3 py-1.5 rounded-full font-semibold">Subscription</div>
+        </div>
+        <div class="p-7 lg:p-8">
+          <h3 class="font-serif text-2xl lg:text-3xl">Premium Cat Scratchers</h3>
+          <p class="mt-3 text-forest-900/80">3D-printed furniture with subscription scratching post refills.</p>
+          <p class="mt-4 italic text-honey-600 font-serif">"Keep your cat happy for life."</p>
+          <a href="#" class="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold">
+            Subscribe for Scratchers
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE ============ -->
+<section class="py-20 lg:py-28">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+    <div class="max-w-2xl mx-auto text-center mb-14 fade-in">
+      <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">Why Realized Prints</div>
+      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">Crafted differently. <span class="italic text-honey-600">On purpose.</span></h2>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-sand-50 border border-sand-200 rounded-2xl p-7 card-hover fade-in">
+        <div class="w-12 h-12 rounded-xl bg-forest-800 text-sand-50 flex items-center justify-center mb-5 text-xl">✦</div>
+        <h3 class="font-serif text-xl mb-2">Heirloom Quality</h3>
+        <p class="text-sm text-forest-900/75 leading-relaxed">Every piece is sanded, sealed, and inspected by hand. Built to be passed down — not packed away.</p>
+      </div>
+      <div class="bg-sand-50 border border-sand-200 rounded-2xl p-7 card-hover fade-in">
+        <div class="w-12 h-12 rounded-xl bg-honey-600 text-sand-50 flex items-center justify-center mb-5 text-xl">✎</div>
+        <h3 class="font-serif text-xl mb-2">Signed & Numbered</h3>
+        <p class="text-sm text-forest-900/75 leading-relaxed">Flagship pieces are individually numbered and authenticated by Dad himself. You own one of a finite few.</p>
+      </div>
+      <div class="bg-sand-50 border border-sand-200 rounded-2xl p-7 card-hover fade-in">
+        <div class="w-12 h-12 rounded-xl bg-sage-600 text-sand-50 flex items-center justify-center mb-5 text-xl">♡</div>
+        <h3 class="font-serif text-xl mb-2">Real Family, Real Care</h3>
+        <p class="text-sm text-forest-900/75 leading-relaxed">No call centers. Message us and you're talking to the people who printed your order. Promise.</p>
+      </div>
+      <div class="bg-sand-50 border border-sand-200 rounded-2xl p-7 card-hover fade-in">
+        <div class="w-12 h-12 rounded-xl bg-forest-700 text-sand-50 flex items-center justify-center mb-5 text-xl">⟳</div>
+        <h3 class="font-serif text-xl mb-2">Happiness Guarantee</h3>
+        <p class="text-sm text-forest-900/75 leading-relaxed">30 days to fall in love. If you don't, we'll make it right or take it back. Zero questions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="py-20 lg:py-28 bg-forest-900 text-sand-100 relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <img src="https://picsum.photos/seed/texturebg/1600/900" alt="" class="w-full h-full object-cover">
+  </div>
+  <div class="relative max-w-7xl mx-auto px-5 lg:px-8">
+    <div class="max-w-2xl mb-14 fade-in">
+      <div class="text-xs uppercase tracking-[0.2em] text-honey-400 font-semibold mb-4">From Our Customers</div>
+      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">Heirlooms in <span class="italic text-honey-400">2,400+ homes.</span></h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <figure class="bg-sand-50/5 border border-sand-100/10 rounded-2xl p-7 backdrop-blur fade-in">
+        <div class="text-honey-400 mb-4">★★★★★</div>
+        <blockquote class="font-serif text-lg leading-relaxed">"The Catan set is unreal. The magnetic tiles are buttery smooth. Our kids ask to play every Friday now — it's our thing."</blockquote>
+        <figcaption class="mt-5 flex items-center gap-3">
+          <img src="https://picsum.photos/seed/marcus/80/80" alt="Customer Marcus" class="w-10 h-10 rounded-full">
+          <div>
+            <div class="font-semibold text-sm">Marcus T.</div>
+            <div class="text-xs text-sand-100/60">Founder's Edition Catan</div>
+          </div>
+        </figcaption>
+      </figure>
+      <figure class="bg-sand-50/5 border border-sand-100/10 rounded-2xl p-7 backdrop-blur fade-in">
+        <div class="text-honey-400 mb-4">★★★★★</div>
+        <blockquote class="font-serif text-lg leading-relaxed">"My finished anime figurine arrived flawless. The paintwork is genuinely better than the official merch I own. I'm ordering a second."</blockquote>
+        <figcaption class="mt-5 flex items-center gap-3">
+          <img src="https://picsum.photos/seed/aisha/80/80" alt="Customer Aisha" class="w-10 h-10 rounded-full">
+          <div>
+            <div class="font-semibold text-sm">Aisha R.</div>
+            <div class="text-xs text-sand-100/60">Custom Figurine — Finished</div>
+          </div>
+        </figcaption>
+      </figure>
+      <figure class="bg-sand-50/5 border border-sand-100/10 rounded-2xl p-7 backdrop-blur fade-in">
+        <div class="text-honey-400 mb-4">★★★★★</div>
+        <blockquote class="font-serif text-lg leading-relaxed">"Our cat ignored every scratcher we'd ever bought. This one? She lives on it. Plus the refills mean I'm not buying a new one every 3 months."</blockquote>
+        <figcaption class="mt-5 flex items-center gap-3">
+          <img src="https://picsum.photos/seed/jenna/80/80" alt="Customer Jenna" class="w-10 h-10 rounded-full">
+          <div>
+            <div class="font-semibold text-sm">Jenna & Biscuit 🐈</div>
+            <div class="text-xs text-sand-100/60">Cat Scratcher Subscriber</div>
+          </div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="py-20 lg:py-28 bg-sand-100">
+  <div class="max-w-5xl mx-auto px-5 lg:px-8 text-center fade-in">
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-honey-600/10 text-honey-700 text-xs font-semibold mb-6">
+      <span class="w-1.5 h-1.5 rounded-full bg-honey-600 animate-pulse"></span>
+      Founder's Edition — Only 47 sets remaining this batch
+    </div>
+    <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl leading-tight">
+      Start a tradition <br>your family will <span class="italic text-honey-600">actually keep.</span>
+    </h2>
+    <p class="mt-6 text-forest-900/80 text-lg max-w-xl mx-auto">
+      Every set we print is one fewer we can make. Claim yours, hand it down, and let us be a small part of the story.
+    </p>
+    <div class="mt-9 flex flex-wrap gap-3 justify-center">
+      <a href="#collections" class="btn-primary px-8 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+        Shop Catan Collection
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#collections" class="btn-ghost px-8 py-4 rounded-full text-sm font-semibold">Browse All Collections</a>
+    </div>
+    <div class="mt-8 flex items-center justify-center gap-6 text-xs text-forest-900/60">
+      <span>✓ 30-Day Happiness Guarantee</span>
+      <span class="hidden sm:inline">✓ Free US Shipping over $75</span>
+      <span>✓ Signed by Dad</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="footer" class="bg-forest-900 text-sand-100 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+    <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-sand-100/10">
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-9 h-9 rounded-lg bg-honey-600 text-sand-50 flex items-center justify-center font-serif text-lg">R</span>
+          <span class="font-serif text-xl">Realized <span class="text-honey-400">Prints</span></span>
+        </div>
+        <p class="text-sm text-sand-100/70 leading-relaxed max-w-sm">
+          Premium 3D printed heirlooms and collectibles, crafted by a father and son in their home workshop. Made to be loved, used, and passed on.
+        </p>
+        <div class="mt-6 flex gap-3">
+          <span class="px-3 py-1.5 rounded-full bg-sand-50/10 text-xs">🇺🇸 Made in USA</span>
+          <span class="px-3 py-1.5 rounded-full bg-sand-50/10 text-xs">🔒 Secure Checkout</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Shop</h4>
+        <ul class="space-y-2 text-sm text-sand-100/80">
+          <li><a href="#" class="hover:text-honey-400 transition">Catan Collection</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">Anime Figurines</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">Lucky Scoops</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">Cat Scratchers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Company</h4>
+        <ul class="space-y-2 text-sm text-sand-100/80">
+          <li><a href="#story" class="hover:text-honey-400 transition">Our Story</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">Workshop Tour</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">Reviews</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Get In Touch</h4>
+        <ul class="space-y-2 text-sm text-sand-100/80">
+          <li><a href="mailto:hello@realizedprints.com" class="hover:text-honey-400 transition">hello@realizedprints.com</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">Live on WhatsNot</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">Instagram</a></li>
+          <li><a href="#" class="hover:text-honey-400 transition">TikTok</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-sand-100/60">
+      <div>© 2026 Realized Prints. Crafted by a father & son. All rights reserved.</div>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-honey-400">Privacy</a>
+        <a href="#" class="hover:text-honey-400">Terms</a>
+        <a href="#" class="hover:text-honey-400">Shipping & Returns</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+  // Fade-in on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+  // Friendly add-to-cart style click feedback on CTAs
+  document.querySelectorAll('a.btn-primary').forEach(btn => {
+    btn.addEventListener('click', e => {
+      if (btn.getAttribute('href') === '#') {
+        e.preventDefault();
+        const original = btn.innerHTML;
+        btn.innerHTML = '✓ Added — checkout coming soon';
+        btn.style.background = '#566e56';
+        setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 1800);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
