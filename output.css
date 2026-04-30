@@ -1,0 +1,707 @@
+/* ============================================================
+   REALIZED PRINTS — DARK WORKSHOP THEME
+   Warm, earthy, hand-built workshop aesthetic
+   ============================================================ */
+
+:root {
+  /* ---- Base surfaces (deep warm charcoal) ---- */
+  --bg-0:        #0f0c0a;   /* page base */
+  --bg-1:        #1a1612;   /* primary surface */
+  --bg-2:        #221d18;   /* elevated surface */
+  --bg-3:        #2b251f;   /* highest surface / inputs */
+
+  /* ---- Borders & dividers ---- */
+  --border:      rgba(232, 181, 137, 0.10);
+  --border-strong: rgba(232, 181, 137, 0.20);
+
+  /* ---- Text ---- */
+  --text:        #f3e9dc;   /* warm off-white */
+  --text-muted:  rgba(243, 233, 220, 0.72);
+  --text-dim:    rgba(243, 233, 220, 0.50);
+  --text-faint:  rgba(243, 233, 220, 0.32);
+
+  /* ---- Accent palette (warm terracotta + bronze) ---- */
+  --accent:      #c47a3f;   /* terracotta */
+  --accent-soft: #e8b589;   /* glowing highlight */
+  --accent-deep: #a55f2a;   /* hover / pressed */
+  --bronze:      #8a6f4f;   /* aged bronze / moss */
+  --bronze-soft: #b09376;
+
+  /* ---- Glow shadows (subtle, premium — never neon) ---- */
+  --glow-sm:     0 0 0 1px rgba(232, 181, 137, 0.06),
+                 0 4px 14px -6px rgba(196, 122, 63, 0.18);
+  --glow-md:     0 0 0 1px rgba(232, 181, 137, 0.08),
+                 0 10px 30px -12px rgba(196, 122, 63, 0.28),
+                 inset 0 1px 0 rgba(232, 181, 137, 0.04);
+  --glow-lg:     0 0 0 1px rgba(232, 181, 137, 0.10),
+                 0 20px 50px -18px rgba(196, 122, 63, 0.40),
+                 inset 0 1px 0 rgba(232, 181, 137, 0.06);
+  --glow-accent: 0 0 0 1px rgba(232, 181, 137, 0.18),
+                 0 16px 40px -14px rgba(196, 122, 63, 0.55),
+                 inset 0 1px 0 rgba(255, 220, 180, 0.08);
+  --glow-image:  0 0 0 1px rgba(232, 181, 137, 0.12),
+                 0 24px 60px -20px rgba(196, 122, 63, 0.45),
+                 inset 0 0 0 1px rgba(232, 181, 137, 0.06);
+
+  /* ---- Radii ---- */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   RESET / BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg-0);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  background-image:
+    radial-gradient(ellipse at top left,  rgba(196, 122, 63, 0.08), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(138, 111, 79, 0.05), transparent 50%);
+}
+
+img { max-width: 100%; display: block; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* ============================================================
+   FONTS
+   ============================================================ */
+.font-serif { font-family: "Cormorant Garamond", Georgia, "Times New Roman", ui-serif, serif; letter-spacing: -0.01em; }
+.font-sans  { font-family: ui-sans-serif, system-ui, sans-serif; }
+.italic     { font-style: italic; }
+.antialiased { -webkit-font-smoothing: antialiased; }
+.tracking-tight  { letter-spacing: -0.02em; }
+.tracking-wider  { letter-spacing: 0.05em; }
+.tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+.uppercase  { text-transform: uppercase; }
+.leading-snug    { line-height: 1.35; }
+.leading-tight   { line-height: 1.15; }
+.leading-relaxed { line-height: 1.65; }
+.leading-none    { line-height: 1; }
+.leading-\[1\.05\] { line-height: 1.05; }
+
+/* ============================================================
+   GRAIN / TEXTURE
+   ============================================================ */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image:
+    radial-gradient(rgba(232, 181, 137, 0.4) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+/* ============================================================
+   TEXT COLORS  (dark theme remap)
+   ============================================================ */
+.text-forest-900           { color: var(--text); }
+.text-forest-900\/80       { color: var(--text-muted); }
+.text-forest-900\/75       { color: var(--text-muted); }
+.text-forest-900\/70       { color: var(--text-muted); }
+.text-forest-900\/65       { color: var(--text-dim); }
+.text-forest-900\/60       { color: var(--text-dim); }
+.text-forest-900\/55       { color: var(--text-dim); }
+.text-forest-900\/40       { color: var(--text-faint); }
+.text-forest-900           { color: var(--text); }
+.text-forest-700           { color: var(--bronze-soft); }
+.text-sand-50              { color: var(--text); }
+.text-sand-100             { color: var(--text); }
+.text-sand-100\/90         { color: var(--text); }
+.text-sand-100\/85         { color: var(--text-muted); }
+.text-sand-100\/80         { color: var(--text-muted); }
+.text-sand-100\/70         { color: var(--text-muted); }
+.text-sand-100\/60         { color: var(--text-dim); }
+.text-sand-100\/55         { color: var(--text-dim); }
+.text-sand-300\/70         { color: var(--text-dim); }
+.text-honey-400            { color: var(--accent-soft); }
+.text-honey-600            { color: var(--accent); }
+.text-honey-700            { color: var(--accent); }
+
+/* ============================================================
+   BACKGROUND COLORS (dark theme remap)
+   ============================================================ */
+.bg-sand-50       { background: var(--bg-2); }
+.bg-sand-100      { background: var(--bg-1); }
+.bg-sand-50\/90   { background: rgba(26, 22, 18, 0.85); }
+.bg-sand-50\/95   { background: rgba(34, 29, 24, 0.92); }
+.bg-sand-50\/10   { background: rgba(232, 181, 137, 0.08); }
+.bg-sand-50\/5    { background: rgba(232, 181, 137, 0.04); }
+.bg-sand-100\/60  { background: var(--bg-1); }
+.bg-sand-200      { background: var(--bg-3); }
+.bg-forest-700    { background: var(--bronze); }
+.bg-forest-800    { background: var(--bronze); }
+.bg-forest-900    { background: var(--bg-1); }
+.bg-honey-600     { background: var(--accent); }
+.bg-honey-600\/10 { background: rgba(196, 122, 63, 0.12); }
+.bg-sage-500      { background: var(--bronze-soft); }
+.bg-sage-600      { background: var(--bronze); }
+.bg-white         { background: var(--bg-3); }
+
+/* Gradient hero backdrop — re-skinned to deep warm gradient */
+.bg-gradient-to-br.from-sand-50 {
+  background: linear-gradient(135deg, #1a1612 0%, #221d18 40%, #2b251f 100%) !important;
+}
+
+/* ============================================================
+   BORDERS
+   ============================================================ */
+.border           { border-width: 1px; border-style: solid; border-color: var(--border); }
+.border-2         { border-width: 2px; border-style: solid; border-color: var(--border); }
+.border-t         { border-top-width: 1px; border-top-style: solid; border-top-color: var(--border); }
+.border-b         { border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: var(--border); }
+.border-y         { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.border-sand-100\/10 { border-color: var(--border); }
+.border-sand-200  { border-color: var(--border); }
+.border-sand-300  { border-color: var(--border-strong); }
+.border-honey-600\/20 { border-color: rgba(196, 122, 63, 0.30); }
+.border-honey-600\/40 { border-color: rgba(196, 122, 63, 0.50); }
+.border-forest-800 { border-color: var(--accent); }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-primary {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  color: #1a1108;
+  font-weight: 600;
+  border: 1px solid rgba(255, 220, 180, 0.18);
+  box-shadow:
+    0 0 0 1px rgba(232, 181, 137, 0.12),
+    0 12px 28px -10px rgba(196, 122, 63, 0.55),
+    inset 0 1px 0 rgba(255, 230, 200, 0.25);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease);
+}
+.btn-primary:hover {
+  background: linear-gradient(180deg, var(--accent-soft) 0%, var(--accent) 100%);
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(232, 181, 137, 0.25),
+    0 18px 38px -10px rgba(196, 122, 63, 0.75),
+    inset 0 1px 0 rgba(255, 230, 200, 0.35);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-ghost {
+  background: rgba(232, 181, 137, 0.04);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-weight: 600;
+  transition: all 0.25s var(--ease);
+  box-shadow: var(--glow-sm);
+}
+.btn-ghost:hover {
+  background: rgba(196, 122, 63, 0.10);
+  border-color: var(--accent);
+  color: var(--accent-soft);
+  box-shadow: var(--glow-md);
+}
+
+/* ============================================================
+   CARDS — subtle emissive glow
+   ============================================================ */
+.card-hover {
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--glow-lg);
+  border-color: var(--border-strong);
+}
+
+/* Card with always-on glow (use for hero images, featured cards) */
+.shadow-soft { box-shadow: var(--glow-md); }
+.shadow-glow { box-shadow: var(--glow-image); }
+
+/* Make every "card-like" surface emit a quiet glow */
+.bg-sand-50,
+[class*="bg-sand-50 "],
+.bg-sand-50.rounded-2xl,
+.bg-sand-50.rounded-3xl {
+  box-shadow: var(--glow-md);
+}
+
+/* ============================================================
+   IMAGES — emissive border treatment
+   ============================================================ */
+img {
+  border-radius: inherit;
+}
+.rounded-3xl > img,
+.rounded-2xl > img,
+.rounded-xl  > img {
+  filter: brightness(0.95) contrast(1.02) saturate(1.05);
+}
+
+/* Image wrappers that already have rounded-3xl + overflow-hidden get a glowing ring */
+.rounded-3xl.overflow-hidden,
+.rounded-2xl.overflow-hidden {
+  position: relative;
+  isolation: isolate;
+}
+.rounded-3xl.overflow-hidden::after,
+.rounded-2xl.overflow-hidden::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(232, 181, 137, 0.12),
+    inset 0 0 40px rgba(15, 12, 10, 0.35);
+  z-index: 2;
+}
+
+/* ============================================================
+   FADE-IN ANIMATION
+   ============================================================ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   CONFIGURATOR — option chips
+   ============================================================ */
+.opt {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r-md);
+  transition: all 0.25s var(--ease);
+  box-shadow: var(--glow-sm);
+}
+.opt:hover {
+  border-color: var(--accent);
+  box-shadow: var(--glow-md);
+  transform: translateY(-1px);
+}
+.opt.active {
+  background: linear-gradient(180deg, rgba(196, 122, 63, 0.18) 0%, rgba(196, 122, 63, 0.08) 100%);
+  border-color: var(--accent);
+  color: var(--accent-soft);
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 10px 26px -10px rgba(196, 122, 63, 0.55),
+    inset 0 1px 0 rgba(232, 181, 137, 0.10);
+}
+.opt:disabled, .opt.locked {
+  opacity: 0.40;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+.opt.locked::after {
+  content: " 🔒";
+  font-size: 0.75em;
+}
+
+/* Featured / popular tier card */
+.tier-popular {
+  background: linear-gradient(180deg, #2b251f 0%, #1a1612 100%);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--glow-accent);
+  position: relative;
+}
+.tier-popular::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, var(--accent), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Pulse dot */
+.pulse-dot { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
+input[type="text"], input[type="email"], textarea {
+  background: var(--bg-3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  transition: all 0.2s var(--ease);
+}
+input[type="text"]::placeholder { color: var(--text-faint); }
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(196, 122, 63, 0.18);
+}
+
+/* ============================================================
+   LAYOUT HELPERS (Tailwind-compatible utilities)
+   ============================================================ */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed    { position: fixed; }
+.sticky   { position: sticky; }
+.top-0    { top: 0; }
+.z-10     { z-index: 10; }
+.z-50     { z-index: 50; }
+.inset-0  { inset: 0; }
+.bottom-5 { bottom: 1.25rem; }
+.left-5   { left: 1.25rem; }
+.right-5  { right: 1.25rem; }
+.top-5    { top: 1.25rem; }
+.top-4    { top: 1rem; }
+.left-4   { left: 1rem; }
+.-top-6   { top: -1.5rem; }
+.-left-6  { left: -1.5rem; }
+.-bottom-6{ bottom: -1.5rem; }
+.-right-6 { right: -1.5rem; }
+
+.flex     { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid     { display: grid; }
+.hidden   { display: none; }
+.block    { display: block; }
+.inline-block { display: inline-block; }
+
+.items-center  { align-items: center; }
+.items-start   { align-items: flex-start; }
+.items-end     { align-items: flex-end; }
+.items-baseline{ align-items: baseline; }
+.justify-center{ justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-col     { flex-direction: column; }
+.flex-wrap    { flex-wrap: wrap; }
+.flex-1       { flex: 1 1 0%; }
+
+.gap-1\.5 { gap: 0.375rem; }
+.gap-2    { gap: 0.5rem; }
+.gap-3    { gap: 0.75rem; }
+.gap-4    { gap: 1rem; }
+.gap-5    { gap: 1.25rem; }
+.gap-6    { gap: 1.5rem; }
+.gap-8    { gap: 2rem; }
+.gap-9    { gap: 2.25rem; }
+.gap-10   { gap: 2.5rem; }
+.gap-12   { gap: 3rem; }
+.gap-14   { gap: 3.5rem; }
+.gap-x-6  { column-gap: 1.5rem; }
+.gap-x-12 { column-gap: 3rem; }
+.gap-y-2  { row-gap: 0.5rem; }
+.gap-y-10 { row-gap: 2.5rem; }
+.-space-x-2 > * + * { margin-left: -0.5rem; }
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.space-y-3 > * + * { margin-top: 0.75rem; }
+
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.col-span-2 { grid-column: span 2 / span 2; }
+
+.w-full   { width: 100%; }
+.w-1\.5   { width: 0.375rem; }
+.w-5      { width: 1.25rem; }
+.w-6      { width: 1.5rem; }
+.w-8      { width: 2rem; }
+.w-9      { width: 2.25rem; }
+.w-10     { width: 2.5rem; }
+.w-12     { width: 3rem; }
+.h-full   { height: 100%; }
+.h-1\.5   { height: 0.375rem; }
+.h-5      { height: 1.25rem; }
+.h-6      { height: 1.5rem; }
+.h-8      { height: 2rem; }
+.h-9      { height: 2.25rem; }
+.h-10     { height: 2.5rem; }
+.h-12     { height: 3rem; }
+.h-18     { height: 4.5rem; }
+.aspect-\[4\/5\]  { aspect-ratio: 4 / 5; }
+.aspect-\[16\/10\]{ aspect-ratio: 16 / 10; }
+.aspect-\[4\/2\]  { aspect-ratio: 4 / 2; }
+.aspect-square    { aspect-ratio: 1 / 1; }
+
+.max-w-sm  { max-width: 24rem; }
+.max-w-md  { max-width: 28rem; }
+.max-w-xl  { max-width: 36rem; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-5xl { max-width: 64rem; }
+.max-w-6xl { max-width: 72rem; }
+.max-w-7xl { max-width: 80rem; }
+.max-w-\[180px\]  { max-width: 180px; }
+.max-w-\[200px\]  { max-width: 200px; }
+
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mr-1\.5 { margin-right: 0.375rem; }
+.mb-1   { margin-bottom: 0.25rem; }
+.mb-2   { margin-bottom: 0.5rem; }
+.mb-3   { margin-bottom: 0.75rem; }
+.mb-4   { margin-bottom: 1rem; }
+.mb-5   { margin-bottom: 1.25rem; }
+.mb-6   { margin-bottom: 1.5rem; }
+.mb-8   { margin-bottom: 2rem; }
+.mb-10  { margin-bottom: 2.5rem; }
+.mb-12  { margin-bottom: 3rem; }
+.mb-14  { margin-bottom: 3.5rem; }
+.mb-1\.5 { margin-bottom: 0.375rem; }
+.mb-0\.5 { margin-bottom: 0.125rem; }
+.mt-0\.5 { margin-top: 0.125rem; }
+.mt-1   { margin-top: 0.25rem; }
+.mt-2   { margin-top: 0.5rem; }
+.mt-3   { margin-top: 0.75rem; }
+.mt-4   { margin-top: 1rem; }
+.mt-5   { margin-top: 1.25rem; }
+.mt-6   { margin-top: 1.5rem; }
+.mt-8   { margin-top: 2rem; }
+.mt-9   { margin-top: 2.25rem; }
+.mt-10  { margin-top: 2.5rem; }
+.ml-1   { margin-left: 0.25rem; }
+
+.p-2    { padding: 0.5rem; }
+.p-4    { padding: 1rem; }
+.p-5    { padding: 1.25rem; }
+.p-6    { padding: 1.5rem; }
+.p-7    { padding: 1.75rem; }
+.p-8    { padding: 2rem; }
+.p-10   { padding: 2.5rem; }
+.px-2   { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-3   { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-4   { padding-left: 1rem; padding-right: 1rem; }
+.px-5   { padding-left: 1.25rem; padding-right: 1.25rem; }
+.px-6   { padding-left: 1.5rem; padding-right: 1.5rem; }
+.px-7   { padding-left: 1.75rem; padding-right: 1.75rem; }
+.px-8   { padding-left: 2rem; padding-right: 2rem; }
+.py-1   { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+.py-2   { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-2\.5{ padding-top: 0.625rem; padding-bottom: 0.625rem; }
+.py-3   { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.py-3\.5{ padding-top: 0.875rem; padding-bottom: 0.875rem; }
+.py-4   { padding-top: 1rem; padding-bottom: 1rem; }
+.py-6   { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.py-8   { padding-top: 2rem; padding-bottom: 2rem; }
+.py-14  { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+.py-16  { padding-top: 4rem; padding-bottom: 4rem; }
+.py-20  { padding-top: 5rem; padding-bottom: 5rem; }
+.pt-5   { padding-top: 1.25rem; }
+.pt-8   { padding-top: 2rem; }
+.pt-16  { padding-top: 4rem; }
+.pb-8   { padding-bottom: 2rem; }
+.pb-12  { padding-bottom: 3rem; }
+
+.rounded-full   { border-radius: 9999px; }
+.rounded-lg     { border-radius: var(--r-sm); }
+.rounded-xl     { border-radius: var(--r-md); }
+.rounded-2xl    { border-radius: var(--r-lg); }
+.rounded-3xl    { border-radius: var(--r-xl); }
+.rounded-bl-2xl { border-bottom-left-radius: var(--r-lg); }
+
+.overflow-hidden { overflow: hidden; }
+.object-cover { object-fit: cover; }
+
+.text-xs   { font-size: 0.75rem; line-height: 1rem; }
+.text-\[10px\]   { font-size: 10px; line-height: 1.4; }
+.text-\[11px\]   { font-size: 11px; line-height: 1.4; }
+.text-sm   { font-size: 0.875rem; line-height: 1.35rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg   { font-size: 1.125rem; line-height: 1.65rem; }
+.text-xl   { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl  { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl  { font-size: 1.875rem; line-height: 2.25rem; }
+.text-4xl  { font-size: 2.25rem; line-height: 2.5rem; }
+.text-5xl  { font-size: 3rem; line-height: 1.05; }
+.text-6xl  { font-size: 3.75rem; line-height: 1.05; }
+
+.font-medium   { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold     { font-weight: 700; }
+
+.text-center { text-align: center; }
+.text-left   { text-align: left; }
+.text-right  { text-align: right; }
+
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opacity-10 { opacity: 0.1; }
+.opacity-70 { opacity: 0.7; }
+.opacity-75 { opacity: 0.75; }
+.opacity-80 { opacity: 0.8; }
+.opacity-90 { opacity: 0.9; }
+.backdrop-blur { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+.transition { transition-property: color, background-color, border-color, opacity, box-shadow, transform; transition-duration: 0.25s; transition-timing-function: var(--ease); }
+.duration-700 { transition-duration: 0.7s; }
+.group:hover .group-hover\:scale-105 { transform: scale(1.05); }
+.group:hover .group-hover\:bg-honey-600 { background: var(--accent); }
+.hover\:text-honey-400:hover { color: var(--accent-soft); }
+.hover\:text-honey-600:hover { color: var(--accent); }
+.hover\:bg-honey-500:hover   { background: var(--accent-soft); }
+
+/* Misc utility */
+.align-middle { vertical-align: middle; }
+.cursor-not-allowed { cursor: not-allowed; }
+
+/* ============================================================
+   FOCUS RINGS
+   ============================================================ */
+.focus\:outline-none:focus { outline: none; }
+.focus\:border-forest-800:focus { border-color: var(--accent); }
+.focus\:ring-2:focus { box-shadow: 0 0 0 3px rgba(196, 122, 63, 0.18); }
+
+.ring-2          { box-shadow: 0 0 0 2px var(--accent); }
+.ring-honey-600  { --tw-ring-color: var(--accent); }
+.ring-offset-2   { /* visual handled in box-shadow */ }
+.ring-offset-sand-50 { }
+
+/* ============================================================
+   RESPONSIVE  (sm / md / lg breakpoints)
+   ============================================================ */
+@media (min-width: 640px) {
+  .sm\:inline-flex   { display: inline-flex; }
+  .sm\:inline        { display: inline; }
+  .sm\:grid-cols-2   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm\:grid-cols-3   { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sm\:grid-cols-4   { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 768px) {
+  .md\:block         { display: block; }
+  .md\:inline        { display: inline; }
+  .md\:grid-cols-2   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md\:grid-cols-3   { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .md\:grid-cols-4   { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .md\:flex-row      { flex-direction: row; }
+  .md\:text-4xl      { font-size: 2.25rem; line-height: 2.5rem; }
+  .md\:text-5xl      { font-size: 3rem; line-height: 1.05; }
+  .md\:justify-start { justify-content: flex-start; }
+  .md\:text-left     { text-align: left; }
+}
+@media (min-width: 1024px) {
+  .lg\:block         { display: block; }
+  .lg\:flex          { display: flex; }
+  .lg\:hidden        { display: none; }
+  .lg\:grid-cols-2   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lg\:grid-cols-3   { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg\:grid-cols-4   { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lg\:grid-cols-5   { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .lg\:grid-cols-12  { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .lg\:col-span-2    { grid-column: span 2 / span 2; }
+  .lg\:col-span-6    { grid-column: span 6 / span 6; }
+  .lg\:px-8          { padding-left: 2rem; padding-right: 2rem; }
+  .lg\:py-20         { padding-top: 5rem; padding-bottom: 5rem; }
+  .lg\:py-24         { padding-top: 6rem; padding-bottom: 6rem; }
+  .lg\:py-28         { padding-top: 7rem; padding-bottom: 7rem; }
+  .lg\:gap-8         { gap: 2rem; }
+  .lg\:p-6           { padding: 1.5rem; }
+  .lg\:p-8           { padding: 2rem; }
+  .lg\:p-10          { padding: 2.5rem; }
+  .lg\:text-3xl      { font-size: 1.875rem; line-height: 2.25rem; }
+  .lg\:text-5xl      { font-size: 3rem; line-height: 1.05; }
+  .lg\:text-6xl      { font-size: 3.75rem; line-height: 1.05; }
+}
+@media (max-width: 1023px) {
+  .lg\:hidden        { display: block; }
+}
+@media (min-width: 1024px) {
+  .lg\:hidden        { display: none !important; }
+}
+
+/* small-screen base adjustments */
+@media (max-width: 767px) {
+  .hidden.md\:block  { display: none; }
+}
+@media (min-width: 768px) {
+  .hidden.md\:block  { display: block; }
+}
+@media (max-width: 1023px) {
+  .hidden.lg\:flex   { display: none; }
+}
+@media (min-width: 1024px) {
+  .hidden.lg\:flex   { display: flex; }
+}
+
+/* ============================================================
+   FOOTER specifics
+   ============================================================ */
+footer.bg-forest-900 {
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+  border-top: 1px solid var(--border-strong);
+}
+
+/* ============================================================
+   SECTION DIVIDERS — emissive horizontal hairlines
+   ============================================================ */
+section.border-y {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, var(--accent), transparent) 1;
+  position: relative;
+}
+section.border-y::before,
+section.border-y::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+              transparent,
+              rgba(196, 122, 63, 0.50) 30%,
+              rgba(232, 181, 137, 0.65) 50%,
+              rgba(196, 122, 63, 0.50) 70%,
+              transparent);
+  box-shadow: 0 0 18px rgba(196, 122, 63, 0.45);
+}
+section.border-y::before { top: 0; }
+section.border-y::after  { bottom: 0; }
+
+/* ============================================================
+   NAVBAR specifics
+   ============================================================ */
+header.sticky {
+  background: rgba(15, 12, 10, 0.85);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(232, 181, 137, 0.04);
+}
+
+/* Make logo "R" mark glow */
+header .bg-forest-800.rounded-lg,
+header .bg-honey-600.rounded-lg {
+  box-shadow: var(--glow-md);
+}
+
+/* ============================================================
+   TRUST BAR — inset from the dark workshop
+   ============================================================ */
+section.bg-forest-900 {
+  background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+  position: relative;
+}
+
+/* ============================================================
+   SMALL ROUNDED PILLS / BADGES
+   ============================================================ */
+.bg-honey-600\/10 { box-shadow: inset 0 0 0 1px rgba(196, 122, 63, 0.25); }
