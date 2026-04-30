@@ -6,74 +6,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catan Artisan Collection — Realized Prints | catan-artisan.html</title>
 <meta name="description" content="Magnetic, signed & numbered Catan heirloom sets. 3 premium tiers, fully customizable, hand-crafted by a father & son in the USA.">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          forest: { 50:'#ecfdf5', 100:'#d1fae5', 700:'#047857', 800:'#065f46', 900:'#064e3b' },
-          sand:   { 50:'#fbf8f3', 100:'#f5efe4', 200:'#ebe1cc', 300:'#dbcaa8' },
-          sage:   { 400:'#8aa68a', 500:'#6e8a6e', 600:'#566e56' },
-          honey:  { 400:'#f59e0b', 500:'#d97706', 600:'#b45309', 700:'#92400e' },
-        },
-        fontFamily: {
-          serif: ['Georgia','ui-serif','serif'],
-          sans:  ['ui-sans-serif','system-ui','sans-serif'],
-        },
-        boxShadow: {
-          soft: '0 10px 30px -12px rgba(6,95,70,0.18)',
-          glow: '0 20px 50px -20px rgba(180,83,9,0.45)',
-        }
-      }
-    }
-  }
-</script>
-<style>
-  html { scroll-behavior: smooth; }
-  body { background: #fbf8f3; color: #064e3b; }
-  .grain::before {
-    content:""; position:absolute; inset:0; pointer-events:none; opacity:.06;
-    background-image: radial-gradient(rgba(0,0,0,0.6) 1px, transparent 1px);
-    background-size: 3px 3px;
-  }
-  .btn-primary { background:#065f46; color:#fbf8f3; transition:all .25s ease; }
-  .btn-primary:hover { background:#b45309; transform:translateY(-1px); box-shadow:0 12px 30px -12px rgba(180,83,9,.5); }
-  .btn-ghost { border:1px solid #065f46; color:#065f46; transition:all .25s ease; }
-  .btn-ghost:hover { background:#065f46; color:#fbf8f3; }
-  .card-hover { transition: transform .35s ease, box-shadow .35s ease; }
-  .card-hover:hover { transform: translateY(-6px); box-shadow:0 25px 50px -20px rgba(6,95,70,.25); }
-  .fade-in { opacity:0; transform:translateY(16px); transition:all .8s ease; }
-  .fade-in.visible { opacity:1; transform:translateY(0); }
-
-  /* Configurator option chips */
-  .opt {
-    border:1px solid #ebe1cc; background:#fbf8f3; color:#064e3b;
-    transition: all .2s ease;
-  }
-  .opt:hover { border-color:#065f46; }
-  .opt.active {
-    background:#065f46; color:#fbf8f3; border-color:#065f46;
-    box-shadow: 0 8px 20px -10px rgba(6,95,70,.55);
-  }
-  .opt:disabled, .opt.locked {
-    opacity:.45; cursor:not-allowed;
-  }
-  .opt.locked::after {
-    content:" 🔒"; font-size:.75em;
-  }
-  .tier-popular {
-    background: linear-gradient(180deg,#065f46 0%,#047857 100%);
-    color:#fbf8f3;
-  }
-  .pulse-dot { animation: pulse 1.6s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="output.css" rel="stylesheet">
+<style>body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }</style>
 </head>
-<body class="font-sans text-forest-900 antialiased">
+<body class="font-sans antialiased">
 
 <!-- ============ NAVBAR ============ -->
-<header id="nav" class="sticky top-0 z-50 bg-sand-50/90 backdrop-blur border-b border-sand-200">
+<header id="nav" class="sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-18 py-3">
     <a href="index.html" class="flex items-center gap-2 group">
       <span class="w-9 h-9 rounded-lg bg-forest-800 text-sand-50 flex items-center justify-center font-serif text-lg group-hover:bg-honey-600 transition">R</span>
@@ -138,9 +80,8 @@
 
     <div class="lg:col-span-6 relative fade-in">
       <div class="relative rounded-3xl overflow-hidden shadow-glow aspect-[4/5] bg-forest-900">
-        <!-- Real image: images/hero-boxed.JPG -->
         <img src="images/hero-boxed.JPG" alt="Premium magnetic 3D printed Catan Artisan set displayed in its signed wooden heirloom box with custom robber and player pieces" class="w-full h-full object-cover">
-        <div class="absolute top-5 right-5 bg-honey-600 text-sand-50 rounded-full px-3 py-1.5 text-xs font-bold tracking-wide">
+        <div class="absolute top-5 right-5 bg-honey-600 text-sand-50 rounded-full px-3 py-1.5 text-xs font-bold tracking-wider">
           LIMITED EDITION
         </div>
         <div class="absolute bottom-5 left-5 right-5 bg-sand-50/95 backdrop-blur rounded-2xl p-4 flex items-center gap-3 shadow-soft">
@@ -196,7 +137,6 @@
       <!-- CORE -->
       <article class="bg-sand-50 border border-sand-200 rounded-3xl overflow-hidden card-hover shadow-soft fade-in flex flex-col">
         <div class="aspect-[16/10] overflow-hidden bg-sand-200">
-          <!-- Real image: images/board-basic.JPG -->
           <img src="images/board-basic.JPG" alt="Core tier Catan Artisan board with default red, orange, white, and blue player pieces on magnetic hex tiles" class="w-full h-full object-cover">
         </div>
         <div class="p-8 flex flex-col flex-1">
@@ -223,7 +163,6 @@
           MOST POPULAR
         </div>
         <div class="aspect-[16/10] overflow-hidden bg-forest-900">
-          <!-- Real image: images/in-game-shot-2.JPG -->
           <img src="images/in-game-shot-2.JPG" alt="Hero tier Catan Artisan game in play with custom finished wooden box and silk-textured player pieces" class="w-full h-full object-cover opacity-90">
         </div>
         <div class="p-8 flex flex-col flex-1">
@@ -239,7 +178,7 @@
             <li class="flex gap-2"><span class="text-honey-400 font-bold">✓</span> Premium gift packaging</li>
             <li class="flex gap-2"><span class="text-honey-400 font-bold">✓</span> Priority queue (ships first)</li>
           </ul>
-          <button data-tier="hero" data-price="399" class="select-tier w-full px-6 py-3.5 rounded-full text-sm font-semibold bg-honey-600 hover:bg-honey-500 text-sand-50 transition">
+          <button data-tier="hero" data-price="399" class="select-tier btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold">
             Choose Hero — $399
           </button>
         </div>
@@ -251,7 +190,6 @@
           LIMITED EDITION
         </div>
         <div class="aspect-[16/10] overflow-hidden bg-sand-200">
-          <!-- Real image: images/in-game-shot-3.JPG -->
           <img src="images/in-game-shot-3.JPG" alt="Premium tier Catan Artisan set with airbrushed names, custom robber, and oak finished heirloom box" class="w-full h-full object-cover">
         </div>
         <div class="p-8 flex flex-col flex-1">
@@ -331,7 +269,7 @@
       </div>
     </div>
 
-    <!-- STEP 2: CUSTOMIZATION (FULL WIDTH 2-COL ON DESKTOP) -->
+    <!-- STEP 2: CUSTOMIZATION -->
     <div class="bg-sand-50 rounded-3xl p-6 lg:p-10 border border-sand-200 shadow-soft mb-6 fade-in">
       <div class="flex items-center gap-3 mb-8">
         <span class="w-8 h-8 rounded-full bg-forest-800 text-sand-50 flex items-center justify-center font-serif text-sm">2</span>
@@ -349,7 +287,6 @@
           <div class="grid grid-cols-2 gap-3">
             <button class="opt active rounded-2xl p-4 text-left" data-group="texture" data-value="basic">
               <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
-                <!-- Real image: images/pieces-red.JPG -->
                 <img src="images/pieces-red.JPG" alt="Basic solid color Catan player pieces in red — settlements, cities, and roads" class="w-full h-full object-cover">
               </div>
               <div class="font-semibold text-sm">Basic</div>
@@ -357,7 +294,6 @@
             </button>
             <button class="opt rounded-2xl p-4 text-left" data-group="texture" data-value="silk">
               <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
-                <!-- Real image: images/pieces-yellow.JPG -->
                 <img src="images/pieces-yellow.JPG" alt="Premium silk-textured Catan player pieces in shimmering yellow Bambu Studios Silk+ filament" class="w-full h-full object-cover">
               </div>
               <div class="font-semibold text-sm">Silk <span id="silkPriceTag" class="text-honey-600">+$39</span></div>
@@ -374,9 +310,7 @@
             <div id="paletteLabel" class="text-[11px] text-forest-900/60 font-semibold">Default palette</div>
           </div>
           <p class="text-[11px] text-forest-900/55 mb-3">Tap to pick the 4 player colors for your set.</p>
-          <div id="swatchGrid" class="grid grid-cols-4 sm:grid-cols-4 gap-2 mb-3">
-            <!-- swatches injected by JS -->
-          </div>
+          <div id="swatchGrid" class="grid grid-cols-4 sm:grid-cols-4 gap-2 mb-3"></div>
           <div class="text-[11px] text-forest-900/70 mb-1">Selected: <span id="selectedColors" class="font-semibold text-forest-900">Red, Orange, White, Blue</span></div>
           <div class="text-[11px] text-forest-900/55"><span id="swatchCount">4</span> of 4 chosen</div>
         </div>
@@ -390,7 +324,6 @@
           <div class="grid grid-cols-2 gap-3">
             <button class="opt active rounded-2xl p-4 text-left" data-group="robber" data-value="classic">
               <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
-                <!-- Real image: images/robber-front.JPG -->
                 <img src="images/robber-front.JPG" alt="Classic Bandit Catan robber figurine — front view of the default 3D printed design" class="w-full h-full object-cover">
               </div>
               <div class="font-semibold text-sm">Classic Bandit</div>
@@ -398,7 +331,6 @@
             </button>
             <button class="opt rounded-2xl p-4 text-left" data-group="robber" data-value="custom">
               <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
-                <!-- Real image: images/robber-side.JPG -->
                 <img src="images/robber-side.JPG" alt="Custom hand-sculpted Catan robber 3D printed from a customer-supplied photo" class="w-full h-full object-cover">
               </div>
               <div class="font-semibold text-sm">Custom from Photo <span id="robberPriceTag" class="text-honey-600">+$20</span></div>
@@ -494,7 +426,7 @@
           </div>
           <div id="namesInputRow" class="hidden">
             <label class="block text-[11px] font-semibold text-forest-900/70 mb-2">Enter family names (we'll airbrush them onto pieces & box):</label>
-            <input id="namesInput" type="text" placeholder="e.g. George & Dad" class="w-full px-4 py-3 rounded-xl border border-sand-300 bg-white text-sm focus:outline-none focus:border-forest-800 focus:ring-2 focus:ring-honey-600/20">
+            <input id="namesInput" type="text" placeholder="e.g. George & Dad" class="w-full px-4 py-3 rounded-xl text-sm">
             <p class="text-[11px] text-forest-900/55 mt-2">Up to 30 characters. We'll send a mockup before we airbrush.</p>
           </div>
         </div>
@@ -510,14 +442,14 @@
             <span class="w-8 h-8 rounded-full bg-honey-600 text-sand-50 flex items-center justify-center font-serif text-sm">3</span>
             <h3 class="font-serif text-xl">Review & Lock It In</h3>
           </div>
-          <div id="breakdown" class="text-sm text-sand-100/85 space-y-2 border-t border-sand-100/15 pt-5"></div>
+          <div id="breakdown" class="text-sm text-sand-100/85 space-y-2 border-t border-sand-100/10 pt-5"></div>
         </div>
         <div>
           <div class="text-right mb-4">
             <div class="text-xs uppercase tracking-wider text-honey-400 font-semibold">Your Total</div>
             <div id="priceTotalBig" class="font-serif text-5xl text-sand-50">$299</div>
           </div>
-          <button id="addToCart" class="w-full bg-honey-600 hover:bg-honey-500 text-sand-50 px-6 py-4 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 transition">
+          <button id="addToCart" class="btn-primary w-full px-6 py-4 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2">
             Add to Cart
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </button>
@@ -536,8 +468,7 @@
 <section class="py-20 lg:py-28">
   <div class="max-w-6xl mx-auto px-5 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
     <div class="relative fade-in">
-      <div class="rounded-3xl overflow-hidden shadow-soft aspect-[4/5]">
-        <!-- Real image: images/hero-nobox.JPG -->
+      <div class="rounded-3xl overflow-hidden shadow-glow aspect-[4/5]">
         <img src="images/hero-nobox.JPG" alt="Full Catan Artisan set components laid out — magnetic hex tiles, settlements, cities, roads, custom robber, and number tokens" class="w-full h-full object-cover">
       </div>
       <div class="absolute -bottom-6 -right-6 bg-honey-600 text-sand-50 rounded-2xl p-5 shadow-glow max-w-[200px] hidden md:block">
@@ -590,7 +521,6 @@
 <!-- ============ SOCIAL PROOF ============ -->
 <section class="py-20 lg:py-28 bg-forest-900 text-sand-100 relative overflow-hidden">
   <div class="absolute inset-0 opacity-10">
-    <!-- Real image: images/in-game-shot-1.JPG -->
     <img src="images/in-game-shot-1.JPG" alt="" class="w-full h-full object-cover">
   </div>
   <div class="relative max-w-7xl mx-auto px-5 lg:px-8">
@@ -603,7 +533,6 @@
         <div class="text-honey-400 mb-4">★★★★★</div>
         <blockquote class="font-serif text-lg leading-relaxed">"Worth every penny of the Premium tier. The magnetic tiles are a game-changer — literally. Our set is #3 of 5 and my kids already fight over who inherits it."</blockquote>
         <figcaption class="mt-5 flex items-center gap-3">
-          <!-- Real image: images/pieces-red.JPG -->
           <img src="images/pieces-red.JPG" alt="Premium magnetic Catan player pieces in red — settlements, cities, and roads" class="w-10 h-10 rounded-full object-cover">
           <div><div class="font-semibold text-sm">Dan & Sarah K.</div><div class="text-xs text-sand-100/60">Premium Bundle • #3/5</div></div>
         </figcaption>
@@ -612,7 +541,6 @@
         <div class="text-honey-400 mb-4">★★★★★</div>
         <blockquote class="font-serif text-lg leading-relaxed">"I sent them a photo of our family golden retriever. Two weeks later — there he was, my custom robber. My wife actually cried. Game night will never be the same."</blockquote>
         <figcaption class="mt-5 flex items-center gap-3">
-          <!-- Real image: images/robber-front.JPG -->
           <img src="images/robber-front.JPG" alt="Custom 3D printed Catan robber figurine, hand-sculpted from a customer photo" class="w-10 h-10 rounded-full object-cover">
           <div><div class="font-semibold text-sm">Marcus T.</div><div class="text-xs text-sand-100/60">Premium Bundle</div></div>
         </figcaption>
@@ -621,7 +549,6 @@
         <div class="text-honey-400 mb-4">★★★★★</div>
         <blockquote class="font-serif text-lg leading-relaxed">"I gave the Core set to my dad for his 70th. He actually teared up reading the signed card. Best gift I've ever bought, full stop."</blockquote>
         <figcaption class="mt-5 flex items-center gap-3">
-          <!-- Real image: images/pieces-blue.JPG -->
           <img src="images/pieces-blue.JPG" alt="Premium magnetic Catan player pieces in blue — settlements, cities, and roads" class="w-10 h-10 rounded-full object-cover">
           <div><div class="font-semibold text-sm">Priya N.</div><div class="text-xs text-sand-100/60">Core Bundle</div></div>
         </figcaption>
@@ -714,7 +641,6 @@
   </div>
 </footer>
 
-<!-- ============ JS ============ -->
 <script>
   // Mobile menu
   const menuBtn = document.getElementById('menuBtn');
@@ -733,11 +659,10 @@
   const TIER_LABEL = { core: 'Core Bundle', hero: 'Hero Bundle', premium: 'Premium Bundle' };
   const TIER_BASE  = { core: 299, hero: 399, premium: 799 };
 
-  // Per-tier upgrade price matrix. 0 = included, null = not applicable.
   const PRICING = {
     texture_silk:    { core: 39, hero: 20, premium: 0 },
     robber_custom:   { core: 20, hero: 10, premium: 0 },
-    finish_custom:   { core: 59, hero: 39, premium: 0 }, // any finish other than default Bombay Mahogany
+    finish_custom:   { core: 59, hero: 39, premium: 0 },
     trim_custom:     { core: 25, hero: 10, premium: 0 },
     names_add:       { core: 79, hero: 39, premium: 0 },
   };
@@ -764,21 +689,19 @@
     { name:'Silk Copper',    hex:'#d99a6c' },
   ];
 
-  // State
   const state = {
     tier: 'core',
-    texture: 'basic',          // 'basic' | 'silk'
+    texture: 'basic',
     colors: [...DEFAULT_PALETTE],
-    robber: 'classic',         // 'classic' | 'custom'
-    wood: 'plywood',           // 'plywood' | 'pine' | 'maple' | 'oak'
-    finish: 'bombay',          // 'bombay' | 'oak' | 'black' | 'chestnut'
-    trim: 'standard',          // 'standard' | 'custom'
+    robber: 'classic',
+    wood: 'plywood',
+    finish: 'bombay',
+    trim: 'standard',
     trimColor: 'Red',
-    names: 'none',             // 'none' | 'add'
+    names: 'none',
     namesText: '',
   };
 
-  // ---- Tier locks (wood Maple/Oak require premium) ----
   function applyTierLocks() {
     const rank = TIER_RANK[state.tier];
     document.querySelectorAll('.opt[data-min-tier]').forEach(btn => {
@@ -788,7 +711,6 @@
       btn.disabled = locked;
       if (locked && btn.classList.contains('active')) {
         btn.classList.remove('active');
-        // Fall back to first unlocked option in group
         const group = btn.dataset.group;
         const fallback = document.querySelector(`.opt[data-group="${group}"]:not([data-min-tier])`);
         if (fallback) {
@@ -799,7 +721,6 @@
     });
   }
 
-  // ---- Update price hint labels next to each option group ----
   function updateHints() {
     const t = state.tier;
     const fmt = (p) => p === 0 ? 'Included' : ('+$' + p);
@@ -824,7 +745,6 @@
     document.getElementById('namesPriceTag').textContent = fmt(PRICING.names_add[t]);
   }
 
-  // ---- Render player color swatches (switches palette when texture changes) ----
   function renderSwatches() {
     const palette = state.texture === 'silk' ? SILK_SWATCHES : DEFAULT_SWATCHES;
     const grid = document.getElementById('swatchGrid');
@@ -835,9 +755,9 @@
         <button type="button"
           class="swatch group relative rounded-xl border-2 ${selected ? 'border-forest-800' : 'border-sand-200'} hover:border-forest-800 transition p-2 text-left"
           data-color="${s.name}">
-          <div class="aspect-square rounded-lg mb-1.5 ${s.hex === '#f5f5f0' || s.hex === '#ece4d6' ? 'border border-sand-300' : ''}" style="background:${s.hex};"></div>
-          <div class="text-[10px] font-semibold text-forest-900 truncate">${s.name}</div>
-          ${selected ? `<div class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-honey-600 text-sand-50 text-[10px] font-bold flex items-center justify-center">${idx + 1}</div>` : ''}
+          <div class="aspect-square rounded-lg mb-1.5" style="background:${s.hex}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);"></div>
+          <div class="text-[10px] font-semibold truncate">${s.name}</div>
+          ${selected ? `<div class="absolute" style="top:0.375rem;right:0.375rem;width:1.25rem;height:1.25rem;border-radius:9999px;background:var(--accent);color:#1a1108;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(196,122,63,0.6);">${idx + 1}</div>` : ''}
         </button>
       `;
     }).join('');
@@ -847,15 +767,14 @@
     document.getElementById('selectedColors').textContent = state.colors.join(', ') || '—';
     document.getElementById('swatchCount').textContent = state.colors.length;
 
-    // Wire up swatch clicks
     grid.querySelectorAll('.swatch').forEach(btn => {
       btn.addEventListener('click', () => {
         const color = btn.dataset.color;
         const i = state.colors.indexOf(color);
         if (i >= 0) {
-          state.colors.splice(i, 1); // toggle off
+          state.colors.splice(i, 1);
         } else {
-          if (state.colors.length >= 4) state.colors.shift(); // FIFO when 4 reached
+          if (state.colors.length >= 4) state.colors.shift();
           state.colors.push(color);
         }
         renderSwatches();
@@ -864,13 +783,11 @@
     });
   }
 
-  // ---- Recalculate total + breakdown ----
   function recalc() {
     const t = state.tier;
     let total = TIER_BASE[t];
     const lines = [{ label: 'Tier', value: TIER_LABEL[t], price: TIER_BASE[t], base: true }];
 
-    // Texture
     if (state.texture === 'silk') {
       const p = PRICING.texture_silk[t];
       if (p > 0) total += p;
@@ -879,10 +796,8 @@
       lines.push({ label: 'Texture', value: 'Basic', price: 0 });
     }
 
-    // Player Colors
     lines.push({ label: 'Player Colors', value: state.colors.join(', ') || 'None', price: 0 });
 
-    // Robber
     if (state.robber === 'custom') {
       const p = PRICING.robber_custom[t];
       if (p > 0) total += p;
@@ -891,11 +806,9 @@
       lines.push({ label: 'Robber', value: 'Classic Bandit', price: 0 });
     }
 
-    // Wood Type (no upgrade fee, just availability)
     const woodLabels = { plywood:'Plywood', pine:'Pine', maple:'Maple', oak:'Oak' };
     lines.push({ label: 'Wood Type', value: woodLabels[state.wood], price: 0 });
 
-    // Box Finish — anything other than default 'bombay' triggers upgrade
     const finishLabels = { bombay:'Bombay Mahogany', oak:'Oak', black:'Black', chestnut:'Chestnut' };
     if (state.finish !== 'bombay') {
       const p = PRICING.finish_custom[t];
@@ -905,7 +818,6 @@
       lines.push({ label: 'Box Finish', value: 'Bombay Mahogany', price: 0 });
     }
 
-    // Trim
     if (state.trim === 'custom') {
       const p = PRICING.trim_custom[t];
       if (p > 0) total += p;
@@ -914,7 +826,6 @@
       lines.push({ label: 'Trim', value: 'Standard', price: 0 });
     }
 
-    // Names
     if (state.names === 'add') {
       const p = PRICING.names_add[t];
       if (p > 0) total += p;
@@ -922,12 +833,10 @@
       lines.push({ label: 'Names', value: display, price: p });
     }
 
-    // Render totals
     document.getElementById('priceTotal').textContent    = '$' + total;
     document.getElementById('priceTotalBig').textContent = '$' + total;
     document.getElementById('tierLabel').textContent     = TIER_LABEL[t];
 
-    // Render breakdown
     document.getElementById('breakdown').innerHTML = lines.map(l => {
       const right = l.base
         ? `<span class="font-semibold text-sand-50">$${l.price}</span>`
@@ -941,7 +850,6 @@
     }).join('');
   }
 
-  // ---- Wire up generic .opt buttons (single-select per group) ----
   document.querySelectorAll('.opt').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.disabled || btn.classList.contains('locked')) return;
@@ -956,7 +864,6 @@
         updateHints();
       }
       if (group === 'texture') {
-        // Switch swatch palette and reset selections to first 4 of new palette
         const newPalette = value === 'silk' ? SILK_SWATCHES : DEFAULT_SWATCHES;
         state.colors = newPalette.slice(0, 4).map(s => s.name);
         renderSwatches();
@@ -972,7 +879,6 @@
     });
   });
 
-  // ---- Trim color swatch selection ----
   document.querySelectorAll('.trim-swatch').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.trim-swatch').forEach(b => {
@@ -986,14 +892,12 @@
     });
   });
 
-  // ---- Names input ----
   document.getElementById('namesInput').addEventListener('input', (e) => {
     state.namesText = e.target.value.slice(0, 30);
     if (e.target.value.length > 30) e.target.value = state.namesText;
     recalc();
   });
 
-  // ---- Tier select buttons in pricing cards scroll + sync ----
   document.querySelectorAll('.select-tier').forEach(btn => {
     btn.addEventListener('click', () => {
       const tier = btn.dataset.tier;
@@ -1003,29 +907,26 @@
     });
   });
 
-  // ---- Init ----
   applyTierLocks();
   updateHints();
   renderSwatches();
   recalc();
 
-  // ---- Add to Cart feedback ----
   const cartBtn = document.getElementById('addToCart');
   cartBtn.addEventListener('click', () => {
     const original = cartBtn.innerHTML;
     cartBtn.innerHTML = '✓ Added — checkout coming soon';
-    cartBtn.style.background = '#566e56';
+    cartBtn.style.background = 'linear-gradient(180deg, #8a6f4f, #6f5739)';
     setTimeout(() => { cartBtn.innerHTML = original; cartBtn.style.background = ''; }, 2000);
   });
 
-  // Same friendly feedback for any other btn-primary anchors with href="#"
   document.querySelectorAll('a.btn-primary').forEach(btn => {
     btn.addEventListener('click', e => {
       if (btn.getAttribute('href') === '#') {
         e.preventDefault();
         const original = btn.innerHTML;
         btn.innerHTML = '✓ Added — checkout coming soon';
-        btn.style.background = '#566e56';
+        btn.style.background = 'linear-gradient(180deg, #8a6f4f, #6f5739)';
         setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 1800);
       }
     });
