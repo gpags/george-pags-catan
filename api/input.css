@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-    /* Surfaces — warm dark workshop */
+    /* Surfaces â€” warm dark workshop */
     --color-bg-0: #0f0c0a;
     --color-bg-1: #1a1612;
     --color-bg-2: #221d18;
     --color-bg-3: #2b251f;
-    /* Text — warm off-white / beige */
+    /* Text â€” warm off-white / beige */
     --color-text: #f3e9dc;
     --color-text-muted: #c9b89c;
     --color-text-dim: #9a8a72;
     --color-text-faint: #6b5f4d;
-    /* Accents — terracotta / amber / bronze / moss */
+    /* Accents â€” terracotta / amber / bronze / moss */
     --color-accent: #c47a3f;
     --color-accent-soft: #e8b589;
     --color-accent-deep: #a55f2a;
@@ -150,7 +150,7 @@
     .shadow-glow {
         box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.65), 0 0 0 1px rgb(232 181 137 / 0.16), 0 0 60px -20px rgb(196 122 63 / 0.30);
     }
-    /* Image wrappers — inset emissive ring */
+    /* Image wrappers â€” inset emissive ring */
     .rounded-3xl.overflow-hidden,
     .rounded-2xl.overflow-hidden {
         position: relative;
@@ -204,7 +204,7 @@
             mask-composite: exclude;
             pointer-events: none;
         }
-    /* Section dividers — emissive hairlines */
+    /* Section dividers â€” emissive hairlines */
     section.border-y {
         position: relative;
         border-top: 0;
