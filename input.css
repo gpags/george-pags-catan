@@ -1,0 +1,338 @@
+/* ============================================================================
+   REALIZED PRINTS — input.css (Tailwind v4 source-of-truth)
+   ----------------------------------------------------------------------------
+   This file is the source for the compiled output.css. The hand-tuned
+   output.css is the canonical artifact; this stays in sync so a future
+   `npx tailwindcss -i input.css -o output.css` build remains consistent.
+
+   Aesthetic direction: "Lamplit Workshop" v2
+     • Warm dark workshop palette
+     • Single ember-brass accent (#c8884a)
+     • Layered material textures (paper, linen, wood, leather, brushed)
+   ============================================================================ */
+
+@import "tailwindcss";
+
+@theme {
+    /* ---- Surfaces (warm dark workshop) ---- */
+    --color-bg-0: #100c09;
+    --color-bg-1: #1a1612;
+    --color-bg-2: #221d18;
+    --color-bg-3: #2c251e;
+    --color-bg-4: #36302a;
+
+    /* ---- Light surfaces (parchment family) ---- */
+    --color-paper-0: #f6efe1;
+    --color-paper-1: #ede4d2;
+    --color-paper-2: #ddd0b8;
+    --color-paper-shadow: #b8a684;
+
+    /* ---- Text ---- */
+    --color-text: #f4ead9;
+    --color-text-muted: #c9b89c;
+    --color-text-dim: #9a8a72;
+    --color-text-faint: #6b5f4d;
+    --color-text-on-paper: #1d1813;
+
+    /* ---- Accent — refined ember-brass (Linear/Arc-grade restraint) ----
+       Tuned slightly toward brass and away from orange-honey (was #c47a3f)  */
+    --color-accent: #c8884a;
+    --color-accent-soft: #e6b984;
+    --color-accent-deep: #9c6730;
+
+    /* ---- Supporting metals & one cool counterpoint ---- */
+    --color-bronze: #8a6f4f;
+    --color-bronze-soft: #b09376;
+    --color-moss: #6b7a5a;
+    --color-moss-soft: #8a9678;
+
+    /* ---- Borders ---- */
+    --color-border: rgb(232 181 137 / 0.10);
+    --color-border-strong: rgb(232 181 137 / 0.20);
+
+    /* ---- Legacy palette remap (so existing class names re-skin to new theme) ---- */
+    --color-sand-50:  #f6efe1;
+    --color-sand-100: #ede4d2;
+    --color-sand-200: #ddd0b8;
+    --color-sand-300: #b8a684;
+    --color-forest-700: #8a6f4f;
+    --color-forest-800: #2c241c;
+    --color-forest-900: #1a1612;
+    --color-sage-600: #6b7a5a;
+    --color-honey-400: #e6b984;
+    --color-honey-500: #e6b984;
+    --color-honey-600: #c8884a;
+    --color-honey-700: #9c6730;
+
+    /* ---- Radii ---- */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --radius-2xl: 32px;
+
+    /* ---- Fonts ---- */
+    --font-serif: "Cormorant Garamond", ui-serif, "Iowan Old Style", Georgia, serif;
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    /* ---- Easing ---- */
+    --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+    html { color-scheme: dark; scroll-behavior: smooth; }
+
+    body {
+        background-color: var(--color-bg-0);
+        color: var(--color-text);
+        font-family: var(--font-sans);
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-image:
+            radial-gradient(72% 55% at 12% -8%,  rgb(200 136 74 / 0.08) 0%, transparent 60%),
+            radial-gradient(60% 45% at 100% 100%, rgb(138 111 79 / 0.06) 0%, transparent 60%),
+            radial-gradient(40% 30% at 50% 40%,   rgb(255 220 180 / 0.025) 0%, transparent 70%);
+        background-attachment: fixed;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: var(--font-serif);
+        font-weight: 500;
+        letter-spacing: -0.012em;
+        line-height: 1.12;
+    }
+
+    ::selection { background: var(--color-accent); color: #1a0f06; }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+@layer components {
+
+    /* ============================================================
+       TEXTURE LAYERS — inlined SVG noise/weave (zero extra requests)
+       ============================================================ */
+    :root {
+        --tex-paper:
+            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.86  0 0 0 0 0.72  0 0 0 0.45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        --tex-linen:
+            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.6 0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92  0 0 0 0 0.83  0 0 0 0 0.66  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        --tex-brushed:
+            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'><filter id='n'><feTurbulence type='turbulence' baseFrequency='0.02 1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.78  0 0 0 0 0.6  0 0 0 0.32 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        --tex-wood:
+            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='300'><filter id='n'><feTurbulence type='turbulence' baseFrequency='0.012 1.1' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.2  0 0 0 0.4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        --tex-leather:
+            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    .grain { position: relative; isolation: isolate; }
+    .grain > * { position: relative; z-index: 1; }
+    .grain::before {
+        content: "";
+        position: absolute; inset: 0;
+        background-image: var(--tex-paper);
+        background-size: 220px 220px;
+        mix-blend-mode: overlay;
+        opacity: 0.18;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* ============================================================
+       BUTTONS — brass primary + etched ghost
+       ============================================================ */
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.875rem 1.5rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        color: #1a0f06;
+        background: linear-gradient(180deg, var(--color-accent-soft) 0%, var(--color-accent) 50%, var(--color-accent-deep) 100%);
+        box-shadow:
+            inset 0 1px 0 rgb(255 240 210 / 0.45),
+            inset 0 -1px 0 rgb(0 0 0 / 0.22),
+            0 8px 22px -8px rgb(200 136 74 / 0.55),
+            0 0 0 1px rgb(232 181 137 / 0.22);
+        text-shadow: 0 1px 0 rgb(255 240 210 / 0.25);
+        transition: transform 220ms var(--ease-soft),
+                    box-shadow 220ms var(--ease-soft),
+                    filter 220ms var(--ease-soft);
+    }
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.05) saturate(1.05);
+        box-shadow:
+            inset 0 1px 0 rgb(255 240 210 / 0.55),
+            inset 0 -1px 0 rgb(0 0 0 / 0.22),
+            0 14px 32px -10px rgb(200 136 74 / 0.65),
+            0 0 0 1px rgb(232 181 137 / 0.32);
+    }
+    .btn-primary:active { transform: translateY(0); filter: brightness(0.98); }
+
+    .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.875rem 1.5rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        color: var(--color-text-on-paper);
+        background: linear-gradient(180deg, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0));
+        border: 1px solid rgb(29 24 19 / 0.18);
+        box-shadow:
+            inset 0 1px 0 rgb(255 255 255 / 0.5),
+            0 1px 2px rgb(82 60 30 / 0.06);
+        transition: all 220ms var(--ease-soft);
+    }
+    .btn-ghost:hover {
+        background: rgb(255 255 255 / 0.6);
+        border-color: var(--color-accent);
+        color: var(--color-accent-deep);
+        box-shadow:
+            inset 0 1px 0 rgb(255 255 255 / 0.6),
+            0 4px 12px -4px rgb(200 136 74 / 0.25),
+            0 0 0 1px rgb(200 136 74 / 0.18);
+    }
+
+    /* Ghost on dark sections flips to dark surface */
+    .bg-forest-900 .btn-ghost {
+        color: var(--color-text);
+        background: rgb(232 181 137 / 0.04);
+        border-color: var(--color-border-strong);
+    }
+    .bg-forest-900 .btn-ghost:hover {
+        background: rgb(232 181 137 / 0.10);
+        border-color: rgb(232 181 137 / 0.40);
+        color: var(--color-accent-soft);
+    }
+
+    /* ============================================================
+       CARDS, TIERS, CHIPS, SHADOWS — see output.css for the
+       full hand-tuned section-by-section material treatments.
+       The classes below are the minimum components needed when
+       compiling from this source.
+       ============================================================ */
+
+    .card-hover {
+        transition: transform 420ms var(--ease-out),
+                    box-shadow 420ms var(--ease-out),
+                    border-color 420ms var(--ease-out);
+    }
+
+    .shadow-soft {
+        box-shadow:
+            0 8px 24px -8px rgb(0 0 0 / 0.45),
+            0 0 0 1px rgb(232 181 137 / 0.06);
+    }
+    .shadow-glow {
+        box-shadow:
+            0 24px 60px -20px rgb(0 0 0 / 0.65),
+            0 0 0 1px rgb(232 181 137 / 0.10),
+            0 0 80px -30px rgb(200 136 74 / 0.30);
+    }
+
+    .opt {
+        cursor: pointer;
+        border: 1px solid rgb(29 24 19 / 0.10);
+        background: linear-gradient(180deg, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.1));
+        color: var(--color-text-on-paper);
+        border-radius: var(--radius-md);
+        padding: 0.75rem 1rem;
+        transition: all 200ms var(--ease-soft);
+        box-shadow:
+            inset 0 1px 0 rgb(255 255 255 / 0.6),
+            0 1px 2px rgb(82 60 30 / 0.04);
+    }
+    .opt:hover {
+        border-color: var(--color-accent);
+        background: rgb(255 255 255 / 0.7);
+        transform: translateY(-1px);
+    }
+    .opt.active {
+        border-color: var(--color-accent);
+        background: linear-gradient(180deg, rgb(200 136 74 / 0.16), rgb(200 136 74 / 0.06));
+        box-shadow:
+            inset 0 1px 0 rgb(255 240 210 / 0.4),
+            0 0 0 1px var(--color-accent),
+            0 8px 20px -8px rgb(200 136 74 / 0.35);
+    }
+    .opt.locked, .opt:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .tier-popular {
+        position: relative;
+        background: linear-gradient(180deg, var(--color-bg-2), var(--color-bg-1));
+        color: var(--color-text);
+    }
+    .tier-popular::before {
+        content: "";
+        position: absolute; inset: 0; border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(180deg, var(--color-accent-soft), var(--color-accent) 30%, rgb(138 111 79 / 0.4));
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+                mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    /* Sticky header with frost */
+    header.sticky {
+        background: rgb(16 12 9 / 0.72);
+        backdrop-filter: blur(14px) saturate(150%);
+        -webkit-backdrop-filter: blur(14px) saturate(150%);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    /* Inputs */
+    input[type="text"], input[type="email"], textarea {
+        background: rgb(255 255 255 / 0.65);
+        color: var(--color-text-on-paper);
+        border: 1px solid rgb(29 24 19 / 0.18);
+        border-radius: var(--radius-md);
+        padding: 0.75rem 1rem;
+        transition: all 200ms var(--ease-soft);
+        box-shadow:
+            inset 0 1px 2px rgb(82 60 30 / 0.06),
+            inset 0 1px 0 rgb(255 255 255 / 0.6);
+    }
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+        outline: none;
+        border-color: var(--color-accent);
+        background: rgb(255 255 255 / 0.85);
+        box-shadow:
+            inset 0 1px 2px rgb(82 60 30 / 0.06),
+            0 0 0 3px rgb(200 136 74 / 0.20);
+    }
+
+    /* Pulse */
+    .pulse-dot {
+        width: 0.5rem; height: 0.5rem;
+        border-radius: 9999px;
+        background: var(--color-accent-soft);
+        animation: pulse-glow 2s var(--ease-soft) infinite;
+        display: inline-block;
+    }
+    @keyframes pulse-glow {
+        0%   { box-shadow: 0 0 0 0 rgb(232 181 137 / 0.5); }
+        70%  { box-shadow: 0 0 0 10px rgb(232 181 137 / 0); }
+        100% { box-shadow: 0 0 0 0 rgb(232 181 137 / 0); }
+    }
+
+    /* Fade-in observer */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 700ms var(--ease-out),
+                    transform 700ms var(--ease-out);
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+}
