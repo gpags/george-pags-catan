@@ -1,0 +1,3099 @@
+<!-- catan-artisan.html — Realized Prints | Catan Artisan Collection product page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catan Artisan Collection — Realized Prints | catan-artisan.html</title>
+    <meta name="description" content="Magnetic, signed & numbered Catan heirloom sets. 3 premium tiers, fully customizable, hand-crafted by a father & son in the USA.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="output.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* =========================================================
+           DESIGN TOKENS — Catan Artisan / Realized Prints
+           Warm, woody, hand-crafted heirloom aesthetic
+           ========================================================= */
+        :root {
+            /* Sand — warm parchment / linen */
+            --sand-50:  #faf6ee;
+            --sand-100: #f4ecdc;
+            --sand-200: #e8dcc1;
+            --sand-300: #d4c19a;
+
+            /* Forest — deep workshop green */
+            --forest-700: #2f3a2c;
+            --forest-800: #232b21;
+            --forest-900: #1a2018;
+
+            /* Honey — burnished brass / copper */
+            --honey-400: #d9a86a;
+            --honey-600: #b88542;
+            --honey-700: #8e6432;
+
+            /* Sage — softer accent */
+            --sage-600: #6b8463;
+
+            /* Accent alias used by JS */
+            --accent: var(--honey-600);
+
+            /* Layered shadows for warmth & depth */
+            --shadow-soft: 0 1px 2px rgba(35,43,33,0.04),
+                           0 8px 24px -8px rgba(35,43,33,0.10),
+                           0 2px 6px -2px rgba(35,43,33,0.06);
+            --shadow-glow: 0 1px 2px rgba(35,43,33,0.06),
+                           0 20px 50px -12px rgba(35,43,33,0.28),
+                           0 8px 20px -8px rgba(184,133,66,0.18);
+            --shadow-inset-paper: inset 0 1px 0 rgba(255,255,255,0.65),
+                                  inset 0 -1px 0 rgba(35,43,33,0.04);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+            color: var(--forest-900);
+            background: var(--sand-50);
+            margin: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Subtle full-page paper grain so nothing feels flat */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            opacity: 0.55;
+            mix-blend-mode: multiply;
+        }
+        body > * { position: relative; z-index: 1; }
+
+        /* =========================================================
+           TYPOGRAPHY
+           ========================================================= */
+        .font-serif { font-family: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif; font-weight: 500; letter-spacing: -0.005em; }
+        .font-sans  { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+        .italic     { font-style: italic; }
+        .antialiased { -webkit-font-smoothing: antialiased; }
+
+        h1, h2, h3, h4 { letter-spacing: -0.015em; }
+        em, .italic { font-style: italic; }
+
+        /* =========================================================
+           LAYOUT UTILITIES (Tailwind-equivalent surface)
+           ========================================================= */
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .sticky   { position: sticky; }
+        .fixed    { position: fixed; }
+        .inset-0  { inset: 0; }
+        .top-0    { top: 0; }
+        .top-5    { top: 1.25rem; }
+        .right-0  { right: 0; }
+        .right-5  { right: 1.25rem; }
+        .bottom-5 { bottom: 1.25rem; }
+        .left-5   { left: 1.25rem; }
+        .-top-6   { top: -1.5rem; }
+        .-left-6  { left: -1.5rem; }
+        .-bottom-6{ bottom: -1.5rem; }
+        .-right-6 { right: -1.5rem; }
+        .z-10     { z-index: 10; }
+        .z-50     { z-index: 50; }
+
+        .block    { display: block; }
+        .inline-block { display: inline-block; }
+        .inline-flex  { display: inline-flex; }
+        .flex     { display: flex; }
+        .grid     { display: grid; }
+        .hidden   { display: none; }
+
+        .flex-col { flex-direction: column; }
+        .flex-wrap{ flex-wrap: wrap; }
+        .flex-1   { flex: 1 1 0%; }
+        .items-start  { align-items: flex-start; }
+        .items-center { align-items: center; }
+        .items-end    { align-items: flex-end; }
+        .items-baseline { align-items: baseline; }
+        .justify-between { justify-content: space-between; }
+        .justify-center  { justify-content: center; }
+        .text-left  { text-align: left; }
+        .text-center{ text-align: center; }
+        .text-right { text-align: right; }
+        .align-middle { vertical-align: middle; }
+
+        .gap-1\.5 { gap: 0.375rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-5 { gap: 1.25rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-9 { gap: 2.25rem; }
+        .gap-10 { gap: 2.5rem; }
+        .gap-12 { gap: 3rem; }
+        .gap-14 { gap: 3.5rem; }
+        .gap-x-6 { column-gap: 1.5rem; }
+        .gap-x-12 { column-gap: 3rem; }
+        .gap-y-2 { row-gap: 0.5rem; }
+        .gap-y-10 { row-gap: 2.5rem; }
+
+        .w-full { width: 100%; }
+        .w-1\.5 { width: 0.375rem; }
+        .w-9    { width: 2.25rem; }
+        .w-10   { width: 2.5rem; }
+        .w-12   { width: 3rem; }
+        .h-1\.5 { height: 0.375rem; }
+        .h-6    { height: 1.5rem; }
+        .h-9    { height: 2.25rem; }
+        .h-10   { height: 2.5rem; }
+        .h-12   { height: 3rem; }
+        .h-18   { height: 4.5rem; }
+        .h-full { height: 100%; }
+
+        .max-w-md { max-width: 28rem; }
+        .max-w-sm { max-width: 24rem; }
+        .max-w-xl { max-width: 36rem; }
+        .max-w-2xl{ max-width: 42rem; }
+        .max-w-5xl{ max-width: 64rem; }
+        .max-w-6xl{ max-width: 72rem; }
+        .max-w-7xl{ max-width: 80rem; }
+        .max-w-\[180px\] { max-width: 180px; }
+        .max-w-\[200px\] { max-width: 200px; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mr-1\.5 { margin-right: 0.375rem; }
+        .ml-1    { margin-left: 0.25rem; }
+        .mt-0\.5 { margin-top: 0.125rem; }
+        .mt-1    { margin-top: 0.25rem; }
+        .mt-2    { margin-top: 0.5rem; }
+        .mt-3    { margin-top: 0.75rem; }
+        .mt-4    { margin-top: 1rem; }
+        .mt-5    { margin-top: 1.25rem; }
+        .mt-6    { margin-top: 1.5rem; }
+        .mt-8    { margin-top: 2rem; }
+        .mt-9    { margin-top: 2.25rem; }
+        .mt-10   { margin-top: 2.5rem; }
+        .mb-1    { margin-bottom: 0.25rem; }
+        .mb-1\.5 { margin-bottom: 0.375rem; }
+        .mb-2    { margin-bottom: 0.5rem; }
+        .mb-3    { margin-bottom: 0.75rem; }
+        .mb-4    { margin-bottom: 1rem; }
+        .mb-5    { margin-bottom: 1.25rem; }
+        .mb-6    { margin-bottom: 1.5rem; }
+        .mb-8    { margin-bottom: 2rem; }
+        .mb-10   { margin-bottom: 2.5rem; }
+        .mb-12   { margin-bottom: 3rem; }
+
+        .px-2  { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-3  { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4  { padding-left: 1rem; padding-right: 1rem; }
+        .px-5  { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .px-6  { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-7  { padding-left: 1.75rem; padding-right: 1.75rem; }
+        .px-8  { padding-left: 2rem; padding-right: 2rem; }
+        .py-1  { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-2  { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .py-3  { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+        .py-4  { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6  { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8  { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-14 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+        .pt-5  { padding-top: 1.25rem; }
+        .pt-8  { padding-top: 2rem; }
+        .pt-16 { padding-top: 4rem; }
+        .pb-8  { padding-bottom: 2rem; }
+        .pb-12 { padding-bottom: 3rem; }
+        .p-2   { padding: 0.5rem; }
+        .p-4   { padding: 1rem; }
+        .p-5   { padding: 1.25rem; }
+        .p-6   { padding: 1.5rem; }
+        .p-7   { padding: 1.75rem; }
+        .p-8   { padding: 2rem; }
+
+        /* =========================================================
+           GRID
+           ========================================================= */
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .sm\:inline-flex { display: inline-flex; }
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .md\:flex-row { flex-direction: row; }
+            .md\:text-left { text-align: left; }
+            .md\:text-5xl { font-size: 3rem; line-height: 1.1; }
+            .md\:text-4xl { font-size: 2.25rem; line-height: 1.15; }
+            .md\:justify-start { justify-content: flex-start; }
+            .md\:block { display: block; }
+        }
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+            .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+            .lg\:col-span-2 { grid-column: span 2 / span 2; }
+            .lg\:col-span-6 { grid-column: span 6 / span 6; }
+            .lg\:flex { display: flex; }
+            .lg\:hidden { display: none; }
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:py-28 { padding-top: 7rem; padding-bottom: 7rem; }
+            .lg\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+            .lg\:p-6 { padding: 1.5rem; }
+            .lg\:p-8 { padding: 2rem; }
+            .lg\:p-10 { padding: 2.5rem; }
+            .lg\:gap-8 { gap: 2rem; }
+            .lg\:text-5xl { font-size: 3rem; line-height: 1.05; }
+            .lg\:text-6xl { font-size: 3.75rem; line-height: 1; }
+        }
+
+        /* =========================================================
+           TYPE SCALE
+           ========================================================= */
+        .text-\[10px\] { font-size: 10px; }
+        .text-\[11px\] { font-size: 11px; }
+        .text-\[12px\] { font-size: 12px; }
+        .text-xs   { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm   { font-size: 0.875rem; line-height: 1.4; }
+        .text-base { font-size: 1rem; line-height: 1.5; }
+        .text-lg   { font-size: 1.125rem; line-height: 1.55; }
+        .text-xl   { font-size: 1.25rem; line-height: 1.4; }
+        .text-2xl  { font-size: 1.5rem; line-height: 1.25; }
+        .text-3xl  { font-size: 1.875rem; line-height: 1.18; }
+        .text-4xl  { font-size: 2.25rem; line-height: 1.15; }
+        .text-5xl  { font-size: 3rem; line-height: 1.05; }
+
+        .font-medium   { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold     { font-weight: 700; }
+
+        .uppercase    { text-transform: uppercase; }
+        .tracking-tight  { letter-spacing: -0.025em; }
+        .tracking-wider  { letter-spacing: 0.05em; }
+        .tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+        .leading-none    { line-height: 1; }
+        .leading-tight   { line-height: 1.15; }
+        .leading-snug    { line-height: 1.35; }
+        .leading-relaxed { line-height: 1.65; }
+        .leading-\[1\.05\] { line-height: 1.05; }
+
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* =========================================================
+           COLOR UTILITIES
+           ========================================================= */
+        .bg-sand-50    { background-color: var(--sand-50); }
+        .bg-sand-100   { background-color: var(--sand-100); }
+        .bg-sand-100\/60 { background-color: rgba(244,236,220,0.6); }
+        .bg-sand-200   { background-color: var(--sand-200); }
+        .bg-sand-50\/95{ background-color: rgba(250,246,238,0.95); }
+        .bg-sand-50\/10{ background-color: rgba(250,246,238,0.10); }
+        .bg-sand-50\/5 { background-color: rgba(250,246,238,0.05); }
+        .bg-forest-800 { background-color: var(--forest-800); }
+        .bg-forest-900 { background-color: var(--forest-900); }
+        .bg-honey-600  { background-color: var(--honey-600); }
+        .bg-honey-600\/10 { background-color: rgba(184,133,66,0.10); }
+        .bg-sage-600   { background-color: var(--sage-600); }
+        .bg-red-500\/15 { background-color: rgba(239,68,68,0.15); }
+
+        .text-sand-50  { color: var(--sand-50); }
+        .text-sand-100 { color: var(--sand-100); }
+        .text-sand-100\/90 { color: rgba(244,236,220,0.90); }
+        .text-sand-100\/85 { color: rgba(244,236,220,0.85); }
+        .text-sand-100\/80 { color: rgba(244,236,220,0.80); }
+        .text-sand-100\/70 { color: rgba(244,236,220,0.70); }
+        .text-sand-100\/60 { color: rgba(244,236,220,0.60); }
+        .text-sand-100\/55 { color: rgba(244,236,220,0.55); }
+        .text-sand-300\/70 { color: rgba(212,193,154,0.70); }
+        .text-forest-700 { color: var(--forest-700); }
+        .text-forest-900 { color: var(--forest-900); }
+        .text-forest-900\/85 { color: rgba(26,32,24,0.85); }
+        .text-forest-900\/80 { color: rgba(26,32,24,0.80); }
+        .text-forest-900\/75 { color: rgba(26,32,24,0.75); }
+        .text-forest-900\/70 { color: rgba(26,32,24,0.70); }
+        .text-forest-900\/65 { color: rgba(26,32,24,0.65); }
+        .text-forest-900\/60 { color: rgba(26,32,24,0.60); }
+        .text-forest-900\/55 { color: rgba(26,32,24,0.55); }
+        .text-forest-900\/40 { color: rgba(26,32,24,0.40); }
+        .text-honey-400  { color: var(--honey-400); }
+        .text-honey-600  { color: var(--honey-600); }
+        .text-honey-700  { color: var(--honey-700); }
+        .text-red-200    { color: #fecaca; }
+
+        .border          { border: 1px solid var(--sand-200); }
+        .border-2        { border-width: 2px; border-style: solid; }
+        .border-y        { border-top: 1px solid var(--sand-200); border-bottom: 1px solid var(--sand-200); }
+        .border-t        { border-top: 1px solid var(--sand-200); }
+        .border-sand-200 { border-color: var(--sand-200); }
+        .border-sand-300 { border-color: var(--sand-300); }
+        .border-sand-100\/10 { border-color: rgba(244,236,220,0.10); }
+        .border-honey-600\/20 { border-color: rgba(184,133,66,0.20); }
+        .border-honey-600\/40 { border-color: rgba(184,133,66,0.40); }
+        .border-red-500\/30   { border-color: rgba(239,68,68,0.30); }
+
+        /* =========================================================
+           BORDERS / RADII / OVERFLOW
+           ========================================================= */
+        .rounded         { border-radius: 0.25rem; }
+        .rounded-lg      { border-radius: 0.5rem; }
+        .rounded-xl      { border-radius: 0.75rem; }
+        .rounded-2xl     { border-radius: 1rem; }
+        .rounded-3xl     { border-radius: 1.5rem; }
+        .rounded-full    { border-radius: 9999px; }
+        .rounded-bl-2xl  { border-bottom-left-radius: 1rem; }
+        .overflow-hidden { overflow: hidden; }
+
+        .aspect-\[4\/2\] { aspect-ratio: 4 / 2; }
+        .aspect-\[4\/5\] { aspect-ratio: 4 / 5; }
+        .aspect-\[16\/10\] { aspect-ratio: 16 / 10; }
+        .aspect-square { aspect-ratio: 1 / 1; }
+
+        .object-cover { object-fit: cover; }
+        .opacity-10 { opacity: 0.1; }
+        .opacity-70 { opacity: 0.7; }
+        .opacity-75 { opacity: 0.75; }
+        .opacity-80 { opacity: 0.8; }
+        .opacity-90 { opacity: 0.9; }
+
+        .shadow-soft { box-shadow: var(--shadow-soft); }
+        .shadow-glow { box-shadow: var(--shadow-glow); }
+
+        .backdrop-blur { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+
+        /* =========================================================
+           NAV — frosted, hand-finished (matches index polish)
+           ========================================================= */
+        #nav {
+            background:
+                linear-gradient(180deg, rgba(250,246,238,0.95), rgba(250,246,238,0.88)),
+                linear-gradient(180deg, transparent, rgba(35,43,33,0.02));
+            backdrop-filter: blur(18px) saturate(1.1);
+            -webkit-backdrop-filter: blur(18px) saturate(1.1);
+            border-bottom: 1px solid rgba(35,43,33,0.09);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 4px 18px -8px rgba(35,43,33,0.12);
+        }
+        #nav a:hover { color: var(--honey-700); }
+        /* Logo monogram polish (matches index logo effect) */
+        #nav .bg-forest-800 {
+            background: linear-gradient(135deg, var(--forest-700) 0%, var(--forest-900) 100%) !important;
+            box-shadow: 0 4px 14px rgba(35,43,33,0.32);
+            transition: transform 0.25s;
+        }
+        #nav a.group:hover .bg-forest-800 {
+            transform: rotate(8deg);
+        }
+        .group:hover .group-hover\:bg-honey-600 { background-color: var(--honey-600); }
+        .transition { transition: color 200ms ease, background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+
+        /* =========================================================
+           BUTTONS — burnished brass + warm wood
+           ========================================================= */
+        .btn-primary {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sand-50);
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.18), rgba(0,0,0,0) 45%, rgba(0,0,0,0.18)),
+                linear-gradient(180deg, #c89858 0%, #b88542 45%, #8e6432 100%);
+            border: 1px solid rgba(74, 50, 22, 0.55);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.35),
+                inset 0 -1px 0 rgba(0,0,0,0.18),
+                0 1px 2px rgba(35,43,33,0.10),
+                0 8px 22px -10px rgba(184,133,66,0.55);
+            text-shadow: 0 1px 0 rgba(0,0,0,0.18);
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.40),
+                inset 0 -1px 0 rgba(0,0,0,0.20),
+                0 2px 4px rgba(35,43,33,0.14),
+                0 14px 28px -10px rgba(184,133,66,0.65);
+        }
+        .btn-primary:active { transform: translateY(0); filter: brightness(0.97); }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--forest-900);
+            background: linear-gradient(180deg, #fffaf0, var(--sand-50));
+            border: 1px solid var(--sand-300);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 2px rgba(35,43,33,0.05);
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
+        }
+        .btn-ghost:hover {
+            border-color: var(--honey-600);
+            color: var(--honey-700);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 14px -8px rgba(184,133,66,0.35);
+        }
+
+        /* =========================================================
+           CARDS — warm paper feel with layered depth
+           ========================================================= */
+        .card-hover {
+            transition: transform 320ms cubic-bezier(.2,.7,.2,1), box-shadow 320ms ease, border-color 320ms ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 1px 2px rgba(35,43,33,0.08),
+                0 28px 60px -16px rgba(35,43,33,0.30),
+                0 12px 28px -12px rgba(184,133,66,0.18);
+        }
+
+        /* Tier cards: cream-paper articles with subtle gradient + warm grain */
+        article.bg-sand-50 {
+            background:
+                radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.6) 0%, transparent 55%),
+                radial-gradient(120% 100% at 100% 100%, rgba(184,133,66,0.06) 0%, transparent 60%),
+                linear-gradient(180deg, #fdf8ec 0%, var(--sand-50) 60%, #f1e8d2 100%);
+            box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        /* Hero (Most Popular) card — deep workshop green w/ warm light wash */
+        .tier-popular {
+            color: var(--sand-100);
+            background:
+                radial-gradient(80% 60% at 100% 0%, rgba(217,168,106,0.30) 0%, transparent 55%),
+                radial-gradient(80% 80% at 0% 100%, rgba(107,132,99,0.20) 0%, transparent 55%),
+                linear-gradient(180deg, #2e3a2c 0%, var(--forest-800) 50%, #1a2018 100%);
+            border: 1px solid rgba(217,168,106,0.30);
+            position: relative;
+        }
+        .tier-popular::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.85  0 0 0 0 0.65  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.7;
+        }
+
+        /* =========================================================
+           SECTIONS WITH GRADIENT/TEXTURE BACKGROUNDS
+           ========================================================= */
+        .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--sand-50), var(--sand-100), var(--sand-200)); }
+        .from-sand-50  { /* used inside Tailwind utility above */ }
+        .via-sand-100  {}
+        .to-sand-200   {}
+
+        /* HERO SECTION — rich dark walnut workshop with warm honey light + diagonal weave */
+        section.relative.overflow-hidden.grain {
+            background-color: #1a2018;
+            background-image:
+                radial-gradient(ellipse 65% 55% at 72% 50%, rgba(217,168,106,0.32) 0%, transparent 65%),
+                radial-gradient(ellipse 40% 45% at 8% 80%, rgba(107,132,99,0.22) 0%, transparent 60%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 18px),
+                linear-gradient(150deg, #14180f 0%, #232b21 45%, #1a2018 100%);
+        }
+        section.relative.overflow-hidden.grain > .absolute.inset-0.bg-gradient-to-br { display: none; }
+        .grain::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.85  0 0 0 0 0.65  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.6;
+        }
+
+        /* Hero text colors — light on dark wood */
+        section.relative.overflow-hidden.grain h1 { color: #f4ecdc; }
+        section.relative.overflow-hidden.grain p { color: rgba(244,236,220,0.78); }
+        section.relative.overflow-hidden.grain .text-forest-900\/60,
+        section.relative.overflow-hidden.grain .text-forest-900\/70,
+        section.relative.overflow-hidden.grain .text-forest-900\/80 {
+            color: rgba(244,236,220,0.72);
+        }
+        section.relative.overflow-hidden.grain .text-forest-900\/60:hover { color: var(--honey-400); }
+
+        /* Hero pill — frosted on dark */
+        section.relative.overflow-hidden.grain .bg-honey-600\/10 {
+            background: rgba(217,168,106,0.14) !important;
+            border-color: rgba(217,168,106,0.35) !important;
+            color: var(--honey-400) !important;
+        }
+
+        /* Floating "$299" plaque — repositioned + warmer */
+        .absolute.bg-sand-50.rounded-2xl {
+            background: linear-gradient(180deg, #fdf8ec, var(--sand-50));
+            box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        /* Corner marks for hero image (like index.html) */
+        .cm { position: absolute; width: 18px; height: 18px; border-color: rgba(217,168,106,0.65); border-style: solid; z-index: 2; }
+        .cm-tl { top: 14px;    left: 14px;    border-width: 2px 0 0 2px; }
+        .cm-tr { top: 14px;    right: 14px;   border-width: 2px 2px 0 0; }
+        .cm-bl { bottom: 14px; left: 14px;    border-width: 0 0 2px 2px; }
+        .cm-br { bottom: 14px; right: 14px;   border-width: 0 2px 2px 0; }
+
+        /* Avatar stack for social proof */
+        .av {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: var(--honey-600); color: var(--sand-50);
+            font-size: 0.6rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid rgba(244,236,220,0.25);
+            flex-shrink: 0;
+        }
+
+        /* Progress bar for scarcity card */
+        .prog-track { height: 6px; border-radius: 99px; background: rgba(244,236,220,0.14); overflow: hidden; }
+        .prog-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--honey-600), var(--honey-400)); width: 60%; }
+
+        /* Scarcity card on hero */
+        .scarcity-card {
+            margin-top: 14px; border-radius: 16px; padding: 14px 18px;
+            background: rgba(244,236,220,0.07);
+            border: 1px solid rgba(244,236,220,0.13);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Limited Edition glass overlay on hero image */
+        .hero-glass-card {
+            position: absolute; bottom: 18px; left: 18px; right: 18px;
+            background: rgba(20,24,15,0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(217,168,106,0.28);
+            border-radius: 16px;
+            padding: 14px 18px;
+        }
+
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+        /* Trust bar — warm dark wood with polka-dot pattern (matches index polish) */
+        section.bg-forest-900.text-sand-100 {
+            background-color: #1a2018;
+            background-image:
+                radial-gradient(60% 80% at 0% 50%, rgba(184,133,66,0.18) 0%, transparent 55%),
+                radial-gradient(60% 80% at 100% 50%, rgba(107,132,99,0.10) 0%, transparent 55%),
+                radial-gradient(circle, rgba(217,168,106,0.18) 1px, transparent 1px),
+                linear-gradient(90deg, #1a2018 0%, #232b21 50%, #1a2018 100%);
+            background-size: auto, auto, 26px 26px, auto;
+            border-top: 1px solid rgba(217,168,106,0.20);
+            border-bottom: 1px solid rgba(217,168,106,0.20);
+            box-shadow: inset 0 8px 24px -16px rgba(0,0,0,0.6), inset 0 -8px 24px -16px rgba(0,0,0,0.6);
+        }
+
+        /* Tiers section — better contrast + visible texture */
+        section#tiers {
+            background-color: #f0e4d0; /* slightly deeper parchment */
+            background-image: radial-gradient(65% 55% at 50% 0%, rgba(184,133,66,0.18) 0%, transparent 70%), repeating-linear-gradient(-45deg, rgba(142,100,50,0.14) 0px, rgba(142,100,50,0.14) 1px, transparent 1px, transparent 10px), linear-gradient(180deg, #f0e4d0 0%, #e0d0b0 100%);
+        }
+
+        /* Light tier cards - stronger definition & readable text */
+        article.bg-sand-50 {
+            background: radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.85) 0%, transparent 60%), linear-gradient(180deg, #fdf8ec 0%, #f0e4ce 65%, #e8d9b8 100%);
+            box-shadow: var(--shadow-soft), inset 0 2px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(35,43,33,0.08);
+            border: 1px solid rgba(184,133,66,0.25);
+        }
+
+            /* Make sure text inside light cards is dark enough */
+            article.bg-sand-50 .text-forest-900\/85,
+            article.bg-sand-50 .text-forest-900\/70,
+            article.bg-sand-50 p {
+                color: #1f2a20;
+            }
+
+        /* Premium card gets a touch more warmth */
+        article.border-2.border-honey-600\/40 {
+            border-color: rgba(184,133,66,0.45);
+        }
+
+        /* Configurator / "Bonuses" — warmer sand with diagonal weave */
+        section#configurator,
+        section.py-20.lg\:py-28.bg-sand-100\/60 {
+            background-color: #1a2018;
+            background-image: 
+                radial-gradient(70% 55% at 30% 20%, rgba(217,168,106,0.22) 0%, transparent 65%), 
+                radial-gradient(60% 50% at 80% 70%, rgba(107,132,99,0.18) 0%, transparent 70%), 
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 22px), 
+                linear-gradient(180deg, #1a2018 0%, #232b21 50%, #14180f 100%);
+            border-top: 1px solid rgba(217,168,106,0.18);
+            border-bottom: 1px solid rgba(217,168,106,0.18);
+        }
+            section#configurator .bg-forest-900 {
+                background: linear-gradient(135deg, #2e3a2c 0%, #1a2018 50%, #14180f 100%);
+                border: 1px solid rgba(217,168,106,0.25);
+            }
+
+        /* "Why this set" — dark workshop with warm haze + diagonal weave (matches index hero pattern) */
+        section.bg-forest-900.text-sand-100.relative.overflow-hidden {
+            background-color: #1a2018;
+            background-image:
+                radial-gradient(60% 50% at 80% 0%, rgba(184,133,66,0.20) 0%, transparent 60%),
+                radial-gradient(50% 60% at 0% 100%, rgba(107,132,99,0.18) 0%, transparent 60%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.016) 0px, rgba(255,255,255,0.016) 1px, transparent 1px, transparent 18px),
+                linear-gradient(180deg, #1a2018 0%, #232b21 50%, #14180f 100%);
+        }
+
+        /* Final urgency CTA — sunlit parchment with subtle diagonal weave */
+        section.bg-sand-100 {
+            background-color: #f8efd8;
+            background-image:
+                radial-gradient(60% 40% at 50% 0%, rgba(217,168,106,0.20) 0%, transparent 60%),
+                radial-gradient(50% 50% at 50% 100%, rgba(184,133,66,0.10) 0%, transparent 60%),
+                repeating-linear-gradient(-45deg, rgba(142,100,50,0.025) 0px, rgba(142,100,50,0.025) 1px, transparent 1px, transparent 9px),
+                linear-gradient(180deg, #f8efd8 0%, #f0e3c2 100%);
+        }
+
+        /* "What You Get" plain section — add subtle parchment background */
+        section.py-20.lg\:py-28:not(#tiers):not(#configurator):not(.bg-sand-100\/60):not(.bg-sand-100):not(.bg-forest-900) {
+            background-color: var(--sand-50);
+            background-image:
+                radial-gradient(50% 60% at 100% 50%, rgba(184,133,66,0.05) 0%, transparent 60%),
+                radial-gradient(40% 50% at 0% 50%, rgba(107,132,99,0.04) 0%, transparent 60%);
+        }
+
+        /* Footer — deep wood */
+        #footer {
+            background:
+                radial-gradient(50% 60% at 0% 0%, rgba(184,133,66,0.16) 0%, transparent 55%),
+                linear-gradient(180deg, #1a2018 0%, #14180f 100%);
+        }
+
+        /* Inner card on configurator — paper feel */
+        section#configurator .bg-sand-50 {
+            background:
+                linear-gradient(180deg, #fdf8ec 0%, var(--sand-50) 100%);
+            box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        /* Forest live-price bar inside configurator + Step 3 */
+        section#configurator .bg-forest-900 {
+            background:
+                radial-gradient(70% 80% at 100% 0%, rgba(217,168,106,0.28) 0%, transparent 60%),
+                radial-gradient(60% 80% at 0% 100%, rgba(107,132,99,0.18) 0%, transparent 60%),
+                linear-gradient(135deg, #2e3a2c 0%, var(--forest-800) 50%, #14180f 100%);
+            border: 1px solid rgba(217,168,106,0.20);
+            position: relative;
+            overflow: hidden;
+        }
+        section#configurator .bg-forest-900::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.85  0 0 0 0 0.65  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.6;
+        }
+        section#configurator .bg-forest-900 > * { position: relative; z-index: 1; }
+
+        /* Bonus cards — paper with warm corner light */
+        section .bg-sand-50.border.border-sand-200.rounded-2xl,
+        .bg-sand-50.border.border-sand-200.rounded-3xl {
+            background:
+                radial-gradient(100% 80% at 0% 0%, rgba(255,255,255,0.7) 0%, transparent 60%),
+                radial-gradient(100% 100% at 100% 100%, rgba(184,133,66,0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #fdf8ec 0%, var(--sand-50) 100%);
+        }
+
+        /* Translucent quote cards on the dark "Why this set" section */
+        figure.bg-sand-50\/5 {
+            background:
+                linear-gradient(180deg, rgba(250,246,238,0.07) 0%, rgba(250,246,238,0.03) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(244,236,220,0.12);
+        }
+        figure.bg-sand-50\/5:hover {
+            border-color: rgba(217,168,106,0.30);
+            background: linear-gradient(180deg, rgba(250,246,238,0.10) 0%, rgba(250,246,238,0.04) 100%);
+        }
+
+        /* Floating "$299" plaque on hero */
+        .absolute.bg-sand-50.rounded-2xl {
+            background: linear-gradient(180deg, #fdf8ec, var(--sand-50));
+            box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        /* =========================================================
+           CONFIGURATOR OPTION BUTTONS
+           ========================================================= */
+        .opt {
+            background: linear-gradient(180deg, #fffaf0 0%, var(--sand-50) 100%);
+            border: 1.5px solid var(--sand-200);
+            color: var(--forest-900);
+            cursor: pointer;
+            transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 1px rgba(35,43,33,0.03);
+        }
+        .opt:hover:not(.locked):not(:disabled) {
+            border-color: var(--honey-600);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 14px -8px rgba(184,133,66,0.30);
+        }
+        .opt.active {
+            border-color: var(--honey-600);
+            background:
+                radial-gradient(80% 80% at 100% 0%, rgba(184,133,66,0.10) 0%, transparent 60%),
+                linear-gradient(180deg, #fdf2dd 0%, #f6e5c1 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.7),
+                inset 0 0 0 1px var(--honey-600),
+                0 6px 14px -8px rgba(184,133,66,0.40);
+            color: var(--forest-900);
+        }
+        .opt.locked, .opt:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            filter: grayscale(0.4);
+        }
+
+        /* Color swatch buttons (rendered by JS) */
+        .swatch {
+            background: linear-gradient(180deg, #fffaf0, var(--sand-50));
+            cursor: pointer;
+            transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+        }
+        .swatch:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px -8px rgba(35,43,33,0.20);
+        }
+
+        /* Names input */
+        #namesInput {
+            background: linear-gradient(180deg, #fffaf0, var(--sand-50));
+            border: 1.5px solid var(--sand-300);
+            color: var(--forest-900);
+            outline: none;
+            box-shadow: inset 0 1px 2px rgba(35,43,33,0.05);
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+        #namesInput:focus {
+            border-color: var(--honey-600);
+            box-shadow: inset 0 1px 2px rgba(35,43,33,0.05), 0 0 0 3px rgba(184,133,66,0.18);
+        }
+        #namesInput::placeholder { color: rgba(26,32,24,0.40); }
+
+        /* =========================================================
+           ANIMATIONS
+           ========================================================= */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 700ms cubic-bezier(.2,.7,.2,1), transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(184,133,66,0.55); }
+            50%      { box-shadow: 0 0 0 6px rgba(184,133,66,0); }
+        }
+        .pulse-dot {
+            animation: pulseDot 2s ease-out infinite;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 0.9s linear infinite; }
+
+        /* Image hover zoom inside cards */
+        article .aspect-\[16\/10\] img,
+        .rounded-3xl.overflow-hidden img {
+            transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        article:hover .aspect-\[16\/10\] img,
+        .card-hover:hover .rounded-3xl.overflow-hidden img { transform: scale(1.04); }
+
+        /* =========================================================
+           MOBILE / RESPONSIVE TIDY-UPS
+           ========================================================= */
+        @media (max-width: 640px) {
+            .text-4xl { font-size: 2rem; }
+            .text-5xl { font-size: 2.5rem; }
+            .text-6xl { font-size: 2.75rem; }
+            .py-20 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+            .py-14 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        }
+
+        /* Make sure section-stacking gradients sit beneath the parchment */
+        section { position: relative; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- ============ NAVBAR ============ -->
+    <header id="nav" class="sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-18 py-3">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <span class="w-9 h-9 rounded-lg bg-forest-800 text-sand-50 flex items-center justify-center font-serif text-lg group-hover:bg-honey-600 transition">R</span>
+                <span class="font-serif text-xl tracking-tight">Realized Prints</span>
+            </a>
+            <nav class="hidden lg:flex items-center gap-9 text-sm font-medium">
+                <a href="index.html" class="hover:text-honey-600 transition">← Back to Home</a>
+                <a href="index.html#collections" class="hover:text-honey-600 transition">Collections</a>
+                <a href="index.html#story" class="hover:text-honey-600 transition">About</a>
+                <a href="#footer" class="hover:text-honey-600 transition">Contact</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <a href="#configurator" class="hidden sm:inline-flex btn-primary px-5 py-2.5 rounded-full text-sm font-semibold">Configure Your Set</a>
+                <button id="menuBtn" class="lg:hidden p-2" aria-label="Open menu">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden lg:hidden border-t border-sand-200 bg-sand-50">
+            <div class="px-5 py-4 flex flex-col gap-3 text-sm font-medium">
+                <a href="index.html" class="py-2">← Back to Home</a>
+                <a href="index.html#collections" class="py-2">Collections</a>
+                <a href="index.html#story" class="py-2">About</a>
+                <a href="#footer" class="py-2">Contact</a>
+                <a href="#configurator" class="btn-primary px-5 py-3 rounded-full text-center">Configure Your Set</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="relative overflow-hidden grain">
+        <div class="absolute inset-0 bg-gradient-to-br from-sand-50 via-sand-100 to-sand-200"></div>
+        <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-10 lg:py-16 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            <div class="lg:col-span-6 fade-in">
+                <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-medium text-forest-900/60 hover:text-honey-600 mb-4 transition" style="color:rgba(244,236,220,0.65);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                    Back to all collections
+                </a>
+
+                <h1 class="font-serif" style="font-size: clamp(2.6rem, 5.5vw, 4.4rem); line-height: 1.06; letter-spacing: -0.025em; color: #f4ecdc; margin-bottom: 18px;">
+                    The Catan Set That<br>
+                    <em style="color: var(--honey-400); font-style: italic;">Outlasts</em> the Game Itself.
+                </h1>
+
+                <p class="text-lg text-forest-900/80 max-w-xl leading-relaxed mb-8">
+                    Magnetic hex tiles. Premium wooden box. Handcrafted by a father and son in their New Jersey workshop.
+                </p>
+
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="#configurator" class="btn-primary px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                        Configure Your Set
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                    </a>
+                    <a href="#tiers" class="btn-ghost px-7 py-4 rounded-full text-sm font-semibold" style="background:transparent;color:#f4ecdc;border-color:rgba(244,236,220,0.38);box-shadow:none;">Compare Tiers</a>
+                </div>
+
+                <!-- Social proof row -->
+                <div class="mt-10" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+                    <div style="display:flex;">
+                        <div class="av" style="margin-left:0">JD</div>
+                        <div class="av" style="margin-left:-8px">SR</div>
+                        <div class="av" style="margin-left:-8px">MK</div>
+                    </div>
+                    <div>
+                        <div style="color:var(--honey-400);font-weight:700;font-size:0.85rem;">★★★★★&nbsp; 4.9</div>
+                        <div style="font-size:0.73rem;color:rgba(244,236,220,0.5);margin-top:2px;">47 verified buyers</div>
+                    </div>
+                    <div style="width:1px;height:34px;background:rgba(244,236,220,0.16);"></div>
+                    <div>
+                        <div style="font-weight:600;color:rgba(244,236,220,0.85);font-size:0.82rem;">USA-made</div>
+                        <div style="font-size:0.73rem;color:rgba(244,236,220,0.48);">NJ workshop</div>
+                    </div>
+                </div>
+
+                <!-- Feature pills below -->
+                <div class="mt-8 grid grid-cols-3 gap-3 text-xs max-w-md" style="color:rgba(244,236,220,0.72);">
+                    <div class="flex items-start gap-2"><span class="text-honey-600 text-base leading-none" style="color:var(--honey-400);">✦</span><span>Magnetic<br>tile system</span></div>
+                    <div class="flex items-start gap-2"><span class="text-honey-600 text-base leading-none" style="color:var(--honey-400);">✎</span><span>Signed &<br>numbered</span></div>
+                    <div class="flex items-start gap-2"><span class="text-honey-600 text-base leading-none" style="color:var(--honey-400);">♡</span><span>60-day love-it<br>guarantee</span></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 relative fade-in">
+                <div class="relative rounded-3xl overflow-hidden shadow-glow aspect-[4/5] bg-forest-900" style="border:1px solid rgba(217,168,106,0.22);box-shadow:0 24px 60px rgba(9,12,8,0.5);">
+                    <img src="images/hero-boxed.JPG" alt="Premium magnetic 3D printed Catan Artisan set displayed in its signed wooden heirloom box with custom robber and player pieces" class="w-full h-full object-cover" style="opacity:0.94;">
+                    <!-- Corner marks -->
+                    <div class="cm cm-tl"></div>
+                    <div class="cm cm-tr"></div>
+                    <div class="cm cm-bl"></div>
+                    <div class="cm cm-br"></div>
+
+                    <div class="absolute top-5 right-5 bg-honey-600 text-sand-50 rounded-full px-3 py-1.5 text-xs font-bold tracking-wider" style="z-index:2;">
+                        LIMITED EDITION
+                    </div>
+                    <div class="hero-glass-card">
+                        <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--honey-400);margin-bottom:6px;">Premium Bundle</div>
+                        <div class="font-serif" style="font-size:1rem;color:#f4ecdc;line-height:1.4;">Only 5 will ever be made. Once they're gone, that's it.</div>
+                    </div>
+                </div>
+
+                <!-- Scarcity progress card (matches index.html flagship availability) -->
+                <div class="scarcity-card">
+                    <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:600;color:rgba(244,236,220,0.65);margin-bottom:8px;">
+                        <span>Premium tier availability</span>
+                        <span style="color:var(--honey-400);">3 of 5 remaining</span>
+                    </div>
+                    <div class="prog-track"><div class="prog-fill"></div></div>
+                </div>
+
+                <!-- Floating $299 plaque — fixed & polished -->
+                <div class="hidden md:block absolute -top-6 -left-6 bg-sand-50 rounded-2xl p-5 shadow-soft border border-sand-200 max-w-[190px]">
+                    <div class="text-xs uppercase tracking-wider text-honey-600 font-semibold mb-1">STARTING AT</div>
+                    <div class="font-serif text-3xl leading-none text-forest-900">$299</div>
+                    <div class="text-xs text-forest-900/65 mt-2 leading-tight">Free US shipping over $75</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TRUST BAR ============ -->
+    <section class="bg-forest-900 text-sand-100">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">📦</span>
+                <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs text-sand-300/70">2–4 day delivery</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">🇺🇸</span>
+                <div class="text-sm"><div class="font-semibold">Made in the USA</div><div class="text-xs text-sand-300/70">Our home workshop</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">♡</span>
+                <div class="text-sm"><div class="font-semibold">60-Day Guarantee</div><div class="text-xs text-sand-300/70">Play it & love it</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">👨‍👦</span>
+                <div class="text-sm"><div class="font-semibold">Family Owned</div><div class="text-xs text-sand-300/70">Father & son craft</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 3-TIER PRICING ============ -->
+    <section id="tiers" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">Choose Your Tier</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">
+                    <span class="text-honey-700">Three sets.</span>
+                    <span class="italic text-honey-600">One workshop.</span>
+                </h2>
+                <p class="mt-4 text-forest-900/70">Same obsessive craftsmanship at every tier. The difference is how far we'll go to make it yours.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6 lg:gap-8">
+
+                <!-- CORE -->
+                <article class="bg-sand-50 border border-sand-200 rounded-3xl overflow-hidden card-hover shadow-soft fade-in flex flex-col">
+                    <div class="aspect-[16/10] overflow-hidden bg-sand-200">
+                        <img src="images/board-basic.JPG" alt="Core tier Catan Artisan board" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider text-forest-700 font-semibold mb-2">Core Bundle</div>
+                        <div class="font-serif text-4xl mb-1">$299</div>
+                        <div class="text-xs text-forest-900/60 mb-6">The heirloom essentials</div>
+                        <ul class="space-y-3 text-sm text-forest-900/85 mb-8 flex-1">
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Full magnetic Catan tile set</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Default player piece colors (Red, Orange, White, Blue)</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Standard wooden box</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Default Robber (Classic Bandit)</li>
+                            <li class="flex gap-2"><span class="text-forest-900/40 font-bold">✗</span> <span class="text-forest-900/55">Not signed</span></li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Add-on upgrades available</li>
+                        </ul>
+                        <button data-tier="core" data-price="299" class="select-tier btn-ghost w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Choose Core — $299
+                        </button>
+                    </div>
+                </article>
+
+                <!-- HERO (POPULAR) -->
+                <article class="rounded-3xl overflow-hidden card-hover shadow-glow fade-in flex flex-col tier-popular relative">
+                    <div class="absolute top-0 right-0 z-10 bg-honey-600 text-sand-50 px-4 py-1.5 text-xs font-bold tracking-wider rounded-bl-2xl">
+                        MOST POPULAR
+                    </div>
+                    <div class="aspect-[16/10] overflow-hidden bg-forest-900">
+                        <img src="images/board-basic.JPG" alt="Hero tier Catan Artisan game" class="w-full h-full object-cover opacity-90">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider text-honey-400 font-semibold mb-2">Hero Bundle</div>
+                        <div class="font-serif text-4xl mb-1">$399</div>
+                        <div class="text-xs text-sand-100/70 mb-6">The sweet spot</div>
+                        <ul class="space-y-3 text-sm text-sand-100/90 mb-8 flex-1">
+                            <li class="flex gap-2"><span class="text-honey-400 font-bold">✓</span> Everything in Core</li>
+                            <li class="flex gap-2"><span class="text-honey-400 font-bold">✓</span> Discounted upgrades across the board</li>
+                            <li class="flex gap-2"><span class="text-honey-400 font-bold">✓</span> Signed by Dad</li>
+                            <li class="flex gap-2"><span class="text-honey-400 font-bold">✓</span> Priority queue</li>
+                        </ul>
+                        <button data-tier="hero" data-price="399" class="select-tier btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Choose Hero — $399
+                        </button>
+                    </div>
+                </article>
+
+                <!-- PREMIUM -->
+                <article class="bg-sand-50 border-2 border-honey-600/40 rounded-3xl overflow-hidden card-hover shadow-soft fade-in flex flex-col relative">
+                    <div class="absolute top-0 right-0 z-10 bg-forest-800 text-sand-50 px-4 py-1.5 text-xs font-bold tracking-wider rounded-bl-2xl">
+                        LIMITED EDITION
+                    </div>
+                    <div class="aspect-[16/10] overflow-hidden bg-sand-200">
+                        <img src="images/board-basic.JPG" alt="Premium tier Catan Artisan set" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider text-honey-700 font-semibold mb-2">Premium Bundle</div>
+                        <div class="font-serif text-4xl mb-1">$799</div>
+                        <div class="text-xs text-honey-700 font-semibold mb-6">Numbered 1–5 only — ever</div>
+                        <ul class="space-y-3 text-sm text-forest-900/85 mb-8 flex-1">
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Everything in Hero</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Every upgrade included</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Airbrushed names included</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Numbered & signed by Dad</li>
+                        </ul>
+                        <button data-tier="premium" data-price="799" class="select-tier btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Claim a Premium Set — $799
+                        </button>
+                    </div>
+                </article>
+
+            </div>
+
+            <p class="text-center text-xs text-forest-900/60 mt-8 max-w-xl mx-auto fade-in">
+                Pricing is locked at these tiers. Once a Premium set is claimed, the next number goes — and once #5 ships, the Premium Bundle is closed forever.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ CONFIGURATOR ============ -->
+    <!-- ============================================================
+     CONFIGURATOR — IMMERSIVE PROGRESSIVE WIZARD
+     Drop-in replacement for the existing <section id="configurator">.
+     IDs preserved: priceTotal, priceTotalBig, tierLabel, breakdown,
+     swatchGrid, paletteLabel, selectedColors, swatchCount,
+     texturePriceHint, silkPriceTag, robberPriceHint, victoriousPriceTag,
+     finishPriceHint, trimPriceHint, trimPriceTag, namesPriceHint,
+     namesPriceTag, namesInputRow, namesInput, addToCart, checkoutError.
+     All .opt[data-group][data-value] buttons preserved.
+     ============================================================ -->
+<section id="configurator" class="relative overflow-hidden">
+
+    <!-- Wizard-specific styling (scoped to #configurator) -->
+    <style>
+        #configurator {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+        #configurator .wiz-shell {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 1.25rem 1.25rem 2rem;
+        }
+        @media (min-width: 1024px) {
+            #configurator .wiz-shell {
+                padding: 1.75rem 2rem 3rem;
+            }
+        }
+
+        /* ---------- WIZARD HEADER (sticky-ish band) ---------- */
+        #configurator .wiz-header {
+            position: sticky;
+            top: 4.5rem; /* clears the main #nav */
+            z-index: 5;
+            background:
+                radial-gradient(70% 100% at 50% 0%, rgba(217,168,106,0.10) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(20,24,15,0.92) 0%, rgba(26,32,24,0.78) 100%);
+            backdrop-filter: blur(14px) saturate(1.1);
+            -webkit-backdrop-filter: blur(14px) saturate(1.1);
+            border: 1px solid rgba(217,168,106,0.22);
+            border-radius: 1.25rem;
+            padding: 0.85rem 1.1rem;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.06),
+                0 12px 30px -16px rgba(0,0,0,0.6);
+            margin-bottom: 1.25rem;
+        }
+        @media (min-width: 768px) {
+            #configurator .wiz-header { padding: 1rem 1.4rem; }
+        }
+
+        #configurator .wiz-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        #configurator .wiz-step-label {
+            color: rgba(244,236,220,0.92);
+        }
+        #configurator .wiz-step-eyebrow {
+            color: var(--honey-400);
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        #configurator .wiz-step-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            line-height: 1.2;
+            margin-top: 2px;
+            color: var(--sand-50);
+        }
+        @media (min-width: 768px) {
+            #configurator .wiz-step-title { font-size: 1.6rem; }
+        }
+
+        /* Live mini-price chip in header */
+        #configurator .wiz-price-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.55rem 0.95rem 0.55rem 0.75rem;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, rgba(217,168,106,0.18), rgba(217,168,106,0.08));
+            border: 1px solid rgba(217,168,106,0.42);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                0 6px 18px -10px rgba(184,133,66,0.5);
+        }
+        #configurator .wiz-price-chip .chip-tier {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: rgba(244,236,220,0.7);
+            font-weight: 600;
+        }
+        #configurator .wiz-price-chip .chip-tier-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: var(--sand-50);
+            line-height: 1;
+            margin-top: 1px;
+        }
+        #configurator .wiz-price-chip .chip-total {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.65rem;
+            line-height: 1;
+            color: var(--honey-400);
+            font-weight: 600;
+            padding-left: 0.65rem;
+            border-left: 1px solid rgba(217,168,106,0.35);
+        }
+
+        /* =========================================================
+           SAVINGS DISPLAY — emerald accent, Hero-tier only.
+           Distinct from honey so "savings" reads as a separate channel.
+           ========================================================= */
+        :root {
+            --save-400: #6ee7b7;
+            --save-500: #34d399;
+            --save-600: #10b981;
+            --save-700: #047857;
+        }
+
+        /* ----- Sticky-header "You're Saving $X" pill ----- */
+        #configurator .wiz-savings-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, rgba(52,211,153,0.22), rgba(16,185,129,0.10));
+            border: 1px solid rgba(110,231,183,0.45);
+            color: var(--save-400);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 18px -10px rgba(16,185,129,0.45);
+            animation: savingsPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+            #configurator .wiz-savings-pill .wsp-eyebrow {
+                font-size: 9.5px;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: rgba(110,231,183,0.85);
+                font-weight: 700;
+            }
+
+            #configurator .wiz-savings-pill .wsp-amount {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.15rem;
+                line-height: 1;
+                color: var(--save-400);
+                font-weight: 700;
+            }
+
+            #configurator .wiz-savings-pill svg {
+                color: var(--save-400);
+                flex-shrink: 0;
+            }
+
+        @keyframes savingsPop {
+            0% {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* ----- Inline "Save X%" badge in hint lines ----- */
+        #configurator .save-pct {
+            display: inline-block;
+            margin-left: 0.35rem;
+            padding: 0.08rem 0.45rem;
+            border-radius: 9999px;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            background: rgba(52,211,153,0.18);
+            color: var(--save-700);
+            border: 1px solid rgba(16,185,129,0.35);
+            vertical-align: 0.05em;
+        }
+
+        /* ----- Price tags inside option buttons (Core $X → Hero $Y) ----- */
+        #configurator .tag-strike {
+            color: rgba(26,32,24,0.40);
+            font-weight: 500;
+            margin-right: 0.15rem;
+        }
+
+        #configurator .tag-hero {
+            color: var(--honey-700);
+            font-weight: 700;
+        }
+
+        #configurator .tag-included {
+            color: var(--sage-600);
+            font-weight: 600;
+            font-size: 0.78rem;
+            letter-spacing: 0.02em;
+        }
+
+        /* ----- Hero tier card: "save up to $X" teaser ----- */
+        #configurator .tier-card[data-value="hero"] .tier-save-teaser {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0 0 0.85rem 0;
+            padding: 0.4rem 0.7rem;
+            border-radius: 9999px;
+            background: rgba(52,211,153,0.12);
+            border: 1px solid rgba(110,231,183,0.30);
+            color: var(--save-400);
+            font-size: 0.74rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+            #configurator .tier-card[data-value="hero"] .tier-save-teaser .tst-dot {
+                color: var(--save-400);
+                font-size: 0.55rem;
+                line-height: 1;
+            }
+
+            #configurator .tier-card[data-value="hero"] .tier-save-teaser strong {
+                color: var(--save-400);
+                font-weight: 700;
+            }
+
+        /* ----- Final review: "You saved" row ----- */
+        #configurator .review-savings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 0.85rem 1rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(180deg, rgba(52,211,153,0.14), rgba(16,185,129,0.06));
+            border: 1px solid rgba(110,231,183,0.30);
+            color: var(--save-400);
+            font-size: 0.85rem;
+        }
+
+            #configurator .review-savings-row .rsr-label {
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                font-size: 0.7rem;
+                margin-right: 0.4rem;
+            }
+
+            #configurator .review-savings-row .rsr-amount {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: var(--save-400);
+                letter-spacing: -0.01em;
+            }
+
+        /* Mobile: stack the savings pill below the live-total chip */
+        @media (max-width: 640px) {
+            #configurator .wiz-savings-pill {
+                margin-top: 0.25rem;
+                flex-basis: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ---------- PROGRESS PILLS ---------- */
+        #configurator .wiz-pills {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.85rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 2px;
+        }
+        #configurator .wiz-pills::-webkit-scrollbar { display: none; }
+        #configurator .wiz-pill {
+            flex: 1 1 0;
+            min-width: 28px;
+            height: 6px;
+            border-radius: 99px;
+            background: rgba(244,236,220,0.10);
+            border: 1px solid rgba(244,236,220,0.06);
+            transition: background 280ms ease, border-color 280ms ease;
+            cursor: pointer;
+        }
+        #configurator .wiz-pill.done {
+            background: linear-gradient(90deg, var(--honey-700), var(--honey-400));
+            border-color: rgba(217,168,106,0.45);
+        }
+        #configurator .wiz-pill.current {
+            background: linear-gradient(90deg, var(--honey-600), var(--honey-400));
+            border-color: rgba(217,168,106,0.65);
+            box-shadow: 0 0 0 3px rgba(217,168,106,0.18);
+        }
+
+        /* ---------- STEP STAGE ---------- */
+        #configurator .wiz-stage {
+            position: relative;
+            flex: 1 1 auto;
+        }
+        #configurator .wiz-step {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 320ms cubic-bezier(.2,.7,.2,1), transform 320ms cubic-bezier(.2,.7,.2,1);
+        }
+        #configurator .wiz-step.active {
+            display: block;
+        }
+        #configurator .wiz-step.entering {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Inner card (parchment paper) */
+        #configurator .wiz-card {
+            background:
+                radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.85) 0%, transparent 60%),
+                linear-gradient(180deg, #fdf8ec 0%, var(--sand-50) 60%, #f1e8d2 100%);
+            border: 1px solid rgba(184,133,66,0.28);
+            border-radius: 1.5rem;
+            box-shadow:
+                var(--shadow-soft),
+                inset 0 1px 0 rgba(255,255,255,0.85),
+                0 18px 50px -22px rgba(35,43,33,0.45);
+            padding: 1.5rem 1.25rem 1.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            #configurator .wiz-card { padding: 2.25rem 2rem; }
+        }
+        @media (min-width: 1024px) {
+            #configurator .wiz-card { padding: 2.75rem 3rem; }
+        }
+        /* warm corner light + subtle grain on every card */
+        #configurator .wiz-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: multiply;
+            opacity: 0.55;
+            border-radius: inherit;
+        }
+        #configurator .wiz-card > * { position: relative; z-index: 1; }
+
+        #configurator .wiz-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.85rem, 3.6vw, 2.65rem);
+            line-height: 1.08;
+            letter-spacing: -0.015em;
+            color: var(--forest-900);
+            margin: 0 0 0.5rem;
+        }
+        #configurator .wiz-card h3 em {
+            color: var(--honey-700);
+            font-style: italic;
+        }
+        #configurator .wiz-card .wiz-card-sub {
+            color: rgba(26,32,24,0.65);
+            max-width: 42rem;
+            margin-bottom: 1.75rem;
+        }
+        #configurator .wiz-card .wiz-card-hint {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--honey-700);
+            background: rgba(217,168,106,0.12);
+            border: 1px solid rgba(184,133,66,0.28);
+            border-radius: 9999px;
+            padding: 0.3rem 0.7rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ---------- TIER HERO CARDS (Step 1) ---------- */
+        #configurator .tier-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            #configurator .tier-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.25rem;
+            }
+        }
+
+        /* The tier .opt buttons get an upgraded "hero card" treatment */
+        #configurator .tier-card.opt {
+            text-align: left;
+            padding: 1.4rem 1.4rem 1.5rem;
+            border-radius: 1.25rem;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border-width: 2px;
+        }
+        @media (min-width: 768px) {
+            #configurator .tier-card.opt {
+                min-height: 320px;
+                padding: 1.75rem 1.6rem 1.75rem;
+            }
+        }
+        #configurator .tier-card .tier-eyebrow {
+            font-size: 10px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--honey-700);
+            margin-bottom: 0.4rem;
+        }
+        #configurator .tier-card .tier-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.95rem;
+            line-height: 1.05;
+            margin-bottom: 0.35rem;
+        }
+        @media (min-width: 768px) {
+            #configurator .tier-card .tier-name { font-size: 2.35rem; }
+        }
+        #configurator .tier-card .tier-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--forest-900);
+            margin-bottom: 0.85rem;
+        }
+        #configurator .tier-card .tier-price small {
+            font-size: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            color: rgba(26,32,24,0.55);
+            font-weight: 500;
+            margin-left: 0.25rem;
+        }
+        #configurator .tier-card .tier-blurb {
+            font-size: 0.875rem;
+            color: rgba(26,32,24,0.7);
+            line-height: 1.5;
+            margin-bottom: 0.85rem;
+        }
+        #configurator .tier-card .tier-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--honey-700);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        #configurator .tier-card.opt.active .tier-cta { color: var(--honey-700); }
+
+        /* Hero (most popular) — deep workshop green by default, but readable when not active */
+        #configurator .tier-card[data-value="hero"] {
+            background:
+                radial-gradient(80% 60% at 100% 0%, rgba(217,168,106,0.30) 0%, transparent 55%),
+                radial-gradient(80% 80% at 0% 100%, rgba(107,132,99,0.20) 0%, transparent 55%),
+                linear-gradient(180deg, #2e3a2c 0%, var(--forest-800) 50%, #1a2018 100%);
+            color: var(--sand-100);
+            border-color: rgba(217,168,106,0.45);
+        }
+        #configurator .tier-card[data-value="hero"] .tier-eyebrow { color: var(--honey-400); }
+        #configurator .tier-card[data-value="hero"] .tier-name { color: var(--sand-50); }
+        #configurator .tier-card[data-value="hero"] .tier-price { color: var(--sand-50); }
+        #configurator .tier-card[data-value="hero"] .tier-price small { color: rgba(244,236,220,0.6); }
+        #configurator .tier-card[data-value="hero"] .tier-blurb { color: rgba(244,236,220,0.8); }
+        #configurator .tier-card[data-value="hero"] .tier-cta { color: var(--honey-400); }
+        #configurator .tier-card[data-value="hero"]:hover { transform: translateY(-3px); }
+
+        #configurator .tier-card[data-value="hero"] .tier-badge {
+            position: absolute;
+            top: -10px; right: 16px;
+            background: linear-gradient(180deg, var(--honey-400), var(--honey-600));
+            color: #1a1108;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            padding: 0.3rem 0.65rem;
+            border-radius: 9999px;
+            box-shadow: 0 6px 14px -6px rgba(184,133,66,0.6);
+        }
+
+        #configurator .tier-card[data-value="premium"] {
+            border-color: rgba(184,133,66,0.5);
+        }
+        #configurator .tier-card[data-value="premium"] .tier-badge {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-weight: 700;
+            color: var(--honey-700);
+            margin-top: 0.5rem;
+        }
+
+        /* Active state polish for tier cards */
+        #configurator .tier-card.opt.active {
+            transform: translateY(-2px);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.7),
+                inset 0 0 0 2px var(--honey-600),
+                0 22px 50px -18px rgba(184,133,66,0.55);
+        }
+        #configurator .tier-card[data-value="hero"].opt.active {
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.10),
+                inset 0 0 0 2px var(--honey-400),
+                0 26px 60px -18px rgba(184,133,66,0.55);
+        }
+
+        /* ---------- 2-UP IMAGE OPTIONS (Texture / Trim / Robber) ---------- */
+        #configurator .opt-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+        }
+        @media (min-width: 640px) {
+            #configurator .opt-grid-2 { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        }
+        #configurator .opt-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+        }
+        @media (min-width: 640px) {
+            #configurator .opt-grid-3 { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        }
+
+        /* Larger, more immersive image-option cards */
+        #configurator .wiz-step .opt {
+            border-radius: 1.1rem;
+        }
+        #configurator .wiz-step .opt[data-group="texture"],
+        #configurator .wiz-step .opt[data-group="robber"],
+        #configurator .wiz-step .opt[data-group="trim"] {
+            padding: 1rem;
+        }
+        #configurator .wiz-step .opt[data-group="texture"] .aspect-\[4\/2\],
+        #configurator .wiz-step .opt[data-group="robber"] .aspect-\[4\/2\],
+        #configurator .wiz-step .opt[data-group="trim"] .aspect-\[4\/2\] {
+            aspect-ratio: 4 / 3;
+        }
+        @media (min-width: 768px) {
+            #configurator .wiz-step .opt[data-group="texture"] .aspect-\[4\/2\],
+            #configurator .wiz-step .opt[data-group="robber"] .aspect-\[4\/2\],
+            #configurator .wiz-step .opt[data-group="trim"] .aspect-\[4\/2\] {
+                aspect-ratio: 16 / 10;
+            }
+        }
+        #configurator .wiz-step .opt .font-semibold.text-sm { font-size: 0.95rem; }
+
+        /* ---------- FINISH / TRIM-COLOR SWATCH ROWS ---------- */
+        #configurator .finish-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+        }
+        @media (min-width: 640px) { #configurator .finish-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { #configurator .finish-grid { grid-template-columns: repeat(5, 1fr); gap: 0.75rem; } }
+
+        #configurator .finish-grid .opt,
+        #configurator .trim-color-row .opt {
+            padding: 0.85rem 0.6rem;
+            border-radius: 0.85rem;
+        }
+        #configurator .finish-grid .opt > div:first-child,
+        #configurator .trim-color-row .opt > div:first-child {
+            height: 2.25rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        #configurator .trim-color-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+        }
+        @media (min-width: 640px) { #configurator .trim-color-row { grid-template-columns: repeat(4, 1fr); } }
+
+        /* ---------- COLOR SWATCH GRID (Step 3) ---------- */
+        #configurator #swatchGrid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+        }
+        @media (min-width: 640px) {
+            #configurator #swatchGrid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.85rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            #configurator #swatchGrid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+        }
+
+        /* ---------- NAMES STEP ---------- */
+        #configurator .names-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+        }
+        @media (min-width: 640px) { #configurator .names-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } }
+
+        #configurator .names-grid .opt {
+            padding: 1.2rem 1.1rem;
+            border-radius: 1rem;
+            text-align: left;
+            min-height: 96px;
+        }
+        #configurator .names-grid .opt .font-semibold { font-size: 1rem; margin-bottom: 2px; }
+        #configurator .names-grid .opt .opt-blurb {
+            font-size: 0.78rem;
+            color: rgba(26,32,24,0.65);
+        }
+
+        /* ---------- REVIEW STEP ---------- */
+        #configurator .review-card {
+            background:
+                radial-gradient(70% 80% at 100% 0%, rgba(217,168,106,0.28) 0%, transparent 60%),
+                radial-gradient(60% 80% at 0% 100%, rgba(107,132,99,0.18) 0%, transparent 60%),
+                linear-gradient(135deg, #2e3a2c 0%, var(--forest-800) 50%, #14180f 100%);
+            border: 1px solid rgba(217,168,106,0.28);
+            color: var(--sand-50);
+            border-radius: 1.5rem;
+            padding: 1.5rem 1.25rem 1.75rem;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+        #configurator .review-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.85  0 0 0 0 0.65  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        #configurator .review-card > * { position: relative; z-index: 1; }
+        @media (min-width: 768px) {
+            #configurator .review-card { padding: 2.25rem 2rem; }
+        }
+        @media (min-width: 1024px) {
+            #configurator .review-card { padding: 2.75rem 3rem; }
+        }
+        #configurator .review-card h3 { color: var(--sand-50); }
+        #configurator .review-card .wiz-card-sub { color: rgba(244,236,220,0.7); }
+
+        /* ---------- WIZARD FOOTER NAV ---------- */
+        #configurator .wiz-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        #configurator .wiz-foot .wiz-foot-left,
+        #configurator .wiz-foot .wiz-foot-right {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+        #configurator .wiz-back {
+            border-radius: 9999px;
+            padding: 0.65rem 1.1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        #configurator .wiz-continue {
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        #configurator .wiz-skip {
+            font-size: 0.78rem;
+            color: rgba(26,32,24,0.55);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem 0.4rem;
+        }
+        #configurator .wiz-skip:hover { color: var(--honey-700); }
+
+        /* On the dark Review step, footer text/skip flips */
+        #configurator .wiz-step[data-step="8"] .wiz-skip { color: rgba(244,236,220,0.55); }
+        #configurator .wiz-step[data-step="8"] .wiz-skip:hover { color: var(--honey-400); }
+
+        /* Hint label under a card */
+        #configurator .wiz-card-meta {
+            font-size: 0.78rem;
+            color: rgba(26,32,24,0.55);
+            margin-top: 0.85rem;
+        }
+        #configurator .review-card .wiz-card-meta { color: rgba(244,236,220,0.55); }
+
+        /* Selected color summary line */
+        #configurator .selected-summary {
+            margin-top: 1rem;
+            padding: 0.85rem 1rem;
+            border-radius: 0.85rem;
+            background: rgba(217,168,106,0.1);
+            border: 1px solid rgba(184,133,66,0.25);
+            color: var(--forest-900);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Keyboard focus ring */
+        #configurator .opt:focus-visible,
+        #configurator .wiz-back:focus-visible,
+        #configurator .wiz-continue:focus-visible,
+        #configurator .wiz-pill:focus-visible {
+            outline: 3px solid rgba(217,168,106,0.55);
+            outline-offset: 2px;
+        }
+
+        /* Mobile tweaks */
+        @media (max-width: 640px) {
+            #configurator .wiz-header { top: 4rem; padding: 0.75rem 0.9rem; border-radius: 1rem; }
+            #configurator .wiz-step-title { font-size: 1.15rem; }
+            #configurator .wiz-price-chip { padding: 0.4rem 0.75rem 0.4rem 0.6rem; gap: 0.5rem; }
+            #configurator .wiz-price-chip .chip-total { font-size: 1.3rem; padding-left: 0.5rem; }
+            #configurator .wiz-card { padding: 1.25rem 1rem 1.4rem; border-radius: 1.25rem; }
+            #configurator .wiz-card h3 { font-size: 1.55rem; }
+            #configurator .review-card { padding: 1.4rem 1.1rem; }
+        }
+    </style>
+
+    <div class="wiz-shell">
+
+        <!-- ============ STICKY WIZARD HEADER ============ -->
+        <div class="wiz-header" role="region" aria-label="Configurator progress">
+            <div class="wiz-header-row">
+                <div class="wiz-step-label">
+                    <div class="wiz-step-eyebrow">
+                        Step <span id="wizStepNum">1</span> of 8
+                    </div>
+                    <div class="wiz-step-title" id="wizStepTitle">Choose Your Tier</div>
+                </div>
+
+                <div style="display:inline-flex; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+                    <div class="wiz-price-chip" aria-live="polite">
+                        <div>
+                            <div class="chip-tier">Live total</div>
+                            <div class="chip-tier-name"><span id="tierLabel">Core Bundle</span></div>
+                        </div>
+                        <div class="chip-total" id="priceTotal">$299</div>
+                    </div>
+
+                    <!-- Hero-tier savings pill — hidden until Hero is selected with at least one upgrade -->
+                    <div class="wiz-savings-pill hidden" id="wizSavingsPill" aria-live="polite" role="status">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                        <div style="display:flex;flex-direction:column;line-height:1.1;">
+                            <span class="wsp-eyebrow">You're saving</span>
+                            <span class="wsp-amount" id="wizSavingsAmount">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wiz-pills" id="wizPills" role="tablist" aria-label="Wizard steps"></div>
+        </div>
+
+        <!-- ============ STAGE (one panel visible at a time) ============ -->
+        <div class="wiz-stage" id="wizStage">
+
+            <!-- ===== STEP 1 — TIER ===== -->
+            <section class="wiz-step active entering" data-step="1" role="tabpanel" aria-labelledby="wizStepTitle">
+                <div class="wiz-card">
+                    <span class="wiz-card-hint">Start here · The foundation of your set</span>
+                    <h3>Choose Your <em>Tier</em>.</h3>
+                    <p class="wiz-card-sub">Three thoughtfully built bundles. Higher tiers unlock more textures, finishes and add-ons — and bake the upgrades in for free. You can fine-tune everything in the next steps.</p>
+
+                    <div class="tier-grid">
+                        <button class="opt tier-card active rounded-2xl" data-group="tier" data-value="core" aria-label="Choose Core Bundle, $299 base">
+                            <div>
+                                <div class="tier-eyebrow">Core Bundle</div>
+                                <div class="tier-name">Core</div>
+                                <div class="tier-price">$299 <small>base</small></div>
+                                <div class="tier-blurb">Hand-crafted essentials. Bombay Mahogany box, basic pieces, classic bandit. Upgrade individual pieces à la carte.</div>
+                            </div>
+                            <span class="tier-cta">Select Core →</span>
+                        </button>
+
+                        <button class="opt tier-card rounded-2xl" data-group="tier" data-value="hero" aria-label="Choose Hero Bundle, $399 base, most popular">
+                            <span class="tier-badge">Most Popular</span>
+                            <div>
+                                <div class="tier-eyebrow">Hero Bundle</div>
+                                <div class="tier-name">Hero</div>
+                                <div class="tier-price">$399 <small>base</small></div>
+                                <div class="tier-blurb">Discounted upgrades across the board — Silk pieces, premium finishes and airbrushed names all priced down.</div>
+                            </div>
+                            <span class="tier-cta">Select Hero →</span>
+                        </button>
+
+                        <button class="opt tier-card rounded-2xl" data-group="tier" data-value="premium" aria-label="Choose Premium Bundle, $799 base, limited">
+                            <div>
+                                <div class="tier-eyebrow">Premium Bundle</div>
+                                <div class="tier-name">Premium</div>
+                                <div class="tier-price">$799 <small>base</small></div>
+                                <div class="tier-blurb">Everything included. Silk pieces & trim, any finish, custom names — no upgrade fees, ever.</div>
+                                <span class="tier-badge">Limited Edition</span>
+                            </div>
+                            <span class="tier-cta">Select Premium →</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left"></div>
+                    <div class="wiz-foot-right">
+                        <span style="font-size:0.78rem;color:rgba(26,32,24,0.55);">Pick a tier to continue</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STEP 2 — TEXTURE ===== -->
+            <section class="wiz-step" data-step="2" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                <div class="wiz-card">
+                    <span class="wiz-card-hint" id="texturePriceHintWrap">
+                        <span id="texturePriceHint">Silk +$39 on Core</span>
+                    </span>
+                    <h3>Player Piece <em>Texture</em>.</h3>
+                    <p class="wiz-card-sub">Solid colors, or shimmering Bambu Studios Silk+ filament that catches the light at the dinner table. Silk pieces are limited to a curated palette — your colors update automatically.</p>
+
+                    <div class="opt-grid-2">
+                        <button class="opt active rounded-2xl p-4 text-left" data-group="texture" data-value="basic" aria-label="Basic texture, free">
+                            <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                <img src="images/pieces-red.JPG" alt="Basic solid color Catan player pieces in red — settlements, cities, and roads" class="w-full h-full object-cover">
+                            </div>
+                            <div class="font-semibold text-sm">Basic</div>
+                            <div class="text-[11px] opacity-75 mt-0.5">Solid colors, free on all tiers</div>
+                        </button>
+                        <button class="opt rounded-2xl p-4 text-left" data-group="texture" data-value="silk" aria-label="Silk texture, premium upgrade">
+                            <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                <img src="images/pieces-yellow.JPG" alt="Premium silk-textured Catan player pieces in shimmering yellow Bambu Studios Silk+ filament" class="w-full h-full object-cover">
+                            </div>
+                            <div class="font-semibold text-sm">Silk <span id="silkPriceTag" class="text-honey-600">+$39</span></div>
+                            <div class="text-[11px] opacity-75 mt-0.5">Bambu Studios Silk+ filament</div>
+                        </button>
+                    </div>
+                    <p class="wiz-card-meta">Silk swaps your palette to the Bambu Silk+ collection in the next step.</p>
+                </div>
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left">
+                        <button class="btn-ghost wiz-back" data-wiz-back aria-label="Go back">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STEP 3 — COLORS ===== -->
+            <section class="wiz-step" data-step="3" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                <div class="wiz-card">
+                    <span class="wiz-card-hint">
+                        <span id="paletteLabel">Default palette</span>
+                    </span>
+                    <h3>Pick Your <em>Player Colors</em>.</h3>
+                    <p class="wiz-card-sub">Tap to choose the four colors for your set. Tap again to remove. The order you tap is the order they'll be numbered.</p>
+
+                    <div id="swatchGrid" aria-label="Available player piece colors"></div>
+
+                    <div class="selected-summary">
+                        <div>
+                            <span style="color:rgba(26,32,24,0.55);font-size:0.78rem;">Selected:</span>
+                            <strong id="selectedColors" style="color:var(--forest-900);margin-left:4px;">Red, Orange, White, Blue</strong>
+                        </div>
+                        <div style="font-size:0.78rem;color:rgba(26,32,24,0.55);">
+                            <span id="swatchCount">4</span> of 4 chosen
+                        </div>
+                    </div>
+                </div>
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left">
+                        <button class="btn-ghost wiz-back" data-wiz-back>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                            Back
+                        </button>
+                    </div>
+                    <div class="wiz-foot-right">
+                        <button class="btn-primary wiz-continue" data-wiz-next>
+                            Continue
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STEP 4 — ROBBER ===== -->
+            <section class="wiz-step" data-step="4" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                <div class="wiz-card">
+                    <span class="wiz-card-hint">
+                        <span id="robberPriceHint">Victorious +$10 • Custom $75</span>
+                    </span>
+                    <h3>The <em>Robber</em>.</h3>
+                    <p class="wiz-card-sub">Every set ships with a robber. Pick the classic, our victorious bandit, or send us a photo and we'll hand-sculpt one in your likeness.</p>
+
+                    <div class="opt-grid-3">
+                        <button class="opt active rounded-2xl p-4 text-left" data-group="robber" data-value="classic" aria-label="Classic Bandit, free">
+                            <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                <img src="images/robber-front.JPG" alt="Classic Bandit Catan robber figurine — front view of the default 3D printed design" class="w-full h-full object-cover">
+                            </div>
+                            <div class="font-semibold text-sm">Classic Bandit</div>
+                            <div class="text-[11px] opacity-75 mt-0.5">Default, free</div>
+                        </button>
+                        <button class="opt rounded-2xl p-4 text-left" data-group="robber" data-value="victorious" aria-label="Victorious Bandit upgrade">
+                            <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                <img src="images/robber-side.JPG" alt="Victorious Bandit Catan robber figurine — triumphant pose with raised arms" class="w-full h-full object-cover">
+                            </div>
+                            <div class="font-semibold text-sm">Victorious Bandit <span id="victoriousPriceTag" class="text-honey-600">+$10</span></div>
+                            <div class="text-[11px] opacity-75 mt-0.5">A bandit who's won the day</div>
+                        </button>
+                        <button class="opt rounded-2xl p-4 text-left" data-group="robber" data-value="custom" aria-label="Custom Bandit, plus 75 dollars">
+                            <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                <img src="images/robber-side.JPG" alt="Custom hand-sculpted Catan robber 3D printed from a customer-supplied photo" class="w-full h-full object-cover">
+                            </div>
+                            <div class="font-semibold text-sm">Custom Bandit <span class="text-honey-600">+$75</span></div>
+                            <div class="text-[11px] opacity-75 mt-0.5">Send us a pic — we'll sculpt it</div>
+                        </button>
+                    </div>
+                    <p class="wiz-card-meta">Custom Bandit is a flat $75 across all tiers — every photo gets the same hand-sculpting time.</p>
+                </div>
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left">
+                        <button class="btn-ghost wiz-back" data-wiz-back>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STEP 5 — BOX FINISH ===== -->
+            <section class="wiz-step" data-step="5" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                <div class="wiz-card">
+                    <span class="wiz-card-hint">
+                        <span id="finishPriceHint">+$59 on Core for non-default</span>
+                    </span>
+                    <h3>Wooden Box <em>Finish</em>.</h3>
+                    <p class="wiz-card-sub">Bombay Mahogany comes standard. The other four are popular Home Depot stains, hand-applied by Dad. Free on Premium.</p>
+
+                    <div class="finish-grid">
+                        <button class="opt active rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="bombay" aria-label="Bombay Mahogany finish, default">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#5b2e1a;"></div>
+                            Bombay Mahogany
+                        </button>
+                        <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="chestnut" aria-label="Chestnut finish">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#7a4423;"></div>
+                            Chestnut
+                        </button>
+                        <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="early-american" aria-label="Early American finish">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#8c5a2b;"></div>
+                            Early American
+                        </button>
+                        <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="special-walnut" aria-label="Special Walnut finish">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#4a2f1f;"></div>
+                            Special Walnut
+                        </button>
+                        <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="golden-oak" aria-label="Golden Oak finish">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#b88a4a;"></div>
+                            Golden Oak
+                        </button>
+                    </div>
+                    <p class="wiz-card-meta">Switch to any non-default finish for the listed upgrade fee — free on Premium.</p>
+                </div>
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left">
+                        <button class="btn-ghost wiz-back" data-wiz-back>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STEP 6 — TRIM (texture + color combined) ===== -->
+            <section class="wiz-step" data-step="6" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                <div class="wiz-card">
+                    <span class="wiz-card-hint">
+                        <span id="trimPriceHint">Silk +$25 on Core</span>
+                    </span>
+                    <h3>Trim <em>Texture &amp; Color</em>.</h3>
+                    <p class="wiz-card-sub">First the finish on the trim, then the color it's painted. Silk gives a shimmering, premium feel — color is included with either choice.</p>
+
+                    <!-- Trim texture -->
+                    <div style="font-size:11px;font-weight:600;color:rgba(26,32,24,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.65rem;">Trim Texture</div>
+                    <div class="opt-grid-2" style="margin-bottom:1.5rem;">
+                        <button class="opt active rounded-2xl p-4 text-left" data-group="trim" data-value="basic" aria-label="Basic trim texture, free">
+                            <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200" style="background: linear-gradient(135deg,#c0392b 0%, #c0392b 100%);"></div>
+                            <div class="font-semibold text-sm">Basic</div>
+                            <div class="text-[11px] opacity-75 mt-0.5">Solid trim, free on all tiers</div>
+                        </button>
+                        <button class="opt rounded-2xl p-4 text-left" data-group="trim" data-value="silk" aria-label="Silk trim texture, premium upgrade">
+                            <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden" style="background: linear-gradient(135deg,#d99a9a 0%, #e8d5a8 50%, #d9c87a 100%);"></div>
+                            <div class="font-semibold text-sm">Silk <span id="trimPriceTag" class="text-honey-600">+$25</span></div>
+                            <div class="text-[11px] opacity-75 mt-0.5">Shimmering Silk+ filament</div>
+                        </button>
+                    </div>
+
+                    <!-- Trim color -->
+                    <div style="font-size:11px;font-weight:600;color:rgba(26,32,24,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.65rem;">Trim Color</div>
+                    <div class="trim-color-row">
+                        <button class="trim-color-opt opt active rounded-xl py-3 px-2 text-xs text-center" data-color="Red" aria-label="Red trim color">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#c0392b;"></div>
+                            Red
+                        </button>
+                        <button class="trim-color-opt opt rounded-xl py-3 px-2 text-xs text-center" data-color="Green" aria-label="Green trim color">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#2e7d4f;"></div>
+                            Green
+                        </button>
+                        <button class="trim-color-opt opt rounded-xl py-3 px-2 text-xs text-center" data-color="Blue" aria-label="Blue trim color">
+                            <div class="w-full h-6 rounded mb-1.5" style="background:#1f4e8c;"></div>
+                            Blue
+                        </button>
+                        <button class="trim-color-opt opt rounded-xl py-3 px-2 text-xs text-center" data-color="White" aria-label="White trim color">
+                            <div class="w-full h-6 rounded mb-1.5 border border-sand-300" style="background:#f5f5f0;"></div>
+                            White
+                        </button>
+                    </div>
+                </div>
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left">
+                        <button class="btn-ghost wiz-back" data-wiz-back>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                            Back
+                        </button>
+                    </div>
+                    <div class="wiz-foot-right">
+                        <button class="btn-primary wiz-continue" data-wiz-next>
+                            Continue
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STEP 7 — NAMES ===== -->
+            <section class="wiz-step" data-step="7" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                <div class="wiz-card">
+                    <span class="wiz-card-hint">
+                        <span id="namesPriceHint">+$79 on Core</span>
+                    </span>
+                    <h3>Custom Airbrushed <em>Names</em>.</h3>
+                    <p class="wiz-card-sub">Want family names hand-airbrushed onto the pieces and box? We'll send a mockup before we touch the airbrush.</p>
+
+                    <div class="names-grid">
+                        <button class="opt active" data-group="names" data-value="none" aria-label="Skip airbrushed names">
+                            <div class="font-semibold">No Names</div>
+                            <div class="opt-blurb">Keep it classic — clean wood and pieces, no airbrushing.</div>
+                        </button>
+                        <button class="opt" data-group="names" data-value="add" aria-label="Add airbrushed names">
+                            <div class="font-semibold">Add Airbrushed Names <span id="namesPriceTag" class="text-honey-600" style="font-weight:600;">+$79</span></div>
+                            <div class="opt-blurb">Personalize with up to 30 characters — perfect for gifts.</div>
+                        </button>
+                    </div>
+
+                    <div id="namesInputRow" class="hidden" style="margin-top:1.5rem;">
+                        <label for="namesInput" class="block" style="font-size:11px;font-weight:600;color:rgba(26,32,24,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.5rem;">Enter family names (we'll airbrush them onto pieces & box):</label>
+                        <input id="namesInput" type="text" placeholder="e.g. George & Dad" class="w-full px-4 py-3 rounded-xl text-sm" maxlength="30">
+                        <p class="wiz-card-meta">Up to 30 characters. We'll send a mockup before we airbrush.</p>
+                    </div>
+                </div>
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left">
+                        <button class="btn-ghost wiz-back" data-wiz-back>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                            Back
+                        </button>
+                    </div>
+                    <div class="wiz-foot-right">
+                        <button class="btn-primary wiz-continue" data-wiz-next>
+                            Review my set
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STEP 8 — REVIEW ===== -->
+            <section class="wiz-step" data-step="8" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                <div class="review-card">
+                    <span class="wiz-card-hint" style="background:rgba(217,168,106,0.18);color:var(--honey-400);border-color:rgba(217,168,106,0.4);">Final step · Review &amp; lock it in</span>
+                    <h3 style="color:var(--sand-50);">Your <em style="color:var(--honey-400);">Heirloom Set</em>.</h3>
+                    <p class="wiz-card-sub" style="color:rgba(244,236,220,0.75);">Here's everything you've chosen. Hit checkout when you're ready — we'll start hand-crafting your set within 1–2 weeks.</p>
+
+                    <div style="display:grid;grid-template-columns:1fr;gap:2rem;align-items:start;" class="lg:grid-cols-3">
+
+                        <div style="grid-column: span 1;" class="lg:col-span-2">
+                            <div id="breakdown" class="text-sm text-sand-100/85 space-y-2" style="padding-top:1.25rem;border-top:1px solid rgba(244,236,220,0.10);"></div>
+                        </div>
+
+                        <div>
+                            <div style="text-align:right;margin-bottom:1rem;">
+                                <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--honey-400);font-weight:600;">Your Total</div>
+                                <div id="priceTotalBig" class="font-serif" style="font-size:3rem;line-height:1;color:var(--sand-50);margin-top:0.25rem;">$299</div>
+                            </div>
+                            <button id="addToCart" class="btn-primary w-full px-6 py-4 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2">
+                                Checkout Securely
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                            </button>
+                            <div id="checkoutError" class="hidden mt-3 text-[12px] text-center bg-red-500/15 border border-red-500/30 text-red-200 rounded-xl px-3 py-2"></div>
+                            <div class="mt-3 text-[11px] text-center text-sand-100/60">
+                                🔒 Secure Stripe checkout • ✓ 60-day guarantee • ✓ Ships in 1–2 weeks
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wiz-foot">
+                    <div class="wiz-foot-left">
+                        <button class="btn-ghost wiz-back" data-wiz-back>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                            Back
+                        </button>
+                    </div>
+                    <div class="wiz-foot-right">
+                        <button class="wiz-skip" data-wiz-restart aria-label="Start the wizard from the beginning">Start over</button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</section>
+
+
+
+    <!-- ============ WHAT YOU GET ============ -->
+    <section class="py-20 lg:py-28">
+        <div class="max-w-6xl mx-auto px-5 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
+            <div class="relative fade-in">
+                <div class="rounded-3xl overflow-hidden shadow-glow aspect-[4/5]">
+                    <img src="images/hero-nobox.JPG" alt="Full Catan Artisan set components laid out — magnetic hex tiles, settlements, cities, roads, custom robber, and number tokens" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute -bottom-6 -right-6 bg-honey-600 text-sand-50 rounded-2xl p-5 shadow-glow max-w-[200px] hidden md:block">
+                    <div class="font-serif italic text-sm leading-snug">"Every component is made, sanded, and inspected by hand."</div>
+                </div>
+            </div>
+            <div class="fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">What's In The Box</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">An heirloom, <span class="italic text-honey-600">not a board game.</span></h2>
+                <ul class="mt-8 space-y-3 text-forest-900/85">
+                    <li class="flex gap-3"><span class="text-honey-600 text-lg leading-none mt-1">✦</span><span><strong>19 magnetic hex tiles</strong> — buttery snap, no more table-bumps mid-game</span></li>
+                    <li class="flex gap-3"><span class="text-honey-600 text-lg leading-none mt-1">✦</span><span><strong>Full player set</strong> — settlements, cities, roads in your chosen colors/textures</span></li>
+                    <li class="flex gap-3"><span class="text-honey-600 text-lg leading-none mt-1">✦</span><span><strong>Signed wooden box</strong> — engraved with edition number, finished by hand</span></li>
+                    <li class="flex gap-3"><span class="text-honey-600 text-lg leading-none mt-1">✦</span><span><strong>Custom robber</strong> — preset or designed from your photo</span></li>
+                    <li class="flex gap-3"><span class="text-honey-600 text-lg leading-none mt-1">✦</span><span><strong>Number tokens & dice</strong> — color-matched to your build</span></li>
+                    <li class="flex gap-3"><span class="text-honey-600 text-lg leading-none mt-1">✦</span><span><strong>Certificate of authenticity</strong> — signed by Dad, dated by hand</span></li>
+                    <li class="flex gap-3"><span class="text-honey-600 text-lg leading-none mt-1">✦</span><span><strong>Workshop photos</strong> — we send pics from the bench before it ships</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ BONUSES + GUARANTEES ============ -->
+    <section class="py-20 lg:py-28 bg-sand-100/60 border-y border-sand-200">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">Bonuses & Promises</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">We stand behind every set. <span class="italic text-honey-600">For life.</span></h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-sand-50 border border-sand-200 rounded-2xl p-7 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-forest-800 text-sand-50 flex items-center justify-center mb-5 text-xl">♡</div>
+                    <h3 class="font-serif text-xl mb-2">60-Day "Play It & Love It"</h3>
+                    <p class="text-sm text-forest-900/75 leading-relaxed">Take it home. Play five game nights. If it doesn't earn its place on your shelf, we'll refund you — no awkward emails.</p>
+                </div>
+                <div class="bg-sand-50 border border-sand-200 rounded-2xl p-7 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-honey-600 text-sand-50 flex items-center justify-center mb-5 text-xl">⟳</div>
+                    <h3 class="font-serif text-xl mb-2">Lifetime Replacement Pieces</h3>
+                    <p class="text-sm text-forest-900/75 leading-relaxed">Lost a settlement to the couch cushions? Cat ate the robber? Replacements are <strong>$5 flat</strong>, forever. No questions, no upcharges.</p>
+                </div>
+                <div class="bg-sand-50 border border-sand-200 rounded-2xl p-7 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-sage-600 text-sand-50 flex items-center justify-center mb-5 text-xl">✦</div>
+                    <h3 class="font-serif text-xl mb-2">Direct Line to the Workshop</h3>
+                    <p class="text-sm text-forest-900/75 leading-relaxed">Email us and you're talking to the people who printed your set. No bots, no support tickets. Just two craftsmen who care.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ WHY THIS SET ============ -->
+    <section class="py-20 lg:py-28 bg-forest-900 text-sand-100 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <img src="images/in-game-shot-1.JPG" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] text-honey-400 font-semibold mb-4">Built With Obsessive Care</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">Why this set is <span class="italic text-honey-400">different.</span></h2>
+                <p class="mt-4 text-sand-100/70">We're a brand-new father-and-son workshop. We don't have a wall of reviews yet — what we have is the obsession that goes into every set. Here's what that looks like.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <figure class="bg-sand-50/5 border border-sand-100/10 rounded-2xl p-7 backdrop-blur fade-in">
+                    <div class="text-honey-400 mb-4 text-2xl">✦</div>
+                    <div class="text-xs uppercase tracking-wider text-honey-400 font-semibold mb-3">Quality You Can Feel</div>
+                    <blockquote class="font-serif text-lg leading-relaxed">Every hex tile gets four passes — print, sand, magnetize, inspect. The pieces snap with a weight that's closer to a chess set than a board game. Nothing leaves the workshop until both of us have signed off.</blockquote>
+                    <figcaption class="mt-5 flex items-center gap-3">
+                        <img src="images/pieces-red.JPG" alt="Premium magnetic Catan player pieces in red — settlements, cities, and roads" class="w-10 h-10 rounded-full object-cover">
+                        <div><div class="font-semibold text-sm">Workshop Standard</div><div class="text-xs text-sand-100/60">Inspected before every ship</div></div>
+                    </figcaption>
+                </figure>
+                <figure class="bg-sand-50/5 border border-sand-100/10 rounded-2xl p-7 backdrop-blur fade-in">
+                    <div class="text-honey-400 mb-4 text-2xl">✦</div>
+                    <div class="text-xs uppercase tracking-wider text-honey-400 font-semibold mb-3">Set Up in Seconds</div>
+                    <blockquote class="font-serif text-lg leading-relaxed">Magnetic tiles mean no more setup wars. Drop the hexes onto the base, they snap exactly where they should — even if a kid bumps the table mid-game. The whole set lives in its signed wooden box, ready in under a minute.</blockquote>
+                    <figcaption class="mt-5 flex items-center gap-3">
+                        <img src="images/in-game-shot-2.JPG" alt="Magnetic hex tiles snapping into place on the Catan Artisan base board" class="w-10 h-10 rounded-full object-cover">
+                        <div><div class="font-semibold text-sm">Designed for Game Nights</div><div class="text-xs text-sand-100/60">Not display shelves</div></div>
+                    </figcaption>
+                </figure>
+                <figure class="bg-sand-50/5 border border-sand-100/10 rounded-2xl p-7 backdrop-blur fade-in">
+                    <div class="text-honey-400 mb-4 text-2xl">✦</div>
+                    <div class="text-xs uppercase tracking-wider text-honey-400 font-semibold mb-3">Customization Done Right</div>
+                    <blockquote class="font-serif text-lg leading-relaxed">Pick your colors, your textures, your trim, your finish — and your robber, if you want one sculpted from a photo. We send mockups before we airbrush. Unlimited revisions on Premium. The set you imagine is the set you get.</blockquote>
+                    <figcaption class="mt-5 flex items-center gap-3">
+                        <img src="images/robber-front.JPG" alt="Custom 3D printed Catan robber figurine, hand-sculpted from a customer photo" class="w-10 h-10 rounded-full object-cover">
+                        <div><div class="font-semibold text-sm">Built to Your Spec</div><div class="text-xs text-sand-100/60">Mockups before paint</div></div>
+                    </figcaption>
+                </figure>
+            </div>
+            <p class="text-center text-xs text-sand-100/55 mt-10 max-w-xl mx-auto fade-in">
+                First customer? You'll be the start of our review wall — and the 60-day guarantee means there's zero risk to being early.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ FINAL URGENCY CTA ============ -->
+    <section class="py-20 lg:py-28 bg-sand-100">
+        <div class="max-w-5xl mx-auto px-5 lg:px-8 text-center fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-honey-600/10 text-honey-700 text-xs font-semibold mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-honey-600 pulse-dot"></span>
+                Only 5 sets being built this month — and only 5 Premium Editions will ever exist
+            </div>
+            <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl leading-tight">
+                The next set off the bench <br>could be <span class="italic text-honey-600">yours.</span>
+            </h2>
+            <p class="mt-6 text-forest-900/80 text-lg max-w-xl mx-auto">
+                We print two per week. That's it. Once this month's slots are full, the next opening is 4–6 weeks out. Lock yours in now.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3 justify-center">
+                <a href="#configurator" class="btn-primary px-8 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                    Configure Your Set
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                </a>
+                <a href="#tiers" class="btn-ghost px-8 py-4 rounded-full text-sm font-semibold">Compare Tiers Again</a>
+            </div>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-forest-900/60">
+                <span>✓ 60-Day Play-It-And-Love-It Guarantee</span>
+                <span>✓ Lifetime $5 piece replacements</span>
+                <span>✓ Signed by Dad</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer id="footer" class="bg-forest-900 text-sand-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-sand-100/10">
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="w-9 h-9 rounded-lg bg-honey-600 text-sand-50 flex items-center justify-center font-serif text-lg">R</span>
+                        <span class="font-serif text-xl">Realized <span class="text-honey-400">Prints</span></span>
+                    </div>
+                    <p class="text-sm text-sand-100/70 leading-relaxed max-w-sm">
+                        Premium 3D printed heirlooms and collectibles, crafted by a father and son in their home workshop. Made to be loved, used, and passed on.
+                    </p>
+                    <div class="mt-6 flex gap-3">
+                        <span class="px-3 py-1.5 rounded-full bg-sand-50/10 text-xs">🇺🇸 Made in USA</span>
+                        <span class="px-3 py-1.5 rounded-full bg-sand-50/10 text-xs">🔒 Secure Checkout</span>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Shop</h4>
+                    <ul class="space-y-2 text-sm text-sand-100/80">
+                        <li><a href="catan-artisan.html" class="hover:text-honey-400 transition">Catan Collection</a></li>
+                        <li><a href="index.html#collections" class="hover:text-honey-400 transition">Anime Figurines</a></li>
+                        <li><a href="index.html#collections" class="hover:text-honey-400 transition">Lucky Scoops</a></li>
+                        <li><a href="index.html#collections" class="hover:text-honey-400 transition">Cat Scratchers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-sand-100/80">
+                        <li><a href="index.html#story" class="hover:text-honey-400 transition">Our Story</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Workshop Tour</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Reviews</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Get In Touch</h4>
+                    <ul class="space-y-2 text-sm text-sand-100/80">
+                        <li><a href="mailto:hello@realizedprints.com" class="hover:text-honey-400 transition">hello@realizedprints.com</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Live on WhatsNot</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Instagram</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-sand-100/60">
+                <div>© 2026 Realized Prints. Crafted by a father & son. All rights reserved.</div>
+                <div class="flex gap-5">
+                    <a href="#" class="hover:text-honey-400">Privacy</a>
+                    <a href="#" class="hover:text-honey-400">Terms</a>
+                    <a href="#" class="hover:text-honey-400">Shipping & Returns</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- THIS IS THE LINE THE SEPERATES VISUALS FROM FUNCTIONS. VISUALS ABOVE, FUNCTIONS BELOW. -->
+
+
+    <script>
+        // ===== STRIPE =====
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TC500E8CXX0QGip3XQ4QqpI8KA7v6t91u0ocMtgRqSTlRJ8F8cbsaYXBkJenF1IoB1tmvnH9nWOMvJVbF9TbXCh00lHqhCZSQ';
+        const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+        // Mobile menu (untouched)
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // Fade-in observer (untouched)
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+        // ===== CONFIGURATOR — CENTRALIZED PRICING (single source of truth) =====
+        // To change ANY price in the configurator, edit only this object.
+        const PRICING_CONFIG = {
+            tiers: {
+                core: { base: 299, label: 'Core Bundle', rank: 1 },
+                hero: { base: 399, label: 'Hero Bundle', rank: 2 },
+                premium: { base: 799, label: 'Premium Bundle', rank: 3 },
+            },
+            // Per-upgrade pricing across tiers. `core` is the "anchor" we measure
+            // Hero savings against. Premium is always 0 (everything included).
+            upgrades: {
+                texture_silk: { core: 39, hero: 20, premium: 0, label: 'Silk pieces' },
+                robber_victorious: { core: 10, hero: 5, premium: 0, label: 'Victorious Bandit' },
+                robber_custom: { core: 75, hero: 75, premium: 75, label: 'Custom Bandit', flat: true },
+                finish_custom: { core: 59, hero: 39, premium: 0, label: 'Premium finish' },
+                trim_silk: { core: 25, hero: 10, premium: 0, label: 'Silk trim' },
+                names_add: { core: 79, hero: 39, premium: 0, label: 'Airbrushed names' },
+            },
+        };
+
+        // ----- Back-compat aliases so the rest of the file keeps working unchanged -----
+        const TIER_RANK = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.rank]));
+        const TIER_LABEL = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.label]));
+        const TIER_BASE = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.base]));
+        const PRICING = Object.fromEntries(
+            Object.entries(PRICING_CONFIG.upgrades).map(([k, v]) => [k, { core: v.core, hero: v.hero, premium: v.premium }])
+        );
+
+        // ----- Savings helpers (Hero tier only) -----
+        function getSavings(upgradeKey) {
+            const u = PRICING_CONFIG.upgrades[upgradeKey];
+            if (!u || u.flat) return { corePrice: u?.core ?? 0, heroPrice: u?.hero ?? 0, savings: 0, percent: 0 };
+            const savings = Math.max(0, u.core - u.hero);
+            const percent = u.core > 0 ? Math.round((savings / u.core) * 100) : 0;
+            return { corePrice: u.core, heroPrice: u.hero, savings, percent };
+        }
+
+        // Max possible savings if a Hero buyer adds every (non-flat) upgrade.
+        // Used on the Hero tier card teaser.
+        const HERO_MAX_SAVINGS = Object.values(PRICING_CONFIG.upgrades)
+            .filter(u => !u.flat)
+            .reduce((sum, u) => sum + Math.max(0, u.core - u.hero), 0);
+
+        const DEFAULT_PALETTE = ['Red', 'Orange', 'White', 'Blue'];
+        const DEFAULT_SWATCHES = [
+            { name: 'Red', hex: '#c0392b' },
+            { name: 'Orange', hex: '#e67e22' },
+            { name: 'White', hex: '#f5f5f0' },
+            { name: 'Blue', hex: '#1f4e8c' },
+            { name: 'Green', hex: '#2e7d4f' },
+            { name: 'Yellow', hex: '#f1c40f' },
+            { name: 'Black', hex: '#1a1a1a' },
+            { name: 'Purple', hex: '#6c3a8c' },
+        ];
+        const SILK_SWATCHES = [
+            { name: 'Silk Champagne', hex: '#e8d5a8' },
+            { name: 'Silk Rose', hex: '#d99a9a' },
+            { name: 'Silk Mint', hex: '#a8d9c4' },
+            { name: 'Silk Sky', hex: '#a8c4d9' },
+            { name: 'Silk Lavender', hex: '#c4a8d9' },
+            { name: 'Silk Gold', hex: '#d9c87a' },
+            { name: 'Silk Pearl', hex: '#ece4d6' },
+            { name: 'Silk Copper', hex: '#d99a6c' },
+        ];
+
+        const state = {
+            tier: 'core',
+            texture: 'basic',
+            colors: [...DEFAULT_PALETTE],
+            robber: 'classic',
+            finish: 'bombay',
+            trim: 'basic',
+            trimColor: 'Red',
+            names: 'none',
+            namesText: '',
+        };
+
+        // Track current total computed in recalc()
+        let currentTotal = TIER_BASE.core;
+
+        function applyTierLocks() {
+            const rank = TIER_RANK[state.tier];
+            document.querySelectorAll('.opt[data-min-tier]').forEach(btn => {
+                const need = btn.dataset.minTier;
+                const locked = TIER_RANK[need] > rank;
+                btn.classList.toggle('locked', locked);
+                btn.disabled = locked;
+                if (locked && btn.classList.contains('active')) {
+                    btn.classList.remove('active');
+                    const group = btn.dataset.group;
+                    const fallback = document.querySelector(`.opt[data-group="${group}"]:not([data-min-tier])`);
+                    if (fallback) {
+                        fallback.classList.add('active');
+                        state[group] = fallback.dataset.value;
+                    }
+                }
+            });
+        }
+
+        function updateHints() {
+            const t = state.tier;
+            const fmtPlain = (p) => p === 0 ? 'Included' : ('+$' + p);
+
+            // Hero hint format: "Silk $39 $20 [Save 49%]" (with strikethrough on $39)
+            function hintFor(upgradeKey, prefix) {
+                const u = PRICING_CONFIG.upgrades[upgradeKey];
+                if (t === 'premium') return `${prefix} included`;
+                if (t === 'hero') {
+                    const { corePrice, heroPrice, percent } = getSavings(upgradeKey);
+                    return `${prefix} <s style="opacity:0.55;">$${corePrice}</s> <strong style="color:var(--honey-400);">$${heroPrice}</strong> <span class="save-pct">Save ${percent}%</span>`;
+                }
+                return `${prefix} ${fmtPlain(u.core)}`;
+            }
+
+            // Option-button price tag: "$39 +$20" on Hero, "+$39" on Core, "Included" on Premium
+            function tagFor(upgradeKey) {
+                const u = PRICING_CONFIG.upgrades[upgradeKey];
+                const price = u[t];
+                if (t === 'premium' || price === 0) return '<span class="tag-included">Included</span>';
+                if (t === 'hero') {
+                    return `<s class="tag-strike">$${u.core}</s> <span class="tag-hero">+$${price}</span>`;
+                }
+                return `+$${price}`;
+            }
+
+            // Texture
+            document.getElementById('texturePriceHint').innerHTML = hintFor('texture_silk', 'Silk');
+            document.getElementById('silkPriceTag').innerHTML = tagFor('texture_silk');
+
+            // Robber (custom robber is flat across tiers, so we keep the +$75 tail)
+            const robberHint = t === 'premium'
+                ? 'Victorious included · Custom +$75'
+                : t === 'hero'
+                    ? `${hintFor('robber_victorious', 'Victorious')} · Custom +$75`
+                    : `Victorious +$${PRICING_CONFIG.upgrades.robber_victorious.core} · Custom +$75`;
+            document.getElementById('robberPriceHint').innerHTML = robberHint;
+            document.getElementById('victoriousPriceTag').innerHTML = tagFor('robber_victorious');
+
+            // Finish
+            document.getElementById('finishPriceHint').innerHTML = t === 'premium'
+                ? 'Any finish included'
+                : t === 'hero'
+                    ? hintFor('finish_custom', 'Premium finish')
+                    : `+$${PRICING_CONFIG.upgrades.finish_custom.core} for non-default`;
+
+            // Trim
+            document.getElementById('trimPriceHint').innerHTML = hintFor('trim_silk', 'Silk');
+            document.getElementById('trimPriceTag').innerHTML = tagFor('trim_silk');
+
+            // Names
+            document.getElementById('namesPriceHint').innerHTML = hintFor('names_add', 'Names');
+            document.getElementById('namesPriceTag').innerHTML = tagFor('names_add');
+        }
+
+        function renderSwatches() {
+            const palette = state.texture === 'silk' ? SILK_SWATCHES : DEFAULT_SWATCHES;
+            const grid = document.getElementById('swatchGrid');
+            grid.innerHTML = palette.map(s => {
+                const selected = state.colors.includes(s.name);
+                const idx = state.colors.indexOf(s.name);
+                return `
+                    <button type="button"
+                      class="swatch group relative rounded-xl border-2 ${selected ? 'border-forest-800' : 'border-sand-200'} hover:border-forest-800 transition p-2 text-left"
+                      data-color="${s.name}"
+                      aria-pressed="${selected}"
+                      aria-label="${s.name}${selected ? ', selected' : ''}">
+                      <div class="aspect-square rounded-lg mb-1.5" style="background:${s.hex}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);"></div>
+                      <div class="text-[10px] font-semibold truncate">${s.name}</div>
+                      ${selected ? `<div class="absolute" style="top:0.375rem;right:0.375rem;width:1.25rem;height:1.25rem;border-radius:9999px;background:var(--accent);color:#1a1108;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(196,122,63,0.6);">${idx + 1}</div>` : ''}
+                    </button>
+                  `;
+            }).join('');
+
+            document.getElementById('paletteLabel').textContent =
+                state.texture === 'silk' ? 'Bambu Silk+ palette' : 'Default palette';
+            document.getElementById('selectedColors').textContent = state.colors.join(', ') || '—';
+            document.getElementById('swatchCount').textContent = state.colors.length;
+
+            grid.querySelectorAll('.swatch').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const color = btn.dataset.color;
+                    const i = state.colors.indexOf(color);
+                    if (i >= 0) {
+                        state.colors.splice(i, 1);
+                    } else {
+                        if (state.colors.length >= 4) state.colors.shift();
+                        state.colors.push(color);
+                    }
+                    renderSwatches();
+                    recalc();
+                });
+            });
+        }
+
+        function recalc() {
+            const t = state.tier;
+            let total = TIER_BASE[t];
+            const lines = [{ label: 'Tier', value: TIER_LABEL[t], price: TIER_BASE[t], base: true }];
+
+            if (state.texture === 'silk') {
+                const p = PRICING.texture_silk[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Texture', value: 'Silk (Bambu Silk+)', price: p });
+            } else {
+                lines.push({ label: 'Texture', value: 'Basic', price: 0 });
+            }
+
+            lines.push({ label: 'Player Colors', value: state.colors.join(', ') || 'None', price: 0 });
+
+            if (state.robber === 'victorious') {
+                const p = PRICING.robber_victorious[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Robber', value: 'Victorious Bandit', price: p });
+            } else if (state.robber === 'custom') {
+                const p = PRICING.robber_custom[t];
+                total += p;
+                lines.push({ label: 'Robber', value: 'Custom Bandit (from photo)', price: p });
+            } else {
+                lines.push({ label: 'Robber', value: 'Classic Bandit', price: 0 });
+            }
+
+            const finishLabels = {
+                bombay: 'Bombay Mahogany',
+                chestnut: 'Chestnut',
+                'early-american': 'Early American',
+                'special-walnut': 'Special Walnut',
+                'golden-oak': 'Golden Oak'
+            };
+            if (state.finish !== 'bombay') {
+                const p = PRICING.finish_custom[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Box Finish', value: finishLabels[state.finish], price: p });
+            } else {
+                lines.push({ label: 'Box Finish', value: 'Bombay Mahogany', price: 0 });
+            }
+
+            if (state.trim === 'silk') {
+                const p = PRICING.trim_silk[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Trim', value: `Silk — ${state.trimColor}`, price: p });
+            } else {
+                lines.push({ label: 'Trim', value: `Basic — ${state.trimColor}`, price: 0 });
+            }
+
+            if (state.names === 'add') {
+                const p = PRICING.names_add[t];
+                if (p > 0) total += p;
+                const display = state.namesText.trim() ? `Airbrushed: "${state.namesText.trim()}"` : 'Airbrushed names';
+                lines.push({ label: 'Names', value: display, price: p });
+            }
+
+            currentTotal = total;
+
+            // ----- Compute live savings (Hero tier only) -----
+            let savedSoFar = 0;
+            if (t === 'hero') {
+                if (state.texture === 'silk') savedSoFar += getSavings('texture_silk').savings;
+                if (state.robber === 'victorious') savedSoFar += getSavings('robber_victorious').savings;
+                if (state.finish !== 'bombay') savedSoFar += getSavings('finish_custom').savings;
+                if (state.trim === 'silk') savedSoFar += getSavings('trim_silk').savings;
+                if (state.names === 'add') savedSoFar += getSavings('names_add').savings;
+            }
+
+            document.getElementById('priceTotal').textContent = '$' + total;
+            document.getElementById('priceTotalBig').textContent = '$' + total;
+            document.getElementById('tierLabel').textContent = TIER_LABEL[t];
+
+            // ----- Sticky-header savings pill -----
+            const savingsPill = document.getElementById('wizSavingsPill');
+            if (savingsPill) {
+                if (t === 'hero' && savedSoFar > 0) {
+                    savingsPill.classList.remove('hidden');
+                    document.getElementById('wizSavingsAmount').textContent = '$' + savedSoFar;
+                } else {
+                    savingsPill.classList.add('hidden');
+                }
+            }
+
+            // ----- Final-review breakdown -----
+            const breakdownHTML = lines.map(l => {
+                const right = l.base
+                    ? `<span class="font-semibold text-sand-50">$${l.price}</span>`
+                    : (l.price > 0
+                        ? `<span class="font-semibold text-honey-400">+$${l.price}</span>`
+                        : `<span class="text-sand-100/55">included</span>`);
+                return `<div class="flex justify-between gap-4">
+                    <span class="text-sand-100/85"><span class="text-sand-100/55">${l.label}:</span> ${l.value}</span>
+                    ${right}
+                  </div>`;
+            }).join('');
+
+            const savingsRowHTML = (t === 'hero' && savedSoFar > 0)
+                ? `<div class="review-savings-row">
+                       <span><span class="rsr-label">You saved</span> vs. Core à-la-carte pricing</span>
+                       <span class="rsr-amount">−$${savedSoFar}</span>
+                   </div>`
+                : '';
+
+            document.getElementById('breakdown').innerHTML = breakdownHTML + savingsRowHTML;
+        }
+
+        // ===== ORIGINAL .opt CLICK HANDLER (unchanged) =====
+        document.querySelectorAll('.opt').forEach(btn => {
+            // skip trim color swatches — handled separately
+            if (btn.classList.contains('trim-color-opt')) return;
+
+            btn.addEventListener('click', () => {
+                if (btn.disabled || btn.classList.contains('locked')) return;
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                if (!group) return;
+                document.querySelectorAll(`.opt[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state[group] = value;
+
+                if (group === 'tier') {
+                    applyTierLocks();
+                    updateHints();
+                }
+                if (group === 'texture') {
+                    const newPalette = value === 'silk' ? SILK_SWATCHES : DEFAULT_SWATCHES;
+                    state.colors = newPalette.slice(0, 4).map(s => s.name);
+                    renderSwatches();
+                }
+                if (group === 'names') {
+                    document.getElementById('namesInputRow').classList.toggle('hidden', value !== 'add');
+                }
+
+                recalc();
+            });
+        });
+
+        document.querySelectorAll('.trim-color-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.trim-color-opt').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.trimColor = btn.dataset.color;
+                recalc();
+            });
+        });
+
+        document.getElementById('namesInput').addEventListener('input', (e) => {
+            state.namesText = e.target.value.slice(0, 30);
+            if (e.target.value.length > 30) e.target.value = state.namesText;
+            recalc();
+        });
+
+        // "Select this tier" buttons elsewhere on the page jump to the configurator
+        document.querySelectorAll('.select-tier').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tier = btn.dataset.tier;
+                const tierBtn = document.querySelector(`.opt[data-group="tier"][data-value="${tier}"]`);
+                if (tierBtn) tierBtn.click();
+                document.getElementById('configurator').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Initialize state-derived UI
+        applyTierLocks();
+        updateHints();
+        renderSwatches();
+        recalc();
+
+        // ----- Stamp the "save up to $X" teaser into the Hero tier card -----
+        (function stampHeroSavingsTeaser() {
+            const heroCard = document.querySelector('.tier-card[data-value="hero"] .tier-blurb');
+            if (!heroCard) return;
+            const teaser = document.createElement('div');
+            teaser.className = 'tier-save-teaser';
+            teaser.innerHTML = `<span class="tst-dot">●</span> Save up to <strong>$${HERO_MAX_SAVINGS}</strong> vs. Core upgrade pricing`;
+            heroCard.insertAdjacentElement('afterend', teaser);
+        })();
+
+        /* =========================================================
+           WIZARD NAVIGATION LAYER
+           Adds step-by-step UX on top of the existing configurator.
+           - Auto-advance after a selection on single-choice steps
+           - Back/Continue buttons + numbered progress pills
+           - Smooth fade transitions; respects existing state object
+           ========================================================= */
+        (function initWizard() {
+            const TOTAL_STEPS = 8;
+            const STEP_TITLES = {
+                1: 'Choose Your Tier',
+                2: 'Player Piece Texture',
+                3: 'Player Piece Colors',
+                4: 'Robber',
+                5: 'Wooden Box Finish',
+                6: 'Trim Texture & Color',
+                7: 'Custom Airbrushed Names',
+                8: 'Review & Lock It In',
+            };
+            // Groups whose selection on a step should auto-advance
+            const AUTO_ADVANCE_GROUP_BY_STEP = {
+                1: 'tier',
+                2: 'texture',
+                4: 'robber',
+                5: 'finish',
+                7: 'names', // only auto-advance when user picks "none"; "add" stays so they can type
+            };
+
+            const stage = document.getElementById('wizStage');
+            const steps = Array.from(stage.querySelectorAll('.wiz-step'));
+            const pillsWrap = document.getElementById('wizPills');
+            const stepNumEl = document.getElementById('wizStepNum');
+            const stepTitleEl = document.getElementById('wizStepTitle');
+            let currentStep = 1;
+            let highestVisited = 1;
+            let advanceTimer = null;
+
+            // Build progress pills
+            for (let i = 1; i <= TOTAL_STEPS; i++) {
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.className = 'wiz-pill';
+                pill.dataset.step = String(i);
+                pill.setAttribute('role', 'tab');
+                pill.setAttribute('aria-label', `Step ${i}: ${STEP_TITLES[i]}`);
+                pill.addEventListener('click', () => {
+                    if (i <= highestVisited) goToStep(i);
+                });
+                pillsWrap.appendChild(pill);
+            }
+
+            function updatePills() {
+                pillsWrap.querySelectorAll('.wiz-pill').forEach(p => {
+                    const n = Number(p.dataset.step);
+                    p.classList.toggle('current', n === currentStep);
+                    p.classList.toggle('done', n < currentStep);
+                    p.setAttribute('aria-selected', n === currentStep ? 'true' : 'false');
+                });
+            }
+
+            function goToStep(target) {
+                if (target < 1 || target > TOTAL_STEPS) return;
+                if (advanceTimer) { clearTimeout(advanceTimer); advanceTimer = null; }
+
+                const fromEl = steps.find(s => Number(s.dataset.step) === currentStep);
+                const toEl = steps.find(s => Number(s.dataset.step) === target);
+                if (!toEl) return;
+
+                // Fade out current
+                if (fromEl && fromEl !== toEl) {
+                    fromEl.classList.remove('entering');
+                    // wait for fade out
+                    setTimeout(() => {
+                        fromEl.classList.remove('active');
+                        fromEl.setAttribute('hidden', '');
+                        toEl.removeAttribute('hidden');
+                        toEl.classList.add('active');
+                        // next frame -> entering for fade in
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => toEl.classList.add('entering'));
+                        });
+                        // Focus the first interactive in the new step for a11y
+                        const focusable = toEl.querySelector('.opt:not(.locked), input, button.btn-primary, button.wiz-continue');
+                        if (focusable && typeof focusable.focus === 'function') {
+                            try { focusable.focus({ preventScroll: true }); } catch (_) {}
+                        }
+                    }, 200);
+                } else {
+                    // First load — just show
+                    toEl.classList.add('active', 'entering');
+                    toEl.removeAttribute('hidden');
+                }
+
+                currentStep = target;
+                if (currentStep > highestVisited) highestVisited = currentStep;
+                stepNumEl.textContent = String(currentStep);
+                stepTitleEl.textContent = STEP_TITLES[currentStep];
+                updatePills();
+
+                // Keep header in view on small screens when advancing
+                const header = document.querySelector('#configurator .wiz-header');
+                if (header && window.innerWidth < 1024) {
+                    const rect = header.getBoundingClientRect();
+                    if (rect.top < 56 || rect.top > window.innerHeight * 0.6) {
+                        header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            }
+
+            function nextStep() { goToStep(Math.min(currentStep + 1, TOTAL_STEPS)); }
+            function prevStep() { goToStep(Math.max(currentStep - 1, 1)); }
+
+            // Wire Back / Continue / Restart buttons
+            stage.querySelectorAll('[data-wiz-back]').forEach(btn => {
+                btn.addEventListener('click', prevStep);
+            });
+            stage.querySelectorAll('[data-wiz-next]').forEach(btn => {
+                btn.addEventListener('click', nextStep);
+            });
+            stage.querySelectorAll('[data-wiz-restart]').forEach(btn => {
+                btn.addEventListener('click', () => goToStep(1));
+            });
+
+            // Keyboard: ArrowLeft = back, Esc inside names input does nothing special
+            document.addEventListener('keydown', (e) => {
+                // Don't hijack typing in inputs
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+                // Only when configurator is in viewport-ish
+                const cfg = document.getElementById('configurator');
+                const rect = cfg.getBoundingClientRect();
+                if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+                if (e.key === 'ArrowLeft' && currentStep > 1) {
+                    prevStep();
+                }
+            });
+
+            // Auto-advance on selection inside auto-advance groups.
+            // We attach a SECONDARY listener to each .opt button — the original
+            // handler still runs first and updates state/active classes.
+            stage.querySelectorAll('.opt').forEach(btn => {
+                if (btn.classList.contains('trim-color-opt')) return;
+                btn.addEventListener('click', () => {
+                    if (btn.disabled || btn.classList.contains('locked')) return;
+                    const group = btn.dataset.group;
+                    const value = btn.dataset.value;
+                    const expectedGroup = AUTO_ADVANCE_GROUP_BY_STEP[currentStep];
+                    if (!expectedGroup || group !== expectedGroup) return;
+
+                    // Special case: on names step, only auto-advance when picking "none".
+                    // If user picks "add", let them type before continuing.
+                    if (currentStep === 7 && value === 'add') return;
+
+                    // Schedule auto-advance ~350ms after click for smooth UX
+                    if (advanceTimer) clearTimeout(advanceTimer);
+                    advanceTimer = setTimeout(() => {
+                        advanceTimer = null;
+                        if (currentStep < TOTAL_STEPS) nextStep();
+                    }, 350);
+                });
+            });
+
+            // Make the in-section "select-tier" buttons (rendered elsewhere) jump
+            // to the configurator AND drop user on Step 1 if needed
+            document.querySelectorAll('.select-tier').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Original handler already clicks the matching tier .opt;
+                    // we just make sure we're showing step 1 so the choice is visible.
+                    goToStep(1);
+                });
+            });
+
+            // Initial paint
+            updatePills();
+            stepNumEl.textContent = '1';
+            stepTitleEl.textContent = STEP_TITLES[1];
+        })();
+
+        // ===== STRIPE CHECKOUT (UNCHANGED) =====
+        const cartBtn = document.getElementById('addToCart');
+        const errorBox = document.getElementById('checkoutError');
+
+        function showError(msg) {
+            errorBox.textContent = msg;
+            errorBox.classList.remove('hidden');
+        }
+        function clearError() {
+            errorBox.textContent = '';
+            errorBox.classList.add('hidden');
+        }
+
+        cartBtn.addEventListener('click', async () => {
+            if (cartBtn.disabled) return;
+            clearError();
+
+            const originalHTML = cartBtn.innerHTML;
+            cartBtn.disabled = true;
+            cartBtn.style.opacity = '0.85';
+            cartBtn.style.cursor = 'wait';
+            cartBtn.innerHTML = `
+                  <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                  </svg>
+                  Redirecting to secure checkout…
+                `;
+
+            try {
+                const res = await fetch('/api/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ state, total: currentTotal })
+                });
+
+                if (!res.ok) {
+                    const errBody = await res.json().catch(() => ({}));
+                    throw new Error(errBody.error || `Checkout failed (HTTP ${res.status})`);
+                }
+
+                const data = await res.json();
+                if (!data.url) throw new Error('No checkout URL returned. Please try again.');
+
+                window.location = data.url;
+            } catch (err) {
+                console.error('Checkout error:', err);
+                showError(err.message || 'Something went wrong. Please try again or email hello@realizedprints.com.');
+                cartBtn.disabled = false;
+                cartBtn.style.opacity = '';
+                cartBtn.style.cursor = '';
+                cartBtn.innerHTML = originalHTML;
+            }
+        });
+
+        // Inject spinner keyframes once
+        (function injectSpinKeyframes() {
+            if (document.getElementById('rp-spin-kf')) return;
+            const s = document.createElement('style');
+            s.id = 'rp-spin-kf';
+            s.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+            document.head.appendChild(s);
+        })();
+
+        // Soft-CTA placeholder behavior for any unattached buttons (kept for parity)
+        document.querySelectorAll('a.btn-primary').forEach(btn => {
+            btn.addEventListener('click', e => {
+                if (btn.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '✓ Added — checkout coming soon';
+                    btn.style.background = 'linear-gradient(180deg, #8a6f4f, #6f5739)';
+                    setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 1800);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
