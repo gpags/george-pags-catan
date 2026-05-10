@@ -1,0 +1,1595 @@
+<!-- cs2-knives.html — Realized Prints | CS2 Knife Replicas collection page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS2 Knife Replicas — Realized Prints | cs2-knives.html</title>
+    <meta name="description" content="3D printed CS2 knife replicas — Talon, Butterfly, Karambit. Slaughter & Tiger Tooth skins. Ready-made $29 with BOGO, or full custom from your screenshot $69. Tactical heirlooms, made in the USA.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="output.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* =========================================================
+           DESIGN TOKENS — CS2 Knives / Realized Prints (Tactical)
+           Deep red, burnished gold, gunmetal — battle-ready
+           Sibling of the Catan Artisan theme, same DNA.
+           ========================================================= */
+        :root {
+            /* Steel — gunmetal / oiled blade */
+            --steel-50:  #ececea;
+            --steel-100: #c9c9c4;
+            --steel-200: #8a8a83;
+            --steel-300: #4a4a44;
+
+            /* Onyx — workshop dark */
+            --onyx-700: #1f1414;
+            --onyx-800: #150c0c;
+            --onyx-900: #0a0606;
+
+            /* Tactical red — deep blood / muzzle flash */
+            --red-400: #ff4d4d;
+            --red-500: #d4282a;
+            --red-600: #9f1e1e;
+            --red-700: #6e1212;
+
+            /* Burnished gold — brass accent */
+            --gold-400: #ffc030;
+            --gold-500: #f0a500;
+            --gold-600: #c08000;
+            --gold-700: #8a5a00;
+
+            /* Accent alias used by JS */
+            --accent: var(--red-600);
+
+            /* Layered shadows for depth & menace */
+            --shadow-soft: 0 1px 2px rgba(0,0,0,0.20),
+                           0 8px 24px -8px rgba(0,0,0,0.35),
+                           0 2px 6px -2px rgba(0,0,0,0.20);
+            --shadow-glow: 0 1px 2px rgba(0,0,0,0.30),
+                           0 24px 60px -12px rgba(0,0,0,0.65),
+                           0 8px 22px -8px rgba(159,30,30,0.40);
+            --shadow-blade: 0 0 0 1px rgba(255,192,48,0.18),
+                            0 18px 50px -14px rgba(159,30,30,0.55),
+                            0 4px 16px -6px rgba(0,0,0,0.5);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+            color: var(--steel-50);
+            background: var(--onyx-900);
+            margin: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Subtle full-page tactical grain — fine carbon weave */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.04  0 0 0 0 0.04  0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            opacity: 0.7;
+            mix-blend-mode: overlay;
+        }
+        body > * { position: relative; z-index: 1; }
+
+        /* =========================================================
+           TYPOGRAPHY
+           ========================================================= */
+        .font-serif { font-family: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif; font-weight: 500; letter-spacing: -0.005em; }
+        .font-sans  { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+        .italic     { font-style: italic; }
+        .antialiased { -webkit-font-smoothing: antialiased; }
+
+        h1, h2, h3, h4 { letter-spacing: -0.015em; }
+        em, .italic { font-style: italic; }
+
+        /* =========================================================
+           LAYOUT UTILITIES (carried over)
+           ========================================================= */
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .sticky   { position: sticky; }
+        .fixed    { position: fixed; }
+        .inset-0  { inset: 0; }
+        .top-0    { top: 0; }
+        .top-5    { top: 1.25rem; }
+        .right-0  { right: 0; }
+        .right-5  { right: 1.25rem; }
+        .bottom-5 { bottom: 1.25rem; }
+        .left-5   { left: 1.25rem; }
+        .-top-6   { top: -1.5rem; }
+        .-left-6  { left: -1.5rem; }
+        .-bottom-6{ bottom: -1.5rem; }
+        .-right-6 { right: -1.5rem; }
+        .z-10     { z-index: 10; }
+        .z-50     { z-index: 50; }
+
+        .block    { display: block; }
+        .inline-block { display: inline-block; }
+        .inline-flex  { display: inline-flex; }
+        .flex     { display: flex; }
+        .grid     { display: grid; }
+        .hidden   { display: none; }
+
+        .flex-col { flex-direction: column; }
+        .flex-wrap{ flex-wrap: wrap; }
+        .flex-1   { flex: 1 1 0%; }
+        .items-start  { align-items: flex-start; }
+        .items-center { align-items: center; }
+        .items-end    { align-items: flex-end; }
+        .items-baseline { align-items: baseline; }
+        .justify-between { justify-content: space-between; }
+        .justify-center  { justify-content: center; }
+        .text-left  { text-align: left; }
+        .text-center{ text-align: center; }
+        .text-right { text-align: right; }
+
+        .gap-1\.5 { gap: 0.375rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-5 { gap: 1.25rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-9 { gap: 2.25rem; }
+        .gap-10 { gap: 2.5rem; }
+        .gap-12 { gap: 3rem; }
+        .gap-14 { gap: 3.5rem; }
+        .gap-x-6 { column-gap: 1.5rem; }
+        .gap-y-2 { row-gap: 0.5rem; }
+
+        .w-full { width: 100%; }
+        .w-1\.5 { width: 0.375rem; }
+        .w-9    { width: 2.25rem; }
+        .w-10   { width: 2.5rem; }
+        .w-12   { width: 3rem; }
+        .h-1\.5 { height: 0.375rem; }
+        .h-6    { height: 1.5rem; }
+        .h-9    { height: 2.25rem; }
+        .h-10   { height: 2.5rem; }
+        .h-12   { height: 3rem; }
+        .h-18   { height: 4.5rem; }
+        .h-full { height: 100%; }
+
+        .max-w-md { max-width: 28rem; }
+        .max-w-sm { max-width: 24rem; }
+        .max-w-xl { max-width: 36rem; }
+        .max-w-2xl{ max-width: 42rem; }
+        .max-w-5xl{ max-width: 64rem; }
+        .max-w-6xl{ max-width: 72rem; }
+        .max-w-7xl{ max-width: 80rem; }
+        .max-w-\[180px\] { max-width: 180px; }
+        .max-w-\[200px\] { max-width: 200px; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mr-1\.5 { margin-right: 0.375rem; }
+        .ml-1    { margin-left: 0.25rem; }
+        .mt-0\.5 { margin-top: 0.125rem; }
+        .mt-1    { margin-top: 0.25rem; }
+        .mt-2    { margin-top: 0.5rem; }
+        .mt-3    { margin-top: 0.75rem; }
+        .mt-4    { margin-top: 1rem; }
+        .mt-5    { margin-top: 1.25rem; }
+        .mt-6    { margin-top: 1.5rem; }
+        .mt-8    { margin-top: 2rem; }
+        .mt-9    { margin-top: 2.25rem; }
+        .mt-10   { margin-top: 2.5rem; }
+        .mb-1    { margin-bottom: 0.25rem; }
+        .mb-1\.5 { margin-bottom: 0.375rem; }
+        .mb-2    { margin-bottom: 0.5rem; }
+        .mb-3    { margin-bottom: 0.75rem; }
+        .mb-4    { margin-bottom: 1rem; }
+        .mb-5    { margin-bottom: 1.25rem; }
+        .mb-6    { margin-bottom: 1.5rem; }
+        .mb-8    { margin-bottom: 2rem; }
+        .mb-10   { margin-bottom: 2.5rem; }
+        .mb-12   { margin-bottom: 3rem; }
+
+        .px-2  { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-3  { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4  { padding-left: 1rem; padding-right: 1rem; }
+        .px-5  { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .px-6  { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-7  { padding-left: 1.75rem; padding-right: 1.75rem; }
+        .px-8  { padding-left: 2rem; padding-right: 2rem; }
+        .py-1  { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-2  { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .py-3  { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+        .py-4  { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6  { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8  { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-14 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+        .pt-5  { padding-top: 1.25rem; }
+        .pt-8  { padding-top: 2rem; }
+        .pt-16 { padding-top: 4rem; }
+        .pb-8  { padding-bottom: 2rem; }
+        .pb-12 { padding-bottom: 3rem; }
+        .p-2   { padding: 0.5rem; }
+        .p-4   { padding: 1rem; }
+        .p-5   { padding: 1.25rem; }
+        .p-6   { padding: 1.5rem; }
+        .p-7   { padding: 1.75rem; }
+        .p-8   { padding: 2rem; }
+
+        /* GRID */
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .sm\:inline-flex { display: inline-flex; }
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .md\:flex-row { flex-direction: row; }
+            .md\:text-left { text-align: left; }
+            .md\:text-5xl { font-size: 3rem; line-height: 1.1; }
+            .md\:text-4xl { font-size: 2.25rem; line-height: 1.15; }
+            .md\:justify-start { justify-content: flex-start; }
+            .md\:block { display: block; }
+        }
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+            .lg\:col-span-5 { grid-column: span 5 / span 5; }
+            .lg\:col-span-6 { grid-column: span 6 / span 6; }
+            .lg\:col-span-7 { grid-column: span 7 / span 7; }
+            .lg\:flex { display: flex; }
+            .lg\:hidden { display: none; }
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:py-28 { padding-top: 7rem; padding-bottom: 7rem; }
+            .lg\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+            .lg\:p-8 { padding: 2rem; }
+            .lg\:p-10 { padding: 2.5rem; }
+            .lg\:gap-8 { gap: 2rem; }
+            .lg\:gap-12 { gap: 3rem; }
+            .lg\:text-5xl { font-size: 3rem; line-height: 1.05; }
+            .lg\:text-6xl { font-size: 3.75rem; line-height: 1; }
+        }
+
+        /* TYPE SCALE */
+        .text-\[10px\] { font-size: 10px; }
+        .text-\[11px\] { font-size: 11px; }
+        .text-\[12px\] { font-size: 12px; }
+        .text-xs   { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm   { font-size: 0.875rem; line-height: 1.4; }
+        .text-base { font-size: 1rem; line-height: 1.5; }
+        .text-lg   { font-size: 1.125rem; line-height: 1.55; }
+        .text-xl   { font-size: 1.25rem; line-height: 1.4; }
+        .text-2xl  { font-size: 1.5rem; line-height: 1.25; }
+        .text-3xl  { font-size: 1.875rem; line-height: 1.18; }
+        .text-4xl  { font-size: 2.25rem; line-height: 1.15; }
+        .text-5xl  { font-size: 3rem; line-height: 1.05; }
+
+        .font-medium   { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold     { font-weight: 700; }
+        .font-extrabold{ font-weight: 800; }
+
+        .uppercase    { text-transform: uppercase; }
+        .tracking-tight  { letter-spacing: -0.025em; }
+        .tracking-wider  { letter-spacing: 0.05em; }
+        .tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+        .leading-none    { line-height: 1; }
+        .leading-tight   { line-height: 1.15; }
+        .leading-snug    { line-height: 1.35; }
+        .leading-relaxed { line-height: 1.65; }
+
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* COLOR UTILITIES — remapped to tactical palette */
+        .bg-onyx-700   { background-color: var(--onyx-700); }
+        .bg-onyx-800   { background-color: var(--onyx-800); }
+        .bg-onyx-900   { background-color: var(--onyx-900); }
+        .bg-steel-50   { background-color: var(--steel-50); }
+        .bg-red-500    { background-color: var(--red-500); }
+        .bg-red-600    { background-color: var(--red-600); }
+        .bg-red-700    { background-color: var(--red-700); }
+        .bg-gold-500   { background-color: var(--gold-500); }
+        .bg-gold-600   { background-color: var(--gold-600); }
+        .bg-gold-500\/10  { background-color: rgba(240,165,0,0.10); }
+        .bg-red-500\/15   { background-color: rgba(212,40,42,0.15); }
+        .bg-onyx-800\/95  { background-color: rgba(21,12,12,0.95); }
+        .bg-steel-50\/10  { background-color: rgba(236,236,234,0.10); }
+        .bg-steel-50\/5   { background-color: rgba(236,236,234,0.05); }
+
+        .text-steel-50   { color: var(--steel-50); }
+        .text-steel-100  { color: var(--steel-100); }
+        .text-steel-100\/90 { color: rgba(201,201,196,0.90); }
+        .text-steel-100\/85 { color: rgba(201,201,196,0.85); }
+        .text-steel-100\/80 { color: rgba(201,201,196,0.80); }
+        .text-steel-100\/70 { color: rgba(201,201,196,0.70); }
+        .text-steel-100\/60 { color: rgba(201,201,196,0.60); }
+        .text-steel-100\/55 { color: rgba(201,201,196,0.55); }
+        .text-steel-200\/70 { color: rgba(138,138,131,0.80); }
+        .text-onyx-900   { color: var(--onyx-900); }
+        .text-red-400    { color: var(--red-400); }
+        .text-red-500    { color: var(--red-500); }
+        .text-red-600    { color: var(--red-600); }
+        .text-gold-400   { color: var(--gold-400); }
+        .text-gold-500   { color: var(--gold-500); }
+        .text-gold-600   { color: var(--gold-600); }
+        .text-red-200    { color: #fecaca; }
+
+        .border          { border: 1px solid rgba(236,236,234,0.10); }
+        .border-2        { border-width: 2px; border-style: solid; }
+        .border-y        { border-top: 1px solid rgba(236,236,234,0.10); border-bottom: 1px solid rgba(236,236,234,0.10); }
+        .border-t        { border-top: 1px solid rgba(236,236,234,0.10); }
+        .border-onyx-700 { border-color: var(--onyx-700); }
+        .border-steel-100\/10 { border-color: rgba(201,201,196,0.10); }
+        .border-gold-500\/30  { border-color: rgba(240,165,0,0.30); }
+        .border-gold-500\/40  { border-color: rgba(240,165,0,0.40); }
+        .border-red-500\/30   { border-color: rgba(212,40,42,0.40); }
+        .border-red-500\/50   { border-color: rgba(212,40,42,0.55); }
+
+        /* BORDERS / RADII */
+        .rounded         { border-radius: 0.25rem; }
+        .rounded-lg      { border-radius: 0.5rem; }
+        .rounded-xl      { border-radius: 0.75rem; }
+        .rounded-2xl     { border-radius: 1rem; }
+        .rounded-3xl     { border-radius: 1.5rem; }
+        .rounded-full    { border-radius: 9999px; }
+        .rounded-bl-2xl  { border-bottom-left-radius: 1rem; }
+        .overflow-hidden { overflow: hidden; }
+
+        .aspect-\[4\/2\] { aspect-ratio: 4 / 2; }
+        .aspect-\[4\/5\] { aspect-ratio: 4 / 5; }
+        .aspect-\[16\/10\] { aspect-ratio: 16 / 10; }
+        .aspect-\[3\/4\] { aspect-ratio: 3 / 4; }
+        .aspect-square { aspect-ratio: 1 / 1; }
+
+        .object-cover { object-fit: cover; }
+        .opacity-10 { opacity: 0.1; }
+        .opacity-70 { opacity: 0.7; }
+        .opacity-75 { opacity: 0.75; }
+        .opacity-80 { opacity: 0.8; }
+        .opacity-90 { opacity: 0.9; }
+
+        .shadow-soft { box-shadow: var(--shadow-soft); }
+        .shadow-glow { box-shadow: var(--shadow-glow); }
+        .shadow-blade { box-shadow: var(--shadow-blade); }
+
+        .backdrop-blur { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+
+        /* =========================================================
+           NAV — frosted dark, hand-finished tactical
+           ========================================================= */
+        #nav {
+            background:
+                linear-gradient(180deg, rgba(10,6,6,0.92), rgba(10,6,6,0.82)),
+                linear-gradient(180deg, transparent, rgba(159,30,30,0.05));
+            backdrop-filter: blur(18px) saturate(1.2);
+            -webkit-backdrop-filter: blur(18px) saturate(1.2);
+            border-bottom: 1px solid rgba(240,165,0,0.18);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 18px -8px rgba(0,0,0,0.6);
+        }
+        #nav a { color: var(--steel-100); }
+        #nav a:hover { color: var(--gold-400); }
+        #nav .logo-mono {
+            background: linear-gradient(135deg, var(--red-600) 0%, var(--red-700) 100%);
+            box-shadow: 0 4px 14px rgba(159,30,30,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+            transition: transform 0.25s;
+        }
+        #nav a.group:hover .logo-mono { transform: rotate(-8deg); }
+        .transition { transition: color 200ms ease, background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+
+        /* =========================================================
+           BUTTONS — burnished brass + tactical red
+           ========================================================= */
+        .btn-primary {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff7e0;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.20), rgba(0,0,0,0) 45%, rgba(0,0,0,0.22)),
+                linear-gradient(180deg, #d4282a 0%, #a91d1f 45%, #6e1212 100%);
+            border: 1px solid rgba(255,192,48,0.45);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.30),
+                inset 0 -1px 0 rgba(0,0,0,0.25),
+                0 1px 2px rgba(0,0,0,0.30),
+                0 10px 26px -10px rgba(159,30,30,0.70);
+            text-shadow: 0 1px 0 rgba(0,0,0,0.35);
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.35),
+                inset 0 -1px 0 rgba(0,0,0,0.28),
+                0 2px 4px rgba(0,0,0,0.35),
+                0 16px 32px -10px rgba(159,30,30,0.80),
+                0 0 0 1px rgba(255,192,48,0.55);
+        }
+        .btn-primary:active { transform: translateY(0); filter: brightness(0.95); }
+
+        .btn-gold {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a0f00;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.30), rgba(0,0,0,0) 45%, rgba(0,0,0,0.15)),
+                linear-gradient(180deg, #ffd060 0%, #f0a500 50%, #c08000 100%);
+            border: 1px solid rgba(110, 70, 0, 0.55);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.45),
+                inset 0 -1px 0 rgba(0,0,0,0.18),
+                0 1px 2px rgba(0,0,0,0.30),
+                0 10px 26px -10px rgba(240,165,0,0.60);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+            font-weight: 700;
+        }
+        .btn-gold:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.06);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.50),
+                inset 0 -1px 0 rgba(0,0,0,0.22),
+                0 2px 4px rgba(0,0,0,0.35),
+                0 16px 32px -10px rgba(240,165,0,0.75);
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--steel-50);
+            background: linear-gradient(180deg, rgba(236,236,234,0.06), rgba(236,236,234,0.02));
+            border: 1px solid rgba(236,236,234,0.22);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 1px 2px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease, background 180ms ease;
+        }
+        .btn-ghost:hover {
+            border-color: var(--gold-500);
+            color: var(--gold-400);
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, rgba(240,165,0,0.08), rgba(240,165,0,0.02));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 18px -8px rgba(240,165,0,0.4);
+        }
+
+        /* =========================================================
+           CARDS — dark workshop feel with sharp edges
+           ========================================================= */
+        .card-hover {
+            transition: transform 320ms cubic-bezier(.2,.7,.2,1), box-shadow 320ms ease, border-color 320ms ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.30),
+                0 30px 60px -16px rgba(0,0,0,0.65),
+                0 14px 30px -12px rgba(159,30,30,0.30);
+        }
+
+        /* Knife showcase cards — dark steel base */
+        .knife-card {
+            background:
+                radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.04) 0%, transparent 55%),
+                radial-gradient(120% 100% at 100% 100%, rgba(159,30,30,0.10) 0%, transparent 60%),
+                linear-gradient(180deg, #1a1010 0%, #120808 60%, #0a0606 100%);
+            border: 1px solid rgba(240,165,0,0.18);
+            box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        .knife-card:hover {
+            border-color: rgba(240,165,0,0.42);
+        }
+
+        /* "Popular" knife card — accented in red */
+        .knife-popular {
+            background:
+                radial-gradient(80% 60% at 100% 0%, rgba(240,165,0,0.18) 0%, transparent 55%),
+                radial-gradient(80% 80% at 0% 100%, rgba(159,30,30,0.30) 0%, transparent 55%),
+                linear-gradient(180deg, #2a1010 0%, #1a0808 50%, #0a0404 100%);
+            border: 1px solid rgba(240,165,0,0.40);
+            position: relative;
+        }
+        .knife-popular::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.4  0 0 0 0 0.2  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.6;
+        }
+        .knife-popular > * { position: relative; z-index: 1; }
+
+        /* =========================================================
+           HERO SECTION — dark armory with red haze + diagonal weave
+           ========================================================= */
+        section.hero-section {
+            background-color: #0a0606;
+            background-image:
+                radial-gradient(ellipse 65% 55% at 75% 50%, rgba(212,40,42,0.30) 0%, transparent 65%),
+                radial-gradient(ellipse 40% 45% at 8% 80%, rgba(240,165,0,0.18) 0%, transparent 60%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 18px),
+                linear-gradient(150deg, #0a0606 0%, #1a0c0c 45%, #0a0606 100%);
+        }
+        .grain-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.3  0 0 0 0 0.15  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.55;
+        }
+
+        /* Corner marks for hero image */
+        .cm { position: absolute; width: 18px; height: 18px; border-color: rgba(240,165,0,0.70); border-style: solid; z-index: 2; }
+        .cm-tl { top: 14px; left: 14px;   border-width: 2px 0 0 2px; }
+        .cm-tr { top: 14px; right: 14px;  border-width: 2px 2px 0 0; }
+        .cm-bl { bottom: 14px; left: 14px;border-width: 0 0 2px 2px; }
+        .cm-br { bottom: 14px; right: 14px;border-width: 0 2px 2px 0; }
+
+        /* Avatar stack for social proof */
+        .av {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: var(--red-600); color: #fff7e0;
+            font-size: 0.6rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid rgba(236,236,234,0.18);
+            flex-shrink: 0;
+        }
+
+        /* BOGO Banner — the big screaming offer */
+        .bogo-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px 9px 12px;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, rgba(212,40,42,0.30), rgba(159,30,30,0.18));
+            border: 1px solid rgba(255,192,48,0.55);
+            color: var(--gold-400);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                0 8px 24px -10px rgba(212,40,42,0.6);
+            margin-bottom: 18px;
+        }
+        .bogo-banner .bogo-pulse {
+            width: 8px; height: 8px; border-radius: 9999px;
+            background: var(--red-400);
+            box-shadow: 0 0 0 0 rgba(212,40,42,0.7);
+            animation: bogoPulse 1.8s ease-out infinite;
+        }
+        @keyframes bogoPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212,40,42,0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(212,40,42,0); }
+        }
+
+        /* Hero glass card overlay */
+        .hero-glass-card {
+            position: absolute; bottom: 18px; left: 18px; right: 18px;
+            background: rgba(10,6,6,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(240,165,0,0.32);
+            border-radius: 16px;
+            padding: 14px 18px;
+        }
+
+        /* Floating "$29" plaque */
+        .price-plaque {
+            background: linear-gradient(180deg, #1f1414, #0a0606);
+            box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255,255,255,0.06);
+            border: 1px solid rgba(240,165,0,0.35);
+        }
+
+        /* Trust bar — dark with red/gold polka dots */
+        section.trust-bar {
+            background-color: #0a0606;
+            background-image:
+                radial-gradient(60% 80% at 0% 50%, rgba(159,30,30,0.30) 0%, transparent 55%),
+                radial-gradient(60% 80% at 100% 50%, rgba(240,165,0,0.16) 0%, transparent 55%),
+                radial-gradient(circle, rgba(240,165,0,0.18) 1px, transparent 1px),
+                linear-gradient(90deg, #0a0606 0%, #150c0c 50%, #0a0606 100%);
+            background-size: auto, auto, 26px 26px, auto;
+            border-top: 1px solid rgba(240,165,0,0.20);
+            border-bottom: 1px solid rgba(240,165,0,0.20);
+            box-shadow: inset 0 8px 24px -16px rgba(0,0,0,0.6), inset 0 -8px 24px -16px rgba(0,0,0,0.6);
+        }
+
+        /* Configurator section — armory bench */
+        section#configurator {
+            background-color: #0a0606;
+            background-image:
+                radial-gradient(70% 55% at 30% 20%, rgba(240,165,0,0.16) 0%, transparent 65%),
+                radial-gradient(60% 50% at 80% 70%, rgba(159,30,30,0.30) 0%, transparent 70%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 22px),
+                linear-gradient(180deg, #0a0606 0%, #150c0c 50%, #050202 100%);
+            border-top: 1px solid rgba(240,165,0,0.18);
+            border-bottom: 1px solid rgba(240,165,0,0.18);
+        }
+
+        /* Showcase grid section background */
+        section#showcase {
+            background-color: #0a0606;
+            background-image:
+                radial-gradient(50% 50% at 50% 0%, rgba(159,30,30,0.18) 0%, transparent 70%),
+                repeating-linear-gradient(-45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 14px),
+                linear-gradient(180deg, #0a0606 0%, #120808 100%);
+        }
+
+        /* Story section — dark workshop with warm haze */
+        section.story-section {
+            background-color: #0a0606;
+            background-image:
+                radial-gradient(60% 50% at 80% 0%, rgba(240,165,0,0.18) 0%, transparent 60%),
+                radial-gradient(50% 60% at 0% 100%, rgba(159,30,30,0.20) 0%, transparent 60%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.016) 0px, rgba(255,255,255,0.016) 1px, transparent 1px, transparent 18px),
+                linear-gradient(180deg, #0a0606 0%, #150c0c 50%, #050202 100%);
+        }
+
+        /* Final CTA — red wash */
+        section.final-cta {
+            background-color: #150c0c;
+            background-image:
+                radial-gradient(60% 40% at 50% 0%, rgba(212,40,42,0.30) 0%, transparent 60%),
+                radial-gradient(50% 50% at 50% 100%, rgba(240,165,0,0.18) 0%, transparent 60%),
+                repeating-linear-gradient(-45deg, rgba(255,255,255,0.014) 0px, rgba(255,255,255,0.014) 1px, transparent 1px, transparent 9px),
+                linear-gradient(180deg, #1a0c0c 0%, #0a0404 100%);
+        }
+
+        /* Footer */
+        #footer {
+            background:
+                radial-gradient(50% 60% at 0% 0%, rgba(159,30,30,0.22) 0%, transparent 55%),
+                radial-gradient(50% 60% at 100% 100%, rgba(240,165,0,0.10) 0%, transparent 55%),
+                linear-gradient(180deg, #0a0606 0%, #050202 100%);
+            border-top: 1px solid rgba(240,165,0,0.16);
+        }
+
+        /* Quote cards on dark sections */
+        figure.quote-card {
+            background: linear-gradient(180deg, rgba(236,236,234,0.06) 0%, rgba(236,236,234,0.02) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(236,236,234,0.10);
+        }
+        figure.quote-card:hover {
+            border-color: rgba(240,165,0,0.32);
+            background: linear-gradient(180deg, rgba(240,165,0,0.06) 0%, rgba(236,236,234,0.03) 100%);
+        }
+
+        /* =========================================================
+           CONFIGURATOR — option buttons
+           ========================================================= */
+        .opt {
+            background: linear-gradient(180deg, rgba(31,20,20,0.85) 0%, rgba(15,8,8,0.85) 100%);
+            border: 1.5px solid rgba(236,236,234,0.14);
+            color: var(--steel-50);
+            cursor: pointer;
+            transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 1px 1px rgba(0,0,0,0.25);
+        }
+        .opt:hover:not(.locked):not(:disabled) {
+            border-color: var(--gold-500);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 18px -8px rgba(240,165,0,0.45);
+        }
+        .opt.active {
+            border-color: var(--gold-500);
+            background:
+                radial-gradient(80% 80% at 100% 0%, rgba(240,165,0,0.18) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(60,30,10,0.85) 0%, rgba(40,15,5,0.85) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                inset 0 0 0 1px var(--gold-500),
+                0 8px 18px -8px rgba(240,165,0,0.55);
+            color: var(--steel-50);
+        }
+        .opt.active.opt-red {
+            border-color: var(--red-500);
+            background:
+                radial-gradient(80% 80% at 100% 0%, rgba(212,40,42,0.30) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(70,15,15,0.92) 0%, rgba(40,8,8,0.92) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                inset 0 0 0 1px var(--red-500),
+                0 8px 18px -8px rgba(212,40,42,0.65);
+        }
+        .opt.locked, .opt:disabled {
+            opacity: 0.40;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        /* =========================================================
+           ANIMATIONS
+           ========================================================= */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 700ms cubic-bezier(.2,.7,.2,1), transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212,40,42,0.65); }
+            50%      { box-shadow: 0 0 0 6px rgba(212,40,42,0); }
+        }
+        .pulse-dot {
+            animation: pulseDot 1.8s ease-out infinite;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 0.9s linear infinite; }
+
+        /* Image hover zoom inside cards */
+        article .aspect-\[16\/10\] img,
+        article .aspect-\[3\/4\] img,
+        article .aspect-\[4\/5\] img,
+        .rounded-3xl.overflow-hidden img {
+            transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        article:hover .aspect-\[16\/10\] img,
+        article:hover .aspect-\[3\/4\] img,
+        article:hover .aspect-\[4\/5\] img,
+        .card-hover:hover .rounded-3xl.overflow-hidden img { transform: scale(1.05); }
+
+        /* Skin swatch buttons */
+        .skin-swatch-preview {
+            position: relative;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            border: 1px solid rgba(0,0,0,0.4);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+        }
+        .skin-slaughter {
+            background:
+                radial-gradient(circle at 30% 30%, #ff4d4d 0%, transparent 30%),
+                radial-gradient(circle at 70% 60%, #ffffff 0%, transparent 25%),
+                radial-gradient(circle at 50% 80%, #d4282a 0%, transparent 35%),
+                linear-gradient(135deg, #b81818 0%, #6e1212 50%, #fdf2f2 100%);
+        }
+        .skin-tiger {
+            background:
+                repeating-linear-gradient(110deg, #1a0a0a 0px, #1a0a0a 3px, transparent 3px, transparent 9px),
+                linear-gradient(135deg, #ffc030 0%, #f0a500 50%, #ffd060 100%);
+        }
+
+        /* Live price bar in configurator */
+        .price-bar {
+            background:
+                radial-gradient(70% 80% at 100% 0%, rgba(240,165,0,0.24) 0%, transparent 60%),
+                radial-gradient(60% 80% at 0% 100%, rgba(159,30,30,0.30) 0%, transparent 60%),
+                linear-gradient(135deg, #1a1010 0%, #0e0808 50%, #050202 100%);
+            border: 1px solid rgba(240,165,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .price-bar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.4  0 0 0 0 0.2  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.55;
+        }
+        .price-bar > * { position: relative; z-index: 1; }
+
+        /* Path selector cards (Ready vs Custom) */
+        .path-card {
+            background: linear-gradient(180deg, rgba(31,20,20,0.7) 0%, rgba(15,8,8,0.7) 100%);
+            border: 1.5px solid rgba(236,236,234,0.14);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 200ms ease;
+            position: relative;
+        }
+        .path-card:hover {
+            border-color: var(--gold-500);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px -10px rgba(240,165,0,0.5);
+        }
+        .path-card.active {
+            border-color: var(--gold-500);
+            background:
+                radial-gradient(120% 100% at 0% 0%, rgba(240,165,0,0.16) 0%, transparent 55%),
+                linear-gradient(180deg, rgba(40,25,5,0.95) 0%, rgba(20,10,2,0.95) 100%);
+            box-shadow: inset 0 0 0 1px var(--gold-500), 0 12px 28px -10px rgba(240,165,0,0.5);
+        }
+        .path-card .path-badge {
+            position: absolute;
+            top: -10px;
+            right: 14px;
+            font-size: 9.5px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            background: var(--red-600);
+            color: #fff7e0;
+            box-shadow: 0 4px 10px rgba(159,30,30,0.55);
+        }
+        .path-card .path-badge.gold {
+            background: linear-gradient(180deg, var(--gold-400), var(--gold-600));
+            color: #1a0f00;
+            box-shadow: 0 4px 10px rgba(240,165,0,0.55);
+        }
+
+        /* Mobile / responsive */
+        @media (max-width: 640px) {
+            .text-4xl { font-size: 2rem; }
+            .text-5xl { font-size: 2.5rem; }
+            .text-6xl { font-size: 2.75rem; }
+            .py-20 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+            .py-14 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        }
+
+        section { position: relative; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- ============ NAVBAR ============ -->
+    <header id="nav" class="sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-18 py-3">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <span class="logo-mono w-9 h-9 rounded-lg flex items-center justify-center font-serif text-lg" style="color:#fff7e0;">R</span>
+                <span class="font-serif text-xl tracking-tight" style="color:var(--steel-50);">Realized Prints</span>
+            </a>
+            <nav class="hidden lg:flex items-center gap-9 text-sm font-medium">
+                <a href="index.html" class="transition">← Back to Home</a>
+                <a href="index.html#collections" class="transition">Collections</a>
+                <a href="index.html#story" class="transition">About</a>
+                <a href="#footer" class="transition">Contact</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <a href="#configurator" class="hidden sm:inline-flex btn-primary px-5 py-2.5 rounded-full text-sm font-semibold">Pick Your Blade</a>
+                <button id="menuBtn" class="lg:hidden p-2" aria-label="Open menu" style="color:var(--steel-50);">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden lg:hidden border-t bg-onyx-800" style="border-color: rgba(240,165,0,0.18);">
+            <div class="px-5 py-4 flex flex-col gap-3 text-sm font-medium">
+                <a href="index.html" class="py-2" style="color:var(--steel-100);">← Back to Home</a>
+                <a href="index.html#collections" class="py-2" style="color:var(--steel-100);">Collections</a>
+                <a href="index.html#story" class="py-2" style="color:var(--steel-100);">About</a>
+                <a href="#footer" class="py-2" style="color:var(--steel-100);">Contact</a>
+                <a href="#configurator" class="btn-primary px-5 py-3 rounded-full text-center">Pick Your Blade</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero-section relative overflow-hidden grain-overlay">
+        <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-10 lg:py-16 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            <div class="lg:col-span-6 fade-in">
+                <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-medium mb-4 transition" style="color:rgba(201,201,196,0.62);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                    Back to all collections
+                </a>
+
+                <div class="bogo-banner">
+                    <span class="bogo-pulse"></span>
+                    <span>Buy 1, Get 1 Free — Ready-Made Knives</span>
+                </div>
+
+                <h1 class="font-serif" style="font-size: clamp(2.6rem, 5.5vw, 4.4rem); line-height: 1.04; letter-spacing: -0.025em; color: #f4ecdc; margin-bottom: 18px;">
+                    Loadout-Grade <em style="color: var(--red-400); font-style: italic;">CS2 Knives.</em><br>
+                    Printed in our <em style="color: var(--gold-400); font-style: italic;">workshop.</em>
+                </h1>
+
+                <p class="text-lg leading-relaxed mb-8 max-w-xl" style="color: rgba(201,201,196,0.80);">
+                    Talon. Butterfly. Karambit. Replica blades in Slaughter or Tiger Tooth — hand-finished from your inventory. Or send a screenshot and we'll print the exact one.
+                </p>
+
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="#configurator" class="btn-primary px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                        Configure Your Knife
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                    </a>
+                    <a href="#showcase" class="btn-ghost px-7 py-4 rounded-full text-sm font-semibold">See the Blades</a>
+                </div>
+
+                <!-- Social proof row -->
+                <div class="mt-10" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+                    <div style="display:flex;">
+                        <div class="av" style="margin-left:0">JT</div>
+                        <div class="av" style="margin-left:-8px">MR</div>
+                        <div class="av" style="margin-left:-8px">KS</div>
+                    </div>
+                    <div>
+                        <div style="color:var(--gold-400);font-weight:700;font-size:0.85rem;">★★★★★&nbsp; 4.9</div>
+                        <div style="font-size:0.73rem;color:rgba(201,201,196,0.50);margin-top:2px;">CS2 community-tested</div>
+                    </div>
+                    <div style="width:1px;height:34px;background:rgba(236,236,234,0.16);"></div>
+                    <div>
+                        <div style="font-weight:600;color:rgba(236,236,234,0.85);font-size:0.82rem;">USA-made</div>
+                        <div style="font-size:0.73rem;color:rgba(201,201,196,0.48);">NJ workshop</div>
+                    </div>
+                </div>
+
+                <!-- Feature pills below -->
+                <div class="mt-8 grid grid-cols-3 gap-3 text-xs max-w-md" style="color:rgba(201,201,196,0.75);">
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--gold-400);">⚔</span><span>3 blade<br>models</span></div>
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--gold-400);">🎨</span><span>Hand-painted<br>finish</span></div>
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--gold-400);">📸</span><span>Custom from<br>screenshot</span></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 relative fade-in">
+                <div class="relative rounded-3xl overflow-hidden aspect-[4/5] bg-onyx-900" style="border:1px solid rgba(240,165,0,0.28);box-shadow: var(--shadow-blade);">
+                    <img src="images/CSTalonSlaughterHero.JPG" alt="3D printed CS2 Talon knife replica in Slaughter skin — held by maker against a dark workshop background" class="w-full h-full object-cover" style="opacity:0.95;">
+                    <!-- Corner marks -->
+                    <div class="cm cm-tl"></div>
+                    <div class="cm cm-tr"></div>
+                    <div class="cm cm-bl"></div>
+                    <div class="cm cm-br"></div>
+
+                    <div class="absolute top-5 right-5 rounded-full px-3 py-1.5 text-xs font-bold tracking-wider" style="z-index:2;background:var(--red-600);color:#fff7e0;box-shadow:0 6px 16px rgba(159,30,30,0.55);">
+                        ★ BOGO LIVE
+                    </div>
+                    <div class="hero-glass-card">
+                        <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-400);margin-bottom:6px;">Featured · Talon Slaughter</div>
+                        <div class="font-serif" style="font-size:1rem;color:#f4ecdc;line-height:1.4;">Buy one ready-made knife — get a second one free. Mix any model, any skin.</div>
+                    </div>
+                </div>
+
+                <!-- Floating $29 plaque -->
+                <div class="hidden md:block absolute -top-6 -left-6 price-plaque rounded-2xl p-5 max-w-[200px]">
+                    <div class="text-xs uppercase tracking-wider font-semibold mb-1" style="color:var(--gold-400);">READY-MADE FROM</div>
+                    <div class="font-serif text-3xl leading-none" style="color:var(--steel-50);">$29</div>
+                    <div class="text-xs mt-2 leading-tight" style="color:rgba(201,201,196,0.70);">+ second knife <strong style="color:var(--gold-400);">FREE</strong></div>
+                </div>
+
+                <!-- BOGO counter card -->
+                <div class="mt-4 rounded-2xl px-5 py-4" style="background:rgba(15,8,8,0.7);border:1px solid rgba(240,165,0,0.22);backdrop-filter:blur(8px);">
+                    <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:600;margin-bottom:8px;color:rgba(201,201,196,0.70);">
+                        <span>BOGO ends this week</span>
+                        <span style="color:var(--gold-400);">2 ready-made models in stock</span>
+                    </div>
+                    <div style="height: 6px; border-radius: 99px; background: rgba(236,236,234,0.10); overflow: hidden;">
+                        <div style="height:100%;border-radius:99px;background:linear-gradient(90deg, var(--red-500), var(--gold-500));width:72%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TRUST BAR ============ -->
+    <section class="trust-bar text-steel-100">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">⚔</span>
+                <div class="text-sm"><div class="font-semibold">3 Blade Models</div><div class="text-xs text-steel-200\/70">Talon · Butterfly · Karambit</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">🇺🇸</span>
+                <div class="text-sm"><div class="font-semibold">Made in the USA</div><div class="text-xs text-steel-200\/70">NJ workshop</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">📦</span>
+                <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs text-steel-200\/70">2–4 day delivery</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">♡</span>
+                <div class="text-sm"><div class="font-semibold">60-Day Guarantee</div><div class="text-xs text-steel-200\/70">Hold it & love it</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CONFIGURATOR ============ -->
+    <section id="configurator" class="relative overflow-hidden py-20 lg:py-28">
+        <div class="max-w-6xl mx-auto px-5 lg:px-8 relative" style="z-index:1;">
+
+            <div class="max-w-2xl mx-auto text-center mb-10 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--gold-400);">Build Your Loadout</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--steel-50);">
+                    <span style="color:var(--red-400);">Three picks.</span>
+                    <span class="italic" style="color:var(--gold-400);">One blade.</span>
+                </h2>
+                <p class="mt-4" style="color:rgba(201,201,196,0.72);">Pick your model, your skin, then how we make it — ready-made off the bench, or custom-printed from your inventory screenshot.</p>
+            </div>
+
+            <!-- Wizard card -->
+            <div class="rounded-3xl p-6 lg:p-10 fade-in" style="background:linear-gradient(180deg, rgba(31,20,20,0.55), rgba(10,6,6,0.55));border:1px solid rgba(240,165,0,0.22);box-shadow: 0 24px 60px -16px rgba(0,0,0,0.6);">
+
+                <!-- ===== STEP 1 — MODEL ===== -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold" style="background:var(--red-600);color:#fff7e0;">1</span>
+                        <h3 class="font-serif text-2xl" style="color:var(--steel-50);">Pick your model</h3>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button type="button" class="opt rounded-2xl p-3 text-center" data-group="model" data-value="talon">
+                            <div class="aspect-square rounded-xl overflow-hidden mb-2" style="background:#0a0606;">
+                                <img src="images/CSTalonSlaughterMain.JPG" alt="3D printed CS2 Talon knife replica" style="width:100%;height:100%;object-fit:cover;">
+                            </div>
+                            <div class="font-serif text-base" style="color:var(--steel-50);">Talon</div>
+                            <div class="text-[10px] uppercase tracking-wider font-semibold" style="color:var(--gold-400);">★ Most Wanted</div>
+                        </button>
+                        <button type="button" class="opt rounded-2xl p-3 text-center" data-group="model" data-value="butterfly">
+                            <div class="aspect-square rounded-xl overflow-hidden mb-2" style="background:#0a0606;">
+                                <img src="images/CSTalonSlaughterMain.JPG" alt="3D printed CS2 Butterfly knife replica" style="width:100%;height:100%;object-fit:cover;filter:hue-rotate(140deg) saturate(0.6);">
+                            </div>
+                            <div class="font-serif text-base" style="color:var(--steel-50);">Butterfly</div>
+                            <div class="text-[10px] uppercase tracking-wider font-semibold" style="color:rgba(201,201,196,0.55);">Smooth flip</div>
+                        </button>
+                        <button type="button" class="opt rounded-2xl p-3 text-center" data-group="model" data-value="karambit">
+                            <div class="aspect-square rounded-xl overflow-hidden mb-2" style="background:#0a0606;">
+                                <img src="images/CSTalonSlaughterBlade.JPG" alt="3D printed CS2 Karambit knife replica" style="width:100%;height:100%;object-fit:cover;">
+                            </div>
+                            <div class="font-serif text-base" style="color:var(--steel-50);">Karambit</div>
+                            <div class="text-[10px] uppercase tracking-wider font-semibold" style="color:rgba(201,201,196,0.55);">Curved hook</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ===== STEP 2 — SKIN ===== -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold" style="background:var(--red-600);color:#fff7e0;">2</span>
+                        <h3 class="font-serif text-2xl" style="color:var(--steel-50);">Pick your skin</h3>
+                        <span class="text-xs ml-1" style="color:rgba(201,201,196,0.55);">2 available — more coming</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" class="opt opt-red rounded-2xl p-4 text-left flex items-center gap-4" data-group="skin" data-value="slaughter">
+                            <div class="skin-swatch-preview skin-slaughter" style="width:72px;height:72px;flex-shrink:0;"></div>
+                            <div>
+                                <div class="font-serif text-lg leading-tight" style="color:var(--steel-50);">Slaughter</div>
+                                <div class="text-xs mt-1" style="color:rgba(201,201,196,0.65);">Blood-red splatter, white base. The iconic one.</div>
+                            </div>
+                        </button>
+                        <button type="button" class="opt rounded-2xl p-4 text-left flex items-center gap-4" data-group="skin" data-value="tiger">
+                            <div class="skin-swatch-preview skin-tiger" style="width:72px;height:72px;flex-shrink:0;"></div>
+                            <div>
+                                <div class="font-serif text-lg leading-tight" style="color:var(--steel-50);">Tiger Tooth</div>
+                                <div class="text-xs mt-1" style="color:rgba(201,201,196,0.65);">Burnished gold over black tiger stripes.</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ===== STEP 3 — PATH ===== -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold" style="background:var(--red-600);color:#fff7e0;">3</span>
+                        <h3 class="font-serif text-2xl" style="color:var(--steel-50);">How do we make it?</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="path-card active" data-path="ready">
+                            <span class="path-badge">BOGO · Buy 1 Get 1</span>
+                            <div class="flex items-baseline justify-between mb-2">
+                                <div class="font-serif text-xl" style="color:var(--steel-50);">Ready-Made</div>
+                                <div class="font-serif text-2xl" style="color:var(--gold-400);">$29</div>
+                            </div>
+                            <div class="text-xs mb-3" style="color:rgba(201,201,196,0.65);">Pulled off the bench. Ships in 2–4 days.</div>
+                            <ul class="text-xs space-y-1.5" style="color:rgba(201,201,196,0.80);">
+                                <li class="flex gap-2"><span style="color:var(--gold-400);">✓</span> Pre-printed in the selected skin</li>
+                                <li class="flex gap-2"><span style="color:var(--gold-400);">✓</span> Buy 1, second knife <strong>free</strong></li>
+                                <li class="flex gap-2"><span style="color:var(--gold-400);">✓</span> Same hand-finish, same blade quality</li>
+                            </ul>
+                        </div>
+                        <div class="path-card" data-path="custom">
+                            <span class="path-badge gold">FULL CUSTOM</span>
+                            <div class="flex items-baseline justify-between mb-2">
+                                <div class="font-serif text-xl" style="color:var(--steel-50);">From Your Screenshot</div>
+                                <div class="font-serif text-2xl" style="color:var(--gold-400);">$69</div>
+                            </div>
+                            <div class="text-xs mb-3" style="color:rgba(201,201,196,0.65);">Your exact knife, your exact wear. 7–10 days.</div>
+                            <ul class="text-xs space-y-1.5" style="color:rgba(201,201,196,0.80);">
+                                <li class="flex gap-2"><span style="color:var(--gold-400);">✓</span> Send your inventory screenshot</li>
+                                <li class="flex gap-2"><span style="color:var(--gold-400);">✓</span> Float/wear pattern matched</li>
+                                <li class="flex gap-2"><span style="color:var(--gold-400);">✓</span> Mockup approval before paint</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== LIVE PRICE BAR + CTA ===== -->
+                <div class="price-bar rounded-2xl p-6 lg:p-8">
+                    <div class="grid md:grid-cols-2 gap-5 items-center">
+                        <div>
+                            <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-2" style="color:var(--gold-400);">Your Build</div>
+                            <div class="font-serif text-2xl mb-1" id="buildSummary" style="color:var(--steel-50);">Talon · Slaughter · Ready-Made</div>
+                            <div class="text-xs" id="bogoNote" style="color:var(--gold-400);font-weight:600;">+ Free second knife at checkout (BOGO)</div>
+                        </div>
+                        <div class="text-left md:text-right">
+                            <div class="text-xs uppercase tracking-wider font-semibold" style="color:var(--gold-400);">Total</div>
+                            <div class="font-serif" id="priceTotal" style="font-size:3rem;line-height:1;color:var(--steel-50);margin:6px 0;">$29</div>
+                            <button id="addToCart" class="btn-primary px-7 py-3.5 rounded-full text-sm font-semibold inline-flex items-center gap-2 w-full md:w-auto justify-center">
+                                Add to Cart — Secure Checkout
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                            </button>
+                            <div id="checkoutError" class="hidden mt-3 text-[12px] text-center bg-red-500/15 border border-red-500/30 text-red-200 rounded-xl px-3 py-2"></div>
+                            <div class="mt-3 text-[11px] text-center md:text-right" style="color:rgba(201,201,196,0.60);">
+                                🔒 Secure Stripe • ✓ 60-day guarantee
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ KNIFE SHOWCASE GRID ============ -->
+    <section id="showcase" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--gold-400);">The Roster</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--steel-50);">
+                    <span style="color:var(--red-400);">Three blades.</span>
+                    <span class="italic" style="color:var(--gold-400);">Built to grip.</span>
+                </h2>
+                <p class="mt-4" style="color:rgba(201,201,196,0.72);">Each model gets the same obsessive treatment — printed in our workshop, sanded smooth, hand-painted to match the skin.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6 lg:gap-8">
+
+                <!-- TALON (Popular) -->
+                <article class="knife-popular rounded-3xl overflow-hidden card-hover shadow-glow fade-in flex flex-col relative">
+                    <div class="absolute top-0 right-0 z-10 px-4 py-1.5 text-xs font-bold tracking-wider rounded-bl-2xl" style="background:var(--gold-500);color:#1a0f00;">
+                        ★ MOST WANTED
+                    </div>
+                    <div class="aspect-[16/10] overflow-hidden" style="background:#0a0606;">
+                        <img src="images/CSTalonSlaughterMain.JPG" alt="3D printed CS2 Talon knife in Slaughter skin — full view" class="w-full h-full object-cover opacity-90">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider font-semibold mb-2" style="color:var(--gold-400);">The Talon</div>
+                        <div class="font-serif text-4xl mb-1" style="color:var(--steel-50);">From $29</div>
+                        <div class="text-xs mb-6" style="color:rgba(201,201,196,0.65);">Hooked, hungry, unmistakable</div>
+                        <ul class="space-y-3 text-sm mb-8 flex-1" style="color:rgba(201,201,196,0.85);">
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Iconic curved talon profile</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Available in Slaughter or Tiger Tooth</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Ships in 2–4 days (ready-made)</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Full custom from screenshot — $69</li>
+                        </ul>
+                        <a href="#configurator" class="select-knife btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold" data-model="talon">
+                            Build a Talon
+                        </a>
+                    </div>
+                </article>
+
+                <!-- BUTTERFLY -->
+                <article class="knife-card rounded-3xl overflow-hidden card-hover shadow-soft fade-in flex flex-col">
+                    <div class="aspect-[16/10] overflow-hidden" style="background:#0a0606;">
+                        <img src="images/CSTalonSlaughterMain.JPG" alt="3D printed CS2 Butterfly knife replica" class="w-full h-full object-cover" style="filter:hue-rotate(140deg) saturate(0.6) brightness(0.95);">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider font-semibold mb-2" style="color:rgba(201,201,196,0.70);">The Butterfly</div>
+                        <div class="font-serif text-4xl mb-1" style="color:var(--steel-50);">From $29</div>
+                        <div class="text-xs mb-6" style="color:rgba(201,201,196,0.65);">Twin-handle flip, weight balanced</div>
+                        <ul class="space-y-3 text-sm mb-8 flex-1" style="color:rgba(201,201,196,0.85);">
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Hinged twin-handle build</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Smooth pivot — display or fidget</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Slaughter & Tiger Tooth skins</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Custom skin available — $69</li>
+                        </ul>
+                        <a href="#configurator" class="select-knife btn-ghost w-full px-6 py-3.5 rounded-full text-sm font-semibold" data-model="butterfly">
+                            Build a Butterfly
+                        </a>
+                    </div>
+                </article>
+
+                <!-- KARAMBIT -->
+                <article class="knife-card rounded-3xl overflow-hidden card-hover shadow-soft fade-in flex flex-col">
+                    <div class="aspect-[16/10] overflow-hidden" style="background:#0a0606;">
+                        <img src="images/CSTalonSlaughterBlade.JPG" alt="3D printed CS2 Karambit knife replica — close-up of the curved blade" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider font-semibold mb-2" style="color:rgba(201,201,196,0.70);">The Karambit</div>
+                        <div class="font-serif text-4xl mb-1" style="color:var(--steel-50);">From $29</div>
+                        <div class="text-xs mb-6" style="color:rgba(201,201,196,0.65);">Finger-ring grip, deep curve</div>
+                        <ul class="space-y-3 text-sm mb-8 flex-1" style="color:rgba(201,201,196,0.85);">
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Signature finger-ring pommel</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Aggressive inward curve</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Slaughter & Tiger Tooth skins</li>
+                            <li class="flex gap-2"><span style="color:var(--gold-400);font-weight:700;">✓</span> Custom skin available — $69</li>
+                        </ul>
+                        <a href="#configurator" class="select-knife btn-ghost w-full px-6 py-3.5 rounded-full text-sm font-semibold" data-model="karambit">
+                            Build a Karambit
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+
+            <p class="text-center text-xs mt-8 max-w-xl mx-auto fade-in" style="color:rgba(201,201,196,0.60);">
+                Ready-made stock rotates weekly. Custom orders open year-round — every blade gets the same hand finish, signed under the handle.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ EMOTIONAL STORY ============ -->
+    <section class="story-section py-20 lg:py-28 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-5 lg:px-8 grid lg:grid-cols-2 gap-14 items-center relative" style="z-index:1;">
+            <div class="relative fade-in">
+                <div class="rounded-3xl overflow-hidden aspect-[4/5]" style="box-shadow: var(--shadow-blade);">
+                    <img src="images/CSTalonSlaughterBlade.JPG" alt="Close-up of a hand-painted Talon Slaughter knife blade showing fine paint detail and hand-finishing" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute -bottom-6 -right-6 rounded-2xl p-5 max-w-[210px] hidden md:block" style="background:var(--red-600);color:#fff7e0;box-shadow:0 16px 38px -10px rgba(159,30,30,0.7);">
+                    <div class="font-serif italic text-sm leading-snug">"Every blade is sanded, primed, and painted by hand. No two are identical."</div>
+                </div>
+            </div>
+            <div class="fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--gold-400);">The Story</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--steel-50);">
+                    I printed my brother's exact Talon <span class="italic" style="color:var(--gold-400);">for his birthday.</span>
+                </h2>
+                <div class="mt-8 space-y-4 leading-relaxed" style="color:rgba(201,201,196,0.85);">
+                    <p>
+                        He'd been grinding for that Talon Slaughter for a year. Pulled it from a case the week before his birthday. Float 0.04, almost factory new — and he couldn't shut up about it.
+                    </p>
+                    <p>
+                        So I screenshotted his inventory, brought the file into the workshop, and printed it. Same blade. Same wear pattern in the paint. Same tiny scratch he kept pointing out. Sanded it for two nights. Hand-painted the splatter. Signed the handle.
+                    </p>
+                    <p>
+                        He's a grown man. He cried. Held it like it was the real thing.
+                    </p>
+                    <p style="color:var(--gold-400);font-weight:600;">
+                        That's what we do here. You send the screenshot. We print the blade.
+                    </p>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="#configurator" class="btn-primary px-7 py-3.5 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                        Send Your Screenshot
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supporting quotes -->
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 mt-20 grid md:grid-cols-2 gap-6 relative" style="z-index:1;">
+            <figure class="quote-card rounded-2xl p-7 fade-in">
+                <div class="mb-4 text-2xl" style="color:var(--gold-400);">⚔</div>
+                <div class="text-xs uppercase tracking-wider font-semibold mb-3" style="color:var(--gold-400);">Hand-Finished, Not Mass-Made</div>
+                <blockquote class="font-serif text-lg leading-relaxed" style="color:var(--steel-50);">Every blade comes off the printer with seams and rough edges. We sand them out by hand, prime, then paint the skin in matched layers. Tiger Tooth gets real metallic. Slaughter gets the deep blood-red over a clean white base.</blockquote>
+                <figcaption class="mt-5 flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--red-600);color:#fff7e0;font-weight:700;">JT</span>
+                    <div><div class="font-semibold text-sm" style="color:var(--steel-50);">Workshop finish</div><div class="text-xs" style="color:rgba(201,201,196,0.55);">Not display shelf</div></div>
+                </figcaption>
+            </figure>
+            <figure class="quote-card rounded-2xl p-7 fade-in">
+                <div class="mb-4 text-2xl" style="color:var(--gold-400);">📸</div>
+                <div class="text-xs uppercase tracking-wider font-semibold mb-3" style="color:var(--gold-400);">Custom Done Right</div>
+                <blockquote class="font-serif text-lg leading-relaxed" style="color:var(--steel-50);">Send the screenshot from your inventory. We match the float, the wear pattern, the exact paint placement. You see a mockup before we touch a brush. Two revisions free. The knife you imagine is the knife you get.</blockquote>
+                <figcaption class="mt-5 flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--gold-500);color:#1a0f00;font-weight:700;">MR</span>
+                    <div><div class="font-semibold text-sm" style="color:var(--steel-50);">Built to your spec</div><div class="text-xs" style="color:rgba(201,201,196,0.55);">Mockup before paint</div></div>
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final-cta py-20 lg:py-28">
+        <div class="max-w-5xl mx-auto px-5 lg:px-8 text-center fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6" style="background:rgba(212,40,42,0.20);color:var(--gold-400);border:1px solid rgba(240,165,0,0.40);">
+                <span class="w-1.5 h-1.5 rounded-full pulse-dot" style="background:var(--red-400);"></span>
+                BOGO ends this week — Buy 1 ready-made, get a second free
+            </div>
+            <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl leading-tight" style="color:var(--steel-50);">
+                Your knife is one <br>screenshot <span class="italic" style="color:var(--red-400);">away.</span>
+            </h2>
+            <p class="mt-6 text-lg max-w-xl mx-auto" style="color:rgba(201,201,196,0.78);">
+                Pull a blade from the bench for $29, or send us the one you've been chasing for $69. Either way, it ships from our workshop with a signed handle and a 60-day guarantee.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3 justify-center">
+                <a href="#configurator" class="btn-primary px-8 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                    Build Your Knife
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                </a>
+                <a href="#showcase" class="btn-ghost px-8 py-4 rounded-full text-sm font-semibold">See All Three Blades</a>
+            </div>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs" style="color:rgba(201,201,196,0.60);">
+                <span>✓ 60-Day Hold-It-And-Love-It Guarantee</span>
+                <span>✓ Signed under the handle</span>
+                <span>✓ Free US shipping over $50</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer id="footer" class="text-steel-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12" style="border-bottom: 1px solid rgba(201,201,196,0.10);">
+                <div class="lg:col-span-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="w-9 h-9 rounded-lg flex items-center justify-center font-serif text-lg logo-mono" style="color:#fff7e0;">R</span>
+                        <span class="font-serif text-xl" style="color:var(--steel-50);">Realized <span style="color:var(--gold-400);">Prints</span></span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-sm" style="color:rgba(201,201,196,0.70);">
+                        Premium 3D printed heirlooms and collectibles, crafted by a father and son in their home workshop. Made to be held, used, and shown off.
+                    </p>
+                    <div class="mt-6 flex gap-3">
+                        <span class="px-3 py-1.5 rounded-full text-xs bg-steel-50/10">🇺🇸 Made in USA</span>
+                        <span class="px-3 py-1.5 rounded-full text-xs bg-steel-50/10">🔒 Secure Checkout</span>
+                    </div>
+                </div>
+                <div class="lg:col-span-2">
+                    <h4 class="font-serif text-sm uppercase tracking-wider mb-4" style="color:var(--gold-400);">Shop</h4>
+                    <ul class="space-y-2 text-sm" style="color:rgba(201,201,196,0.80);">
+                        <li><a href="cs2-knives.html" class="transition" style="color:var(--gold-400);">CS2 Knives</a></li>
+                        <li><a href="catan-artisan.html" class="transition">Catan Collection</a></li>
+                        <li><a href="index.html#collections" class="transition">Anime Figurines</a></li>
+                        <li><a href="index.html#collections" class="transition">Lucky Scoops</a></li>
+                    </ul>
+                </div>
+                <div class="lg:col-span-2">
+                    <h4 class="font-serif text-sm uppercase tracking-wider mb-4" style="color:var(--gold-400);">Company</h4>
+                    <ul class="space-y-2 text-sm" style="color:rgba(201,201,196,0.80);">
+                        <li><a href="index.html#story" class="transition">Our Story</a></li>
+                        <li><a href="#" class="transition">Workshop Tour</a></li>
+                        <li><a href="#" class="transition">Reviews</a></li>
+                        <li><a href="#" class="transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="lg:col-span-3">
+                    <h4 class="font-serif text-sm uppercase tracking-wider mb-4" style="color:var(--gold-400);">Get In Touch</h4>
+                    <ul class="space-y-2 text-sm" style="color:rgba(201,201,196,0.80);">
+                        <li><a href="mailto:hello@realizedprints.com" class="transition">hello@realizedprints.com</a></li>
+                        <li><a href="#" class="transition">Live on WhatsNot</a></li>
+                        <li><a href="#" class="transition">Instagram</a></li>
+                        <li><a href="#" class="transition">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs" style="color:rgba(201,201,196,0.55);">
+                <div>© 2026 Realized Prints. Crafted by a father & son. All rights reserved.</div>
+                <div class="flex gap-5">
+                    <a href="#" class="transition">Privacy</a>
+                    <a href="#" class="transition">Terms</a>
+                    <a href="#" class="transition">Shipping & Returns</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        #footer a:hover { color: var(--gold-400); }
+    </style>
+
+    <!-- ============================================================
+         THIS IS THE LINE THAT SEPARATES VISUALS FROM FUNCTIONS.
+         VISUALS ABOVE, FUNCTIONS BELOW.
+         ============================================================ -->
+
+    <script>
+        // ===== STRIPE =====
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TC500E8CXX0QGip3XQ4QqpI8KA7v6t91u0ocMtgRqSTlRJ8F8cbsaYXBkJenF1IoB1tmvnH9nWOMvJVbF9TbXCh00lHqhCZSQ';
+        const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // Fade-in observer
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+        // ===== CONFIGURATOR =====
+        const MODEL_LABELS = {
+            talon:     'Talon',
+            butterfly: 'Butterfly',
+            karambit:  'Karambit'
+        };
+        const SKIN_LABELS = {
+            slaughter: 'Slaughter',
+            tiger:     'Tiger Tooth'
+        };
+        const PATH_LABELS = {
+            ready:  'Ready-Made',
+            custom: 'Custom from Screenshot'
+        };
+        const PATH_PRICE = {
+            ready:  29,
+            custom: 69
+        };
+
+        const state = {
+            model: 'talon',
+            skin:  'slaughter',
+            path:  'ready'
+        };
+
+        // Set defaults active visually
+        function syncActiveStates() {
+            document.querySelectorAll('.opt').forEach(btn => {
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                if (state[group] === value) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            document.querySelectorAll('.path-card').forEach(card => {
+                if (card.dataset.path === state.path) card.classList.add('active');
+                else card.classList.remove('active');
+            });
+        }
+
+        function recalc() {
+            const total = PATH_PRICE[state.path];
+            const summary = `${MODEL_LABELS[state.model]} · ${SKIN_LABELS[state.skin]} · ${PATH_LABELS[state.path]}`;
+            document.getElementById('priceTotal').textContent = '$' + total;
+            document.getElementById('buildSummary').textContent = summary;
+
+            const bogoNote = document.getElementById('bogoNote');
+            if (state.path === 'ready') {
+                bogoNote.style.color = 'var(--gold-400)';
+                bogoNote.innerHTML = '+ Free second knife at checkout (BOGO)';
+            } else {
+                bogoNote.style.color = 'rgba(201,201,196,0.70)';
+                bogoNote.innerHTML = 'Mockup approval before we paint · 7–10 day build';
+            }
+        }
+
+        // Model + Skin option buttons
+        document.querySelectorAll('.opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.disabled) return;
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                if (!group) return;
+                state[group] = value;
+                // Update active state within group
+                document.querySelectorAll(`.opt[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                recalc();
+            });
+        });
+
+        // Path cards (Ready vs Custom)
+        document.querySelectorAll('.path-card').forEach(card => {
+            card.addEventListener('click', () => {
+                state.path = card.dataset.path;
+                document.querySelectorAll('.path-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                recalc();
+            });
+        });
+
+        // Showcase "Build a X" buttons → jump to configurator + set model
+        document.querySelectorAll('.select-knife').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const model = btn.dataset.model;
+                if (model && MODEL_LABELS[model]) {
+                    state.model = model;
+                    const opt = document.querySelector(`.opt[data-group="model"][data-value="${model}"]`);
+                    if (opt) {
+                        document.querySelectorAll('.opt[data-group="model"]').forEach(b => b.classList.remove('active'));
+                        opt.classList.add('active');
+                    }
+                    recalc();
+                }
+            });
+        });
+
+        // Initial paint
+        syncActiveStates();
+        recalc();
+
+        // ===== STRIPE CHECKOUT =====
+        const cartBtn = document.getElementById('addToCart');
+        const errorBox = document.getElementById('checkoutError');
+
+        function showError(msg) {
+            errorBox.textContent = msg;
+            errorBox.classList.remove('hidden');
+        }
+        function clearError() {
+            errorBox.textContent = '';
+            errorBox.classList.add('hidden');
+        }
+
+        cartBtn.addEventListener('click', async () => {
+            if (cartBtn.disabled) return;
+            clearError();
+
+            const originalHTML = cartBtn.innerHTML;
+            cartBtn.disabled = true;
+            cartBtn.style.opacity = '0.85';
+            cartBtn.style.cursor = 'wait';
+            cartBtn.innerHTML = `
+                <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;">
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                </svg>
+                Redirecting to secure checkout…
+            `;
+
+            try {
+                const currentTotal = PATH_PRICE[state.path];
+                const res = await fetch('/api/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ state, total: currentTotal, collection: 'cs2-knives' })
+                });
+
+                if (!res.ok) {
+                    const errBody = await res.json().catch(() => ({}));
+                    throw new Error(errBody.error || `Checkout failed (HTTP ${res.status})`);
+                }
+
+                const data = await res.json();
+                if (!data.url) throw new Error('No checkout URL returned. Please try again.');
+
+                window.location = data.url;
+            } catch (err) {
+                console.error('Checkout error:', err);
+                showError(err.message || 'Something went wrong. Please try again or email hello@realizedprints.com.');
+                cartBtn.disabled = false;
+                cartBtn.style.opacity = '';
+                cartBtn.style.cursor = '';
+                cartBtn.innerHTML = originalHTML;
+            }
+        });
+
+        // Inject spinner keyframes once
+        (function injectSpinKeyframes() {
+            if (document.getElementById('rp-spin-kf')) return;
+            const s = document.createElement('style');
+            s.id = 'rp-spin-kf';
+            s.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+            document.head.appendChild(s);
+        })();
+
+        // Soft-CTA placeholder behavior for hash-only buttons
+        document.querySelectorAll('a.btn-primary, a.btn-ghost').forEach(btn => {
+            btn.addEventListener('click', e => {
+                if (btn.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '✓ Added — checkout coming soon';
+                    setTimeout(() => { btn.innerHTML = original; }, 1800);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
