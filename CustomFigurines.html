@@ -1,0 +1,2862 @@
+<!-- cs2-knives.html — Realized Prints | Custom Figurines product page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Figurines — Realized Prints | cs2-knives.html</title>
+    <meta name="description" content="Custom 3D printed figurines of you, your family, or your pet. DIY kits or fully finished. Your character. Your pet. Your way.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="output.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* =========================================================
+           DESIGN TOKENS — Custom Figurines / Realized Prints
+           Premium green heirloom aesthetic
+           ========================================================= */
+        :root {
+            /* Sand — warm parchment / linen base */
+            --sand-50:  #f7faf5;
+            --sand-100: #ebf2e6;
+            --sand-200: #d6e3cf;
+            --sand-300: #b8caab;
+
+            /* Forest — deep premium green */
+            --green:      #1e6b3a;
+            --emerald:    #10b981;
+            --forest:     #134e2b;
+            --forest-700: #1e6b3a;
+            --forest-800: #134e2b;
+            --forest-900: #0d3a20;
+
+            /* Honey — gold accent (unchanged premium feel) */
+            --honey-400: #f5c560;
+            --honey-600: #f0a500;
+            --honey-700: #b87900;
+
+            /* Sage — softer accent */
+            --sage-600: #5b8f5a;
+
+            /* Accent alias used by JS */
+            --accent: var(--honey-600);
+
+            /* Layered shadows for warmth & depth */
+            --shadow-soft: 0 1px 2px rgba(13,58,32,0.05),
+                           0 8px 24px -8px rgba(13,58,32,0.12),
+                           0 2px 6px -2px rgba(13,58,32,0.07);
+            --shadow-glow: 0 1px 2px rgba(13,58,32,0.08),
+                           0 20px 50px -12px rgba(13,58,32,0.32),
+                           0 8px 20px -8px rgba(240,165,0,0.22);
+            --shadow-inset-paper: inset 0 1px 0 rgba(255,255,255,0.65),
+                                  inset 0 -1px 0 rgba(13,58,32,0.04);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+            color: var(--forest-900);
+            background: var(--sand-50);
+            margin: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Subtle full-page paper grain */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.22  0 0 0 0 0.13  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            opacity: 0.5;
+            mix-blend-mode: multiply;
+        }
+        body > * { position: relative; z-index: 1; }
+
+        /* =========================================================
+           TYPOGRAPHY
+           ========================================================= */
+        .font-serif { font-family: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif; font-weight: 500; letter-spacing: -0.005em; }
+        .font-sans  { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+        .italic     { font-style: italic; }
+        .antialiased { -webkit-font-smoothing: antialiased; }
+
+        h1, h2, h3, h4 { letter-spacing: -0.015em; }
+        em, .italic { font-style: italic; }
+
+        /* =========================================================
+           LAYOUT UTILITIES
+           ========================================================= */
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .sticky   { position: sticky; }
+        .fixed    { position: fixed; }
+        .inset-0  { inset: 0; }
+        .top-0    { top: 0; }
+        .top-5    { top: 1.25rem; }
+        .right-0  { right: 0; }
+        .right-5  { right: 1.25rem; }
+        .bottom-5 { bottom: 1.25rem; }
+        .left-5   { left: 1.25rem; }
+        .-top-6   { top: -1.5rem; }
+        .-left-6  { left: -1.5rem; }
+        .-bottom-6{ bottom: -1.5rem; }
+        .-right-6 { right: -1.5rem; }
+        .z-10     { z-index: 10; }
+        .z-50     { z-index: 50; }
+
+        .block    { display: block; }
+        .inline-block { display: inline-block; }
+        .inline-flex  { display: inline-flex; }
+        .flex     { display: flex; }
+        .grid     { display: grid; }
+        .hidden   { display: none; }
+
+        .flex-col { flex-direction: column; }
+        .flex-wrap{ flex-wrap: wrap; }
+        .flex-1   { flex: 1 1 0%; }
+        .items-start  { align-items: flex-start; }
+        .items-center { align-items: center; }
+        .items-end    { align-items: flex-end; }
+        .items-baseline { align-items: baseline; }
+        .justify-between { justify-content: space-between; }
+        .justify-center  { justify-content: center; }
+        .text-left  { text-align: left; }
+        .text-center{ text-align: center; }
+        .text-right { text-align: right; }
+        .align-middle { vertical-align: middle; }
+
+        .gap-1\.5 { gap: 0.375rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-5 { gap: 1.25rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-9 { gap: 2.25rem; }
+        .gap-10 { gap: 2.5rem; }
+        .gap-12 { gap: 3rem; }
+        .gap-14 { gap: 3.5rem; }
+        .gap-x-6 { column-gap: 1.5rem; }
+        .gap-x-12 { column-gap: 3rem; }
+        .gap-y-2 { row-gap: 0.5rem; }
+        .gap-y-10 { row-gap: 2.5rem; }
+
+        .w-full { width: 100%; }
+        .w-1\.5 { width: 0.375rem; }
+        .w-9    { width: 2.25rem; }
+        .w-10   { width: 2.5rem; }
+        .w-12   { width: 3rem; }
+        .h-1\.5 { height: 0.375rem; }
+        .h-6    { height: 1.5rem; }
+        .h-9    { height: 2.25rem; }
+        .h-10   { height: 2.5rem; }
+        .h-12   { height: 3rem; }
+        .h-18   { height: 4.5rem; }
+        .h-full { height: 100%; }
+
+        .max-w-md { max-width: 28rem; }
+        .max-w-sm { max-width: 24rem; }
+        .max-w-xl { max-width: 36rem; }
+        .max-w-2xl{ max-width: 42rem; }
+        .max-w-3xl{ max-width: 48rem; }
+        .max-w-5xl{ max-width: 64rem; }
+        .max-w-6xl{ max-width: 72rem; }
+        .max-w-7xl{ max-width: 80rem; }
+        .max-w-\[180px\] { max-width: 180px; }
+        .max-w-\[200px\] { max-width: 200px; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mr-1\.5 { margin-right: 0.375rem; }
+        .ml-1    { margin-left: 0.25rem; }
+        .mt-0\.5 { margin-top: 0.125rem; }
+        .mt-1    { margin-top: 0.25rem; }
+        .mt-2    { margin-top: 0.5rem; }
+        .mt-3    { margin-top: 0.75rem; }
+        .mt-4    { margin-top: 1rem; }
+        .mt-5    { margin-top: 1.25rem; }
+        .mt-6    { margin-top: 1.5rem; }
+        .mt-8    { margin-top: 2rem; }
+        .mt-9    { margin-top: 2.25rem; }
+        .mt-10   { margin-top: 2.5rem; }
+        .mb-1    { margin-bottom: 0.25rem; }
+        .mb-1\.5 { margin-bottom: 0.375rem; }
+        .mb-2    { margin-bottom: 0.5rem; }
+        .mb-3    { margin-bottom: 0.75rem; }
+        .mb-4    { margin-bottom: 1rem; }
+        .mb-5    { margin-bottom: 1.25rem; }
+        .mb-6    { margin-bottom: 1.5rem; }
+        .mb-8    { margin-bottom: 2rem; }
+        .mb-10   { margin-bottom: 2.5rem; }
+        .mb-12   { margin-bottom: 3rem; }
+
+        .px-2  { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-3  { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4  { padding-left: 1rem; padding-right: 1rem; }
+        .px-5  { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .px-6  { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-7  { padding-left: 1.75rem; padding-right: 1.75rem; }
+        .px-8  { padding-left: 2rem; padding-right: 2rem; }
+        .py-1  { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-2  { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .py-3  { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+        .py-4  { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6  { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8  { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-14 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+        .pt-5  { padding-top: 1.25rem; }
+        .pt-8  { padding-top: 2rem; }
+        .pt-16 { padding-top: 4rem; }
+        .pb-8  { padding-bottom: 2rem; }
+        .pb-12 { padding-bottom: 3rem; }
+        .p-2   { padding: 0.5rem; }
+        .p-4   { padding: 1rem; }
+        .p-5   { padding: 1.25rem; }
+        .p-6   { padding: 1.5rem; }
+        .p-7   { padding: 1.75rem; }
+        .p-8   { padding: 2rem; }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .sm\:inline-flex { display: inline-flex; }
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .md\:flex-row { flex-direction: row; }
+            .md\:text-left { text-align: left; }
+            .md\:text-5xl { font-size: 3rem; line-height: 1.1; }
+            .md\:text-4xl { font-size: 2.25rem; line-height: 1.15; }
+            .md\:justify-start { justify-content: flex-start; }
+            .md\:block { display: block; }
+        }
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+            .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+            .lg\:col-span-2 { grid-column: span 2 / span 2; }
+            .lg\:col-span-6 { grid-column: span 6 / span 6; }
+            .lg\:flex { display: flex; }
+            .lg\:hidden { display: none; }
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:py-28 { padding-top: 7rem; padding-bottom: 7rem; }
+            .lg\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+            .lg\:p-6 { padding: 1.5rem; }
+            .lg\:p-8 { padding: 2rem; }
+            .lg\:p-10 { padding: 2.5rem; }
+            .lg\:gap-8 { gap: 2rem; }
+            .lg\:text-5xl { font-size: 3rem; line-height: 1.05; }
+            .lg\:text-6xl { font-size: 3.75rem; line-height: 1; }
+        }
+
+        /* =========================================================
+           TYPE SCALE
+           ========================================================= */
+        .text-\[10px\] { font-size: 10px; }
+        .text-\[11px\] { font-size: 11px; }
+        .text-\[12px\] { font-size: 12px; }
+        .text-xs   { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm   { font-size: 0.875rem; line-height: 1.4; }
+        .text-base { font-size: 1rem; line-height: 1.5; }
+        .text-lg   { font-size: 1.125rem; line-height: 1.55; }
+        .text-xl   { font-size: 1.25rem; line-height: 1.4; }
+        .text-2xl  { font-size: 1.5rem; line-height: 1.25; }
+        .text-3xl  { font-size: 1.875rem; line-height: 1.18; }
+        .text-4xl  { font-size: 2.25rem; line-height: 1.15; }
+        .text-5xl  { font-size: 3rem; line-height: 1.05; }
+
+        .font-medium   { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold     { font-weight: 700; }
+
+        .uppercase    { text-transform: uppercase; }
+        .tracking-tight  { letter-spacing: -0.025em; }
+        .tracking-wider  { letter-spacing: 0.05em; }
+        .tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+        .leading-none    { line-height: 1; }
+        .leading-tight   { line-height: 1.15; }
+        .leading-snug    { line-height: 1.35; }
+        .leading-relaxed { line-height: 1.65; }
+        .leading-\[1\.05\] { line-height: 1.05; }
+
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* =========================================================
+           COLOR UTILITIES
+           ========================================================= */
+        .bg-sand-50    { background-color: var(--sand-50); }
+        .bg-sand-100   { background-color: var(--sand-100); }
+        .bg-sand-100\/60 { background-color: rgba(235,242,230,0.6); }
+        .bg-sand-200   { background-color: var(--sand-200); }
+        .bg-sand-50\/95{ background-color: rgba(247,250,245,0.95); }
+        .bg-sand-50\/10{ background-color: rgba(247,250,245,0.10); }
+        .bg-sand-50\/5 { background-color: rgba(247,250,245,0.05); }
+        .bg-forest-800 { background-color: var(--forest-800); }
+        .bg-forest-900 { background-color: var(--forest-900); }
+        .bg-honey-600  { background-color: var(--honey-600); }
+        .bg-honey-600\/10 { background-color: rgba(240,165,0,0.10); }
+        .bg-sage-600   { background-color: var(--sage-600); }
+        .bg-red-500\/15 { background-color: rgba(239,68,68,0.15); }
+
+        .text-sand-50  { color: var(--sand-50); }
+        .text-sand-100 { color: var(--sand-100); }
+        .text-sand-100\/90 { color: rgba(235,242,230,0.90); }
+        .text-sand-100\/85 { color: rgba(235,242,230,0.85); }
+        .text-sand-100\/80 { color: rgba(235,242,230,0.80); }
+        .text-sand-100\/70 { color: rgba(235,242,230,0.70); }
+        .text-sand-100\/60 { color: rgba(235,242,230,0.60); }
+        .text-sand-100\/55 { color: rgba(235,242,230,0.55); }
+        .text-sand-300\/70 { color: rgba(184,202,171,0.70); }
+        .text-forest-700 { color: var(--forest-700); }
+        .text-forest-900 { color: var(--forest-900); }
+        .text-forest-900\/85 { color: rgba(13,58,32,0.85); }
+        .text-forest-900\/80 { color: rgba(13,58,32,0.80); }
+        .text-forest-900\/70 { color: rgba(13,58,32,0.70); }
+        .text-forest-900\/65 { color: rgba(13,58,32,0.65); }
+        .text-forest-900\/60 { color: rgba(13,58,32,0.60); }
+        .text-honey-400 { color: var(--honey-400); }
+        .text-honey-600 { color: var(--honey-600); }
+        .text-honey-700 { color: var(--honey-700); }
+        .text-red-200   { color: #fecaca; }
+
+        .border { border-width: 1px; border-style: solid; }
+        .border-2 { border-width: 2px; border-style: solid; }
+        .border-t { border-top-width: 1px; border-style: solid; }
+        .border-b { border-bottom-width: 1px; border-style: solid; }
+        .border-sand-100\/10 { border-color: rgba(235,242,230,0.10); }
+        .border-sand-200 { border-color: var(--sand-200); }
+        .border-sand-300 { border-color: var(--sand-300); }
+        .border-honey-600\/40 { border-color: rgba(240,165,0,0.4); }
+        .border-red-500\/30 { border-color: rgba(239,68,68,0.30); }
+
+        .rounded     { border-radius: 0.25rem; }
+        .rounded-lg  { border-radius: 0.5rem; }
+        .rounded-xl  { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-3xl { border-radius: 1.5rem; }
+        .rounded-full{ border-radius: 9999px; }
+
+        .overflow-hidden { overflow: hidden; }
+        .object-cover    { object-fit: cover; }
+        .aspect-square   { aspect-ratio: 1 / 1; }
+        .aspect-\[4\/2\] { aspect-ratio: 4 / 2; }
+        .aspect-\[16\/10\] { aspect-ratio: 16 / 10; }
+        .aspect-\[4\/5\] { aspect-ratio: 4 / 5; }
+
+        .transition { transition-property: color, background-color, border-color, transform, box-shadow, opacity; transition-duration: 200ms; transition-timing-function: cubic-bezier(0.4,0,0.2,1); }
+        .group:hover .group-hover\:bg-honey-600 { background-color: var(--honey-600); }
+        .group:hover .group-hover\:text-honey-600 { color: var(--honey-600); }
+        .hover\:text-honey-400:hover { color: var(--honey-400); }
+        .hover\:text-honey-600:hover { color: var(--honey-600); }
+        .hover\:border-honey-600:hover { border-color: var(--honey-600); }
+        .hover\:bg-honey-600:hover { background-color: var(--honey-600); }
+        .hover\:bg-sand-50\/10:hover { background-color: rgba(247,250,245,0.10); }
+
+        /* Gradient utility for hero backdrop */
+        .bg-gradient-to-br {
+            background-image: linear-gradient(135deg, var(--sand-50) 0%, var(--sand-100) 50%, var(--sand-200) 100%);
+            background-color: var(--sand-50);
+            position: relative;
+        }
+        .from-sand-50 { /* placeholder */ }
+        .via-sand-100 { /* placeholder */ }
+        .to-sand-200 { /* placeholder */ }
+
+        /* Hero gradient override - deep green workshop */
+        section.relative.overflow-hidden.grain > .absolute.bg-gradient-to-br {
+            background-image:
+                radial-gradient(70% 80% at 80% 0%, rgba(240,165,0,0.15) 0%, transparent 60%),
+                radial-gradient(60% 70% at 0% 100%, rgba(16,185,129,0.18) 0%, transparent 60%),
+                linear-gradient(135deg, #0d3a20 0%, #134e2b 45%, #0a2e18 100%);
+        }
+
+        /* Primary button — gold/honey */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(180deg, var(--honey-600), #d89000);
+            color: #1a1108;
+            border: 1px solid rgba(184,121,0,0.5);
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+            box-shadow: 0 4px 14px -4px rgba(240,165,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px -6px rgba(240,165,0,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+            background: linear-gradient(180deg, #ffb420, var(--honey-600));
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--forest-900);
+            border: 1.5px solid rgba(13,58,32,0.3);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: border-color 180ms ease, background 180ms ease;
+        }
+        .btn-ghost:hover {
+            border-color: var(--honey-600);
+            background: rgba(240,165,0,0.06);
+        }
+
+        .shadow-soft { box-shadow: var(--shadow-soft); }
+        .shadow-glow { box-shadow: var(--shadow-glow); }
+
+        /* Card hover */
+        .card-hover { transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease; }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+            border-color: rgba(240,165,0,0.35) !important;
+        }
+
+        /* Floating plaque */
+        .absolute.bg-sand-50.rounded-2xl {
+            background: linear-gradient(180deg, #ffffff, var(--sand-50));
+            box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        /* Corner marks for hero image */
+        .cm { position: absolute; width: 18px; height: 18px; border-color: rgba(245,197,96,0.7); border-style: solid; z-index: 2; }
+        .cm-tl { top: 14px;    left: 14px;    border-width: 2px 0 0 2px; }
+        .cm-tr { top: 14px;    right: 14px;   border-width: 2px 2px 0 0; }
+        .cm-bl { bottom: 14px; left: 14px;    border-width: 0 0 2px 2px; }
+        .cm-br { bottom: 14px; right: 14px;   border-width: 0 2px 2px 0; }
+
+        /* Avatar stack for social proof */
+        .av {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: var(--green); color: var(--sand-50);
+            font-size: 0.6rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid rgba(235,242,230,0.25);
+            flex-shrink: 0;
+        }
+
+        /* Progress bar for scarcity card */
+        .prog-track { height: 6px; border-radius: 99px; background: rgba(235,242,230,0.14); overflow: hidden; }
+        .prog-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--honey-600), var(--honey-400)); width: 55%; }
+
+        /* Scarcity card on hero */
+        .scarcity-card {
+            margin-top: 14px; border-radius: 16px; padding: 14px 18px;
+            background: rgba(235,242,230,0.07);
+            border: 1px solid rgba(235,242,230,0.13);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Limited Edition glass overlay on hero image */
+        .hero-glass-card {
+            position: absolute; bottom: 18px; left: 18px; right: 18px;
+            background: rgba(10,30,18,0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(245,197,96,0.28);
+            border-radius: 16px;
+            padding: 14px 18px;
+        }
+
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+        /* Trust bar */
+        section.bg-forest-900.text-sand-100 {
+            background-color: #0d3a20;
+            background-image:
+                radial-gradient(60% 80% at 0% 50%, rgba(240,165,0,0.18) 0%, transparent 55%),
+                radial-gradient(60% 80% at 100% 50%, rgba(16,185,129,0.14) 0%, transparent 55%),
+                radial-gradient(circle, rgba(245,197,96,0.18) 1px, transparent 1px),
+                linear-gradient(90deg, #0d3a20 0%, #134e2b 50%, #0d3a20 100%);
+            background-size: auto, auto, 26px 26px, auto;
+            border-top: 1px solid rgba(245,197,96,0.20);
+            border-bottom: 1px solid rgba(245,197,96,0.20);
+            box-shadow: inset 0 8px 24px -16px rgba(0,0,0,0.6), inset 0 -8px 24px -16px rgba(0,0,0,0.6);
+        }
+
+        /* Tiers section */
+        section#tiers {
+            background-color: #e8f0e2;
+            background-image: radial-gradient(65% 55% at 50% 0%, rgba(30,107,58,0.15) 0%, transparent 70%), repeating-linear-gradient(-45deg, rgba(30,107,58,0.10) 0px, rgba(30,107,58,0.10) 1px, transparent 1px, transparent 10px), linear-gradient(180deg, #ebf2e6 0%, #d6e3cf 100%);
+        }
+
+        /* Light tier cards */
+        article.bg-sand-50 {
+            background: radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.85) 0%, transparent 60%), linear-gradient(180deg, #ffffff 0%, #ebf2e6 65%, #d6e3cf 100%);
+            box-shadow: var(--shadow-soft), inset 0 2px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(13,58,32,0.08);
+            border: 1px solid rgba(30,107,58,0.22);
+        }
+
+        article.bg-sand-50 .text-forest-900\/85,
+        article.bg-sand-50 .text-forest-900\/70,
+        article.bg-sand-50 p {
+            color: #0d3a20;
+        }
+
+        /* Premium card gets gold accent */
+        article.border-2.border-honey-600\/40 {
+            border-color: rgba(240,165,0,0.5);
+        }
+
+        /* Configurator / "Bonuses" */
+        section#configurator,
+        section.py-20.lg\:py-28.bg-sand-100\/60 {
+            background-color: #0a2e18;
+            background-image:
+                radial-gradient(70% 55% at 30% 20%, rgba(240,165,0,0.18) 0%, transparent 65%),
+                radial-gradient(60% 50% at 80% 70%, rgba(16,185,129,0.20) 0%, transparent 70%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 22px),
+                linear-gradient(180deg, #0d3a20 0%, #134e2b 50%, #061f10 100%);
+            border-top: 1px solid rgba(245,197,96,0.18);
+            border-bottom: 1px solid rgba(245,197,96,0.18);
+        }
+            section#configurator .bg-forest-900 {
+                background: linear-gradient(135deg, #1e6b3a 0%, #134e2b 50%, #061f10 100%);
+                border: 1px solid rgba(245,197,96,0.25);
+            }
+
+        /* "Why this" — dark workshop */
+        section.bg-forest-900.text-sand-100.relative.overflow-hidden {
+            background-color: #0d3a20;
+            background-image:
+                radial-gradient(60% 50% at 80% 0%, rgba(240,165,0,0.20) 0%, transparent 60%),
+                radial-gradient(50% 60% at 0% 100%, rgba(16,185,129,0.20) 0%, transparent 60%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.016) 0px, rgba(255,255,255,0.016) 1px, transparent 1px, transparent 18px),
+                linear-gradient(180deg, #0d3a20 0%, #134e2b 50%, #061f10 100%);
+        }
+
+        /* Final urgency CTA */
+        section.bg-sand-100 {
+            background-color: #e8f0e2;
+            background-image:
+                radial-gradient(60% 40% at 50% 0%, rgba(240,165,0,0.20) 0%, transparent 60%),
+                radial-gradient(50% 50% at 50% 100%, rgba(30,107,58,0.12) 0%, transparent 60%),
+                repeating-linear-gradient(-45deg, rgba(30,107,58,0.025) 0px, rgba(30,107,58,0.025) 1px, transparent 1px, transparent 9px),
+                linear-gradient(180deg, #eef5e8 0%, #d6e3cf 100%);
+        }
+
+        /* "What You Get" plain section */
+        section.py-20.lg\:py-28:not(#tiers):not(#configurator):not(.bg-sand-100\/60):not(.bg-sand-100):not(.bg-forest-900):not(#intake) {
+            background-color: var(--sand-50);
+            background-image:
+                radial-gradient(50% 60% at 100% 50%, rgba(240,165,0,0.05) 0%, transparent 60%),
+                radial-gradient(40% 50% at 0% 50%, rgba(16,185,129,0.05) 0%, transparent 60%);
+        }
+
+        /* Intake section — parchment with warm green corner light */
+        section#intake {
+            background-color: #ebf2e6;
+            background-image:
+                radial-gradient(60% 50% at 0% 0%, rgba(30,107,58,0.10) 0%, transparent 60%),
+                radial-gradient(50% 60% at 100% 100%, rgba(240,165,0,0.10) 0%, transparent 60%),
+                linear-gradient(180deg, #f1f7ec 0%, #dde9d6 100%);
+        }
+
+        /* Footer */
+        #footer {
+            background:
+                radial-gradient(50% 60% at 0% 0%, rgba(240,165,0,0.16) 0%, transparent 55%),
+                linear-gradient(180deg, #0d3a20 0%, #061f10 100%);
+        }
+
+        /* Inner card on configurator */
+        section#configurator .bg-sand-50 {
+            background:
+                linear-gradient(180deg, #ffffff 0%, var(--sand-50) 100%);
+            box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        /* Forest live-price bar inside configurator + Step 3 */
+        section#configurator .bg-forest-900 {
+            background:
+                radial-gradient(70% 80% at 100% 0%, rgba(245,197,96,0.28) 0%, transparent 60%),
+                radial-gradient(60% 80% at 0% 100%, rgba(16,185,129,0.22) 0%, transparent 60%),
+                linear-gradient(135deg, #1e6b3a 0%, var(--forest-800) 50%, #061f10 100%);
+            border: 1px solid rgba(245,197,96,0.20);
+            position: relative;
+            overflow: hidden;
+        }
+        section#configurator .bg-forest-900::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.85  0 0 0 0 0.65  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+            opacity: 0.6;
+        }
+        section#configurator .bg-forest-900 > * { position: relative; z-index: 1; }
+
+        /* Bonus cards */
+        section .bg-sand-50.border.border-sand-200.rounded-2xl,
+        .bg-sand-50.border.border-sand-200.rounded-3xl {
+            background:
+                radial-gradient(100% 80% at 0% 0%, rgba(255,255,255,0.7) 0%, transparent 60%),
+                radial-gradient(100% 100% at 100% 100%, rgba(240,165,0,0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #ffffff 0%, var(--sand-50) 100%);
+        }
+
+        /* Translucent quote cards on dark section */
+        figure.bg-sand-50\/5 {
+            background:
+                linear-gradient(180deg, rgba(247,250,245,0.07) 0%, rgba(247,250,245,0.03) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(235,242,230,0.12);
+        }
+        figure.bg-sand-50\/5:hover {
+            border-color: rgba(245,197,96,0.30);
+            background: linear-gradient(180deg, rgba(247,250,245,0.10) 0%, rgba(247,250,245,0.04) 100%);
+        }
+
+        /* =========================================================
+           CONFIGURATOR OPTION BUTTONS
+           ========================================================= */
+        .opt {
+            background: linear-gradient(180deg, #ffffff 0%, var(--sand-50) 100%);
+            border: 1.5px solid var(--sand-200);
+            color: var(--forest-900);
+            cursor: pointer;
+            transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 1px rgba(13,58,32,0.03);
+        }
+        .opt:hover:not(.locked):not(:disabled) {
+            border-color: var(--green);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 14px -8px rgba(30,107,58,0.32);
+        }
+        .opt.active {
+            border-color: var(--green);
+            background:
+                radial-gradient(80% 80% at 100% 0%, rgba(30,107,58,0.10) 0%, transparent 60%),
+                linear-gradient(180deg, #f0f7eb 0%, #d6e9c9 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.7),
+                inset 0 0 0 1px var(--green),
+                0 6px 14px -8px rgba(30,107,58,0.40);
+            color: var(--forest-900);
+        }
+        .opt.locked, .opt:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            filter: grayscale(0.4);
+        }
+
+        /* Swatch buttons */
+        .swatch {
+            background: linear-gradient(180deg, #ffffff, var(--sand-50));
+            cursor: pointer;
+            transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+        }
+        .swatch:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px -8px rgba(13,58,32,0.20);
+        }
+
+        /* Names input */
+        #namesInput, .rp-input, .rp-textarea {
+            background: linear-gradient(180deg, #ffffff, var(--sand-50));
+            border: 1.5px solid var(--sand-300);
+            color: var(--forest-900);
+            outline: none;
+            box-shadow: inset 0 1px 2px rgba(13,58,32,0.05);
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+        #namesInput:focus, .rp-input:focus, .rp-textarea:focus {
+            border-color: var(--green);
+            box-shadow: inset 0 1px 2px rgba(13,58,32,0.05), 0 0 0 3px rgba(30,107,58,0.18);
+        }
+        #namesInput::placeholder, .rp-input::placeholder, .rp-textarea::placeholder { color: rgba(13,58,32,0.40); }
+
+        /* =========================================================
+           ANIMATIONS
+           ========================================================= */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 700ms cubic-bezier(.2,.7,.2,1), transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(240,165,0,0.55); }
+            50%      { box-shadow: 0 0 0 6px rgba(240,165,0,0); }
+        }
+        .pulse-dot {
+            animation: pulseDot 2s ease-out infinite;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 0.9s linear infinite; }
+
+        /* Image hover zoom */
+        article .aspect-\[16\/10\] img,
+        .rounded-3xl.overflow-hidden img {
+            transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        article:hover .aspect-\[16\/10\] img,
+        .card-hover:hover .rounded-3xl.overflow-hidden img { transform: scale(1.04); }
+
+        /* Mobile tidy */
+        @media (max-width: 640px) {
+            .text-4xl { font-size: 2rem; }
+            .text-5xl { font-size: 2.5rem; }
+            .text-6xl { font-size: 2.75rem; }
+            .py-20 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+            .py-14 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        }
+
+        section { position: relative; }
+
+        /* ========== Savings tokens ========== */
+        :root {
+            --save-400: #6ee7b7;
+            --save-500: #34d399;
+            --save-600: #10b981;
+            --save-700: #047857;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- ============ NAVBAR ============ -->
+    <header id="nav" class="sticky top-0 z-50" style="background: rgba(247,250,245,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(13,58,32,0.08);">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-18 py-3">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <span class="w-9 h-9 rounded-lg bg-forest-800 text-sand-50 flex items-center justify-center font-serif text-lg group-hover:bg-honey-600 transition">R</span>
+                <span class="font-serif text-xl tracking-tight">Realized Prints</span>
+            </a>
+            <nav class="hidden lg:flex items-center gap-9 text-sm font-medium">
+                <a href="index.html" class="hover:text-honey-600 transition">← Back to Home</a>
+                <a href="index.html#collections" class="hover:text-honey-600 transition">Collections</a>
+                <a href="index.html#story" class="hover:text-honey-600 transition">About</a>
+                <a href="#footer" class="hover:text-honey-600 transition">Contact</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <a href="#configurator" class="hidden sm:inline-flex btn-primary px-5 py-2.5 rounded-full text-sm font-semibold">Design Your Figurine</a>
+                <button id="menuBtn" class="lg:hidden p-2" aria-label="Open menu">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden lg:hidden border-t border-sand-200 bg-sand-50">
+            <div class="px-5 py-4 flex flex-col gap-3 text-sm font-medium">
+                <a href="index.html" class="py-2">← Back to Home</a>
+                <a href="index.html#collections" class="py-2">Collections</a>
+                <a href="index.html#story" class="py-2">About</a>
+                <a href="#footer" class="py-2">Contact</a>
+                <a href="#configurator" class="btn-primary px-5 py-3 rounded-full text-center">Design Your Figurine</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="relative overflow-hidden grain">
+        <div class="absolute inset-0 bg-gradient-to-br from-sand-50 via-sand-100 to-sand-200"></div>
+        <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-10 lg:py-16 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            <div class="lg:col-span-6 fade-in">
+                <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-medium hover:text-honey-600 mb-4 transition" style="color:rgba(235,242,230,0.65);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                    Back to all collections
+                </a>
+
+                <h1 class="font-serif" style="font-size: clamp(2.6rem, 5.5vw, 4.4rem); line-height: 1.06; letter-spacing: -0.025em; color: #ebf2e6; margin-bottom: 18px;">
+                    Custom Figurines That Look<br>
+                    <em style="color: var(--honey-400); font-style: italic;">Exactly</em> Like You.
+                </h1>
+
+                <p class="text-lg leading-relaxed mb-8" style="color: rgba(235,242,230,0.82); max-width: 36rem;">
+                    DIY kits or fully finished. Your character. Your pet. Your way. Hand-sculpted from your photos in our New Jersey workshop.
+                </p>
+
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="#configurator" class="btn-primary px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                        Design Your Figurine
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                    </a>
+                    <a href="#tiers" class="btn-ghost px-7 py-4 rounded-full text-sm font-semibold" style="background:transparent;color:#ebf2e6;border-color:rgba(235,242,230,0.38);box-shadow:none;">Compare Tiers</a>
+                </div>
+
+                <!-- Social proof row -->
+                <div class="mt-10" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+                    <div style="display:flex;">
+                        <div class="av" style="margin-left:0">EM</div>
+                        <div class="av" style="margin-left:-8px">RT</div>
+                        <div class="av" style="margin-left:-8px">KP</div>
+                    </div>
+                    <div>
+                        <div style="color:var(--honey-400);font-weight:700;font-size:0.85rem;">★★★★★&nbsp; 4.9</div>
+                        <div style="font-size:0.73rem;color:rgba(235,242,230,0.5);margin-top:2px;">62 verified buyers</div>
+                    </div>
+                    <div style="width:1px;height:34px;background:rgba(235,242,230,0.16);"></div>
+                    <div>
+                        <div style="font-weight:600;color:rgba(235,242,230,0.85);font-size:0.82rem;">USA-made</div>
+                        <div style="font-size:0.73rem;color:rgba(235,242,230,0.48);">NJ workshop</div>
+                    </div>
+                </div>
+
+                <!-- Feature pills -->
+                <div class="mt-8 grid grid-cols-3 gap-3 text-xs max-w-md" style="color:rgba(235,242,230,0.72);">
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--honey-400);">✦</span><span>Photo-matched<br>likeness</span></div>
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--honey-400);">✎</span><span>People, pets<br>or characters</span></div>
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--honey-400);">♡</span><span>60-day love-it<br>guarantee</span></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 relative fade-in">
+                <div class="relative rounded-3xl overflow-hidden shadow-glow aspect-[4/5] bg-forest-900" style="border:1px solid rgba(245,197,96,0.22);box-shadow:0 24px 60px rgba(6,20,12,0.55);">
+                    <img src="images/CustomPrintsHero.JPG" alt="Hand-painted custom 3D printed figurine of a person, photo-matched likeness, premium heirloom finish" class="w-full h-full object-cover" style="opacity:0.94;">
+                    <!-- Corner marks -->
+                    <div class="cm cm-tl"></div>
+                    <div class="cm cm-tr"></div>
+                    <div class="cm cm-bl"></div>
+                    <div class="cm cm-br"></div>
+
+                    <div class="absolute top-5 right-5 rounded-full px-3 py-1.5 text-xs font-bold tracking-wider" style="background: var(--honey-600); color: #1a1108; z-index:2;">
+                        PHOTO-MATCHED
+                    </div>
+                    <div class="hero-glass-card">
+                        <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--honey-400);margin-bottom:6px;">Heirloom Tier</div>
+                        <div class="font-serif" style="font-size:1rem;color:#ebf2e6;line-height:1.4;">Your face. Your pet. Your character. Hand-sculpted from the photos you send.</div>
+                    </div>
+                </div>
+
+                <!-- Scarcity progress card -->
+                <div class="scarcity-card">
+                    <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:600;color:rgba(235,242,230,0.65);margin-bottom:8px;">
+                        <span>This month's Premium slots</span>
+                        <span style="color:var(--honey-400);">4 of 8 remaining</span>
+                    </div>
+                    <div class="prog-track"><div class="prog-fill"></div></div>
+                </div>
+
+                <!-- Floating $79 plaque -->
+                <div class="hidden md:block absolute -top-6 -left-6 bg-sand-50 rounded-2xl p-5 shadow-soft border border-sand-200 max-w-[190px]">
+                    <div class="text-xs uppercase tracking-wider text-honey-600 font-semibold mb-1">STARTING AT</div>
+                    <div class="font-serif text-3xl leading-none text-forest-900">$79</div>
+                    <div class="text-xs text-forest-900/65 mt-2 leading-tight">DIY kit • Free US shipping over $75</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TRUST BAR ============ -->
+    <section class="bg-forest-900 text-sand-100">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">📦</span>
+                <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs text-sand-300/70">2–4 day delivery</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">🇺🇸</span>
+                <div class="text-sm"><div class="font-semibold">Made in the USA</div><div class="text-xs text-sand-300/70">Our home workshop</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">♡</span>
+                <div class="text-sm"><div class="font-semibold">60-Day Guarantee</div><div class="text-xs text-sand-300/70">Love it or send it back</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">👨‍👦</span>
+                <div class="text-sm"><div class="font-semibold">Family Owned</div><div class="text-xs text-sand-300/70">Father & son craft</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 3-TIER PRICING ============ -->
+    <section id="tiers" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">Choose Your Tier</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">
+                    <span class="text-honey-700">Three ways</span>
+                    <span class="italic text-honey-600">to bring them to life.</span>
+                </h2>
+                <p class="mt-4 text-forest-900/75">DIY kits or fully finished. Your character. Your pet. Your way. Same obsessive sculpting at every tier — the difference is how far we take it.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6 lg:gap-8">
+
+                <!-- DIY -->
+                <article class="bg-sand-50 border border-sand-200 rounded-3xl overflow-hidden card-hover shadow-soft fade-in flex flex-col">
+                    <div class="aspect-[16/10] overflow-hidden bg-sand-200">
+                        <img src="images/CustomPrintsAngled.JPG" alt="DIY kit custom figurine — unpainted, hand-sculpted, ready to paint" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider text-forest-700 font-semibold mb-2">DIY Kit</div>
+                        <div class="font-serif text-4xl mb-1">$79</div>
+                        <div class="text-xs text-forest-900/60 mb-6">Paint it yourself</div>
+                        <ul class="space-y-3 text-sm text-forest-900/85 mb-8 flex-1">
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Hand-sculpted figurine from your photos</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Unpainted, primer-ready resin</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Starter brush + 6 acrylic paints</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Step-by-step paint guide</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Display base included</li>
+                        </ul>
+                        <button data-tier="diy" data-price="79" class="select-tier btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Start with DIY — $79
+                        </button>
+                    </div>
+                </article>
+
+                <!-- STANDARD (Most Popular) -->
+                <article class="bg-sand-50 border-2 border-honey-600/40 rounded-3xl overflow-hidden card-hover shadow-glow fade-in flex flex-col relative">
+                    <div style="position:absolute;top:14px;right:14px;background:var(--honey-600);color:#1a1108;font-size:10px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:5px 11px;border-radius:9999px;z-index:2;">Most Popular</div>
+                    <div class="aspect-[16/10] overflow-hidden bg-sand-200">
+                        <img src="images/CustomPrintsHero.JPG" alt="Standard finished custom figurine — fully painted, ready to display" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider text-forest-700 font-semibold mb-2">Standard Finished</div>
+                        <div class="font-serif text-4xl mb-1">$179</div>
+                        <div class="text-xs text-forest-900/60 mb-6">Fully painted, ready to display</div>
+                        <ul class="space-y-3 text-sm text-forest-900/85 mb-8 flex-1">
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Everything in DIY Kit</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Hand-painted by our team</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Premium matte sealant</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Engraved display base</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Discounted upgrades</li>
+                        </ul>
+                        <button data-tier="standard" data-price="179" class="select-tier btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Choose Standard — $179
+                        </button>
+                    </div>
+                </article>
+
+                <!-- PREMIUM PHOTO-MATCHED -->
+                <article class="bg-sand-50 border border-sand-200 rounded-3xl overflow-hidden card-hover shadow-soft fade-in flex flex-col">
+                    <div class="aspect-[16/10] overflow-hidden bg-sand-200">
+                        <img src="images/CustomPrintsAngled.JPG" alt="Premium photo-matched custom figurine — gallery-grade likeness with detail painting" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="text-xs uppercase tracking-wider text-forest-700 font-semibold mb-2">Premium Photo-Matched</div>
+                        <div class="font-serif text-4xl mb-1">$349</div>
+                        <div class="text-xs text-honey-700 font-semibold mb-6">Gallery-grade likeness</div>
+                        <ul class="space-y-3 text-sm text-forest-900/85 mb-8 flex-1">
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Everything in Standard</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Multi-photo facial sculpting</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Custom pose & accessories</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Every upgrade included</li>
+                            <li class="flex gap-2"><span class="text-honey-600 font-bold">✓</span> Signed certificate of authenticity</li>
+                        </ul>
+                        <button data-tier="premium" data-price="349" class="select-tier btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Claim Premium — $349
+                        </button>
+                    </div>
+                </article>
+
+            </div>
+
+            <p class="text-center text-xs text-forest-900/60 mt-8 max-w-xl mx-auto fade-in">
+                Every figurine is hand-sculpted from your photos. DIY kits or fully finished — your character, your pet, your way.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ CONFIGURATOR ============ -->
+    <section id="configurator" class="relative overflow-hidden">
+
+        <!-- Wizard-specific styling (scoped to #configurator) -->
+        <style>
+            #configurator {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                padding: 0;
+            }
+            #configurator .wiz-shell {
+                flex: 1 1 auto;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                max-width: 80rem;
+                margin: 0 auto;
+                padding: 1.25rem 1.25rem 2rem;
+            }
+            @media (min-width: 1024px) {
+                #configurator .wiz-shell {
+                    padding: 1.75rem 2rem 3rem;
+                }
+            }
+
+            /* WIZARD HEADER */
+            #configurator .wiz-header {
+                position: sticky;
+                top: 4.5rem;
+                z-index: 5;
+                background:
+                    radial-gradient(70% 100% at 50% 0%, rgba(245,197,96,0.12) 0%, transparent 70%),
+                    linear-gradient(180deg, rgba(6,31,16,0.92) 0%, rgba(13,58,32,0.78) 100%);
+                backdrop-filter: blur(14px) saturate(1.1);
+                -webkit-backdrop-filter: blur(14px) saturate(1.1);
+                border: 1px solid rgba(245,197,96,0.22);
+                border-radius: 1.25rem;
+                padding: 0.85rem 1.1rem;
+                box-shadow:
+                    inset 0 1px 0 rgba(255,255,255,0.06),
+                    0 12px 30px -16px rgba(0,0,0,0.6);
+                margin-bottom: 1.25rem;
+            }
+            @media (min-width: 768px) {
+                #configurator .wiz-header { padding: 1rem 1.4rem; }
+            }
+
+            #configurator .wiz-header-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            #configurator .wiz-step-label {
+                color: rgba(235,242,230,0.92);
+            }
+            #configurator .wiz-step-eyebrow {
+                color: var(--honey-400);
+                font-size: 11px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+            #configurator .wiz-step-title {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.35rem;
+                line-height: 1.2;
+                margin-top: 2px;
+                color: var(--sand-50);
+            }
+            @media (min-width: 768px) {
+                #configurator .wiz-step-title { font-size: 1.6rem; }
+            }
+
+            /* Live mini-price chip */
+            #configurator .wiz-price-chip {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.65rem;
+                padding: 0.55rem 0.95rem 0.55rem 0.75rem;
+                border-radius: 9999px;
+                background: linear-gradient(180deg, rgba(245,197,96,0.18), rgba(245,197,96,0.08));
+                border: 1px solid rgba(245,197,96,0.42);
+                box-shadow:
+                    inset 0 1px 0 rgba(255,255,255,0.08),
+                    0 6px 18px -10px rgba(240,165,0,0.5);
+            }
+            #configurator .wiz-price-chip .chip-tier {
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: rgba(235,242,230,0.7);
+                font-weight: 600;
+            }
+            #configurator .wiz-price-chip .chip-tier-name {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 0.95rem;
+                color: var(--sand-50);
+                line-height: 1;
+                margin-top: 1px;
+            }
+            #configurator .wiz-price-chip .chip-total {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.65rem;
+                line-height: 1;
+                color: var(--honey-400);
+                font-weight: 600;
+                padding-left: 0.65rem;
+                border-left: 1px solid rgba(245,197,96,0.35);
+            }
+
+            /* SAVINGS pill */
+            #configurator .wiz-savings-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.45rem 0.85rem;
+                border-radius: 9999px;
+                background: linear-gradient(180deg, rgba(52,211,153,0.22), rgba(16,185,129,0.10));
+                border: 1px solid rgba(110,231,183,0.45);
+                color: var(--save-400);
+                font-size: 0.78rem;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 18px -10px rgba(16,185,129,0.45);
+                animation: savingsPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            #configurator .wiz-savings-pill .wsp-eyebrow {
+                font-size: 9.5px;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: rgba(110,231,183,0.85);
+                font-weight: 700;
+            }
+            #configurator .wiz-savings-pill .wsp-amount {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.15rem;
+                line-height: 1;
+                color: var(--save-400);
+                font-weight: 700;
+            }
+            #configurator .wiz-savings-pill svg {
+                color: var(--save-400);
+                flex-shrink: 0;
+            }
+
+            @keyframes savingsPop {
+                0% { transform: scale(0.85); opacity: 0; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+
+            #configurator .save-pct {
+                display: inline-block;
+                margin-left: 0.35rem;
+                padding: 0.08rem 0.45rem;
+                border-radius: 9999px;
+                font-size: 0.66rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                background: rgba(52,211,153,0.18);
+                color: var(--save-700);
+                border: 1px solid rgba(16,185,129,0.35);
+                vertical-align: 0.05em;
+            }
+
+            #configurator .tag-strike {
+                color: rgba(13,58,32,0.40);
+                font-weight: 500;
+                margin-right: 0.15rem;
+            }
+            #configurator .tag-hero {
+                color: var(--honey-700);
+                font-weight: 700;
+            }
+            #configurator .tag-included {
+                color: var(--sage-600);
+                font-weight: 600;
+                font-size: 0.78rem;
+                letter-spacing: 0.02em;
+            }
+
+            /* Standard tier teaser */
+            #configurator .tier-card[data-value="standard"] .tier-save-teaser {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                margin: 0 0 0.85rem 0;
+                padding: 0.4rem 0.7rem;
+                border-radius: 9999px;
+                background: rgba(52,211,153,0.12);
+                border: 1px solid rgba(110,231,183,0.30);
+                color: var(--save-400);
+                font-size: 0.74rem;
+                font-weight: 600;
+                letter-spacing: 0.01em;
+            }
+            #configurator .tier-card[data-value="standard"] .tier-save-teaser .tst-dot {
+                color: var(--save-400);
+                font-size: 0.55rem;
+                line-height: 1;
+            }
+            #configurator .tier-card[data-value="standard"] .tier-save-teaser strong {
+                color: var(--save-400);
+                font-weight: 700;
+            }
+
+            /* Final review savings row */
+            #configurator .review-savings-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                gap: 1rem;
+                margin-top: 1rem;
+                padding: 0.85rem 1rem;
+                border-radius: 0.75rem;
+                background: linear-gradient(180deg, rgba(52,211,153,0.14), rgba(16,185,129,0.06));
+                border: 1px solid rgba(110,231,183,0.30);
+                color: var(--save-400);
+                font-size: 0.85rem;
+            }
+            #configurator .review-savings-row .rsr-label {
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                font-size: 0.7rem;
+                margin-right: 0.4rem;
+            }
+            #configurator .review-savings-row .rsr-amount {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: var(--save-400);
+                letter-spacing: -0.01em;
+            }
+
+            @media (max-width: 640px) {
+                #configurator .wiz-savings-pill {
+                    margin-top: 0.25rem;
+                    flex-basis: 100%;
+                    justify-content: center;
+                }
+            }
+
+            /* PROGRESS PILLS */
+            #configurator .wiz-pills {
+                display: flex;
+                gap: 0.4rem;
+                margin-top: 0.85rem;
+                overflow-x: auto;
+                scrollbar-width: none;
+                padding-bottom: 2px;
+            }
+            #configurator .wiz-pills::-webkit-scrollbar { display: none; }
+            #configurator .wiz-pill {
+                flex: 1 1 0;
+                min-width: 28px;
+                height: 6px;
+                border-radius: 99px;
+                background: rgba(235,242,230,0.10);
+                border: 1px solid rgba(235,242,230,0.06);
+                transition: background 280ms ease, border-color 280ms ease;
+                cursor: pointer;
+            }
+            #configurator .wiz-pill.done {
+                background: linear-gradient(90deg, var(--honey-700), var(--honey-400));
+                border-color: rgba(245,197,96,0.45);
+            }
+            #configurator .wiz-pill.current {
+                background: linear-gradient(90deg, var(--honey-600), var(--honey-400));
+                border-color: rgba(245,197,96,0.65);
+                box-shadow: 0 0 0 3px rgba(245,197,96,0.18);
+            }
+
+            /* STAGE */
+            #configurator .wiz-stage {
+                position: relative;
+                flex: 1 1 auto;
+            }
+            #configurator .wiz-step {
+                display: none;
+                opacity: 0;
+                transform: translateY(10px);
+                transition: opacity 320ms cubic-bezier(.2,.7,.2,1), transform 320ms cubic-bezier(.2,.7,.2,1);
+            }
+            #configurator .wiz-step.active { display: block; }
+            #configurator .wiz-step.entering {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Inner card */
+            #configurator .wiz-card {
+                background:
+                    radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.85) 0%, transparent 60%),
+                    linear-gradient(180deg, #ffffff 0%, var(--sand-50) 60%, #e3ecdb 100%);
+                border: 1px solid rgba(30,107,58,0.25);
+                border-radius: 1.5rem;
+                box-shadow:
+                    var(--shadow-soft),
+                    inset 0 1px 0 rgba(255,255,255,0.85),
+                    0 18px 50px -22px rgba(13,58,32,0.45);
+                padding: 1.5rem 1.25rem 1.75rem;
+                position: relative;
+                overflow: hidden;
+            }
+            @media (min-width: 768px) {
+                #configurator .wiz-card { padding: 2.25rem 2rem; }
+            }
+            @media (min-width: 1024px) {
+                #configurator .wiz-card { padding: 2.75rem 3rem; }
+            }
+            #configurator .wiz-card::after {
+                content: '';
+                position: absolute; inset: 0;
+                pointer-events: none;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.22  0 0 0 0 0.13  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+                mix-blend-mode: multiply;
+                opacity: 0.5;
+                border-radius: inherit;
+            }
+            #configurator .wiz-card > * { position: relative; z-index: 1; }
+
+            #configurator .wiz-card h3 {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: clamp(1.85rem, 3.6vw, 2.65rem);
+                line-height: 1.08;
+                letter-spacing: -0.015em;
+                color: var(--forest-900);
+                margin: 0 0 0.5rem;
+            }
+            #configurator .wiz-card h3 em {
+                color: var(--honey-700);
+                font-style: italic;
+            }
+            #configurator .wiz-card .wiz-card-sub {
+                color: rgba(13,58,32,0.7);
+                max-width: 42rem;
+                margin-bottom: 1.75rem;
+            }
+            #configurator .wiz-card .wiz-card-hint {
+                display: inline-block;
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--honey-700);
+                background: rgba(240,165,0,0.12);
+                border: 1px solid rgba(240,165,0,0.32);
+                border-radius: 9999px;
+                padding: 0.3rem 0.7rem;
+                margin-bottom: 1rem;
+            }
+            #configurator .wiz-card-meta {
+                font-size: 0.78rem;
+                color: rgba(13,58,32,0.55);
+                margin-top: 1rem;
+            }
+
+            /* TIER HERO CARDS */
+            #configurator .tier-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            @media (min-width: 768px) {
+                #configurator .tier-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1.25rem;
+                }
+            }
+
+            #configurator .tier-card.opt {
+                text-align: left;
+                padding: 1.4rem 1.4rem 1.5rem;
+                border-radius: 1.25rem;
+                min-height: 240px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                position: relative;
+                border-width: 2px;
+            }
+            @media (min-width: 768px) {
+                #configurator .tier-card.opt {
+                    min-height: 320px;
+                    padding: 1.75rem 1.6rem 1.75rem;
+                }
+            }
+            #configurator .tier-card .tier-eyebrow {
+                font-size: 10px;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                font-weight: 700;
+                color: var(--honey-700);
+                margin-bottom: 0.4rem;
+            }
+            #configurator .tier-card .tier-name {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.95rem;
+                line-height: 1.05;
+                margin-bottom: 0.35rem;
+            }
+            @media (min-width: 768px) {
+                #configurator .tier-card .tier-name { font-size: 2.35rem; }
+            }
+            #configurator .tier-card .tier-price {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.5rem;
+                color: var(--forest-900);
+                margin-bottom: 0.85rem;
+            }
+            #configurator .tier-card .tier-price small {
+                font-size: 0.75rem;
+                font-family: 'Inter', sans-serif;
+                color: rgba(13,58,32,0.55);
+                font-weight: 500;
+                margin-left: 0.25rem;
+            }
+            #configurator .tier-card .tier-blurb {
+                font-size: 0.875rem;
+                color: rgba(13,58,32,0.72);
+                line-height: 1.5;
+                margin-bottom: 0.85rem;
+            }
+            #configurator .tier-card .tier-cta {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.82rem;
+                font-weight: 700;
+                color: var(--honey-700);
+            }
+            #configurator .tier-card .tier-badge {
+                position: absolute;
+                top: 0.85rem;
+                right: 0.85rem;
+                background: var(--honey-600);
+                color: #1a1108;
+                font-size: 9.5px;
+                font-weight: 800;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                padding: 4px 9px;
+                border-radius: 9999px;
+            }
+
+            /* OPT GRIDS */
+            #configurator .opt-grid-2 {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0.85rem;
+            }
+            @media (min-width: 640px) {
+                #configurator .opt-grid-2 { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            }
+            #configurator .opt-grid-3 {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0.85rem;
+            }
+            @media (min-width: 640px) {
+                #configurator .opt-grid-3 { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+            }
+            #configurator .finish-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            @media (min-width: 640px) {
+                #configurator .finish-grid { grid-template-columns: repeat(5, 1fr); }
+            }
+            #configurator .trim-color-row {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            @media (min-width: 640px) {
+                #configurator .trim-color-row { grid-template-columns: repeat(4, 1fr); }
+            }
+            #configurator .names-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0.85rem;
+            }
+            @media (min-width: 640px) {
+                #configurator .names-grid { grid-template-columns: repeat(2, 1fr); }
+            }
+            #configurator .names-grid .opt {
+                padding: 1.1rem 1.1rem;
+                border-radius: 1rem;
+                text-align: left;
+            }
+            #configurator .names-grid .opt-blurb {
+                font-size: 0.78rem;
+                color: rgba(13,58,32,0.62);
+                margin-top: 0.3rem;
+                line-height: 1.4;
+            }
+
+            /* Selected color summary */
+            #configurator .selected-summary {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                padding: 0.7rem 0.9rem;
+                background: rgba(30,107,58,0.06);
+                border: 1px solid rgba(30,107,58,0.16);
+                border-radius: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            /* SWATCH GRID */
+            #configurator #swatchGrid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.6rem;
+            }
+            @media (min-width: 640px) {
+                #configurator #swatchGrid { grid-template-columns: repeat(8, 1fr); }
+            }
+
+            /* FOOT NAV */
+            #configurator .wiz-foot {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 1rem;
+                margin-top: 1.25rem;
+                flex-wrap: wrap;
+            }
+            #configurator .wiz-back {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                padding: 0.7rem 1.1rem;
+                border-radius: 9999px;
+                background: rgba(235,242,230,0.10);
+                color: rgba(235,242,230,0.85);
+                border: 1px solid rgba(245,197,96,0.25);
+                font-size: 0.82rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 180ms ease, border-color 180ms ease;
+            }
+            #configurator .wiz-back:hover {
+                background: rgba(235,242,230,0.16);
+                border-color: rgba(245,197,96,0.45);
+            }
+            #configurator .wiz-continue {
+                padding: 0.85rem 1.5rem;
+                font-size: 0.86rem;
+            }
+
+            /* REVIEW CARD */
+            #configurator .review-card {
+                background:
+                    radial-gradient(80% 60% at 100% 0%, rgba(245,197,96,0.20) 0%, transparent 65%),
+                    radial-gradient(60% 70% at 0% 100%, rgba(16,185,129,0.18) 0%, transparent 65%),
+                    linear-gradient(135deg, #1e6b3a 0%, #134e2b 50%, #061f10 100%);
+                border: 1px solid rgba(245,197,96,0.28);
+                border-radius: 1.5rem;
+                padding: 2rem 1.5rem;
+                box-shadow: 0 24px 60px -20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+                position: relative;
+                overflow: hidden;
+            }
+            @media (min-width: 768px) {
+                #configurator .review-card { padding: 2.5rem 2.25rem; }
+            }
+            #configurator .review-card h3 {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: clamp(1.85rem, 3.6vw, 2.65rem);
+                line-height: 1.08;
+                letter-spacing: -0.015em;
+                margin: 0 0 0.5rem;
+            }
+            #configurator .review-card .wiz-card-hint {
+                display: inline-block;
+                font-size: 11px;
+                font-weight: 600;
+                border-radius: 9999px;
+                padding: 0.3rem 0.7rem;
+                margin-bottom: 1rem;
+            }
+
+            #configurator .opt:focus-visible,
+            #configurator .wiz-back:focus-visible,
+            #configurator .wiz-continue:focus-visible,
+            #configurator .wiz-pill:focus-visible {
+                outline: 3px solid rgba(245,197,96,0.55);
+                outline-offset: 2px;
+            }
+
+            @media (max-width: 640px) {
+                #configurator .wiz-header { top: 4rem; padding: 0.75rem 0.9rem; border-radius: 1rem; }
+                #configurator .wiz-step-title { font-size: 1.15rem; }
+                #configurator .wiz-price-chip { padding: 0.4rem 0.75rem 0.4rem 0.6rem; gap: 0.5rem; }
+                #configurator .wiz-price-chip .chip-total { font-size: 1.3rem; padding-left: 0.5rem; }
+                #configurator .wiz-card { padding: 1.25rem 1rem 1.4rem; border-radius: 1.25rem; }
+                #configurator .wiz-card h3 { font-size: 1.55rem; }
+                #configurator .review-card { padding: 1.4rem 1.1rem; }
+            }
+        </style>
+
+        <div class="wiz-shell">
+
+            <!-- ============ STICKY WIZARD HEADER ============ -->
+            <div class="wiz-header" role="region" aria-label="Configurator progress">
+                <div class="wiz-header-row">
+                    <div class="wiz-step-label">
+                        <div class="wiz-step-eyebrow">
+                            Step <span id="wizStepNum">1</span> of 8
+                        </div>
+                        <div class="wiz-step-title" id="wizStepTitle">Choose Your Tier</div>
+                    </div>
+
+                    <div style="display:inline-flex; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+                        <div class="wiz-price-chip" aria-live="polite">
+                            <div>
+                                <div class="chip-tier">Live total</div>
+                                <div class="chip-tier-name"><span id="tierLabel">DIY Kit</span></div>
+                            </div>
+                            <div class="chip-total" id="priceTotal">$79</div>
+                        </div>
+
+                        <div class="wiz-savings-pill hidden" id="wizSavingsPill" aria-live="polite" role="status">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <path d="M20 6L9 17l-5-5" />
+                            </svg>
+                            <div style="display:flex;flex-direction:column;line-height:1.1;">
+                                <span class="wsp-eyebrow">You're saving</span>
+                                <span class="wsp-amount" id="wizSavingsAmount">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wiz-pills" id="wizPills" role="tablist" aria-label="Wizard steps"></div>
+            </div>
+
+            <!-- ============ STAGE ============ -->
+            <div class="wiz-stage" id="wizStage">
+
+                <!-- ===== STEP 1 — TIER ===== -->
+                <section class="wiz-step active entering" data-step="1" role="tabpanel" aria-labelledby="wizStepTitle">
+                    <div class="wiz-card">
+                        <span class="wiz-card-hint">Start here · The foundation of your figurine</span>
+                        <h3>Choose Your <em>Tier</em>.</h3>
+                        <p class="wiz-card-sub">DIY kits or fully finished. Your character. Your pet. Your way. Higher tiers bake every upgrade in — you can fine-tune the rest in the next steps.</p>
+
+                        <div class="tier-grid">
+                            <button class="opt tier-card active rounded-2xl" data-group="tier" data-value="diy" aria-label="Choose DIY Kit, $79 base">
+                                <div>
+                                    <div class="tier-eyebrow">DIY Kit</div>
+                                    <div class="tier-name">DIY</div>
+                                    <div class="tier-price">$79 <small>base</small></div>
+                                    <div class="tier-blurb">Hand-sculpted figurine from your photos. Unpainted resin, paints, brush and step-by-step guide included.</div>
+                                </div>
+                                <span class="tier-cta">Select DIY →</span>
+                            </button>
+
+                            <button class="opt tier-card rounded-2xl" data-group="tier" data-value="standard" aria-label="Choose Standard Finished, $179 base, most popular">
+                                <span class="tier-badge">Most Popular</span>
+                                <div>
+                                    <div class="tier-eyebrow">Standard Finished</div>
+                                    <div class="tier-name">Standard</div>
+                                    <div class="tier-price">$179 <small>base</small></div>
+                                    <div class="tier-blurb">Fully painted by our team. Discounted upgrades across every option — premium finish, accessories and engraving all priced down.</div>
+                                </div>
+                                <span class="tier-cta">Select Standard →</span>
+                            </button>
+
+                            <button class="opt tier-card rounded-2xl" data-group="tier" data-value="premium" aria-label="Choose Premium Photo-Matched, $349 base, gallery grade">
+                                <div>
+                                    <div class="tier-eyebrow">Premium Photo-Matched</div>
+                                    <div class="tier-name">Premium</div>
+                                    <div class="tier-price">$349 <small>base</small></div>
+                                    <div class="tier-blurb">Gallery-grade likeness. Multi-photo facial sculpting, custom pose, every upgrade included — no add-on fees, ever.</div>
+                                    <span class="tier-badge">Heirloom</span>
+                                </div>
+                                <span class="tier-cta">Select Premium →</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left"></div>
+                        <div class="wiz-foot-right">
+                            <span style="font-size:0.78rem;color:rgba(13,58,32,0.55);">Pick a tier to continue</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 2 — SUBJECT TYPE ===== -->
+                <section class="wiz-step" data-step="2" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                    <div class="wiz-card">
+                        <span class="wiz-card-hint" id="texturePriceHintWrap">
+                            <span id="texturePriceHint">Premium subject +$39 on DIY</span>
+                        </span>
+                        <h3>What Are We <em>Sculpting</em>?</h3>
+                        <p class="wiz-card-sub">A family member, yourself, or your pet. Multi-subject scenes get hand-sculpted as one connected piece. We'll match the photos you send in the intake form below.</p>
+
+                        <div class="opt-grid-2">
+                            <button class="opt active rounded-2xl p-4 text-left" data-group="texture" data-value="basic" aria-label="Single subject, free">
+                                <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                    <img src="images/CustomPrintsHero.JPG" alt="Single subject custom figurine — one person, character, or pet hand-sculpted from photos" class="w-full h-full object-cover">
+                                </div>
+                                <div class="font-semibold text-sm">Single Subject</div>
+                                <div class="text-[11px] opacity-75 mt-0.5">One person, character, or pet — free on all tiers</div>
+                            </button>
+                            <button class="opt rounded-2xl p-4 text-left" data-group="texture" data-value="silk" aria-label="Premium subject, upgrade">
+                                <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                    <img src="images/CustomPrintsAngled.JPG" alt="Premium subject custom figurine — couple, family, or owner-and-pet duo hand-sculpted as one connected piece" class="w-full h-full object-cover">
+                                </div>
+                                <div class="font-semibold text-sm">Duo / Family Scene <span id="silkPriceTag" class="text-honey-600">+$39</span></div>
+                                <div class="text-[11px] opacity-75 mt-0.5">Two subjects sculpted together (e.g. you + your dog)</div>
+                            </button>
+                        </div>
+                        <p class="wiz-card-meta">Larger groups (3+) available — just mention it in your intake form and we'll quote it.</p>
+                    </div>
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left">
+                            <button class="btn-ghost wiz-back" data-wiz-back aria-label="Go back">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 3 — PALETTE / OUTFIT COLORS ===== -->
+                <section class="wiz-step" data-step="3" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                    <div class="wiz-card">
+                        <span class="wiz-card-hint">
+                            <span id="paletteLabel">Standard palette</span>
+                        </span>
+                        <h3>Pick Your <em>Paint Palette</em>.</h3>
+                        <p class="wiz-card-sub">Tap up to four colors we'll use for clothing, accessories, and base accents. Tap again to remove. The order you tap is the priority order our painter follows.</p>
+
+                        <div id="swatchGrid" aria-label="Available paint colors"></div>
+
+                        <div class="selected-summary">
+                            <div>
+                                <span style="color:rgba(13,58,32,0.55);font-size:0.78rem;">Selected:</span>
+                                <strong id="selectedColors" style="color:var(--forest-900);margin-left:4px;">Forest, Cream, Navy, Burgundy</strong>
+                            </div>
+                            <div style="font-size:0.78rem;color:rgba(13,58,32,0.55);">
+                                <span id="swatchCount">4</span> of 4 chosen
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left">
+                            <button class="btn-ghost wiz-back" data-wiz-back>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                                Back
+                            </button>
+                        </div>
+                        <div class="wiz-foot-right">
+                            <button class="btn-primary wiz-continue" data-wiz-next>
+                                Continue
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 4 — POSE / ACCESSORY ===== -->
+                <section class="wiz-step" data-step="4" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                    <div class="wiz-card">
+                        <span class="wiz-card-hint">
+                            <span id="robberPriceHint">Action pose +$10 • Custom +$75</span>
+                        </span>
+                        <h3>Pose &amp; <em>Accessory</em>.</h3>
+                        <p class="wiz-card-sub">Every figurine ships in a confident standing pose by default. Add motion or a hand-sculpted accessory (instrument, sports gear, prop) to make it unmistakably theirs.</p>
+
+                        <div class="opt-grid-3">
+                            <button class="opt active rounded-2xl p-4 text-left" data-group="robber" data-value="classic" aria-label="Standing Pose, free">
+                                <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                    <img src="images/CustomPrintsHero.JPG" alt="Standing pose custom figurine — classic confident stance, hands at sides" class="w-full h-full object-cover">
+                                </div>
+                                <div class="font-semibold text-sm">Standing Pose</div>
+                                <div class="text-[11px] opacity-75 mt-0.5">Default, free</div>
+                            </button>
+                            <button class="opt rounded-2xl p-4 text-left" data-group="robber" data-value="victorious" aria-label="Action Pose upgrade">
+                                <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                    <img src="images/CustomPrintsAngled.JPG" alt="Action pose custom figurine — dynamic stance, mid-motion" class="w-full h-full object-cover">
+                                </div>
+                                <div class="font-semibold text-sm">Action Pose <span id="victoriousPriceTag" class="text-honey-600">+$10</span></div>
+                                <div class="text-[11px] opacity-75 mt-0.5">Dynamic motion — sports, dancing, jumping</div>
+                            </button>
+                            <button class="opt rounded-2xl p-4 text-left" data-group="robber" data-value="custom" aria-label="Custom accessory, plus 75 dollars">
+                                <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
+                                    <img src="images/CustomPrintsAngled.JPG" alt="Custom accessory figurine — hand-sculpted prop like a guitar, ball, or tool" class="w-full h-full object-cover">
+                                </div>
+                                <div class="font-semibold text-sm">Custom Accessory <span class="text-honey-600">+$75</span></div>
+                                <div class="text-[11px] opacity-75 mt-0.5">Hand-sculpted prop — describe it in intake</div>
+                            </button>
+                        </div>
+                        <p class="wiz-card-meta">Custom Accessory is a flat $75 across all tiers — every prop gets the same hand-sculpting time.</p>
+                    </div>
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left">
+                            <button class="btn-ghost wiz-back" data-wiz-back>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 5 — DISPLAY BASE FINISH ===== -->
+                <section class="wiz-step" data-step="5" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                    <div class="wiz-card">
+                        <span class="wiz-card-hint">
+                            <span id="finishPriceHint">+$29 on DIY for non-default</span>
+                        </span>
+                        <h3>Display Base <em>Finish</em>.</h3>
+                        <p class="wiz-card-sub">Every figurine sits on a hand-finished display base. Forest Green is standard. The other four are popular hand-applied stains. Free on Premium.</p>
+
+                        <div class="finish-grid">
+                            <button class="opt active rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="bombay" aria-label="Forest Green base, default">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#1e6b3a;"></div>
+                                Forest Green
+                            </button>
+                            <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="chestnut" aria-label="Walnut Wood finish">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#7a4423;"></div>
+                                Walnut Wood
+                            </button>
+                            <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="early-american" aria-label="Slate Marble finish">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#3a4a52;"></div>
+                                Slate Marble
+                            </button>
+                            <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="special-walnut" aria-label="Matte Black finish">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#1a1a1a;"></div>
+                                Matte Black
+                            </button>
+                            <button class="opt rounded-xl py-3 px-2 text-xs" data-group="finish" data-value="golden-oak" aria-label="Brushed Gold finish">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#b88a4a;"></div>
+                                Brushed Gold
+                            </button>
+                        </div>
+                        <p class="wiz-card-meta">Switch to any non-default finish for the listed upgrade fee — free on Premium.</p>
+                    </div>
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left">
+                            <button class="btn-ghost wiz-back" data-wiz-back>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 6 — PAINT FINISH (texture + color) ===== -->
+                <section class="wiz-step" data-step="6" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                    <div class="wiz-card">
+                        <span class="wiz-card-hint">
+                            <span id="trimPriceHint">Metallic +$25 on DIY</span>
+                        </span>
+                        <h3>Paint <em>Finish &amp; Accent</em>.</h3>
+                        <p class="wiz-card-sub">First the paint texture across the figurine, then the accent color for highlights (eyes, base trim, signature detail). Metallic adds a premium shimmer.</p>
+
+                        <!-- Paint texture -->
+                        <div style="font-size:11px;font-weight:600;color:rgba(13,58,32,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.65rem;">Paint Finish</div>
+                        <div class="opt-grid-2" style="margin-bottom:1.5rem;">
+                            <button class="opt active rounded-2xl p-4 text-left" data-group="trim" data-value="basic" aria-label="Matte finish, free">
+                                <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200" style="background: linear-gradient(135deg,#1e6b3a 0%, #134e2b 100%);"></div>
+                                <div class="font-semibold text-sm">Matte</div>
+                                <div class="text-[11px] opacity-75 mt-0.5">Soft, photo-realistic — free on all tiers</div>
+                            </button>
+                            <button class="opt rounded-2xl p-4 text-left" data-group="trim" data-value="silk" aria-label="Metallic finish, premium upgrade">
+                                <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200" style="background: linear-gradient(135deg,#f0a500 0%, #f5c560 50%, #b87900 100%);"></div>
+                                <div class="font-semibold text-sm">Metallic <span id="trimPriceTag" class="text-honey-600">+$25</span></div>
+                                <div class="text-[11px] opacity-75 mt-0.5">Premium shimmer on accents and highlights</div>
+                            </button>
+                        </div>
+
+                        <!-- Accent color -->
+                        <div style="font-size:11px;font-weight:600;color:rgba(13,58,32,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.65rem;">Accent Color</div>
+                        <div class="trim-color-row">
+                            <button class="trim-color-opt opt active rounded-xl py-3 px-2 text-xs text-center" data-color="Emerald" aria-label="Emerald accent color">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#10b981;"></div>
+                                Emerald
+                            </button>
+                            <button class="trim-color-opt opt rounded-xl py-3 px-2 text-xs text-center" data-color="Gold" aria-label="Gold accent color">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#f0a500;"></div>
+                                Gold
+                            </button>
+                            <button class="trim-color-opt opt rounded-xl py-3 px-2 text-xs text-center" data-color="Burgundy" aria-label="Burgundy accent color">
+                                <div class="w-full h-6 rounded mb-1.5" style="background:#7a1f2b;"></div>
+                                Burgundy
+                            </button>
+                            <button class="trim-color-opt opt rounded-xl py-3 px-2 text-xs text-center" data-color="Ivory" aria-label="Ivory accent color">
+                                <div class="w-full h-6 rounded mb-1.5 border border-sand-300" style="background:#f5f5f0;"></div>
+                                Ivory
+                            </button>
+                        </div>
+                    </div>
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left">
+                            <button class="btn-ghost wiz-back" data-wiz-back>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                                Back
+                            </button>
+                        </div>
+                        <div class="wiz-foot-right">
+                            <button class="btn-primary wiz-continue" data-wiz-next>
+                                Continue
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 7 — ENGRAVING / NAMEPLATE ===== -->
+                <section class="wiz-step" data-step="7" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                    <div class="wiz-card">
+                        <span class="wiz-card-hint">
+                            <span id="namesPriceHint">+$49 on DIY</span>
+                        </span>
+                        <h3>Engraved <em>Nameplate</em>.</h3>
+                        <p class="wiz-card-sub">Add an engraved nameplate to the display base. Perfect for gifting, memorial pieces, or just making it unmistakably theirs.</p>
+
+                        <div class="names-grid">
+                            <button class="opt active" data-group="names" data-value="none" aria-label="Skip nameplate">
+                                <div class="font-semibold">No Nameplate</div>
+                                <div class="opt-blurb">Keep the base clean — no engraving.</div>
+                            </button>
+                            <button class="opt" data-group="names" data-value="add" aria-label="Add engraved nameplate">
+                                <div class="font-semibold">Add Engraved Nameplate <span id="namesPriceTag" class="text-honey-600" style="font-weight:600;">+$49</span></div>
+                                <div class="opt-blurb">Up to 30 characters — name, date, or short phrase.</div>
+                            </button>
+                        </div>
+
+                        <div id="namesInputRow" class="hidden" style="margin-top:1.5rem;">
+                            <label for="namesInput" class="block" style="font-size:11px;font-weight:600;color:rgba(13,58,32,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.5rem;">Enter engraving text (we'll send a mockup before we engrave):</label>
+                            <input id="namesInput" type="text" placeholder="e.g. Bella · 2018–2024" class="w-full px-4 py-3 rounded-xl text-sm" maxlength="30">
+                            <p class="wiz-card-meta">Up to 30 characters. We'll send a mockup before we engrave anything.</p>
+                        </div>
+                    </div>
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left">
+                            <button class="btn-ghost wiz-back" data-wiz-back>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                                Back
+                            </button>
+                        </div>
+                        <div class="wiz-foot-right">
+                            <button class="btn-primary wiz-continue" data-wiz-next>
+                                Review my figurine
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 8 — REVIEW ===== -->
+                <section class="wiz-step" data-step="8" role="tabpanel" aria-labelledby="wizStepTitle" hidden>
+                    <div class="review-card">
+                        <span class="wiz-card-hint" style="background:rgba(245,197,96,0.18);color:var(--honey-400);border-color:rgba(245,197,96,0.4);border-style:solid;border-width:1px;">Final step · Review &amp; lock it in</span>
+                        <h3 style="color:var(--sand-50);">Your <em style="color:var(--honey-400);">Custom Figurine</em>.</h3>
+                        <p class="wiz-card-sub" style="color:rgba(235,242,230,0.75);">Here's everything you've chosen. Checkout now — and after payment we'll send the intake form to collect your photos and any custom details.</p>
+
+                        <div style="display:grid;grid-template-columns:1fr;gap:2rem;align-items:start;" class="lg:grid-cols-3">
+
+                            <div style="grid-column: span 1;" class="lg:col-span-2">
+                                <div id="breakdown" class="text-sm text-sand-100/85" style="padding-top:1.25rem;border-top:1px solid rgba(235,242,230,0.10); display: flex; flex-direction: column; gap: 0.5rem;"></div>
+                            </div>
+
+                            <div>
+                                <div style="text-align:right;margin-bottom:1rem;">
+                                    <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--honey-400);font-weight:600;">Your Total</div>
+                                    <div id="priceTotalBig" class="font-serif" style="font-size:3rem;line-height:1;color:var(--sand-50);margin-top:0.25rem;">$79</div>
+                                </div>
+                                <button id="addToCart" class="btn-primary w-full px-6 py-4 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2">
+                                    Checkout Securely
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                                </button>
+                                <div id="checkoutError" class="hidden mt-3 text-[12px] text-center bg-red-500/15 border border-red-500/30 text-red-200 rounded-xl px-3 py-2"></div>
+                                <div class="mt-3 text-[11px] text-center text-sand-100/60">
+                                    🔒 Secure Stripe checkout • ✓ 60-day guarantee • ✓ Ships in 2–3 weeks
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wiz-foot">
+                        <div class="wiz-foot-left">
+                            <button class="btn-ghost wiz-back" data-wiz-back style="color:rgba(235,242,230,0.85);border-color:rgba(245,197,96,0.25);background:rgba(235,242,230,0.10);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                                Back
+                            </button>
+                        </div>
+                        <div class="wiz-foot-right">
+                            <button class="btn-ghost wiz-back" data-wiz-restart style="color:rgba(235,242,230,0.85);border-color:rgba(245,197,96,0.25);background:rgba(235,242,230,0.10);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>
+                                Start Over
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ POST-PURCHASE INTAKE FORM ============ -->
+    <section id="intake" class="py-20 lg:py-28">
+        <div class="max-w-3xl mx-auto px-5 lg:px-8">
+            <div class="text-center mb-10 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] text-honey-600 font-semibold mb-4">After You Check Out</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">
+                    Send Us <span class="italic text-honey-600">Your Photos.</span>
+                </h2>
+                <p class="mt-4 text-forest-900/75 max-w-xl mx-auto">This is the intake form you'll receive immediately after checkout. The more we know, the closer the sculpt — and yes, you'll see a digital mockup before we touch the printer.</p>
+            </div>
+
+            <form id="intakeForm" class="bg-sand-50 border border-sand-200 rounded-3xl p-6 lg:p-10 fade-in" style="box-shadow: var(--shadow-soft);" onsubmit="event.preventDefault(); handleIntakeSubmit();">
+
+                <!-- Subject details -->
+                <div class="mb-8">
+                    <h3 class="font-serif text-2xl text-forest-900 mb-1">Subject Details</h3>
+                    <p class="text-sm text-forest-900/65 mb-5">Who (or what) are we sculpting?</p>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Subject Name</label>
+                            <input type="text" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. Emma, Dad, Bella the corgi" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Subject Type</label>
+                            <select class="rp-input w-full px-4 py-3 rounded-xl text-sm">
+                                <option>Family member</option>
+                                <option>Self</option>
+                                <option>Pet</option>
+                                <option>Character / fictional</option>
+                                <option>Multi-subject scene</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Approximate Age</label>
+                            <input type="text" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. 34, or 'puppy'">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Hair / Fur Color</label>
+                            <input type="text" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. dark brown, golden, salt-and-pepper">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo upload -->
+                <div class="mb-8">
+                    <h3 class="font-serif text-2xl text-forest-900 mb-1">Reference Photos</h3>
+                    <p class="text-sm text-forest-900/65 mb-5">Upload 3–6 clear photos: at least one straight-on face, one profile, and one full-body or wide shot. Good lighting matters more than resolution.</p>
+
+                    <label for="photoUpload" style="display:block;border:2px dashed rgba(30,107,58,0.35);border-radius:1rem;padding:2rem 1.5rem;text-align:center;cursor:pointer;background:rgba(30,107,58,0.04);transition:background 180ms ease, border-color 180ms ease;" onmouseover="this.style.borderColor='var(--green)';this.style.background='rgba(30,107,58,0.08)';" onmouseout="this.style.borderColor='rgba(30,107,58,0.35)';this.style.background='rgba(30,107,58,0.04)';">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--green);margin:0 auto 0.5rem;display:block;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                        <div class="font-semibold text-sm text-forest-900">Click to upload photos</div>
+                        <div class="text-xs text-forest-900/60 mt-1">JPG, PNG, or HEIC up to 25MB each. 3–6 photos recommended.</div>
+                        <input id="photoUpload" type="file" multiple accept="image/*" style="display:none;">
+                    </label>
+                </div>
+
+                <!-- Character / pose details -->
+                <div class="mb-8">
+                    <h3 class="font-serif text-2xl text-forest-900 mb-1">Character &amp; Pose Notes</h3>
+                    <p class="text-sm text-forest-900/65 mb-5">Outfit, personality, signature props — the details that make it unmistakably them.</p>
+
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Outfit / Clothing</label>
+                            <input type="text" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. flannel + jeans, wedding dress, work uniform">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Accessories / Props</label>
+                            <input type="text" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. acoustic guitar, baseball bat, coffee mug">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Personality / Pose Notes</label>
+                        <textarea class="rp-textarea w-full px-4 py-3 rounded-xl text-sm" rows="4" placeholder="Anything that helps us capture them — favorite stance, signature smile, gestures, defining quirks. The more specific, the closer the likeness."></textarea>
+                    </div>
+                </div>
+
+                <!-- Engraving (conditional) -->
+                <div class="mb-8">
+                    <h3 class="font-serif text-2xl text-forest-900 mb-1">Engraving Text <span class="text-sm font-sans font-normal text-forest-900/55">(if selected)</span></h3>
+                    <p class="text-sm text-forest-900/65 mb-5">If you chose the engraved nameplate, what should it say?</p>
+                    <input type="text" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. Bella · 2018–2024" maxlength="30">
+                </div>
+
+                <!-- Special requests -->
+                <div class="mb-8">
+                    <h3 class="font-serif text-2xl text-forest-900 mb-1">Anything Else?</h3>
+                    <p class="text-sm text-forest-900/65 mb-5">Deadline, gift wrapping, rush production, multi-subject details — anything we should know.</p>
+                    <textarea class="rp-textarea w-full px-4 py-3 rounded-xl text-sm" rows="3" placeholder="Need it by a specific date? Birthday surprise? Let us know."></textarea>
+                </div>
+
+                <!-- Contact -->
+                <div class="mb-8">
+                    <h3 class="font-serif text-2xl text-forest-900 mb-1">How to Reach You</h3>
+                    <p class="text-sm text-forest-900/65 mb-5">We'll send your digital mockup to this email before we start printing.</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Email</label>
+                            <input type="email" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="you@example.com" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-forest-900/70 mb-2">Phone (optional)</label>
+                            <input type="tel" class="rp-input w-full px-4 py-3 rounded-xl text-sm" placeholder="(555) 555-5555">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary w-full px-6 py-4 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2">
+                    Send My Details
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                </button>
+                <p class="mt-4 text-center text-xs text-forest-900/55">You'll see this form for real after checkout. This is a preview so you know what to expect.</p>
+            </form>
+        </div>
+    </section>
+
+    <!-- ============ WHY THIS PIECE ============ -->
+    <section class="py-20 lg:py-28 bg-forest-900 text-sand-100 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-14 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] text-honey-400 font-semibold mb-4">From The Workshop</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--sand-50);">
+                    Why people <span class="italic text-honey-400">commission</span> us.
+                </h2>
+                <p class="mt-4 text-sand-100/75">Custom figurines used to mean $800 commissions and 3-month waits. We made the heirloom version accessible — DIY kits or fully finished. Your character. Your pet. Your way.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <figure class="bg-sand-50/5 rounded-2xl p-6">
+                    <div class="text-honey-400 font-bold text-sm mb-3">★★★★★</div>
+                    <blockquote class="text-sm leading-relaxed text-sand-100/90 mb-4">"Ordered the Premium tier for my parents' 40th. They both cried. Dad's tiny version is holding his actual fishing rod — it's perfect."</blockquote>
+                    <figcaption class="text-xs text-sand-100/55">— Maya R., Standard tier · Premium upgrade</figcaption>
+                </figure>
+                <figure class="bg-sand-50/5 rounded-2xl p-6">
+                    <div class="text-honey-400 font-bold text-sm mb-3">★★★★★</div>
+                    <blockquote class="text-sm leading-relaxed text-sand-100/90 mb-4">"Got the DIY kit of my golden retriever after he passed. Painting him myself was healing in a way I didn't expect. He sits on my desk now."</blockquote>
+                    <figcaption class="text-sand-100/55 text-xs">— Daniel K., DIY Kit</figcaption>
+                </figure>
+                <figure class="bg-sand-50/5 rounded-2xl p-6">
+                    <div class="text-honey-400 font-bold text-sm mb-3">★★★★★</div>
+                    <blockquote class="text-sm leading-relaxed text-sand-100/90 mb-4">"The photo-matched likeness is wild. My niece thought it was a toy of herself. Engraved 'World's Best Big Sis' on the base. Worth every cent."</blockquote>
+                    <figcaption class="text-sand-100/55 text-xs">— Priya N., Premium Photo-Matched</figcaption>
+                </figure>
+            </div>
+            <p class="text-center text-xs text-sand-100/55 mt-10 max-w-xl mx-auto fade-in">
+                Every figurine ships with a 60-day love-it guarantee — if it doesn't look like them, we'll resculpt it or refund you. No questions.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ FINAL URGENCY CTA ============ -->
+    <section class="py-20 lg:py-28 bg-sand-100">
+        <div class="max-w-5xl mx-auto px-5 lg:px-8 text-center fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-honey-600/10 text-honey-700 text-xs font-semibold mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-honey-600 pulse-dot"></span>
+                Only 8 Premium slots this month — 4 already claimed
+            </div>
+            <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl leading-tight">
+                The next figurine off the bench <br>could be <span class="italic text-honey-600">theirs.</span>
+            </h2>
+            <p class="mt-6 text-forest-900/80 text-lg max-w-xl mx-auto">
+                We sculpt three to four per week. Once this month's Premium slots are full, the next opening is 4–6 weeks out. Lock yours in now.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3 justify-center">
+                <a href="#configurator" class="btn-primary px-8 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                    Design Your Figurine
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                </a>
+                <a href="#tiers" class="btn-ghost px-8 py-4 rounded-full text-sm font-semibold">Compare Tiers Again</a>
+            </div>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-forest-900/60">
+                <span>✓ 60-Day Love-It Guarantee</span>
+                <span>✓ Free digital mockup before printing</span>
+                <span>✓ Made in NJ workshop</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer id="footer" class="bg-forest-900 text-sand-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-sand-100/10">
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="w-9 h-9 rounded-lg bg-honey-600 text-sand-50 flex items-center justify-center font-serif text-lg" style="color:#1a1108;">R</span>
+                        <span class="font-serif text-xl">Realized <span class="text-honey-400">Prints</span></span>
+                    </div>
+                    <p class="text-sm text-sand-100/70 leading-relaxed max-w-sm">
+                        Premium 3D printed heirlooms and collectibles, crafted by a father and son in their home workshop. Made to be loved, used, and passed on.
+                    </p>
+                    <div class="mt-6 flex gap-3">
+                        <span class="px-3 py-1.5 rounded-full bg-sand-50/10 text-xs">🇺🇸 Made in USA</span>
+                        <span class="px-3 py-1.5 rounded-full bg-sand-50/10 text-xs">🔒 Secure Checkout</span>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Shop</h4>
+                    <ul class="space-y-2 text-sm text-sand-100/80">
+                        <li><a href="cs2-knives.html" class="hover:text-honey-400 transition">Custom Figurines</a></li>
+                        <li><a href="catan-artisan.html" class="hover:text-honey-400 transition">Catan Collection</a></li>
+                        <li><a href="index.html#collections" class="hover:text-honey-400 transition">Anime Figurines</a></li>
+                        <li><a href="index.html#collections" class="hover:text-honey-400 transition">Lucky Scoops</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-sand-100/80">
+                        <li><a href="index.html#story" class="hover:text-honey-400 transition">Our Story</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Workshop Tour</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Reviews</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider text-honey-400 mb-4">Get In Touch</h4>
+                    <ul class="space-y-2 text-sm text-sand-100/80">
+                        <li><a href="mailto:hello@realizedprints.com" class="hover:text-honey-400 transition">hello@realizedprints.com</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Live on WhatsNot</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">Instagram</a></li>
+                        <li><a href="#" class="hover:text-honey-400 transition">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-sand-100/60">
+                <div>© 2026 Realized Prints. Crafted by a father & son. All rights reserved.</div>
+                <div class="flex gap-5">
+                    <a href="#" class="hover:text-honey-400">Privacy</a>
+                    <a href="#" class="hover:text-honey-400">Terms</a>
+                    <a href="#" class="hover:text-honey-400">Shipping & Returns</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ============================================================
+         FUNCTIONS / WIZARD / STRIPE
+         ============================================================ -->
+    <script>
+        // ===== STRIPE =====
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TC500E8CXX0QGip3XQ4QqpI8KA7v6t91u0ocMtgRqSTlRJ8F8cbsaYXBkJenF1IoB1tmvnH9nWOMvJVbF9TbXCh00lHqhCZSQ';
+        const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // Fade-in observer
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+        // ===== CONFIGURATOR — CENTRALIZED PRICING =====
+        const PRICING_CONFIG = {
+            tiers: {
+                diy:      { base: 79,  label: 'DIY Kit',                rank: 1 },
+                standard: { base: 179, label: 'Standard Finished',      rank: 2 },
+                premium:  { base: 349, label: 'Premium Photo-Matched',  rank: 3 },
+            },
+            // `diy` is the anchor; Standard savings are measured against it. Premium is always 0.
+            upgrades: {
+                texture_silk:      { diy: 39, standard: 20, premium: 0, label: 'Duo / Family scene' },
+                robber_victorious: { diy: 10, standard: 5,  premium: 0, label: 'Action Pose' },
+                robber_custom:     { diy: 75, standard: 75, premium: 75, label: 'Custom Accessory', flat: true },
+                finish_custom:     { diy: 29, standard: 15, premium: 0, label: 'Premium base finish' },
+                trim_silk:         { diy: 25, standard: 10, premium: 0, label: 'Metallic paint finish' },
+                names_add:         { diy: 49, standard: 25, premium: 0, label: 'Engraved nameplate' },
+            },
+        };
+
+        // Back-compat aliases (kept identical to the catan engine so the rest works unchanged)
+        const TIER_RANK  = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.rank]));
+        const TIER_LABEL = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.label]));
+        const TIER_BASE  = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.base]));
+        const PRICING    = Object.fromEntries(
+            Object.entries(PRICING_CONFIG.upgrades).map(([k, v]) => [k, { core: v.diy, hero: v.standard, premium: v.premium }])
+        );
+
+        // Map state.tier ('diy'/'standard'/'premium') → pricing alias ('core'/'hero'/'premium')
+        const TIER_TO_PRICEKEY = { diy: 'core', standard: 'hero', premium: 'premium' };
+        const pk = (tier) => TIER_TO_PRICEKEY[tier];
+
+        // ----- Savings helpers (Standard tier only) -----
+        function getSavings(upgradeKey) {
+            const u = PRICING_CONFIG.upgrades[upgradeKey];
+            if (!u || u.flat) return { diyPrice: u?.diy ?? 0, stdPrice: u?.standard ?? 0, savings: 0, percent: 0 };
+            const savings = Math.max(0, u.diy - u.standard);
+            const percent = u.diy > 0 ? Math.round((savings / u.diy) * 100) : 0;
+            return { diyPrice: u.diy, stdPrice: u.standard, savings, percent };
+        }
+
+        // Max possible savings if Standard buyer adds every non-flat upgrade
+        const STANDARD_MAX_SAVINGS = Object.values(PRICING_CONFIG.upgrades)
+            .filter(u => !u.flat)
+            .reduce((sum, u) => sum + Math.max(0, u.diy - u.standard), 0);
+
+        const DEFAULT_PALETTE = ['Forest', 'Cream', 'Navy', 'Burgundy'];
+        const DEFAULT_SWATCHES = [
+            { name: 'Forest',   hex: '#1e6b3a' },
+            { name: 'Cream',    hex: '#f5ecd4' },
+            { name: 'Navy',     hex: '#1f3a5e' },
+            { name: 'Burgundy', hex: '#7a1f2b' },
+            { name: 'Charcoal', hex: '#2c2c2c' },
+            { name: 'Saffron',  hex: '#f0a500' },
+            { name: 'Sky',      hex: '#6ba8d4' },
+            { name: 'Plum',     hex: '#6c3a5c' },
+        ];
+        const SILK_SWATCHES = [
+            { name: 'Pearl Gold',   hex: '#e8c97a' },
+            { name: 'Antique Rose', hex: '#d99a9a' },
+            { name: 'Sage Shimmer', hex: '#a8c4a4' },
+            { name: 'Sky Pearl',    hex: '#a8c4d9' },
+            { name: 'Lavender',     hex: '#c4a8d9' },
+            { name: 'Champagne',    hex: '#e8d5a8' },
+            { name: 'Ivory Pearl',  hex: '#ece4d6' },
+            { name: 'Copper',       hex: '#d99a6c' },
+        ];
+
+        const state = {
+            tier: 'diy',
+            texture: 'basic',
+            colors: [...DEFAULT_PALETTE],
+            robber: 'classic',
+            finish: 'bombay',
+            trim: 'basic',
+            trimColor: 'Emerald',
+            names: 'none',
+            namesText: '',
+        };
+
+        let currentTotal = TIER_BASE.diy;
+
+        function applyTierLocks() {
+            const rank = TIER_RANK[state.tier];
+            document.querySelectorAll('.opt[data-min-tier]').forEach(btn => {
+                const need = btn.dataset.minTier;
+                const locked = TIER_RANK[need] > rank;
+                btn.classList.toggle('locked', locked);
+                btn.disabled = locked;
+                if (locked && btn.classList.contains('active')) {
+                    btn.classList.remove('active');
+                    const group = btn.dataset.group;
+                    const fallback = document.querySelector(`.opt[data-group="${group}"]:not([data-min-tier])`);
+                    if (fallback) {
+                        fallback.classList.add('active');
+                        state[group] = fallback.dataset.value;
+                    }
+                }
+            });
+        }
+
+        function updateHints() {
+            const t = state.tier;
+            const pricekey = pk(t);
+            const fmtPlain = (p) => p === 0 ? 'Included' : ('+$' + p);
+
+            function hintFor(upgradeKey, prefix) {
+                const u = PRICING_CONFIG.upgrades[upgradeKey];
+                if (t === 'premium') return `${prefix} included`;
+                if (t === 'standard') {
+                    const { diyPrice, stdPrice, percent } = getSavings(upgradeKey);
+                    return `${prefix} <s style="opacity:0.55;">$${diyPrice}</s> <strong style="color:var(--honey-700);">$${stdPrice}</strong> <span class="save-pct">Save ${percent}%</span>`;
+                }
+                return `${prefix} ${fmtPlain(u.diy)}`;
+            }
+
+            function tagFor(upgradeKey) {
+                const u = PRICING_CONFIG.upgrades[upgradeKey];
+                const price = u[t];
+                if (t === 'premium' || price === 0) return '<span class="tag-included">Included</span>';
+                if (t === 'standard') {
+                    return `<s class="tag-strike">$${u.diy}</s> <span class="tag-hero">+$${price}</span>`;
+                }
+                return `+$${price}`;
+            }
+
+            // Subject type (texture_silk)
+            document.getElementById('texturePriceHint').innerHTML = hintFor('texture_silk', 'Duo scene');
+            document.getElementById('silkPriceTag').innerHTML = tagFor('texture_silk');
+
+            // Pose & accessory
+            const poseHint = t === 'premium'
+                ? 'Action included · Custom +$75'
+                : t === 'standard'
+                    ? `${hintFor('robber_victorious', 'Action')} · Custom +$75`
+                    : `Action +$${PRICING_CONFIG.upgrades.robber_victorious.diy} · Custom +$75`;
+            document.getElementById('robberPriceHint').innerHTML = poseHint;
+            document.getElementById('victoriousPriceTag').innerHTML = tagFor('robber_victorious');
+
+            // Base finish
+            document.getElementById('finishPriceHint').innerHTML = t === 'premium'
+                ? 'Any finish included'
+                : t === 'standard'
+                    ? hintFor('finish_custom', 'Premium finish')
+                    : `+$${PRICING_CONFIG.upgrades.finish_custom.diy} for non-default`;
+
+            // Paint trim
+            document.getElementById('trimPriceHint').innerHTML = hintFor('trim_silk', 'Metallic');
+            document.getElementById('trimPriceTag').innerHTML = tagFor('trim_silk');
+
+            // Names / engraving
+            document.getElementById('namesPriceHint').innerHTML = hintFor('names_add', 'Nameplate');
+            document.getElementById('namesPriceTag').innerHTML = tagFor('names_add');
+        }
+
+        function renderSwatches() {
+            const palette = state.texture === 'silk' ? SILK_SWATCHES : DEFAULT_SWATCHES;
+            const grid = document.getElementById('swatchGrid');
+            grid.innerHTML = palette.map(s => {
+                const selected = state.colors.includes(s.name);
+                const idx = state.colors.indexOf(s.name);
+                return `
+                    <button type="button"
+                      class="swatch group relative rounded-xl border-2 ${selected ? 'border-forest-800' : 'border-sand-200'} hover:border-forest-800 transition p-2 text-left"
+                      data-color="${s.name}"
+                      aria-pressed="${selected}"
+                      aria-label="${s.name}${selected ? ', selected' : ''}"
+                      style="${selected ? 'border-color: var(--green);' : ''}">
+                      <div class="aspect-square rounded-lg mb-1.5" style="background:${s.hex}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);"></div>
+                      <div class="text-[10px] font-semibold truncate">${s.name}</div>
+                      ${selected ? `<div class="absolute" style="top:0.375rem;right:0.375rem;width:1.25rem;height:1.25rem;border-radius:9999px;background:var(--accent);color:#1a1108;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(240,165,0,0.6);">${idx + 1}</div>` : ''}
+                    </button>
+                  `;
+            }).join('');
+
+            document.getElementById('paletteLabel').textContent =
+                state.texture === 'silk' ? 'Duo / Family palette' : 'Standard palette';
+            document.getElementById('selectedColors').textContent = state.colors.join(', ') || '—';
+            document.getElementById('swatchCount').textContent = state.colors.length;
+
+            grid.querySelectorAll('.swatch').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const color = btn.dataset.color;
+                    const i = state.colors.indexOf(color);
+                    if (i >= 0) {
+                        state.colors.splice(i, 1);
+                    } else {
+                        if (state.colors.length >= 4) state.colors.shift();
+                        state.colors.push(color);
+                    }
+                    renderSwatches();
+                    recalc();
+                });
+            });
+        }
+
+        function recalc() {
+            const t = state.tier;
+            let total = TIER_BASE[t];
+            const lines = [{ label: 'Tier', value: TIER_LABEL[t], price: TIER_BASE[t], base: true }];
+
+            if (state.texture === 'silk') {
+                const p = PRICING_CONFIG.upgrades.texture_silk[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Subject', value: 'Duo / Family scene', price: p });
+            } else {
+                lines.push({ label: 'Subject', value: 'Single subject', price: 0 });
+            }
+
+            lines.push({ label: 'Paint Palette', value: state.colors.join(', ') || 'None', price: 0 });
+
+            if (state.robber === 'victorious') {
+                const p = PRICING_CONFIG.upgrades.robber_victorious[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Pose', value: 'Action Pose', price: p });
+            } else if (state.robber === 'custom') {
+                const p = PRICING_CONFIG.upgrades.robber_custom[t];
+                total += p;
+                lines.push({ label: 'Pose', value: 'Custom Accessory (hand-sculpted)', price: p });
+            } else {
+                lines.push({ label: 'Pose', value: 'Standing Pose', price: 0 });
+            }
+
+            const finishLabels = {
+                bombay: 'Forest Green',
+                chestnut: 'Walnut Wood',
+                'early-american': 'Slate Marble',
+                'special-walnut': 'Matte Black',
+                'golden-oak': 'Brushed Gold'
+            };
+            if (state.finish !== 'bombay') {
+                const p = PRICING_CONFIG.upgrades.finish_custom[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Display Base', value: finishLabels[state.finish], price: p });
+            } else {
+                lines.push({ label: 'Display Base', value: 'Forest Green', price: 0 });
+            }
+
+            if (state.trim === 'silk') {
+                const p = PRICING_CONFIG.upgrades.trim_silk[t];
+                if (p > 0) total += p;
+                lines.push({ label: 'Paint Finish', value: `Metallic — ${state.trimColor} accent`, price: p });
+            } else {
+                lines.push({ label: 'Paint Finish', value: `Matte — ${state.trimColor} accent`, price: 0 });
+            }
+
+            if (state.names === 'add') {
+                const p = PRICING_CONFIG.upgrades.names_add[t];
+                if (p > 0) total += p;
+                const display = state.namesText.trim() ? `Engraved: "${state.namesText.trim()}"` : 'Engraved nameplate';
+                lines.push({ label: 'Engraving', value: display, price: p });
+            }
+
+            currentTotal = total;
+
+            // Compute Standard-tier savings
+            let savedSoFar = 0;
+            if (t === 'standard') {
+                if (state.texture === 'silk')     savedSoFar += getSavings('texture_silk').savings;
+                if (state.robber === 'victorious') savedSoFar += getSavings('robber_victorious').savings;
+                if (state.finish !== 'bombay')    savedSoFar += getSavings('finish_custom').savings;
+                if (state.trim === 'silk')        savedSoFar += getSavings('trim_silk').savings;
+                if (state.names === 'add')        savedSoFar += getSavings('names_add').savings;
+            }
+
+            document.getElementById('priceTotal').textContent = '$' + total;
+            document.getElementById('priceTotalBig').textContent = '$' + total;
+            document.getElementById('tierLabel').textContent = TIER_LABEL[t];
+
+            // Savings pill
+            const savingsPill = document.getElementById('wizSavingsPill');
+            if (savingsPill) {
+                if (t === 'standard' && savedSoFar > 0) {
+                    savingsPill.classList.remove('hidden');
+                    document.getElementById('wizSavingsAmount').textContent = '$' + savedSoFar;
+                } else {
+                    savingsPill.classList.add('hidden');
+                }
+            }
+
+            // Final review breakdown
+            const breakdownHTML = lines.map(l => {
+                const right = l.base
+                    ? `<span class="font-semibold text-sand-50">$${l.price}</span>`
+                    : (l.price > 0
+                        ? `<span class="font-semibold text-honey-400">+$${l.price}</span>`
+                        : `<span class="text-sand-100/55">included</span>`);
+                return `<div class="flex justify-between gap-4">
+                    <span class="text-sand-100/85"><span class="text-sand-100/55">${l.label}:</span> ${l.value}</span>
+                    ${right}
+                  </div>`;
+            }).join('');
+
+            const savingsRowHTML = (t === 'standard' && savedSoFar > 0)
+                ? `<div class="review-savings-row">
+                       <span><span class="rsr-label">You saved</span> vs. DIY à-la-carte pricing</span>
+                       <span class="rsr-amount">−$${savedSoFar}</span>
+                   </div>`
+                : '';
+
+            document.getElementById('breakdown').innerHTML = breakdownHTML + savingsRowHTML;
+        }
+
+        // ===== ORIGINAL .opt CLICK HANDLER =====
+        document.querySelectorAll('.opt').forEach(btn => {
+            if (btn.classList.contains('trim-color-opt')) return;
+
+            btn.addEventListener('click', () => {
+                if (btn.disabled || btn.classList.contains('locked')) return;
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                if (!group) return;
+                document.querySelectorAll(`.opt[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state[group] = value;
+
+                if (group === 'tier') {
+                    applyTierLocks();
+                    updateHints();
+                }
+                if (group === 'texture') {
+                    const newPalette = value === 'silk' ? SILK_SWATCHES : DEFAULT_SWATCHES;
+                    state.colors = newPalette.slice(0, 4).map(s => s.name);
+                    renderSwatches();
+                }
+                if (group === 'names') {
+                    document.getElementById('namesInputRow').classList.toggle('hidden', value !== 'add');
+                }
+
+                recalc();
+            });
+        });
+
+        document.querySelectorAll('.trim-color-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.trim-color-opt').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.trimColor = btn.dataset.color;
+                recalc();
+            });
+        });
+
+        document.getElementById('namesInput').addEventListener('input', (e) => {
+            state.namesText = e.target.value.slice(0, 30);
+            if (e.target.value.length > 30) e.target.value = state.namesText;
+            recalc();
+        });
+
+        // "Select this tier" buttons
+        document.querySelectorAll('.select-tier').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tier = btn.dataset.tier;
+                const tierBtn = document.querySelector(`.opt[data-group="tier"][data-value="${tier}"]`);
+                if (tierBtn) tierBtn.click();
+                document.getElementById('configurator').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        applyTierLocks();
+        updateHints();
+        renderSwatches();
+        recalc();
+
+        // Stamp the "save up to $X" teaser into the Standard tier card
+        (function stampStandardSavingsTeaser() {
+            const stdCard = document.querySelector('.tier-card[data-value="standard"] .tier-blurb');
+            if (!stdCard) return;
+            const teaser = document.createElement('div');
+            teaser.className = 'tier-save-teaser';
+            teaser.innerHTML = `<span class="tst-dot">●</span> Save up to <strong>$${STANDARD_MAX_SAVINGS}</strong> vs. DIY upgrade pricing`;
+            stdCard.insertAdjacentElement('afterend', teaser);
+        })();
+
+        /* =========================================================
+           WIZARD NAVIGATION LAYER
+           ========================================================= */
+        (function initWizard() {
+            const TOTAL_STEPS = 8;
+            const STEP_TITLES = {
+                1: 'Choose Your Tier',
+                2: 'Subject Type',
+                3: 'Paint Palette',
+                4: 'Pose & Accessory',
+                5: 'Display Base Finish',
+                6: 'Paint Finish & Accent',
+                7: 'Engraved Nameplate',
+                8: 'Review & Lock It In',
+            };
+            const AUTO_ADVANCE_GROUP_BY_STEP = {
+                1: 'tier',
+                2: 'texture',
+                4: 'robber',
+                5: 'finish',
+                7: 'names',
+            };
+
+            const stage = document.getElementById('wizStage');
+            const steps = Array.from(stage.querySelectorAll('.wiz-step'));
+            const pillsWrap = document.getElementById('wizPills');
+            const stepNumEl = document.getElementById('wizStepNum');
+            const stepTitleEl = document.getElementById('wizStepTitle');
+            let currentStep = 1;
+            let highestVisited = 1;
+            let advanceTimer = null;
+
+            for (let i = 1; i <= TOTAL_STEPS; i++) {
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.className = 'wiz-pill';
+                pill.dataset.step = String(i);
+                pill.setAttribute('role', 'tab');
+                pill.setAttribute('aria-label', `Step ${i}: ${STEP_TITLES[i]}`);
+                pill.addEventListener('click', () => {
+                    if (i <= highestVisited) goToStep(i);
+                });
+                pillsWrap.appendChild(pill);
+            }
+
+            function updatePills() {
+                pillsWrap.querySelectorAll('.wiz-pill').forEach(p => {
+                    const n = Number(p.dataset.step);
+                    p.classList.toggle('current', n === currentStep);
+                    p.classList.toggle('done', n < currentStep);
+                    p.setAttribute('aria-selected', n === currentStep ? 'true' : 'false');
+                });
+            }
+
+            function goToStep(target) {
+                if (target < 1 || target > TOTAL_STEPS) return;
+                if (advanceTimer) { clearTimeout(advanceTimer); advanceTimer = null; }
+
+                const fromEl = steps.find(s => Number(s.dataset.step) === currentStep);
+                const toEl = steps.find(s => Number(s.dataset.step) === target);
+                if (!toEl) return;
+
+                if (fromEl && fromEl !== toEl) {
+                    fromEl.classList.remove('entering');
+                    setTimeout(() => {
+                        fromEl.classList.remove('active');
+                        fromEl.setAttribute('hidden', '');
+                        toEl.removeAttribute('hidden');
+                        toEl.classList.add('active');
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => toEl.classList.add('entering'));
+                        });
+                        const focusable = toEl.querySelector('.opt:not(.locked), input, button.btn-primary, button.wiz-continue');
+                        if (focusable && typeof focusable.focus === 'function') {
+                            try { focusable.focus({ preventScroll: true }); } catch (_) {}
+                        }
+                    }, 200);
+                } else {
+                    toEl.classList.add('active', 'entering');
+                    toEl.removeAttribute('hidden');
+                }
+
+                currentStep = target;
+                if (currentStep > highestVisited) highestVisited = currentStep;
+                stepNumEl.textContent = String(currentStep);
+                stepTitleEl.textContent = STEP_TITLES[currentStep];
+                updatePills();
+
+                const header = document.querySelector('#configurator .wiz-header');
+                if (header && window.innerWidth < 1024) {
+                    const rect = header.getBoundingClientRect();
+                    if (rect.top < 56 || rect.top > window.innerHeight * 0.6) {
+                        header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            }
+
+            function nextStep() { goToStep(Math.min(currentStep + 1, TOTAL_STEPS)); }
+            function prevStep() { goToStep(Math.max(currentStep - 1, 1)); }
+
+            stage.querySelectorAll('[data-wiz-back]').forEach(btn => {
+                btn.addEventListener('click', prevStep);
+            });
+            stage.querySelectorAll('[data-wiz-next]').forEach(btn => {
+                btn.addEventListener('click', nextStep);
+            });
+            stage.querySelectorAll('[data-wiz-restart]').forEach(btn => {
+                btn.addEventListener('click', () => goToStep(1));
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+                const cfg = document.getElementById('configurator');
+                const rect = cfg.getBoundingClientRect();
+                if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+                if (e.key === 'ArrowLeft' && currentStep > 1) prevStep();
+            });
+
+            stage.querySelectorAll('.opt').forEach(btn => {
+                if (btn.classList.contains('trim-color-opt')) return;
+                btn.addEventListener('click', () => {
+                    if (btn.disabled || btn.classList.contains('locked')) return;
+                    const group = btn.dataset.group;
+                    const value = btn.dataset.value;
+                    const expectedGroup = AUTO_ADVANCE_GROUP_BY_STEP[currentStep];
+                    if (!expectedGroup || group !== expectedGroup) return;
+                    if (currentStep === 7 && value === 'add') return;
+                    if (advanceTimer) clearTimeout(advanceTimer);
+                    advanceTimer = setTimeout(() => {
+                        advanceTimer = null;
+                        if (currentStep < TOTAL_STEPS) nextStep();
+                    }, 350);
+                });
+            });
+
+            document.querySelectorAll('.select-tier').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    goToStep(1);
+                });
+            });
+
+            updatePills();
+            stepNumEl.textContent = '1';
+            stepTitleEl.textContent = STEP_TITLES[1];
+        })();
+
+        // ===== STRIPE CHECKOUT =====
+        const cartBtn = document.getElementById('addToCart');
+        const errorBox = document.getElementById('checkoutError');
+
+        function showError(msg) {
+            errorBox.textContent = msg;
+            errorBox.classList.remove('hidden');
+        }
+        function clearError() {
+            errorBox.textContent = '';
+            errorBox.classList.add('hidden');
+        }
+
+        cartBtn.addEventListener('click', async () => {
+            if (cartBtn.disabled) return;
+            clearError();
+
+            const originalHTML = cartBtn.innerHTML;
+            cartBtn.disabled = true;
+            cartBtn.style.opacity = '0.85';
+            cartBtn.style.cursor = 'wait';
+            cartBtn.innerHTML = `
+                  <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                  </svg>
+                  Redirecting to secure checkout…
+                `;
+
+            try {
+                const res = await fetch('/api/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ state, total: currentTotal })
+                });
+
+                if (!res.ok) {
+                    const errBody = await res.json().catch(() => ({}));
+                    throw new Error(errBody.error || `Checkout failed (HTTP ${res.status})`);
+                }
+
+                const data = await res.json();
+                if (!data.url) throw new Error('No checkout URL returned. Please try again.');
+
+                window.location = data.url;
+            } catch (err) {
+                console.error('Checkout error:', err);
+                showError(err.message || 'Something went wrong. Please try again or email hello@realizedprints.com.');
+                cartBtn.disabled = false;
+                cartBtn.style.opacity = '';
+                cartBtn.style.cursor = '';
+                cartBtn.innerHTML = originalHTML;
+            }
+        });
+
+        // Inject spinner keyframes once
+        (function injectSpinKeyframes() {
+            if (document.getElementById('rp-spin-kf')) return;
+            const s = document.createElement('style');
+            s.id = 'rp-spin-kf';
+            s.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+            document.head.appendChild(s);
+        })();
+
+        // Soft-CTA placeholder behavior
+        document.querySelectorAll('a.btn-primary').forEach(btn => {
+            btn.addEventListener('click', e => {
+                if (btn.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '✓ Added — checkout coming soon';
+                    btn.style.background = 'linear-gradient(180deg, #5b8f5a, #1e6b3a)';
+                    setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 1800);
+                }
+            });
+        });
+
+        // Intake form submit handler (preview only)
+        function handleIntakeSubmit() {
+            const form = document.getElementById('intakeForm');
+            const btn = form.querySelector('button[type="submit"]');
+            const original = btn.innerHTML;
+            btn.innerHTML = '✓ Got it — we\'ll be in touch within 24 hours';
+            btn.style.background = 'linear-gradient(180deg, #10b981, #047857)';
+            btn.style.color = '#ffffff';
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.style.background = '';
+                btn.style.color = '';
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
