@@ -1,0 +1,2103 @@
+<!-- meow-meow-blind-bags.html — Realized Prints | Meow Meow Blind Bags product page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meow Meow Blind Bags — Realized Prints | meow-meow-blind-bags.html</title>
+    <meta name="description" content="Surprise cat collectibles, hand-poured by a father and son. $19 Blind Bags & $29 Lucky Scoops with guaranteed rares. Live drops on WhatsNot.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="output.css" rel="stylesheet">
+    <style>
+        /* =========================================================
+           DESIGN TOKENS — Meow Meow Blind Bags / Realized Prints
+           Ultra-cute pink + purple, soft-but-premium aesthetic
+           ========================================================= */
+        :root {
+            /* Pink — bubblegum primary */
+            --pink-50:  #fff4fa;
+            --pink-100: #ffe1ef;
+            --pink-200: #ffc7e0;
+            --pink-300: #ffa8d2;
+            --pink-400: #ff8ec7;   /* primary brand */
+            --pink-500: #f06eaf;
+            --pink-600: #d44a8d;
+            --pink-700: #a13769;
+
+            /* Purple — vibrant accent */
+            --purple-300: #d8b4fe;
+            --purple-400: #c084fc;   /* accent */
+            --purple-500: #a855f7;
+            --purple-600: #9333ea;
+            --purple-700: #7e22ce;
+
+            /* Berry — deep moody background accents */
+            --berry-700: #5a1f3e;
+            --berry-800: #3a132a;
+            --berry-900: #270a1c;
+
+            /* Cream — paper backgrounds */
+            --cream-50:  #fffafd;
+            --cream-100: #fff4f9;
+            --cream-200: #ffe7f3;
+
+            /* Mint — fresh accent for "guaranteed" / wins */
+            --mint-400: #6ee7b7;
+            --mint-500: #34d399;
+            --mint-600: #10b981;
+            --mint-700: #047857;
+
+            /* Yellow — sparkle accent */
+            --sun-400: #fcd34d;
+
+            /* Ink */
+            --ink:      #2a0a1d;
+            --ink-soft: #4a1f3a;
+
+            /* Accent alias */
+            --accent: var(--pink-500);
+
+            /* Layered shadows — soft and bouncy */
+            --shadow-soft: 0 1px 2px rgba(90,31,62,0.05),
+                           0 8px 24px -8px rgba(212,74,141,0.14),
+                           0 2px 6px -2px rgba(90,31,62,0.06);
+            --shadow-glow: 0 1px 2px rgba(90,31,62,0.06),
+                           0 22px 50px -12px rgba(255,142,199,0.45),
+                           0 8px 22px -8px rgba(192,132,252,0.32);
+            --shadow-bouncy: 0 6px 0 0 rgba(212,74,141,0.18),
+                             0 14px 32px -10px rgba(212,74,141,0.35);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+            color: var(--ink);
+            background: var(--cream-50);
+            margin: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Soft paw-print + sparkle background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><g fill='%23ff8ec7' opacity='0.06'><circle cx='40' cy='60' r='5'/><circle cx='30' cy='75' r='3.5'/><circle cx='50' cy='75' r='3.5'/><circle cx='35' cy='90' r='3'/><circle cx='45' cy='90' r='3'/><ellipse cx='40' cy='100' rx='8' ry='6'/><circle cx='220' cy='180' r='5'/><circle cx='210' cy='195' r='3.5'/><circle cx='230' cy='195' r='3.5'/><circle cx='215' cy='210' r='3'/><circle cx='225' cy='210' r='3'/><ellipse cx='220' cy='220' rx='8' ry='6'/></g><g fill='%23c084fc' opacity='0.05'><path d='M150 40 L153 50 L163 53 L153 56 L150 66 L147 56 L137 53 L147 50 Z'/><path d='M270 100 L272 107 L279 109 L272 111 L270 118 L268 111 L261 109 L268 107 Z'/><path d='M90 240 L92 247 L99 249 L92 251 L90 258 L88 251 L81 249 L88 247 Z'/></g></svg>");
+            opacity: 0.85;
+            mix-blend-mode: multiply;
+        }
+        body > * { position: relative; z-index: 1; }
+
+        /* =========================================================
+           TYPOGRAPHY
+           ========================================================= */
+        .font-serif  { font-family: 'Fraunces', 'Georgia', serif; font-weight: 600; letter-spacing: -0.01em; }
+        .font-sans   { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+        .font-script { font-family: 'Caveat', cursive; font-weight: 600; }
+        .italic      { font-style: italic; }
+        .antialiased { -webkit-font-smoothing: antialiased; }
+
+        h1, h2, h3, h4 { letter-spacing: -0.015em; }
+        em, .italic { font-style: italic; }
+
+        /* =========================================================
+           LAYOUT UTILITIES
+           ========================================================= */
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .sticky   { position: sticky; }
+        .fixed    { position: fixed; }
+        .inset-0  { inset: 0; }
+        .top-0    { top: 0; }
+        .top-5    { top: 1.25rem; }
+        .right-0  { right: 0; }
+        .right-5  { right: 1.25rem; }
+        .bottom-5 { bottom: 1.25rem; }
+        .left-5   { left: 1.25rem; }
+        .-top-6   { top: -1.5rem; }
+        .-left-6  { left: -1.5rem; }
+        .-bottom-6{ bottom: -1.5rem; }
+        .-right-6 { right: -1.5rem; }
+        .z-10     { z-index: 10; }
+        .z-50     { z-index: 50; }
+
+        .block    { display: block; }
+        .inline-block { display: inline-block; }
+        .inline-flex  { display: inline-flex; }
+        .flex     { display: flex; }
+        .grid     { display: grid; }
+        .hidden   { display: none; }
+
+        .flex-col { flex-direction: column; }
+        .flex-wrap{ flex-wrap: wrap; }
+        .flex-1   { flex: 1 1 0%; }
+        .items-start  { align-items: flex-start; }
+        .items-center { align-items: center; }
+        .items-end    { align-items: flex-end; }
+        .items-baseline { align-items: baseline; }
+        .justify-between { justify-content: space-between; }
+        .justify-center  { justify-content: center; }
+        .text-left  { text-align: left; }
+        .text-center{ text-align: center; }
+        .text-right { text-align: right; }
+        .align-middle { vertical-align: middle; }
+
+        .gap-1\.5 { gap: 0.375rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-5 { gap: 1.25rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-9 { gap: 2.25rem; }
+        .gap-10 { gap: 2.5rem; }
+        .gap-12 { gap: 3rem; }
+        .gap-14 { gap: 3.5rem; }
+        .gap-x-6 { column-gap: 1.5rem; }
+        .gap-y-2 { row-gap: 0.5rem; }
+
+        .w-full { width: 100%; }
+        .w-1\.5 { width: 0.375rem; }
+        .w-9    { width: 2.25rem; }
+        .w-10   { width: 2.5rem; }
+        .w-12   { width: 3rem; }
+        .w-14   { width: 3.5rem; }
+        .h-1\.5 { height: 0.375rem; }
+        .h-6    { height: 1.5rem; }
+        .h-9    { height: 2.25rem; }
+        .h-10   { height: 2.5rem; }
+        .h-12   { height: 3rem; }
+        .h-14   { height: 3.5rem; }
+        .h-18   { height: 4.5rem; }
+        .h-full { height: 100%; }
+
+        .max-w-md { max-width: 28rem; }
+        .max-w-sm { max-width: 24rem; }
+        .max-w-xl { max-width: 36rem; }
+        .max-w-2xl{ max-width: 42rem; }
+        .max-w-5xl{ max-width: 64rem; }
+        .max-w-6xl{ max-width: 72rem; }
+        .max-w-7xl{ max-width: 80rem; }
+        .max-w-\[200px\] { max-width: 200px; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mr-1\.5 { margin-right: 0.375rem; }
+        .ml-1    { margin-left: 0.25rem; }
+        .mt-0\.5 { margin-top: 0.125rem; }
+        .mt-1    { margin-top: 0.25rem; }
+        .mt-2    { margin-top: 0.5rem; }
+        .mt-3    { margin-top: 0.75rem; }
+        .mt-4    { margin-top: 1rem; }
+        .mt-5    { margin-top: 1.25rem; }
+        .mt-6    { margin-top: 1.5rem; }
+        .mt-8    { margin-top: 2rem; }
+        .mt-9    { margin-top: 2.25rem; }
+        .mt-10   { margin-top: 2.5rem; }
+        .mb-1    { margin-bottom: 0.25rem; }
+        .mb-1\.5 { margin-bottom: 0.375rem; }
+        .mb-2    { margin-bottom: 0.5rem; }
+        .mb-3    { margin-bottom: 0.75rem; }
+        .mb-4    { margin-bottom: 1rem; }
+        .mb-5    { margin-bottom: 1.25rem; }
+        .mb-6    { margin-bottom: 1.5rem; }
+        .mb-8    { margin-bottom: 2rem; }
+        .mb-10   { margin-bottom: 2.5rem; }
+        .mb-12   { margin-bottom: 3rem; }
+
+        .px-2  { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-3  { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4  { padding-left: 1rem; padding-right: 1rem; }
+        .px-5  { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .px-6  { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-7  { padding-left: 1.75rem; padding-right: 1.75rem; }
+        .px-8  { padding-left: 2rem; padding-right: 2rem; }
+        .py-1  { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-2  { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .py-3  { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+        .py-4  { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6  { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8  { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-14 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+        .pt-5  { padding-top: 1.25rem; }
+        .pt-8  { padding-top: 2rem; }
+        .pt-16 { padding-top: 4rem; }
+        .pb-8  { padding-bottom: 2rem; }
+        .pb-12 { padding-bottom: 3rem; }
+        .p-2   { padding: 0.5rem; }
+        .p-4   { padding: 1rem; }
+        .p-5   { padding: 1.25rem; }
+        .p-6   { padding: 1.5rem; }
+        .p-7   { padding: 1.75rem; }
+        .p-8   { padding: 2rem; }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .sm\:inline-flex { display: inline-flex; }
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .md\:flex-row { flex-direction: row; }
+            .md\:text-left { text-align: left; }
+            .md\:text-5xl { font-size: 3rem; line-height: 1.1; }
+            .md\:text-4xl { font-size: 2.25rem; line-height: 1.15; }
+            .md\:justify-start { justify-content: flex-start; }
+            .md\:block { display: block; }
+        }
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+            .lg\:col-span-6 { grid-column: span 6 / span 6; }
+            .lg\:flex { display: flex; }
+            .lg\:hidden { display: none; }
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:py-28 { padding-top: 7rem; padding-bottom: 7rem; }
+            .lg\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+            .lg\:p-6 { padding: 1.5rem; }
+            .lg\:p-8 { padding: 2rem; }
+            .lg\:p-10 { padding: 2.5rem; }
+            .lg\:gap-8 { gap: 2rem; }
+            .lg\:text-5xl { font-size: 3rem; line-height: 1.05; }
+            .lg\:text-6xl { font-size: 3.75rem; line-height: 1; }
+        }
+
+        /* TYPE SCALE */
+        .text-\[10px\] { font-size: 10px; }
+        .text-\[11px\] { font-size: 11px; }
+        .text-\[12px\] { font-size: 12px; }
+        .text-xs   { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm   { font-size: 0.875rem; line-height: 1.4; }
+        .text-base { font-size: 1rem; line-height: 1.5; }
+        .text-lg   { font-size: 1.125rem; line-height: 1.55; }
+        .text-xl   { font-size: 1.25rem; line-height: 1.4; }
+        .text-2xl  { font-size: 1.5rem; line-height: 1.25; }
+        .text-3xl  { font-size: 1.875rem; line-height: 1.18; }
+        .text-4xl  { font-size: 2.25rem; line-height: 1.15; }
+        .text-5xl  { font-size: 3rem; line-height: 1.05; }
+
+        .font-medium   { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold     { font-weight: 700; }
+        .font-extrabold{ font-weight: 800; }
+
+        .uppercase    { text-transform: uppercase; }
+        .tracking-tight  { letter-spacing: -0.025em; }
+        .tracking-wider  { letter-spacing: 0.05em; }
+        .tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+        .leading-none    { line-height: 1; }
+        .leading-tight   { line-height: 1.15; }
+        .leading-snug    { line-height: 1.35; }
+        .leading-relaxed { line-height: 1.65; }
+
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* =========================================================
+           CARD / BORDER / RADII
+           ========================================================= */
+        .rounded         { border-radius: 0.25rem; }
+        .rounded-lg      { border-radius: 0.5rem; }
+        .rounded-xl      { border-radius: 0.75rem; }
+        .rounded-2xl     { border-radius: 1rem; }
+        .rounded-3xl     { border-radius: 1.5rem; }
+        .rounded-\[2rem\]{ border-radius: 2rem; }
+        .rounded-full    { border-radius: 9999px; }
+        .rounded-bl-2xl  { border-bottom-left-radius: 1rem; }
+        .overflow-hidden { overflow: hidden; }
+
+        .aspect-\[4\/5\] { aspect-ratio: 4 / 5; }
+        .aspect-\[16\/10\] { aspect-ratio: 16 / 10; }
+        .aspect-square { aspect-ratio: 1 / 1; }
+
+        .object-cover { object-fit: cover; }
+        .opacity-10 { opacity: 0.1; }
+        .opacity-70 { opacity: 0.7; }
+        .opacity-80 { opacity: 0.8; }
+        .opacity-90 { opacity: 0.9; }
+
+        .shadow-soft { box-shadow: var(--shadow-soft); }
+        .shadow-glow { box-shadow: var(--shadow-glow); }
+
+        .backdrop-blur { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+
+        /* =========================================================
+           NAV — frosted pink-cream
+           ========================================================= */
+        #nav {
+            background:
+                linear-gradient(180deg, rgba(255,250,253,0.95), rgba(255,244,249,0.88));
+            backdrop-filter: blur(18px) saturate(1.2);
+            -webkit-backdrop-filter: blur(18px) saturate(1.2);
+            border-bottom: 1px solid rgba(255,142,199,0.22);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 4px 18px -8px rgba(212,74,141,0.18);
+        }
+        #nav a { color: var(--ink-soft); }
+        #nav a:hover { color: var(--pink-600); }
+        /* Logo monogram polish */
+        #nav .nav-logo-mark {
+            background: linear-gradient(135deg, var(--pink-400) 0%, var(--purple-500) 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(212,74,141,0.40), inset 0 1px 0 rgba(255,255,255,0.35);
+            transition: transform 0.25s ease;
+        }
+        #nav a.group:hover .nav-logo-mark { transform: rotate(-10deg) scale(1.05); }
+        .transition { transition: color 200ms ease, background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+
+        /* =========================================================
+           BUTTONS — bouncy candy primary + soft ghost
+           ========================================================= */
+        .btn-primary {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.22), rgba(0,0,0,0) 40%, rgba(0,0,0,0.10)),
+                linear-gradient(135deg, var(--pink-400) 0%, var(--pink-500) 50%, var(--purple-500) 100%);
+            border: 1px solid rgba(161,55,105,0.42);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.45),
+                inset 0 -1px 0 rgba(0,0,0,0.10),
+                0 1px 2px rgba(90,31,62,0.10),
+                0 10px 26px -10px rgba(212,74,141,0.65);
+            text-shadow: 0 1px 0 rgba(0,0,0,0.10);
+            cursor: pointer;
+            transition: transform 180ms cubic-bezier(.2,.7,.2,1), box-shadow 180ms ease, filter 180ms ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            filter: brightness(1.04) saturate(1.05);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.5),
+                inset 0 -1px 0 rgba(0,0,0,0.12),
+                0 4px 8px rgba(90,31,62,0.14),
+                0 18px 34px -10px rgba(212,74,141,0.75);
+        }
+        .btn-primary:active { transform: translateY(0) scale(0.99); filter: brightness(0.96); }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink);
+            background: linear-gradient(180deg, #ffffff, var(--cream-100));
+            border: 1px solid var(--pink-200);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 1px 2px rgba(90,31,62,0.05);
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
+        }
+        .btn-ghost:hover {
+            border-color: var(--pink-400);
+            color: var(--pink-600);
+            transform: translateY(-2px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 20px -8px rgba(255,142,199,0.55);
+        }
+
+        /* WhatsNot purple button variant */
+        .btn-whatsnot {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.22), rgba(0,0,0,0) 40%, rgba(0,0,0,0.12)),
+                linear-gradient(135deg, var(--purple-400) 0%, var(--purple-600) 100%);
+            border: 1px solid rgba(126,34,206,0.55);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.40),
+                0 10px 26px -10px rgba(168,85,247,0.65);
+            cursor: pointer;
+            transition: transform 180ms cubic-bezier(.2,.7,.2,1), box-shadow 180ms ease, filter 180ms ease;
+        }
+        .btn-whatsnot:hover {
+            transform: translateY(-2px) scale(1.02);
+            filter: brightness(1.06);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.5),
+                0 18px 36px -10px rgba(168,85,247,0.8);
+        }
+
+        /* =========================================================
+           CARDS — soft paper feel with layered cuteness
+           ========================================================= */
+        .card-hover {
+            transition: transform 320ms cubic-bezier(.2,.7,.2,1), box-shadow 320ms ease, border-color 320ms ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-6px) rotate(-0.3deg);
+            box-shadow:
+                0 1px 2px rgba(90,31,62,0.08),
+                0 30px 60px -16px rgba(212,74,141,0.30),
+                0 14px 28px -12px rgba(192,132,252,0.22);
+        }
+
+        /* =========================================================
+           HERO — Berry → Purple → Pink night-sky gradient
+           ========================================================= */
+        .hero-section {
+            background-color: var(--berry-900);
+            background-image:
+                radial-gradient(ellipse 70% 55% at 75% 30%, rgba(255,142,199,0.40) 0%, transparent 65%),
+                radial-gradient(ellipse 55% 50% at 15% 80%, rgba(192,132,252,0.38) 0%, transparent 65%),
+                radial-gradient(ellipse 40% 35% at 50% 0%, rgba(252,211,77,0.18) 0%, transparent 70%),
+                linear-gradient(155deg, #270a1c 0%, var(--berry-800) 40%, var(--berry-700) 75%, #6b2547 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><g fill='%23ffffff' opacity='0.5'><circle cx='30' cy='40' r='1.2'/><circle cx='190' cy='80' r='0.8'/><circle cx='120' cy='30' r='1'/><circle cx='80' cy='180' r='1.4'/><circle cx='210' cy='200' r='0.9'/><circle cx='60' cy='110' r='0.7'/></g></svg>");
+            opacity: 0.6;
+            animation: starTwinkle 4s ease-in-out infinite;
+        }
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        .hero-section h1 { color: #fff4f9; }
+        .hero-section p  { color: rgba(255,231,243,0.82); }
+
+        /* Hero pill — frosted */
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,168,210,0.45);
+            color: #ffe1ef;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Floating $19 plaque */
+        .floating-price-plaque {
+            background: linear-gradient(180deg, #fff 0%, var(--cream-100) 100%);
+            border: 2px solid var(--pink-300);
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.8) inset,
+                0 22px 50px -12px rgba(212,74,141,0.45),
+                0 8px 18px -6px rgba(192,132,252,0.30);
+            transform: rotate(-3deg);
+        }
+        .floating-price-plaque:hover { transform: rotate(-1deg); }
+
+        /* Sparkles around hero */
+        .sparkle {
+            position: absolute;
+            color: var(--sun-400);
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: sparkleFloat 3.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(252,211,77,0.65));
+        }
+        .sparkle.s1 { top: 12%; left: 8%;  animation-delay: 0s;   font-size: 1.4rem; }
+        .sparkle.s2 { top: 24%; right: 12%; animation-delay: 1.2s; font-size: 1.7rem; }
+        .sparkle.s3 { top: 70%; left: 14%; animation-delay: 0.6s; font-size: 1.2rem; }
+        .sparkle.s4 { bottom: 18%; right: 8%; animation-delay: 1.8s; font-size: 1.5rem; }
+        .sparkle.s5 { top: 48%; left: 45%; animation-delay: 2.4s; font-size: 1rem; opacity: 0.7; }
+        @keyframes sparkleFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.85; }
+            50%      { transform: translateY(-14px) rotate(20deg) scale(1.15); opacity: 1; }
+        }
+
+        /* Corner marks for hero image */
+        .cm { position: absolute; width: 18px; height: 18px; border-color: rgba(255,168,210,0.7); border-style: solid; z-index: 2; }
+        .cm-tl { top: 14px;    left: 14px;    border-width: 2px 0 0 2px; }
+        .cm-tr { top: 14px;    right: 14px;   border-width: 2px 2px 0 0; }
+        .cm-bl { bottom: 14px; left: 14px;    border-width: 0 0 2px 2px; }
+        .cm-br { bottom: 14px; right: 14px;   border-width: 0 2px 2px 0; }
+
+        /* Avatar stack for social proof */
+        .av {
+            width: 34px; height: 34px; border-radius: 12px;
+            background: linear-gradient(135deg, var(--pink-400), var(--purple-500));
+            color: #fff;
+            font-size: 0.6rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid rgba(255,231,243,0.35);
+            flex-shrink: 0;
+        }
+
+        /* Live drops glass card on hero image */
+        .hero-glass-card {
+            position: absolute; bottom: 18px; left: 18px; right: 18px;
+            background: rgba(39,10,28,0.78);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,168,210,0.35);
+            border-radius: 18px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,142,199,0.65); }
+            50%      { box-shadow: 0 0 0 8px rgba(255,142,199,0); }
+        }
+        .pulse-dot {
+            animation: pulseDot 1.8s ease-out infinite;
+        }
+        .live-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #ff4d6d;
+            box-shadow: 0 0 0 0 rgba(255,77,109,0.6);
+            animation: livePulse 1.4s ease-out infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,109,0.6); }
+            70%      { box-shadow: 0 0 0 10px rgba(255,77,109,0); }
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 0.9s linear infinite; }
+
+        /* =========================================================
+           TRUST BAR — soft purple with paw pattern
+           ========================================================= */
+        .trust-bar {
+            background-color: #2d0f24;
+            background-image:
+                radial-gradient(60% 80% at 0% 50%, rgba(192,132,252,0.22) 0%, transparent 55%),
+                radial-gradient(60% 80% at 100% 50%, rgba(255,142,199,0.20) 0%, transparent 55%),
+                radial-gradient(circle, rgba(255,168,210,0.20) 1px, transparent 1px),
+                linear-gradient(90deg, #2d0f24 0%, #3a132a 50%, #2d0f24 100%);
+            background-size: auto, auto, 26px 26px, auto;
+            color: #ffe1ef;
+            border-top: 1px solid rgba(255,168,210,0.20);
+            border-bottom: 1px solid rgba(255,168,210,0.20);
+            box-shadow: inset 0 8px 24px -16px rgba(0,0,0,0.5), inset 0 -8px 24px -16px rgba(0,0,0,0.5);
+        }
+
+        /* =========================================================
+           PRODUCT SECTION — cream parchment w/ confetti
+           ========================================================= */
+        section#products {
+            background-color: var(--cream-100);
+            background-image:
+                radial-gradient(65% 55% at 50% 0%, rgba(255,142,199,0.18) 0%, transparent 70%),
+                radial-gradient(50% 45% at 100% 100%, rgba(192,132,252,0.16) 0%, transparent 70%),
+                linear-gradient(180deg, var(--cream-100) 0%, #ffe7f3 100%);
+        }
+
+        /* Product tier cards */
+        .product-card {
+            position: relative;
+            background:
+                radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.95) 0%, transparent 60%),
+                linear-gradient(180deg, #ffffff 0%, var(--cream-50) 65%, var(--cream-200) 100%);
+            border: 1.5px solid var(--pink-200);
+            border-radius: 2rem;
+            box-shadow: var(--shadow-soft), inset 0 2px 0 rgba(255,255,255,0.9);
+        }
+        .product-card.featured {
+            color: #fff4f9;
+            background:
+                radial-gradient(80% 60% at 100% 0%, rgba(252,211,77,0.30) 0%, transparent 55%),
+                radial-gradient(80% 80% at 0% 100%, rgba(255,142,199,0.40) 0%, transparent 55%),
+                linear-gradient(155deg, #3a132a 0%, var(--berry-700) 50%, var(--purple-700) 100%);
+            border: 1.5px solid rgba(255,168,210,0.55);
+            box-shadow: var(--shadow-glow);
+        }
+        .product-card.featured h3,
+        .product-card.featured .price-big {
+            color: #fff4f9;
+        }
+        .product-card.featured::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><g fill='%23ffffff' opacity='0.4'><circle cx='30' cy='40' r='1'/><circle cx='160' cy='70' r='1.4'/><circle cx='90' cy='150' r='1'/><circle cx='180' cy='180' r='0.9'/></g></svg>");
+            opacity: 0.7;
+        }
+
+        /* Image hover zoom inside cards */
+        .product-card .aspect-\[16\/10\] img,
+        .rounded-3xl.overflow-hidden img,
+        .rounded-\[2rem\].overflow-hidden img {
+            transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        .card-hover:hover .aspect-\[16\/10\] img,
+        .card-hover:hover .rounded-3xl.overflow-hidden img,
+        .card-hover:hover .rounded-\[2rem\].overflow-hidden img { transform: scale(1.05); }
+
+        /* Rarity chips inside product cards */
+        .rarity-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .rarity-common  { background: rgba(192,132,252,0.16); color: var(--purple-700); border: 1px solid rgba(192,132,252,0.4); }
+        .rarity-rare    { background: rgba(255,142,199,0.18); color: var(--pink-700);   border: 1px solid rgba(255,142,199,0.45); }
+        .rarity-epic    { background: linear-gradient(135deg, rgba(252,211,77,0.25), rgba(255,142,199,0.25)); color: #a13769; border: 1px solid rgba(252,211,77,0.45); }
+        .rarity-legendary { background: linear-gradient(135deg, rgba(252,211,77,0.30), rgba(192,132,252,0.30)); color: #7e22ce; border: 1px solid rgba(252,211,77,0.55); }
+        .product-card.featured .rarity-common,
+        .product-card.featured .rarity-rare,
+        .product-card.featured .rarity-epic,
+        .product-card.featured .rarity-legendary {
+            background: rgba(255,255,255,0.14);
+            color: #fff4f9;
+            border-color: rgba(255,255,255,0.30);
+        }
+
+        /* =========================================================
+           SCOOP BUILDER (configurator-style mini wizard)
+           ========================================================= */
+        section#scoop-builder {
+            background-color: #270a1c;
+            background-image:
+                radial-gradient(70% 55% at 30% 20%, rgba(255,142,199,0.28) 0%, transparent 65%),
+                radial-gradient(60% 50% at 80% 70%, rgba(192,132,252,0.30) 0%, transparent 70%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 22px),
+                linear-gradient(180deg, #270a1c 0%, var(--berry-800) 50%, #1a0612 100%);
+            border-top: 1px solid rgba(255,168,210,0.20);
+            border-bottom: 1px solid rgba(255,168,210,0.20);
+            color: #fff4f9;
+        }
+
+        .builder-card {
+            background:
+                radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.96) 0%, transparent 60%),
+                linear-gradient(180deg, #ffffff 0%, var(--cream-50) 60%, var(--cream-100) 100%);
+            border: 1.5px solid rgba(255,142,199,0.35);
+            border-radius: 2rem;
+            box-shadow:
+                var(--shadow-soft),
+                inset 0 2px 0 rgba(255,255,255,0.9),
+                0 24px 60px -22px rgba(90,31,62,0.55);
+            color: var(--ink);
+            position: relative;
+            overflow: hidden;
+        }
+        .builder-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><g fill='%23ff8ec7' opacity='0.05'><circle cx='30' cy='40' r='1.5'/><circle cx='190' cy='70' r='1.2'/><circle cx='90' cy='180' r='1.4'/><circle cx='200' cy='200' r='1'/></g></svg>");
+            opacity: 0.8;
+            border-radius: inherit;
+        }
+        .builder-card > * { position: relative; z-index: 1; }
+
+        /* Step header */
+        .builder-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+            padding: 0.85rem 1.1rem;
+            background:
+                radial-gradient(70% 100% at 50% 0%, rgba(255,142,199,0.18) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(39,10,28,0.92) 0%, rgba(58,19,42,0.78) 100%);
+            backdrop-filter: blur(14px) saturate(1.1);
+            -webkit-backdrop-filter: blur(14px) saturate(1.1);
+            border: 1px solid rgba(255,168,210,0.30);
+            border-radius: 1.5rem;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                0 12px 30px -16px rgba(0,0,0,0.6);
+        }
+
+        .builder-eyebrow {
+            color: var(--pink-300);
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .builder-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.45rem;
+            line-height: 1.2;
+            color: #fff4f9;
+            margin-top: 2px;
+        }
+        @media (min-width: 768px) {
+            .builder-title { font-size: 1.7rem; }
+        }
+
+        .price-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.55rem 0.95rem 0.55rem 0.85rem;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, rgba(255,168,210,0.22), rgba(255,142,199,0.10));
+            border: 1px solid rgba(255,168,210,0.55);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.10),
+                0 6px 18px -10px rgba(212,74,141,0.55);
+        }
+        .price-chip .chip-tier {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: rgba(255,231,243,0.75);
+            font-weight: 700;
+        }
+        .price-chip .chip-tier-name {
+            font-family: 'Fraunces', serif;
+            font-size: 0.95rem;
+            color: #fff4f9;
+            line-height: 1;
+            margin-top: 1px;
+        }
+        .price-chip .chip-total {
+            font-family: 'Fraunces', serif;
+            font-size: 1.7rem;
+            line-height: 1;
+            color: var(--pink-300);
+            font-weight: 700;
+            padding-left: 0.7rem;
+            border-left: 1px solid rgba(255,168,210,0.40);
+        }
+
+        /* Bag option buttons */
+        .bag-opt {
+            position: relative;
+            text-align: left;
+            background: linear-gradient(180deg, #ffffff, var(--cream-100));
+            border: 2px solid var(--pink-200);
+            border-radius: 1.25rem;
+            padding: 1.1rem 1.2rem;
+            cursor: pointer;
+            transition: transform 220ms cubic-bezier(.2,.7,.2,1), border-color 220ms ease, box-shadow 220ms ease, background 220ms ease;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            width: 100%;
+            font-family: inherit;
+            color: inherit;
+        }
+        .bag-opt:hover {
+            transform: translateY(-3px);
+            border-color: var(--pink-400);
+            box-shadow: 0 12px 26px -10px rgba(255,142,199,0.5);
+        }
+        .bag-opt.active {
+            border-color: var(--pink-500);
+            background: linear-gradient(180deg, #fff4f9, var(--cream-200));
+            box-shadow:
+                0 0 0 4px rgba(255,142,199,0.20),
+                0 14px 30px -10px rgba(212,74,141,0.45);
+        }
+        .bag-opt .bag-emoji {
+            font-size: 2.2rem;
+            line-height: 1;
+            flex-shrink: 0;
+            filter: drop-shadow(0 4px 8px rgba(212,74,141,0.25));
+        }
+        .bag-opt .bag-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+        .bag-opt .bag-desc {
+            font-size: 0.82rem;
+            color: rgba(42,10,29,0.62);
+            line-height: 1.45;
+        }
+        .bag-opt .bag-price {
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--pink-600);
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+        .bag-opt.active .bag-price { color: var(--purple-600); }
+        .bag-opt .bag-check {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--pink-500);
+            color: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(212,74,141,0.4);
+        }
+        .bag-opt.active .bag-check { display: flex; }
+
+        /* Quantity stepper */
+        .qty-stepper {
+            display: inline-flex;
+            align-items: center;
+            background: #fff;
+            border: 2px solid var(--pink-200);
+            border-radius: 9999px;
+            padding: 4px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px -4px rgba(212,74,141,0.20);
+        }
+        .qty-stepper button {
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+            border: none;
+            background: linear-gradient(135deg, var(--pink-400), var(--purple-500));
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 150ms ease, filter 150ms ease;
+        }
+        .qty-stepper button:hover { filter: brightness(1.08); transform: scale(1.05); }
+        .qty-stepper button:active { transform: scale(0.95); }
+        .qty-stepper button:disabled {
+            background: var(--pink-200);
+            color: rgba(42,10,29,0.4);
+            cursor: not-allowed;
+            transform: none;
+            filter: none;
+        }
+        .qty-stepper .qty-val {
+            font-family: 'Fraunces', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--ink);
+            min-width: 48px;
+            text-align: center;
+        }
+
+        /* Add-on toggle pills */
+        .addon-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1rem;
+            border-radius: 9999px;
+            background: #fff;
+            border: 2px solid var(--pink-200);
+            color: var(--ink-soft);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 180ms ease;
+            font-family: inherit;
+        }
+        .addon-pill:hover {
+            border-color: var(--pink-400);
+            transform: translateY(-2px);
+            color: var(--pink-600);
+        }
+        .addon-pill.active {
+            background: linear-gradient(135deg, var(--pink-400), var(--purple-500));
+            border-color: var(--purple-600);
+            color: #fff;
+            box-shadow: 0 8px 20px -6px rgba(212,74,141,0.55);
+        }
+        .addon-pill .addon-price {
+            font-weight: 700;
+            opacity: 0.85;
+        }
+
+        /* Summary breakdown */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed rgba(255,142,199,0.30);
+        }
+        .summary-row:last-of-type { border-bottom: none; }
+        .summary-row .lbl { color: rgba(42,10,29,0.72); }
+        .summary-row .val { font-weight: 700; color: var(--ink); }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 0.85rem;
+            padding: 1rem 1.1rem;
+            background: linear-gradient(135deg, rgba(255,142,199,0.18), rgba(192,132,252,0.18));
+            border: 1.5px solid var(--pink-300);
+            border-radius: 1rem;
+        }
+        .summary-total .lbl {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--pink-700);
+            font-weight: 700;
+        }
+        .summary-total .val {
+            font-family: 'Fraunces', serif;
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: var(--pink-600);
+        }
+
+        /* =========================================================
+           DROP SCHEDULE — Calendar-style cards
+           ========================================================= */
+        .drop-card {
+            position: relative;
+            background: linear-gradient(180deg, #ffffff 0%, var(--cream-50) 100%);
+            border: 1.5px solid var(--pink-200);
+            border-radius: 1.5rem;
+            padding: 1.5rem 1.4rem 1.4rem;
+            box-shadow: var(--shadow-soft);
+            transition: transform 280ms cubic-bezier(.2,.7,.2,1), box-shadow 280ms ease, border-color 280ms ease;
+            overflow: hidden;
+        }
+        .drop-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--pink-400), var(--purple-500));
+            border-radius: 1.5rem 1.5rem 0 0;
+        }
+        .drop-card:hover {
+            transform: translateY(-6px) rotate(0.4deg);
+            border-color: var(--pink-400);
+            box-shadow: 0 22px 50px -16px rgba(212,74,141,0.30);
+        }
+        .drop-card .day-label {
+            font-family: 'Caveat', cursive;
+            font-size: 1rem;
+            color: var(--purple-600);
+            font-weight: 600;
+        }
+        .drop-card .day-num {
+            font-family: 'Fraunces', serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1;
+            margin: 4px 0 10px;
+        }
+        .drop-card .drop-time {
+            font-size: 0.75rem;
+            color: var(--pink-600);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .drop-card .drop-theme {
+            font-family: 'Fraunces', serif;
+            font-size: 1.2rem;
+            color: var(--ink);
+            line-height: 1.3;
+            margin-bottom: 6px;
+        }
+        .drop-card .drop-blurb {
+            font-size: 0.82rem;
+            color: rgba(42,10,29,0.65);
+            line-height: 1.5;
+        }
+        .drop-card.live {
+            background: linear-gradient(155deg, var(--berry-800) 0%, var(--purple-700) 100%);
+            color: #fff4f9;
+            border-color: transparent;
+            box-shadow: var(--shadow-glow);
+        }
+        .drop-card.live .day-label { color: var(--pink-300); }
+        .drop-card.live .day-num,
+        .drop-card.live .drop-theme { color: #fff4f9; }
+        .drop-card.live .drop-blurb { color: rgba(255,231,243,0.78); }
+        .drop-card.live .drop-time {
+            background: rgba(255,77,109,0.20);
+            border: 1px solid rgba(255,77,109,0.4);
+            color: #ffb3c4;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* =========================================================
+           HOW IT WORKS — soft step ladder
+           ========================================================= */
+        .step-card {
+            background: linear-gradient(180deg, #ffffff 0%, var(--cream-50) 100%);
+            border: 1.5px solid var(--pink-200);
+            border-radius: 1.5rem;
+            padding: 2rem 1.6rem 1.8rem;
+            transition: transform 280ms cubic-bezier(.2,.7,.2,1), box-shadow 280ms ease, border-color 280ms ease;
+            position: relative;
+            text-align: center;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--pink-400);
+            box-shadow: 0 22px 50px -16px rgba(212,74,141,0.25);
+        }
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, var(--pink-400), var(--purple-500));
+            color: #fff;
+            font-family: 'Fraunces', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 20px -6px rgba(212,74,141,0.5);
+        }
+
+        /* =========================================================
+           WHY US — dark dreamy
+           ========================================================= */
+        .why-section {
+            background-color: #1d0815;
+            background-image:
+                radial-gradient(60% 50% at 80% 0%, rgba(255,142,199,0.28) 0%, transparent 60%),
+                radial-gradient(50% 60% at 0% 100%, rgba(192,132,252,0.26) 0%, transparent 60%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.014) 0px, rgba(255,255,255,0.014) 1px, transparent 1px, transparent 18px),
+                linear-gradient(180deg, #1d0815 0%, var(--berry-800) 50%, #14060f 100%);
+            color: #fff4f9;
+        }
+
+        /* =========================================================
+           FINAL CTA — confetti sunlit
+           ========================================================= */
+        .final-cta {
+            background-color: #fff4f9;
+            background-image:
+                radial-gradient(60% 40% at 50% 0%, rgba(255,142,199,0.25) 0%, transparent 60%),
+                radial-gradient(50% 50% at 50% 100%, rgba(192,132,252,0.22) 0%, transparent 60%),
+                repeating-linear-gradient(-45deg, rgba(255,142,199,0.04) 0px, rgba(255,142,199,0.04) 1px, transparent 1px, transparent 11px),
+                linear-gradient(180deg, #fff4f9 0%, var(--cream-200) 100%);
+        }
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+        #footer {
+            background:
+                radial-gradient(50% 60% at 0% 0%, rgba(255,142,199,0.20) 0%, transparent 55%),
+                radial-gradient(40% 50% at 100% 100%, rgba(192,132,252,0.18) 0%, transparent 60%),
+                linear-gradient(180deg, #1d0815 0%, #100309 100%);
+            color: #fff4f9;
+        }
+        #footer a { color: rgba(255,231,243,0.78); transition: color 200ms; }
+        #footer a:hover { color: var(--pink-300); }
+        .footer-logo-mark {
+            background: linear-gradient(135deg, var(--pink-400) 0%, var(--purple-500) 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(212,74,141,0.40);
+        }
+
+        /* =========================================================
+           ANIMATIONS
+           ========================================================= */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 700ms cubic-bezier(.2,.7,.2,1), transform 700ms cubic-bezier(.2,.7,.2,1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25%      { transform: rotate(-4deg); }
+            75%      { transform: rotate(4deg); }
+        }
+        .wiggle-on-hover:hover { animation: wiggle 0.5s ease-in-out; }
+
+        @keyframes bagBounce {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50%      { transform: translateY(-12px) rotate(2deg); }
+        }
+        .bag-bounce { animation: bagBounce 3.2s ease-in-out infinite; }
+
+        /* =========================================================
+           MOBILE / RESPONSIVE TIDY-UPS
+           ========================================================= */
+        @media (max-width: 640px) {
+            .text-4xl { font-size: 2rem; }
+            .text-5xl { font-size: 2.5rem; }
+            .text-6xl { font-size: 2.75rem; }
+            .py-20 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+            .py-14 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+            .builder-header { padding: 0.7rem 0.85rem; }
+            .price-chip .chip-total { font-size: 1.4rem; }
+            .summary-total .val { font-size: 1.7rem; }
+        }
+
+        section { position: relative; }
+
+        /* Sweet little pink scrollbar accent (Webkit) */
+        ::-webkit-scrollbar { width: 12px; height: 12px; }
+        ::-webkit-scrollbar-track { background: var(--cream-100); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--pink-300), var(--purple-400));
+            border-radius: 9999px;
+            border: 3px solid var(--cream-100);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- ============ NAVBAR ============ -->
+    <header id="nav" class="sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-18 py-3">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <span class="nav-logo-mark w-9 h-9 rounded-xl flex items-center justify-center font-serif text-lg">R</span>
+                <span class="font-serif text-xl tracking-tight">Realized Prints</span>
+            </a>
+            <nav class="hidden lg:flex items-center gap-9 text-sm font-medium">
+                <a href="index.html" class="transition">← Back to Home</a>
+                <a href="index.html#collections" class="transition">Collections</a>
+                <a href="catan-artisan.html" class="transition">Catan Artisan</a>
+                <a href="#footer" class="transition">Contact</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <a href="#products" class="hidden sm:inline-flex btn-primary px-5 py-2.5 rounded-full text-sm font-semibold">Shop the Drops</a>
+                <button id="menuBtn" class="lg:hidden p-2" aria-label="Open menu">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden lg:hidden" style="border-top:1px solid rgba(255,142,199,0.22); background:var(--cream-50);">
+            <div class="px-5 py-4 flex flex-col gap-3 text-sm font-medium">
+                <a href="index.html" class="py-2">← Back to Home</a>
+                <a href="index.html#collections" class="py-2">Collections</a>
+                <a href="catan-artisan.html" class="py-2">Catan Artisan</a>
+                <a href="#footer" class="py-2">Contact</a>
+                <a href="#products" class="btn-primary px-5 py-3 rounded-full text-center">Shop the Drops</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero-section">
+        <!-- Sparkles -->
+        <span class="sparkle s1">✨</span>
+        <span class="sparkle s2">✦</span>
+        <span class="sparkle s3">✨</span>
+        <span class="sparkle s4">✦</span>
+        <span class="sparkle s5">✧</span>
+
+        <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-10 lg:py-20 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            <div class="lg:col-span-6 fade-in">
+                <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-medium mb-4 transition" style="color:rgba(255,231,243,0.72);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                    Back to all collections
+                </a>
+
+                <div class="hero-pill px-3 py-1.5 rounded-full text-xs font-semibold mb-5">
+                    <span class="live-dot"></span>
+                    <span>NEW DROP — Friday night live on WhatsNot</span>
+                </div>
+
+                <h1 class="font-serif" style="font-size: clamp(2.6rem, 5.6vw, 4.4rem); line-height: 1.04; letter-spacing: -0.025em; margin-bottom: 18px;">
+                    Each bag holds<br>
+                    <em style="color: var(--pink-300); font-style: italic;">a tiny secret.</em><br>
+                    <span style="background: linear-gradient(135deg, #fcd34d 0%, var(--pink-300) 50%, var(--purple-300) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-style: italic;">Open it. Meow.</span>
+                </h1>
+
+                <p class="text-lg leading-relaxed mb-8 max-w-xl">
+                    Hand-poured surprise cat collectibles, sealed by a father &amp; son in their NJ workshop. Twelve sculpts. Four rarities. <strong style="color:#fff4f9;">Zero chance of a duplicate disappointment.</strong>
+                </p>
+
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="#products" class="btn-primary px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                        Grab a Blind Bag — $19
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                    </a>
+                    <a href="#whatsnot" class="btn-whatsnot px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Watch the Live Drop
+                    </a>
+                </div>
+
+                <!-- Social proof row -->
+                <div class="mt-10" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+                    <div style="display:flex;">
+                        <div class="av" style="margin-left:0">EM</div>
+                        <div class="av" style="margin-left:-8px; background: linear-gradient(135deg, var(--purple-400), var(--pink-500));">LK</div>
+                        <div class="av" style="margin-left:-8px; background: linear-gradient(135deg, #fcd34d, var(--pink-400));">AY</div>
+                    </div>
+                    <div>
+                        <div style="color:var(--pink-300);font-weight:700;font-size:0.85rem;">★★★★★&nbsp; 4.9</div>
+                        <div style="font-size:0.73rem;color:rgba(255,231,243,0.55);margin-top:2px;">312 happy openings</div>
+                    </div>
+                    <div style="width:1px;height:34px;background:rgba(255,231,243,0.16);"></div>
+                    <div>
+                        <div style="font-weight:600;color:rgba(255,244,249,0.88);font-size:0.82rem;">USA-made</div>
+                        <div style="font-size:0.73rem;color:rgba(255,231,243,0.55);">NJ workshop</div>
+                    </div>
+                </div>
+
+                <!-- Feature pills below -->
+                <div class="mt-8 grid grid-cols-3 gap-3 text-xs max-w-md" style="color:rgba(255,231,243,0.76);">
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--pink-300);">✿</span><span>12 unique<br>sculpts</span></div>
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--pink-300);">🐾</span><span>Sealed by<br>hand</span></div>
+                    <div class="flex items-start gap-2"><span class="text-base leading-none" style="color:var(--pink-300);">★</span><span>Guaranteed<br>rare in Scoops</span></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 relative fade-in">
+                <div class="relative rounded-3xl overflow-hidden aspect-[4/5] bag-bounce" style="border:1.5px solid rgba(255,168,210,0.40); box-shadow: 0 30px 70px rgba(20,6,15,0.55), 0 0 0 1px rgba(255,255,255,0.05);">
+                    <img src="MeowMeowsHero.JPG" alt="Pink and purple Meow Meow blind bag with a tiny 3D printed cat collectible peeking out" class="w-full h-full object-cover" style="background: linear-gradient(135deg, #5a1f3e, #c084fc);">
+
+                    <div class="cm cm-tl"></div>
+                    <div class="cm cm-tr"></div>
+                    <div class="cm cm-bl"></div>
+                    <div class="cm cm-br"></div>
+
+                    <div class="absolute top-5 right-5 px-3 py-1.5 text-xs font-bold tracking-wider rounded-full" style="background:linear-gradient(135deg, var(--pink-400), var(--purple-500));color:#fff; z-index:2; box-shadow:0 6px 18px -4px rgba(212,74,141,0.6);">
+                        🎀 DROP #07
+                    </div>
+
+                    <div class="hero-glass-card">
+                        <div>
+                            <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--pink-300);margin-bottom:5px;">This Week's Theme</div>
+                            <div class="font-serif" style="font-size:1.05rem;color:#fff4f9;line-height:1.3;">Sleepy Café Cats — 12 sculpts, 4 rarities</div>
+                        </div>
+                        <div style="font-size:1.8rem;">☕</div>
+                    </div>
+                </div>
+
+                <!-- Floating $19 plaque -->
+                <div class="hidden md:block absolute -top-6 -left-6 floating-price-plaque rounded-2xl p-5 max-w-[200px]">
+                    <div class="text-xs uppercase tracking-wider font-bold mb-1" style="color:var(--pink-600);">BAGS FROM</div>
+                    <div class="font-serif text-4xl leading-none" style="color:var(--ink);">$19</div>
+                    <div class="text-xs mt-2 leading-tight" style="color:var(--ink-soft);">Free US ship over $50 🐾</div>
+                </div>
+
+                <!-- Floating "guaranteed rare" badge -->
+                <div class="hidden md:block absolute -bottom-6 -right-6 rounded-2xl p-4 max-w-[180px]" style="background: linear-gradient(135deg, var(--mint-500), var(--mint-600)); color:#fff; box-shadow: 0 22px 50px -12px rgba(16,185,129,0.45); transform: rotate(4deg);">
+                    <div class="text-xs uppercase tracking-wider font-bold mb-1" style="opacity:0.85;">LUCKY SCOOP</div>
+                    <div class="font-serif text-lg leading-tight">Guaranteed rare or better — every time.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TRUST BAR ============ -->
+    <section class="trust-bar">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">📦</span>
+                <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs" style="color:rgba(255,231,243,0.65);">Ships within 48 hrs</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">🐾</span>
+                <div class="text-sm"><div class="font-semibold">No Duplicates</div><div class="text-xs" style="color:rgba(255,231,243,0.65);">Send-back swap if you do</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">💖</span>
+                <div class="text-sm"><div class="font-semibold">Cute or Refund</div><div class="text-xs" style="color:rgba(255,231,243,0.65);">30-day happy guarantee</div></div>
+            </div>
+            <div class="flex items-center gap-3 justify-center md:justify-start">
+                <span class="text-xl">👨‍👦</span>
+                <div class="text-sm"><div class="font-semibold">Family Crafted</div><div class="text-xs" style="color:rgba(255,231,243,0.65);">Father &amp; son workshop</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PRODUCT TIERS ============ -->
+    <section id="products" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--pink-600);">Pick Your Surprise</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--ink);">
+                    <span style="color:var(--pink-600);">Two ways</span>
+                    <span class="italic" style="color:var(--purple-600);">to meow.</span>
+                </h2>
+                <p class="mt-4" style="color:rgba(42,10,29,0.72);">Every bag is hand-sealed and sent with a tiny purr. The only question is how lucky you're feeling. 🍀</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+
+                <!-- BLIND BAG -->
+                <article class="product-card overflow-hidden card-hover fade-in flex flex-col" data-tier="blind">
+                    <div class="aspect-[16/10] overflow-hidden" style="background: linear-gradient(135deg, var(--pink-200), var(--purple-300));">
+                        <img src="MeowMeowsHero.JPG" alt="Single Meow Meow blind bag — pink foil with a paw print seal" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="text-xs uppercase tracking-wider font-bold" style="color:var(--purple-600);">🎀 The Standard</div>
+                            <span class="rarity-chip rarity-common">1 bag</span>
+                        </div>
+                        <div class="font-serif text-4xl mb-1 price-big" style="color:var(--ink);">$19</div>
+                        <div class="text-xs mb-6" style="color:rgba(42,10,29,0.6);">A surprise cat. A tiny thrill.</div>
+                        <ul class="space-y-3 text-sm mb-8 flex-1" style="color:rgba(42,10,29,0.85);">
+                            <li class="flex gap-2"><span class="font-bold" style="color:var(--pink-500);">✓</span> One sealed Meow Meow bag</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:var(--pink-500);">✓</span> 1 of 12 sculpts from this week's drop</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:var(--pink-500);">✓</span> Mini collector card with sculpt name</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:var(--pink-500);">✓</span> Confetti &amp; sticker inside every bag</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:var(--pink-500);">✓</span> Free US shipping when you grab 3+</li>
+                        </ul>
+                        <button data-tier="blind" data-price="19" class="select-tier btn-ghost w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Choose Blind Bag — $19
+                        </button>
+                    </div>
+                </article>
+
+                <!-- LUCKY SCOOP (featured) -->
+                <article class="product-card featured overflow-hidden card-hover fade-in flex flex-col relative" data-tier="scoop">
+                    <div class="absolute top-0 right-0 z-10 px-4 py-1.5 text-xs font-bold tracking-wider rounded-bl-2xl" style="background:linear-gradient(135deg, #fcd34d, var(--pink-400));color:var(--ink);">
+                        ⭐ MOST LOVED
+                    </div>
+                    <div class="aspect-[16/10] overflow-hidden" style="background:linear-gradient(135deg, var(--berry-700), var(--purple-600));">
+                        <img src="MeowMeowsAngled.JPG" alt="Lucky Scoop — three Meow Meow bags bundled with a guaranteed-rare ribbon" class="w-full h-full object-cover opacity-90">
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="text-xs uppercase tracking-wider font-bold" style="color:var(--pink-300);">🍀 The Big Scoop</div>
+                            <span class="rarity-chip rarity-rare">3 bags + extras</span>
+                        </div>
+                        <div class="font-serif text-4xl mb-1 price-big">$29</div>
+                        <div class="text-xs mb-6" style="color:rgba(255,231,243,0.75);">Save $28 vs. buying singles · Rare guaranteed.</div>
+                        <ul class="space-y-3 text-sm mb-8 flex-1" style="color:rgba(255,231,243,0.92);">
+                            <li class="flex gap-2"><span class="font-bold" style="color:#fcd34d;">✓</span> <strong>3 Meow Meow bags</strong> from this week's drop</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:#fcd34d;">✓</span> <strong>Guaranteed rare</strong> (or better) in every Scoop</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:#fcd34d;">✓</span> Holographic collector card &amp; chase index</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:#fcd34d;">✓</span> Bonus mini-sticker sheet (Scoop-exclusive)</li>
+                            <li class="flex gap-2"><span class="font-bold" style="color:#fcd34d;">✓</span> Free US shipping &amp; priority queue</li>
+                        </ul>
+                        <button data-tier="scoop" data-price="29" class="select-tier btn-primary w-full px-6 py-3.5 rounded-full text-sm font-semibold">
+                            Choose Lucky Scoop — $29
+                        </button>
+                    </div>
+                </article>
+
+            </div>
+
+            <p class="text-center text-xs mt-8 max-w-xl mx-auto fade-in" style="color:rgba(42,10,29,0.62);">
+                Every order ships with a little handwritten thank-you. 🐾 Drop #07 closes Friday at midnight ET — or when sculpts sell out.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ SCOOP BUILDER (CONFIGURATOR-STYLE) ============ -->
+    <section id="scoop-builder" class="py-16 lg:py-20">
+        <div class="max-w-6xl mx-auto px-5 lg:px-8">
+
+            <div class="builder-header fade-in">
+                <div>
+                    <div class="builder-eyebrow">Build Your Order</div>
+                    <div class="builder-title">Pick your bags, sprinkle some extras 🎀</div>
+                </div>
+                <div class="price-chip">
+                    <div>
+                        <div class="chip-tier">Your Total</div>
+                        <div class="chip-tier-name" id="chipTierName">Lucky Scoop ×1</div>
+                    </div>
+                    <div class="chip-total" id="chipTotal">$29</div>
+                </div>
+            </div>
+
+            <div class="builder-card p-6 lg:p-10 fade-in">
+
+                <!-- Step 1: choose bag type -->
+                <div class="mb-8">
+                    <div class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" style="background:rgba(255,142,199,0.14); color:var(--pink-700); border:1px solid rgba(255,142,199,0.35);">STEP 1</div>
+                    <h3 class="font-serif" style="font-size: clamp(1.6rem, 3.4vw, 2.2rem); color:var(--ink); margin-bottom: 0.4rem;">Choose your <em style="color:var(--pink-600); font-style:italic;">flavor of surprise.</em></h3>
+                    <p style="color:rgba(42,10,29,0.65); margin-bottom: 1.5rem; max-width: 42rem;">One bag for a quick thrill — or a Lucky Scoop if you want to skip straight to the good rares.</p>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <button type="button" class="bag-opt" data-bag="blind" data-price="19">
+                            <div class="bag-emoji">🎀</div>
+                            <div style="flex:1;">
+                                <div class="bag-name">Blind Bag</div>
+                                <div class="bag-desc">One sealed surprise. 12 sculpts, 4 rarities. Confetti included.</div>
+                            </div>
+                            <div class="bag-price">$19</div>
+                            <span class="bag-check">✓</span>
+                        </button>
+                        <button type="button" class="bag-opt active" data-bag="scoop" data-price="29">
+                            <div class="bag-emoji">🍀</div>
+                            <div style="flex:1;">
+                                <div class="bag-name">Lucky Scoop</div>
+                                <div class="bag-desc">3 bags + holo card. Rare guaranteed. Bonus stickers tucked in.</div>
+                            </div>
+                            <div class="bag-price">$29</div>
+                            <span class="bag-check">✓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: quantity -->
+                <div class="mb-8">
+                    <div class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" style="background:rgba(192,132,252,0.14); color:var(--purple-700); border:1px solid rgba(192,132,252,0.35);">STEP 2</div>
+                    <h3 class="font-serif" style="font-size: clamp(1.6rem, 3.4vw, 2.2rem); color:var(--ink); margin-bottom: 0.4rem;">How many <em style="color:var(--purple-600); font-style:italic;">do you want?</em></h3>
+                    <p style="color:rgba(42,10,29,0.65); margin-bottom: 1.25rem; max-width: 42rem;">Free US shipping kicks in at $50. Order 4+ and we'll throw in a tiny extra sculpt at no cost. 🤫</p>
+                    <div class="qty-stepper">
+                        <button type="button" id="qtyMinus" aria-label="Decrease quantity">−</button>
+                        <span class="qty-val" id="qtyVal">1</span>
+                        <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
+                    </div>
+                    <span class="font-script" style="font-size:1.15rem; color:var(--purple-600); margin-left:14px;" id="qtyHint">Add 3 more for free shipping ✨</span>
+                </div>
+
+                <!-- Step 3: extras -->
+                <div class="mb-8">
+                    <div class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" style="background:rgba(252,211,77,0.18); color:#a16207; border:1px solid rgba(252,211,77,0.45);">STEP 3</div>
+                    <h3 class="font-serif" style="font-size: clamp(1.6rem, 3.4vw, 2.2rem); color:var(--ink); margin-bottom: 0.4rem;">Sprinkle some <em style="color:#d97706; font-style:italic;">extras.</em></h3>
+                    <p style="color:rgba(42,10,29,0.65); margin-bottom: 1.25rem; max-width: 42rem;">Optional little add-ons that make the unboxing extra. Toggle any combo.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <button type="button" class="addon-pill" data-addon="card" data-price="4">
+                            <span>🃏 Holo collector card</span>
+                            <span class="addon-price">+$4</span>
+                        </button>
+                        <button type="button" class="addon-pill" data-addon="stickers" data-price="3">
+                            <span>🐾 Sticker sheet</span>
+                            <span class="addon-price">+$3</span>
+                        </button>
+                        <button type="button" class="addon-pill" data-addon="note" data-price="2">
+                            <span>💌 Handwritten note</span>
+                            <span class="addon-price">+$2</span>
+                        </button>
+                        <button type="button" class="addon-pill" data-addon="giftwrap" data-price="5">
+                            <span>🎁 Pink gift wrap</span>
+                            <span class="addon-price">+$5</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary + CTA -->
+                <div style="border-top: 1px dashed rgba(255,142,199,0.35); padding-top: 1.5rem;">
+                    <div class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" style="background:rgba(255,142,199,0.14); color:var(--pink-700); border:1px solid rgba(255,142,199,0.35);">YOUR ORDER</div>
+                    <h3 class="font-serif" style="font-size: clamp(1.4rem, 3vw, 1.85rem); color:var(--ink); margin-bottom: 1rem;">Ready to <em style="color:var(--pink-600); font-style:italic;">meow?</em></h3>
+
+                    <div id="summaryBreakdown" style="margin-bottom: 0.6rem;">
+                        <div class="summary-row"><span class="lbl" id="sumBagLine">Lucky Scoop ×1</span><span class="val" id="sumBagPrice">$29</span></div>
+                        <div class="summary-row" id="sumShipRow"><span class="lbl">Shipping</span><span class="val" id="sumShipVal">$5</span></div>
+                    </div>
+
+                    <div class="summary-total">
+                        <div>
+                            <div class="lbl">Order Total</div>
+                            <div class="font-script" style="color:var(--purple-600); font-size: 1.1rem; margin-top:2px;" id="sumSavingsNote"></div>
+                        </div>
+                        <div class="val" id="sumTotal">$34</div>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <button type="button" id="addToCart" class="btn-primary px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2" style="flex:1; min-width: 220px;">
+                            <span id="cartLabel">Add to Cart — $34</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                        </button>
+                        <a href="#whatsnot" class="btn-whatsnot px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            Or watch a live drop
+                        </a>
+                    </div>
+
+                    <div id="cartConfirm" class="hidden" style="margin-top: 1rem; padding: 0.85rem 1.1rem; background: linear-gradient(135deg, rgba(110,231,183,0.18), rgba(52,211,153,0.10)); border: 1px solid rgba(52,211,153,0.45); border-radius: 1rem; color: var(--mint-700); font-weight: 600; font-size: 0.9rem;">
+                        ✓ Added to your cart! We're taking you to checkout…
+                    </div>
+
+                    <p class="text-xs mt-4" style="color:rgba(42,10,29,0.55);">
+                        🐾 Ships in 1–2 business days · 30-day cute-or-refund guarantee · Secure checkout via Stripe
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="py-20 lg:py-28" style="background: linear-gradient(180deg, var(--cream-50) 0%, var(--cream-100) 100%);">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--pink-600);">How It Works</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--ink);">
+                    Three tiny steps to a <span class="italic" style="color:var(--pink-600);">new best friend.</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="step-card fade-in">
+                    <div class="step-num">1</div>
+                    <h3 class="font-serif text-xl mb-2" style="color:var(--ink);">Pick &amp; pour</h3>
+                    <p class="text-sm leading-relaxed" style="color:rgba(42,10,29,0.7);">Order a Blind Bag or a Lucky Scoop. Each one is hand-poured, sealed with a wax paw print, and tucked in a confetti-filled pouch.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-num">2</div>
+                    <h3 class="font-serif text-xl mb-2" style="color:var(--ink);">Unbox the meow</h3>
+                    <p class="text-sm leading-relaxed" style="color:rgba(42,10,29,0.7);">Open it on camera, in your kitchen, in bed — we don't judge. Catch a rare? You'll know from the holographic card hiding inside.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-num">3</div>
+                    <h3 class="font-serif text-xl mb-2" style="color:var(--ink);">Trade or collect</h3>
+                    <p class="text-sm leading-relaxed" style="color:rgba(42,10,29,0.7);">Got a duplicate from a past drop? Send it back — we'll swap it for one you don't have. Build the full set of 12 and we'll send a free secret 13th.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ LIVE ON WHATSNOT ============ -->
+    <section id="whatsnot" class="py-20 lg:py-28" style="background:linear-gradient(135deg, var(--berry-800) 0%, var(--purple-700) 60%, var(--pink-600) 100%); color:#fff4f9; position:relative; overflow:hidden;">
+        <!-- Decorative sparkles -->
+        <div style="position:absolute; top:8%; left:6%; font-size:1.5rem; color:#fcd34d; opacity:0.5;">✦</div>
+        <div style="position:absolute; top:14%; right:9%; font-size:1.2rem; color:var(--pink-300); opacity:0.6;">✨</div>
+        <div style="position:absolute; bottom:12%; left:10%; font-size:1.4rem; color:var(--purple-300); opacity:0.55;">✧</div>
+        <div style="position:absolute; bottom:18%; right:7%; font-size:1.6rem; color:#fcd34d; opacity:0.5;">✦</div>
+
+        <div class="max-w-6xl mx-auto px-5 lg:px-8 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center relative">
+            <div class="fade-in">
+                <div class="hero-pill px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style="background:rgba(255,255,255,0.12); border-color:rgba(255,168,210,0.5); color:#ffe1ef;">
+                    <span class="live-dot"></span>
+                    LIVE EVERY FRIDAY · 8PM ET
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-5">
+                    Watch us pull rares <em class="italic" style="color:var(--pink-300);">in real time.</em>
+                </h2>
+                <p class="text-lg leading-relaxed mb-7" style="color:rgba(255,231,243,0.85);">
+                    Friday nights on <strong style="color:#fff;">WhatsNot</strong>, we go live, open bags on stream, and pull names out of the chat for free giveaways. Bid on rares, trade chases, hang out with the fam — it's basically the world's coziest auction.
+                </p>
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <a href="#" class="btn-whatsnot px-7 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Follow on WhatsNot
+                    </a>
+                    <a href="#schedule" class="btn-ghost px-7 py-4 rounded-full text-sm font-semibold" style="background:rgba(255,255,255,0.10); color:#fff4f9; border-color:rgba(255,168,210,0.45);">
+                        See Drop Schedule
+                    </a>
+                </div>
+                <div class="grid grid-cols-3 gap-4 max-w-md">
+                    <div>
+                        <div class="font-serif text-3xl" style="color:var(--pink-300);">312+</div>
+                        <div class="text-xs" style="color:rgba(255,231,243,0.65);">Happy openings</div>
+                    </div>
+                    <div>
+                        <div class="font-serif text-3xl" style="color:#fcd34d;">4.9★</div>
+                        <div class="text-xs" style="color:rgba(255,231,243,0.65);">Avg rating</div>
+                    </div>
+                    <div>
+                        <div class="font-serif text-3xl" style="color:var(--purple-300);">7</div>
+                        <div class="text-xs" style="color:rgba(255,231,243,0.65);">Drops &amp; counting</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative fade-in">
+                <div class="relative rounded-3xl overflow-hidden aspect-[4/5]" style="border:1.5px solid rgba(255,168,210,0.40); box-shadow: 0 30px 70px rgba(20,6,15,0.55);">
+                    <img src="MeowMeowsAngled.JPG" alt="Three Meow Meow bags fanned out, ready to be opened live on stream" class="w-full h-full object-cover">
+                    <div class="absolute inset-0" style="background:linear-gradient(180deg, transparent 50%, rgba(39,10,28,0.65) 100%);"></div>
+                    <div style="position:absolute; top:18px; left:18px; padding:6px 12px; border-radius:9999px; background:rgba(255,77,109,0.95); color:#fff; font-weight:800; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; display:inline-flex; align-items:center; gap:6px;">
+                        <span class="live-dot" style="background:#fff;"></span>
+                        Live next Friday
+                    </div>
+                    <div style="position:absolute; bottom:20px; left:20px; right:20px;">
+                        <div class="font-serif" style="font-size:1.4rem; color:#fff4f9; line-height:1.25;">"It's like Christmas morning, but for grown-ups who like cats." — @softpawcollector</div>
+                    </div>
+                </div>
+
+                <!-- Stack of mini reaction quotes -->
+                <div class="hidden md:block absolute -top-5 -right-5 rounded-2xl p-4 max-w-[200px]" style="background:#fff; color:var(--ink); transform:rotate(5deg); box-shadow: 0 20px 40px -10px rgba(20,6,15,0.5); border: 2px solid var(--pink-300);">
+                    <div class="font-script" style="font-size:1.1rem; color:var(--pink-600);">"I literally screamed when I pulled the golden one 💛"</div>
+                    <div class="text-xs mt-2" style="color:rgba(42,10,29,0.6);">— Emma, Drop #04</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ DROP SCHEDULE ============ -->
+    <section id="schedule" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--pink-600);">📆 Live Drop Schedule</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--ink);">
+                    Mark your calendar, <span class="italic" style="color:var(--purple-600);">friend.</span>
+                </h2>
+                <p class="mt-4" style="color:rgba(42,10,29,0.7);">Every Friday at 8pm ET we go live on WhatsNot with a new themed drop. Set a reminder so you don't miss the chase sculpts.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+
+                <div class="drop-card live fade-in">
+                    <div class="day-label">This Friday</div>
+                    <div class="day-num">May 15</div>
+                    <div class="drop-time"><span class="live-dot" style="background:#ffb3c4;"></span> Going Live · 8pm ET</div>
+                    <div class="drop-theme">Drop #07 — Sleepy Café Cats ☕</div>
+                    <div class="drop-blurb">12 sculpts of nap-time kittens curled around coffee cups. Chase: the holographic Latte Loaf.</div>
+                </div>
+
+                <div class="drop-card fade-in">
+                    <div class="day-label">Next Friday</div>
+                    <div class="day-num">May 22</div>
+                    <div class="drop-time">8pm ET</div>
+                    <div class="drop-theme">Drop #08 — Garden Goblin Kitties 🌸</div>
+                    <div class="drop-blurb">Tiny mischief-makers in flower hats. 12 sculpts, two new rarities, one secret seasonal chase.</div>
+                </div>
+
+                <div class="drop-card fade-in">
+                    <div class="day-label">Friday</div>
+                    <div class="day-num">May 29</div>
+                    <div class="drop-time">8pm ET</div>
+                    <div class="drop-theme">Drop #09 — Astro Cats 🚀</div>
+                    <div class="drop-blurb">Space-suited kittens drifting through pink nebulae. Glow-in-the-dark variants on rare pulls.</div>
+                </div>
+
+                <div class="drop-card fade-in">
+                    <div class="day-label">Friday</div>
+                    <div class="day-num">Jun 5</div>
+                    <div class="drop-time">8pm ET</div>
+                    <div class="drop-theme">Drop #10 — Anniversary Special 🎉</div>
+                    <div class="drop-blurb">Our biggest drop yet. 15 sculpts, a brand-new "mythic" rarity, surprise giveaways all stream.</div>
+                </div>
+
+            </div>
+
+            <p class="text-center text-xs mt-10 max-w-xl mx-auto fade-in" style="color:rgba(42,10,29,0.6);">
+                Bags from past drops sell out fast — most go in the first 20 minutes of stream. Follow us on WhatsNot for early access &amp; reminder pings. 🔔
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ WHY US ============ -->
+    <section class="why-section py-20 lg:py-28 relative overflow-hidden">
+        <div class="relative max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--pink-300);">Made With Obsessive Love</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight">Why these bags are <em class="italic" style="color:var(--pink-300);">different.</em></h2>
+                <p class="mt-4" style="color:rgba(255,231,243,0.78);">We're a brand-new father-and-son workshop. Every sculpt was prototyped 20+ times before it ever hit a bag. Here's what that obsession looks like.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <figure class="rounded-2xl p-7 backdrop-blur fade-in" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,168,210,0.18);">
+                    <div class="mb-4 text-2xl" style="color:var(--pink-300);">✿</div>
+                    <div class="text-xs uppercase tracking-wider font-semibold mb-3" style="color:var(--pink-300);">Sculpt Obsession</div>
+                    <blockquote class="font-serif text-lg leading-relaxed">Every sculpt gets 20+ prototype rounds before it ever sees a bag. We tweak whisker length, paw curl, ear tilt — whatever it takes to make you go "awww" out loud the second you open it.</blockquote>
+                    <figcaption class="mt-5 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg" style="background:linear-gradient(135deg, var(--pink-400), var(--purple-500));">🎨</div>
+                        <div><div class="font-semibold text-sm">Workshop Standard</div><div class="text-xs" style="color:rgba(255,231,243,0.6);">Cuteness, inspected</div></div>
+                    </figcaption>
+                </figure>
+                <figure class="rounded-2xl p-7 backdrop-blur fade-in" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,168,210,0.18);">
+                    <div class="mb-4 text-2xl" style="color:var(--pink-300);">🐾</div>
+                    <div class="text-xs uppercase tracking-wider font-semibold mb-3" style="color:var(--pink-300);">Sealed by Hand</div>
+                    <blockquote class="font-serif text-lg leading-relaxed">No factory. No conveyor belt. Every bag is poured, weighed, scented (yes — scented), and sealed with a wax paw print by Dad. The crinkle of the foil is part of the joy, so we pick the good crinkly kind.</blockquote>
+                    <figcaption class="mt-5 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg" style="background:linear-gradient(135deg, var(--purple-400), var(--pink-500));">✋</div>
+                        <div><div class="font-semibold text-sm">Designed for Unboxing</div><div class="text-xs" style="color:rgba(255,231,243,0.6);">Crinkle &amp; confetti</div></div>
+                    </figcaption>
+                </figure>
+                <figure class="rounded-2xl p-7 backdrop-blur fade-in" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,168,210,0.18);">
+                    <div class="mb-4 text-2xl" style="color:var(--pink-300);">★</div>
+                    <div class="text-xs uppercase tracking-wider font-semibold mb-3" style="color:var(--pink-300);">No Duplicate Heartbreak</div>
+                    <blockquote class="font-serif text-lg leading-relaxed">Got a sculpt you already have? Send it back, free shipping on us — we'll swap it for a fresh one you don't. The whole point of collecting is the smile, not the disappointment.</blockquote>
+                    <figcaption class="mt-5 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg" style="background:linear-gradient(135deg, #fcd34d, var(--pink-400));">↻</div>
+                        <div><div class="font-semibold text-sm">Swap Promise</div><div class="text-xs" style="color:rgba(255,231,243,0.6);">For life, forever</div></div>
+                    </figcaption>
+                </figure>
+            </div>
+            <p class="text-center text-xs mt-10 max-w-xl mx-auto fade-in" style="color:rgba(255,231,243,0.55);">
+                First time pulling? You're in for a treat — and the 30-day cute-or-refund guarantee means zero risk to dipping in early.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ GUARANTEES ============ -->
+    <section class="py-20 lg:py-28" style="background:var(--cream-100); border-top:1px solid var(--cream-200); border-bottom:1px solid var(--cream-200);">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center mb-12 fade-in">
+                <div class="text-xs uppercase tracking-[0.2em] font-semibold mb-4" style="color:var(--pink-600);">Our Promises</div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight" style="color:var(--ink);">We stand behind every bag. <span class="italic" style="color:var(--pink-600);">Pinky paw promise.</span></h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="step-card fade-in">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 text-xl mx-auto" style="background:linear-gradient(135deg, var(--pink-400), var(--purple-500)); color:#fff; box-shadow:0 8px 20px -6px rgba(212,74,141,0.5);">💖</div>
+                    <h3 class="font-serif text-xl mb-2" style="color:var(--ink);">30-Day Cute Guarantee</h3>
+                    <p class="text-sm leading-relaxed" style="color:rgba(42,10,29,0.72);">Open your bag. Hold the sculpt. If it doesn't make you smile, we'll refund you, no awkward emails, no return needed.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 text-xl mx-auto" style="background:linear-gradient(135deg, #fcd34d, var(--pink-400)); color:var(--ink); box-shadow:0 8px 20px -6px rgba(252,211,77,0.55);">↻</div>
+                    <h3 class="font-serif text-xl mb-2" style="color:var(--ink);">Free Duplicate Swaps</h3>
+                    <p class="text-sm leading-relaxed" style="color:rgba(42,10,29,0.72);">Got the same sculpt twice? Send it back — postage on us — and we'll mail you a fresh one you don't have. Forever.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 text-xl mx-auto" style="background:linear-gradient(135deg, var(--mint-500), var(--mint-600)); color:#fff; box-shadow:0 8px 20px -6px rgba(16,185,129,0.5);">✿</div>
+                    <h3 class="font-serif text-xl mb-2" style="color:var(--ink);">Direct Line to Us</h3>
+                    <p class="text-sm leading-relaxed" style="color:rgba(42,10,29,0.72);">Email us &amp; you're talking to the people who sealed your bag. No bots, no tickets — just two craftsmen who love what they make.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final-cta py-20 lg:py-28">
+        <div class="max-w-5xl mx-auto px-5 lg:px-8 text-center fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6" style="background:rgba(255,142,199,0.15); color:var(--pink-700); border:1px solid rgba(255,142,199,0.35);">
+                <span class="w-1.5 h-1.5 rounded-full pulse-dot" style="background:var(--pink-500);"></span>
+                Drop #07 closes Friday at midnight ET · 48 bags remaining
+            </div>
+            <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl leading-tight" style="color:var(--ink);">
+                Your next favorite cat<br>is <span class="italic" style="color:var(--pink-600);">already in the bag.</span>
+            </h2>
+            <p class="mt-6 text-lg max-w-xl mx-auto" style="color:rgba(42,10,29,0.78);">
+                Twelve sculpts. Four rarities. One sealed pouch with your name on it. Don't think too hard — just pick the surprise. 🎀
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3 justify-center">
+                <a href="#products" class="btn-primary px-8 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                    Grab a Bag — $19
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+                </a>
+                <a href="#products" class="btn-whatsnot px-8 py-4 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+                    Go Lucky Scoop — $29
+                </a>
+            </div>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs" style="color:rgba(42,10,29,0.62);">
+                <span>✓ 30-Day Cute-Or-Refund Guarantee</span>
+                <span>✓ Free duplicate swaps for life</span>
+                <span>✓ Sealed by hand · NJ workshop</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer id="footer" class="pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12" style="border-bottom: 1px solid rgba(255,231,243,0.12);">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="footer-logo-mark w-9 h-9 rounded-xl flex items-center justify-center font-serif text-lg">R</span>
+                        <span class="font-serif text-xl">Realized <span style="color:var(--pink-300);">Prints</span></span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-sm" style="color:rgba(255,231,243,0.72);">
+                        Premium 3D printed heirlooms and collectibles, crafted by a father and son in their home workshop. Made to be loved, played, and passed on.
+                    </p>
+                    <div class="mt-6 flex gap-3 flex-wrap">
+                        <span class="px-3 py-1.5 rounded-full text-xs" style="background:rgba(255,255,255,0.08);">🇺🇸 Made in USA</span>
+                        <span class="px-3 py-1.5 rounded-full text-xs" style="background:rgba(255,255,255,0.08);">🔒 Secure Checkout</span>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider mb-4" style="color:var(--pink-300);">Shop</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="meow-meow-blind-bags.html">Meow Meow Blind Bags</a></li>
+                        <li><a href="catan-artisan.html">Catan Artisan Collection</a></li>
+                        <li><a href="index.html#collections">Anime Figurines</a></li>
+                        <li><a href="index.html#collections">Cat Scratchers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider mb-4" style="color:var(--pink-300);">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html#story">Our Story</a></li>
+                        <li><a href="#schedule">Live Drop Schedule</a></li>
+                        <li><a href="#whatsnot">Watch on WhatsNot</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-sm uppercase tracking-wider mb-4" style="color:var(--pink-300);">Get In Touch</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="mailto:hello@realizedprints.com">hello@realizedprints.com</a></li>
+                        <li><a href="#">Live on WhatsNot</a></li>
+                        <li><a href="#">Instagram @realizedprints</a></li>
+                        <li><a href="#">TikTok @meowmeowdrops</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs" style="color:rgba(255,231,243,0.55);">
+                <div>© 2026 Realized Prints. Crafted by a father &amp; son. All rights reserved. 🐾</div>
+                <div class="flex gap-5">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Shipping &amp; Returns</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════════════════════════
+         THIS IS THE LINE THAT SEPARATES VISUALS FROM FUNCTIONS.
+         VISUALS ABOVE, FUNCTIONS BELOW.
+         ════════════════════════════════════════════════════════════ -->
+
+    <script>
+        // ===== Mobile menu =====
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // ===== Fade-in observer =====
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+        // ===== SCOOP BUILDER — centralized pricing & state =====
+        const PRICING = {
+            bags: {
+                blind: { price: 19, label: 'Blind Bag' },
+                scoop: { price: 29, label: 'Lucky Scoop' }
+            },
+            addons: {
+                card:     { price: 4, label: 'Holo collector card' },
+                stickers: { price: 3, label: 'Sticker sheet' },
+                note:     { price: 2, label: 'Handwritten note' },
+                giftwrap: { price: 5, label: 'Pink gift wrap' }
+            },
+            shipping: { flat: 5, freeOver: 50 }
+        };
+
+        const state = {
+            bag: 'scoop',
+            qty: 1,
+            addons: new Set()
+        };
+
+        // ===== Element refs =====
+        const bagOpts        = document.querySelectorAll('.bag-opt');
+        const addonPills     = document.querySelectorAll('.addon-pill');
+        const qtyVal         = document.getElementById('qtyVal');
+        const qtyMinus       = document.getElementById('qtyMinus');
+        const qtyPlus        = document.getElementById('qtyPlus');
+        const qtyHint        = document.getElementById('qtyHint');
+        const chipTierName   = document.getElementById('chipTierName');
+        const chipTotal      = document.getElementById('chipTotal');
+        const sumBagLine     = document.getElementById('sumBagLine');
+        const sumBagPrice    = document.getElementById('sumBagPrice');
+        const sumShipRow     = document.getElementById('sumShipRow');
+        const sumShipVal     = document.getElementById('sumShipVal');
+        const sumTotal       = document.getElementById('sumTotal');
+        const sumSavingsNote = document.getElementById('sumSavingsNote');
+        const cartLabel      = document.getElementById('cartLabel');
+        const cartBtn        = document.getElementById('addToCart');
+        const cartConfirm    = document.getElementById('cartConfirm');
+        const summaryBreakdown = document.getElementById('summaryBreakdown');
+
+        // ===== Pricing computation =====
+        function compute() {
+            const bag = PRICING.bags[state.bag];
+            const bagSubtotal = bag.price * state.qty;
+            let addonsSubtotal = 0;
+            const addonLines = [];
+            state.addons.forEach(key => {
+                const a = PRICING.addons[key];
+                if (!a) return;
+                addonsSubtotal += a.price;
+                addonLines.push({ key, label: a.label, price: a.price });
+            });
+            const merch = bagSubtotal + addonsSubtotal;
+            const shipping = merch >= PRICING.shipping.freeOver ? 0 : PRICING.shipping.flat;
+            const grand = merch + shipping;
+            return { bag, bagSubtotal, addonLines, addonsSubtotal, merch, shipping, grand };
+        }
+
+        // ===== Re-render summary breakdown rows =====
+        function rebuildSummary(c) {
+            // Clear all summary rows then rebuild (preserving the bag & shipping rows by ID)
+            // Easier: replace innerHTML for the addon lines section.
+            // Strategy: keep static bag row + shipping row, inject addon rows between them.
+            summaryBreakdown.innerHTML = '';
+
+            const bagRow = document.createElement('div');
+            bagRow.className = 'summary-row';
+            bagRow.innerHTML = `<span class="lbl">${c.bag.label} ×${state.qty}</span><span class="val">$${c.bagSubtotal}</span>`;
+            summaryBreakdown.appendChild(bagRow);
+
+            c.addonLines.forEach(line => {
+                const row = document.createElement('div');
+                row.className = 'summary-row';
+                row.innerHTML = `<span class="lbl">+ ${line.label}</span><span class="val">$${line.price}</span>`;
+                summaryBreakdown.appendChild(row);
+            });
+
+            const shipRow = document.createElement('div');
+            shipRow.className = 'summary-row';
+            shipRow.innerHTML = `<span class="lbl">Shipping ${c.shipping === 0 ? '· free 🎉' : ''}</span><span class="val">${c.shipping === 0 ? 'FREE' : '$' + c.shipping}</span>`;
+            summaryBreakdown.appendChild(shipRow);
+        }
+
+        // ===== Master render =====
+        function render() {
+            const c = compute();
+
+            // chip
+            chipTierName.textContent = `${c.bag.label} ×${state.qty}`;
+            chipTotal.textContent = `$${c.grand}`;
+
+            // qty
+            qtyVal.textContent = state.qty;
+            qtyMinus.disabled = state.qty <= 1;
+            qtyPlus.disabled  = state.qty >= 12;
+
+            // qty hint — friendly
+            const needForFreeShip = Math.max(0, PRICING.shipping.freeOver - c.merch);
+            if (c.shipping === 0) {
+                qtyHint.textContent = '✨ Free shipping unlocked! 🎉';
+                qtyHint.style.color = 'var(--mint-600)';
+            } else if (state.qty >= 4 && state.bag === 'scoop') {
+                qtyHint.textContent = '🎁 4+ Scoops = tiny bonus sculpt on us!';
+                qtyHint.style.color = 'var(--purple-600)';
+            } else if (needForFreeShip <= 19) {
+                qtyHint.textContent = `Add $${needForFreeShip} more for free shipping ✨`;
+                qtyHint.style.color = 'var(--purple-600)';
+            } else {
+                qtyHint.textContent = `Add $${needForFreeShip} more for free shipping ✨`;
+                qtyHint.style.color = 'var(--purple-600)';
+            }
+
+            // bag options visual state
+            bagOpts.forEach(b => b.classList.toggle('active', b.dataset.bag === state.bag));
+
+            // addon pills visual state
+            addonPills.forEach(p => p.classList.toggle('active', state.addons.has(p.dataset.addon)));
+
+            // breakdown
+            rebuildSummary(c);
+
+            // savings note — surprise customers picking Scoop
+            if (state.bag === 'scoop') {
+                const singleEquiv = 19 * 3 * state.qty;
+                const saving = singleEquiv - (29 * state.qty);
+                sumSavingsNote.textContent = saving > 0 ? `You're saving $${saving} vs. singles 💖` : '';
+            } else {
+                sumSavingsNote.textContent = '';
+            }
+
+            // total + cart label
+            sumTotal.textContent = `$${c.grand}`;
+            cartLabel.textContent = `Add to Cart — $${c.grand}`;
+        }
+
+        // ===== Wire up bag picker =====
+        bagOpts.forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.bag = btn.dataset.bag;
+                render();
+            });
+        });
+
+        // ===== Quantity stepper =====
+        qtyMinus.addEventListener('click', () => {
+            if (state.qty > 1) { state.qty--; render(); }
+        });
+        qtyPlus.addEventListener('click', () => {
+            if (state.qty < 12) { state.qty++; render(); }
+        });
+
+        // ===== Add-on pills toggle =====
+        addonPills.forEach(p => {
+            p.addEventListener('click', () => {
+                const key = p.dataset.addon;
+                if (state.addons.has(key)) state.addons.delete(key);
+                else state.addons.add(key);
+                render();
+            });
+        });
+
+        // ===== Select-tier buttons (jump from product cards) =====
+        document.querySelectorAll('.select-tier').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.bag = btn.dataset.tier;
+                state.qty = 1;
+                render();
+                document.getElementById('scoop-builder').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // ===== Add to cart (demo — graceful placeholder) =====
+        cartBtn.addEventListener('click', () => {
+            if (cartBtn.disabled) return;
+            const originalHTML = cartBtn.innerHTML;
+            cartBtn.disabled = true;
+            cartBtn.style.opacity = '0.88';
+            cartBtn.style.cursor = 'wait';
+            cartBtn.innerHTML = `
+                <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                </svg>
+                Sealing your bag…
+            `;
+
+            setTimeout(() => {
+                cartConfirm.classList.remove('hidden');
+                cartBtn.innerHTML = '🐾 Added! Check WhatsNot for live drops';
+                cartBtn.style.background = 'linear-gradient(135deg, var(--mint-500), var(--mint-600))';
+                setTimeout(() => {
+                    cartBtn.disabled = false;
+                    cartBtn.style.opacity = '';
+                    cartBtn.style.cursor = '';
+                    cartBtn.style.background = '';
+                    cartBtn.innerHTML = originalHTML;
+                    render();
+                    cartConfirm.classList.add('hidden');
+                }, 2400);
+            }, 900);
+        });
+
+        // ===== Soft-CTA placeholder for unattached primary buttons =====
+        document.querySelectorAll('a.btn-primary, a.btn-whatsnot').forEach(btn => {
+            btn.addEventListener('click', e => {
+                if (btn.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '✓ Coming soon — follow us!';
+                    btn.style.filter = 'brightness(0.95)';
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                        btn.style.filter = '';
+                    }, 1800);
+                }
+            });
+        });
+
+        // ===== Initial paint =====
+        render();
+    </script>
+
+</body>
+</html>
