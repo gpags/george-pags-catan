@@ -3829,15 +3829,20 @@ shorter target and a non-stretching card.
                                 <div class="font-semibold text-sm">Dragon Robber <span id="dragonPriceTag" class="text-honey-600">+$15</span><span id="dragonSaveBadge" class="opt-save-badge hidden">Save 47%</span></div>
                                 <div class="text-[11px] opacity-75 mt-0.5">Fierce sculpted dragon alternate</div>
                             </button>
-                            <button class="opt rounded-2xl p-4 text-left" data-group="robber" data-value="custom" aria-label="Custom Robber, plus 75 dollars">
+                            <button class="opt rounded-2xl p-4 text-left" data-group="robber" data-value="custom" aria-label="Custom Catan Piece, included with Premium">
                                 <div class="aspect-[4/2] rounded-lg mb-3 overflow-hidden bg-sand-200">
                                     <img src="/images/Piece_CustomRobber.JPG" alt="Custom Catan robber figurine — hand-sculpted 3D print from a customer-supplied photo" class="w-full h-full object-cover" loading="lazy">
                                 </div>
-                                <div class="font-semibold text-sm">Custom Robber <span class="text-honey-600">+$75</span></div>
+                                <div class="font-semibold text-sm">Custom Catan Piece <span id="customRobberPriceTag" class="text-honey-600">+$75</span></div>
                                 <div class="text-[11px] opacity-75 mt-0.5">Upload a photo — we'll sculpt it</div>
+                                <label for="customRobberPhoto" class="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-honey-700 cursor-pointer underline underline-offset-2 hover:text-honey-600">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                                    <span id="customRobberUploadLabel">Upload photo</span>
+                                </label>
+                                <input id="customRobberPhoto" type="file" accept="image/*" class="hidden" aria-label="Upload a photo for your custom Catan piece">
                             </button>
                         </div>
-                        <p class="wiz-card-meta">Custom Robber is a flat $75 across all tiers (EXCEPT PREMIUM) — every photo gets brought to life. After checkout you'll receive an email with instructions.</p>
+                        <p class="wiz-card-meta" id="robberMetaNote">Custom Catan Piece is a flat $75 on Core &amp; Hero — <strong>included at no extra charge</strong> on Premium. Every photo gets brought to life; after checkout you'll receive an email with instructions.</p>
                     </div>
                     <div class="wiz-foot">
                         <div class="wiz-foot-left">
@@ -4323,7 +4328,7 @@ shorter target and a non-stretching card.
                 texture_silk: { core: 39, hero: 20, premium: 0, label: 'Silk pieces' },
                 robber_victorious: { core: 10, hero: 5, premium: 0, label: 'Bandit Robber' },
                 robber_dragon: { core: 15, hero: 8, premium: 0, label: 'Dragon Robber' },
-                robber_custom: { core: 75, hero: 75, premium: 75, label: 'Custom Robber', flat: true },
+                robber_custom: { core: 75, hero: 75, premium: 0, label: 'Custom Robber' },
                 finish_custom: { core: 20, hero: 10, premium: 0, label: 'Premium finish' },
                 trim_silk: { core: 25, hero: 10, premium: 0, label: 'Silk trim' },
                 names_add: { core: 39, hero: 19, premium: 0, label: 'Airbrushed names' },
@@ -4333,7 +4338,7 @@ shorter target and a non-stretching card.
         // ----- Back-compat aliases so the rest of the file keeps working unchanged -----
         const TIER_RANK = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.rank]));
         const TIER_LABEL = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.label]));
-        const TIER_BASE = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.base]));
+        const TIER_BASE = Object.fromEntries(Object.entries(PRICING_CONFIG.tiers).map(([k, v]) => [k, v.base ?? v.full ?? 0]));
         const PRICING = Object.fromEntries(
             Object.entries(PRICING_CONFIG.upgrades).map(([k, v]) => [k, { core: v.core, hero: v.hero, premium: v.premium }])
         );
@@ -4608,9 +4613,9 @@ shorter target and a non-stretching card.
             document.getElementById('texturePriceHint').innerHTML = hintFor('texture_silk', 'Silk');
             document.getElementById('silkPriceTag').innerHTML = tagFor('texture_silk');
 
-            // Robber (custom robber is flat across tiers, so we keep the +$75 tail)
+            // Robber (custom robber is included on Premium; flat $75 on Core/Hero)
             const robberHint = t === 'premium'
-                ? 'Bandit + Dragon included · Custom +$75'
+                ? 'Bandit + Dragon + Custom all included'
                 : t === 'hero'
                     ? `${hintFor('robber_victorious', 'Bandit')} · ${hintFor('robber_dragon', 'Dragon')} · Custom +$75`
                     : `Bandit +$${PRICING_CONFIG.upgrades.robber_victorious.core} · Dragon +$${PRICING_CONFIG.upgrades.robber_dragon.core} · Custom +$75`;
@@ -4618,6 +4623,14 @@ shorter target and a non-stretching card.
             document.getElementById('victoriousPriceTag').innerHTML = tagFor('robber_victorious');
             const dragonTag = document.getElementById('dragonPriceTag');
             if (dragonTag) dragonTag.innerHTML = tagFor('robber_dragon');
+            const customRobberTag = document.getElementById('customRobberPriceTag');
+            if (customRobberTag) customRobberTag.innerHTML = tagFor('robber_custom');
+            const robberMetaEl = document.getElementById('robberMetaNote');
+            if (robberMetaEl) {
+                robberMetaEl.innerHTML = t === 'premium'
+                    ? 'Your Custom Catan Piece is <strong>included at no extra charge</strong> with the Premium Bundle — every photo gets brought to life. After checkout you\'ll receive an email with instructions.'
+                    : 'Custom Catan Piece is a flat $75 on Core &amp; Hero — <strong>included at no extra charge</strong> on Premium. Every photo gets brought to life; after checkout you\'ll receive an email with instructions.';
+            }
 
             // === NEW === Inline Save badges on Step 4 robber cards
             // Show only on Hero tier where real savings exist (Bandit 50%, Dragon ~47%).
@@ -4805,8 +4818,9 @@ shorter target and a non-stretching card.
 
             currentTotal = total;
 
-            // ----- Compute live savings (Hero tier only) -----
+            // ----- Compute live savings (Hero & Premium tiers) -----
             let savedSoFar = 0;
+            let alaCarteTotal = total; // pre-discount comparison anchor
             if (t === 'hero') {
                 if (state.texture === 'silk') savedSoFar += getSavings('texture_silk').savings;
                 if (state.robber === 'victorious') savedSoFar += getSavings('robber_victorious').savings;
@@ -4814,6 +4828,13 @@ shorter target and a non-stretching card.
                 if (state.finish !== 'bombay') savedSoFar += getSavings('finish_custom').savings;
                 if (state.trim === 'silk') savedSoFar += getSavings('trim_silk').savings;
                 if (state.names === 'add') savedSoFar += getSavings('names_add').savings;
+                alaCarteTotal = total + savedSoFar;
+            } else if (t === 'premium') {
+                // Premium bakes in ALL upgrades. À-la-carte equivalent =
+                // Core base ($299) + every Core-priced upgrade ($39+$10+$75+$20+$25+$39 = $208 worst-case,
+                // but the marketed à-la-carte anchor is $799 → $200 saved = 25% off.)
+                savedSoFar = 200;
+                alaCarteTotal = 799;
             }
 
             document.getElementById('priceTotal').textContent = '$' + total;
@@ -4823,12 +4844,10 @@ shorter target and a non-stretching card.
             // ----- Sticky-header savings pill -----
             const savingsPill = document.getElementById('wizSavingsPill');
             if (savingsPill) {
-                if (t === 'hero' && savedSoFar > 0) {
+                if ((t === 'hero' || t === 'premium') && savedSoFar > 0) {
                     savingsPill.classList.remove('hidden');
                     document.getElementById('wizSavingsAmount').textContent = '$' + savedSoFar;
-                    // % off is calculated against the would-be (pre-discount) total
-                    const fullPrice = total + savedSoFar;
-                    const percentOff = fullPrice > 0 ? Math.round((savedSoFar / fullPrice) * 100) : 0;
+                    const percentOff = alaCarteTotal > 0 ? Math.round((savedSoFar / alaCarteTotal) * 100) : 0;
                     const percentEl = document.getElementById('wizSavingsPercent');
                     if (percentEl) {
                         percentEl.textContent = percentOff > 0 ? ` · ${percentOff}% off` : '';
@@ -4851,7 +4870,7 @@ shorter target and a non-stretching card.
                       </div>`;
             }).join('');
 
-            const savingsRowHTML = (t === 'hero' && savedSoFar > 0)
+            const savingsRowHTML = ((t === 'hero' || t === 'premium') && savedSoFar > 0)
                 ? `<div class="review-savings-row">
                            <span><span class="rsr-label">You saved</span> vs. Core à-la-carte pricing</span>
                            <span class="rsr-amount">−$${savedSoFar}</span>
@@ -4863,6 +4882,31 @@ shorter target and a non-stretching card.
             // Keep trim photography (Steps 7 & 8) in lockstep with selections.
             paintTrimImages();
         }
+
+        // ===== CUSTOM ROBBER PHOTO UPLOAD =====
+        (function initCustomRobberUpload() {
+            const photoInput = document.getElementById('customRobberPhoto');
+            const uploadLabel = document.getElementById('customRobberUploadLabel');
+            if (!photoInput || !uploadLabel) return;
+
+            // Stop the file picker from bubbling up and toggling the card.
+            photoInput.addEventListener('click', (e) => e.stopPropagation());
+
+            photoInput.addEventListener('change', () => {
+                const f = photoInput.files && photoInput.files[0];
+                if (!f) return;
+                state.robber = 'custom';
+                state.customRobberPhotoName = f.name;
+                const shortName = f.name.length > 22 ? f.name.slice(0, 19) + '…' : f.name;
+                uploadLabel.textContent = '✓ ' + shortName;
+                const customBtn = document.querySelector('.opt[data-group="robber"][data-value="custom"]');
+                if (customBtn && !customBtn.classList.contains('active')) {
+                    customBtn.click();
+                } else {
+                    recalc();
+                }
+            });
+        })();
 
         // ===== ORIGINAL .opt CLICK HANDLER (unchanged) =====
         document.querySelectorAll('.opt').forEach(btn => {
