@@ -1398,6 +1398,7 @@
 
             <div class="footer-bottom">
                 <span>© 2025 Realized Prints. All rights reserved.</span>
+                <span><a href="privacy-policy.html" class="flink" style="padding:0;color:rgba(220,238,255,0.55);">Privacy Policy</a></span>
                 <span>Made with care in New Jersey 🇺🇸</span>
             </div>
 
@@ -1526,14 +1527,14 @@
                     </label>
                     <div class="rp-error" id="rp-consent-error" role="alert" style="margin: -8px 0 14px 32px;"></div>
 
-                    <p class="rp-fineprint">By submitting, you agree that your email may be used solely for the purposes described above and in our <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
+                    <p class="rp-fineprint">By submitting, you agree that your email may be used solely for the purposes described above and in our <a href="privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
 
                     <button type="submit" class="rp-submit" id="rp-submit">
                         <span class="spinner" aria-hidden="true"></span>
                         <span class="label">Submit</span>
                     </button>
 
-                    <p class="rp-footer-note">We respect your privacy. Your information is protected under our <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
+                    <p class="rp-footer-note">We respect your privacy. Your information is protected under our <a href="privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
                 </form>
             </div>
 
@@ -1556,10 +1557,10 @@
         'use strict';
 
         // ─── CONFIG ──────────────────────────────────────────
-        // Set SIMULATE_NETWORK to false and update SUBMIT_ENDPOINT
-        // when wiring to your real email service (Mailchimp, Klaviyo, etc).
-        var SUBMIT_ENDPOINT  = '/api/subscribe';
-        var SIMULATE_NETWORK = true;
+        // SUBMIT_ENDPOINT: paste the /exec URL from your deployed Google Apps Script web app.
+        // (See setup instructions in the project README.)
+        var SUBMIT_ENDPOINT  = 'https://script.google.com/macros/s/PASTE_YOUR_DEPLOYMENT_ID_HERE/exec';
+        var SIMULATE_NETWORK = false;
 
         var modal        = document.getElementById('rp-modal');
         var closeBtn     = document.getElementById('rp-close');
@@ -1693,11 +1694,16 @@
             if (SIMULATE_NETWORK) {
                 setTimeout(function () { console.log('[Realized Prints] Subscribe payload:', payload); done(); }, 900);
             } else {
+                // Google Apps Script web apps don't set CORS headers, so we use
+                // mode:'no-cors' with a text/plain body. Apps Script reads
+                // e.postData.contents as JSON. The response is opaque — we treat
+                // promise resolution as success since the row is logged server-side.
                 fetch(SUBMIT_ENDPOINT, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
-                }).then(function (r) { if (!r.ok) throw new Error('Network response was not ok'); done(); }).catch(fail);
+                }).then(function () { done(); }).catch(fail);
             }
         });
 
