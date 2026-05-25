@@ -3554,6 +3554,447 @@ shorter target and a non-stretching card.
                         display: inline-flex !important;
                     }
             }
+
+            /* ==================== MOBILE POLISH ONLY ====================
+               Heirloom-luxury mobile refinement. Applies ONLY at ≤767px so
+               desktop fidelity is preserved 1:1. Touch targets ≥48px,
+               refined rhythm, premium active states, iOS safe-area aware. */
+            @media (max-width: 767px) {
+
+                /* ---------- 1. WIZARD SHELL & CARD ---------- */
+                #configurator .wiz-shell {
+                    padding: 0.85rem 0.9rem 2rem !important;
+                    padding-left: max(0.9rem, env(safe-area-inset-left)) !important;
+                    padding-right: max(0.9rem, env(safe-area-inset-right)) !important;
+                    padding-bottom: max(2rem, calc(env(safe-area-inset-bottom) + 1rem)) !important;
+                }
+                #configurator .wiz-card {
+                    padding: 1.6rem 1.25rem 1.5rem !important;
+                    border-radius: 1.4rem !important;
+                    box-shadow:
+                        var(--shadow-soft),
+                        inset 0 2px 0 rgba(255,255,255,0.95),
+                        0 18px 36px -14px rgba(35,43,33,0.16) !important;
+                }
+                #configurator .wiz-card > h3:first-child {
+                    margin-top: 2.25rem !important;
+                }
+                #configurator .wiz-card .wiz-card-hint {
+                    margin-top: -1.4rem !important;
+                    margin-bottom: 0.7rem !important;
+                    padding: 0.32rem 0.7rem !important;
+                    font-size: 10.5px !important;
+                    letter-spacing: 0.06em !important;
+                    border-radius: 9999px !important;
+                }
+                #configurator .wiz-card h3 {
+                    font-size: 1.65rem !important;
+                    line-height: 1.12 !important;
+                    letter-spacing: -0.018em !important;
+                    margin: 0 0 0.5rem !important;
+                }
+                #configurator .wiz-card .wiz-card-sub {
+                    font-size: 0.92rem !important;
+                    line-height: 1.55 !important;
+                    color: rgba(26,32,24,0.68) !important;
+                    margin-bottom: 1.35rem !important;
+                }
+
+                /* ---------- 2. STICKY HEADER ---------- */
+                #configurator .wiz-header {
+                    top: 4rem;
+                    padding: 0.95rem 1rem 0.85rem !important;
+                    border-radius: 1.15rem !important;
+                    margin-bottom: 1rem !important;
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.08),
+                        0 14px 28px -14px rgba(0,0,0,0.55) !important;
+                }
+                #configurator .wiz-header-row {
+                    gap: 0.65rem !important;
+                    row-gap: 0.85rem !important;
+                }
+                #configurator .wiz-step-eyebrow {
+                    font-size: 10.5px !important;
+                    letter-spacing: 0.22em !important;
+                    margin-bottom: 2px !important;
+                }
+                #configurator .wiz-step-title {
+                    font-size: 1.35rem !important;
+                    line-height: 1.15 !important;
+                    letter-spacing: -0.012em !important;
+                }
+                #configurator .wiz-price-chip {
+                    padding: 0.55rem 1rem 0.55rem 0.85rem !important;
+                    gap: 0.75rem !important;
+                    border-radius: 9999px !important;
+                    min-height: 48px;
+                }
+                #configurator .wiz-price-chip .chip-tier {
+                    font-size: 9.5px !important;
+                    letter-spacing: 0.22em !important;
+                }
+                #configurator .wiz-price-chip .chip-tier-name {
+                    font-size: 0.92rem !important;
+                    margin-top: 2px !important;
+                }
+                #configurator .wiz-price-chip .chip-total {
+                    font-size: 1.5rem !important;
+                    padding-left: 0.7rem !important;
+                    font-weight: 600 !important;
+                }
+                #configurator .wiz-savings-pill {
+                    flex-basis: 100% !important;
+                    justify-content: center !important;
+                    margin-top: 0.1rem !important;
+                    padding: 0.55rem 1rem !important;
+                    gap: 0.6rem !important;
+                    min-height: 44px;
+                    border-radius: 9999px !important;
+                }
+                #configurator .wiz-savings-pill .wsp-eyebrow {
+                    font-size: 9.5px !important;
+                    letter-spacing: 0.2em !important;
+                }
+                #configurator .wiz-savings-pill .wsp-amount {
+                    font-size: 1.15rem !important;
+                }
+                #configurator .wiz-savings-pill .wsp-percent {
+                    font-size: 0.74rem !important;
+                    margin-left: 0.4rem !important;
+                }
+                #configurator .wiz-pills {
+                    gap: 0.4rem !important;
+                    margin-top: 0.95rem !important;
+                }
+                #configurator .wiz-pill {
+                    height: 8px !important;
+                    border-radius: 999px !important;
+                    min-width: 22px;
+                }
+                #configurator .wiz-pill.current {
+                    box-shadow: 0 0 0 3px rgba(217,168,106,0.22), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+                }
+                #configurator .wiz-pill.done {
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.14) !important;
+                }
+
+                /* ---------- 3. TIER HERO CARDS (Step 1) ---------- */
+                #configurator .tier-hero-grid {
+                    gap: 1rem !important;
+                }
+                #configurator .tier-hero-card .thc-body {
+                    padding: 1.15rem 1.2rem 1.3rem !important;
+                }
+                #configurator .tier-hero-card .thc-eyebrow {
+                    font-size: 10.5px !important;
+                    letter-spacing: 0.18em !important;
+                    margin-bottom: 0.35rem !important;
+                }
+                #configurator .tier-hero-card .thc-name {
+                    font-size: 1.7rem !important;
+                    line-height: 1.05 !important;
+                    margin-bottom: 0.25rem !important;
+                }
+                #configurator .tier-hero-card .thc-price {
+                    font-size: 1.45rem !important;
+                    margin-bottom: 0.5rem !important;
+                }
+                #configurator .tier-hero-card .thc-price small {
+                    font-size: 0.72rem !important;
+                    margin-left: 0.35rem !important;
+                    letter-spacing: 0.05em !important;
+                }
+                #configurator .tier-hero-card .thc-blurb {
+                    font-size: 0.85rem !important;
+                    line-height: 1.5 !important;
+                    margin-bottom: 0.7rem !important;
+                }
+                #configurator .tier-hero-card .thc-list li {
+                    font-size: 0.83rem !important;
+                    line-height: 1.45 !important;
+                    padding: 0.18rem 0 !important;
+                }
+                #configurator .tier-hero-card .thc-cta {
+                    margin-top: 0.85rem !important;
+                    font-size: 0.78rem !important;
+                    letter-spacing: 0.12em !important;
+                }
+
+                /* ---------- 4. OPTION GRIDS ---------- */
+                #configurator .opt-grid-2,
+                #configurator .opt-grid-3,
+                #configurator .opt-grid-3.robber-grid {
+                    gap: 0.95rem !important;
+                }
+                #configurator .opt-grid-3.robber-grid {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                }
+                #configurator .wiz-step .opt[data-group="texture"],
+                #configurator .wiz-step .opt[data-group="robber"],
+                #configurator .wiz-step .opt[data-group="trim"] {
+                    padding: 0.85rem !important;
+                    border-radius: 1.15rem !important;
+                    min-height: 64px;
+                }
+                #configurator .wiz-step .opt[data-group="texture"] .aspect-\[4\/2\],
+                #configurator .wiz-step .opt[data-group="robber"] .aspect-\[4\/2\],
+                #configurator .wiz-step .opt[data-group="trim"] .aspect-\[4\/2\] {
+                    aspect-ratio: 4 / 3 !important;
+                    border-radius: 0.7rem !important;
+                    margin-bottom: 0.75rem !important;
+                }
+                #configurator .wiz-step .opt .font-semibold.text-sm {
+                    font-size: 0.95rem !important;
+                    line-height: 1.3 !important;
+                }
+                #configurator .wiz-step .opt .text-\[11px\] {
+                    font-size: 0.78rem !important;
+                    line-height: 1.45 !important;
+                    margin-top: 0.28rem !important;
+                    opacity: 0.78 !important;
+                }
+                #configurator .wiz-step .opt.active {
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.7),
+                        inset 0 0 0 2px var(--honey-600),
+                        0 10px 22px -10px rgba(184,133,66,0.45) !important;
+                }
+
+                /* ---------- 5. TRIM-COLOR CARDS ---------- */
+                #configurator .trim-color-row {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                    gap: 0.85rem !important;
+                }
+                #configurator .trim-color-row .opt.trim-color-card {
+                    border-radius: 1.1rem !important;
+                    min-height: 180px;
+                }
+                #configurator .trim-color-row .opt.trim-color-card .trim-color-photo {
+                    aspect-ratio: 4 / 3 !important;
+                }
+                #configurator .trim-color-row .opt.trim-color-card .trim-color-meta {
+                    padding: 0.7rem 0.85rem 0.75rem !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: space-between !important;
+                    gap: 0.5rem !important;
+                }
+                #configurator .trim-color-row .opt.trim-color-card .trim-color-meta > *:first-child {
+                    font-size: 0.95rem !important;
+                    font-weight: 600 !important;
+                    letter-spacing: -0.005em !important;
+                }
+                #configurator .trim-color-row .opt.trim-color-card .trim-color-meta span[style*="background"] {
+                    min-width: 26px !important;
+                    min-height: 18px !important;
+                    border-radius: 999px !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 1px 3px rgba(35,43,33,0.18) !important;
+                }
+
+                /* ---------- 6. FINISH CARDS ---------- */
+                #configurator .finish-grid,
+                #configurator .finish-grid.finish-grid-photo {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                    gap: 0.85rem !important;
+                }
+                #configurator .finish-grid .opt.finish-card,
+                #configurator .finish-grid .opt.finish-card-photo {
+                    border-radius: 1.1rem !important;
+                    min-height: 180px;
+                }
+                #configurator .finish-grid .opt.finish-card-photo .finish-photo,
+                #configurator .finish-grid .opt.finish-card .finish-swatch {
+                    aspect-ratio: 4 / 3 !important;
+                }
+                #configurator .finish-grid .opt.finish-card .finish-label {
+                    padding: 0.7rem 0.85rem 0.25rem !important;
+                    font-size: 0.92rem !important;
+                    line-height: 1.3 !important;
+                    gap: 0.45rem !important;
+                }
+                #configurator .finish-grid .opt.finish-card .finish-tag {
+                    padding: 0 0.85rem 0.75rem !important;
+                    font-size: 0.6rem !important;
+                    letter-spacing: 0.16em !important;
+                }
+                #configurator .finish-price-tag {
+                    font-size: 0.82rem !important;
+                }
+
+                /* ---------- 7. COLOR SWATCH GRID ---------- */
+                #configurator #swatchGrid {
+                    gap: 0.8rem !important;
+                    grid-template-columns: repeat(2, 1fr) !important;
+                }
+                #configurator #swatchGrid .swatch {
+                    border-radius: 1.05rem !important;
+                    min-height: 180px;
+                }
+                #configurator #swatchGrid .swatch .swatch-photo {
+                    aspect-ratio: 4 / 3 !important;
+                    border-top-left-radius: 1.05rem !important;
+                    border-top-right-radius: 1.05rem !important;
+                }
+                #configurator #swatchGrid .swatch .swatch-meta {
+                    padding: 0.7rem 0.85rem 0.75rem !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: space-between !important;
+                    gap: 0.5rem !important;
+                }
+                #configurator #swatchGrid .swatch .swatch-meta > *:first-child {
+                    font-size: 0.92rem !important;
+                    font-weight: 600 !important;
+                    letter-spacing: -0.005em !important;
+                }
+                #configurator #swatchGrid .swatch .swatch-meta span[style*="background"] {
+                    min-width: 26px !important;
+                    min-height: 18px !important;
+                    border-radius: 999px !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 1px 3px rgba(35,43,33,0.18) !important;
+                }
+                #configurator #swatchGrid .swatch .swatch-number,
+                #configurator #swatchGrid .swatch [class*="number"] {
+                    top: 0.65rem !important;
+                    right: 0.65rem !important;
+                }
+
+                /* ---------- 8. SELECTED SUMMARY LINE ---------- */
+                #configurator .selected-summary {
+                    margin-top: 0.95rem !important;
+                    padding: 0.7rem 0.95rem !important;
+                    font-size: 0.82rem !important;
+                    line-height: 1.45 !important;
+                    border-radius: 0.95rem !important;
+                    gap: 0.5rem !important;
+                    background: linear-gradient(180deg, rgba(217,168,106,0.14), rgba(217,168,106,0.06)) !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(35,43,33,0.05) !important;
+                }
+
+                /* ---------- 9. NAMES STEP ---------- */
+                #configurator .names-grid {
+                    gap: 0.85rem !important;
+                }
+                #configurator .names-grid .opt {
+                    padding: 0.95rem 1.05rem !important;
+                    min-height: 72px !important;
+                    border-radius: 1.05rem !important;
+                }
+                #configurator .names-grid .opt .font-semibold {
+                    font-size: 0.98rem !important;
+                }
+                #configurator .names-grid .opt .opt-blurb {
+                    font-size: 0.82rem !important;
+                    line-height: 1.45 !important;
+                }
+                #configurator #namesInput {
+                    font-size: 16px !important;   /* prevent iOS auto-zoom */
+                    padding: 0.85rem 1rem !important;
+                    border-radius: 0.95rem !important;
+                    min-height: 48px;
+                }
+
+                /* ---------- 10. REVIEW / SAVINGS ROW ---------- */
+                #configurator .review-card {
+                    padding: 1.55rem 1.2rem 1.4rem !important;
+                    border-radius: 1.4rem !important;
+                }
+                #configurator .review-savings-row {
+                    margin-top: 0.9rem !important;
+                    padding: 0.75rem 1rem !important;
+                    font-size: 0.85rem !important;
+                    border-radius: 0.95rem !important;
+                    gap: 0.5rem !important;
+                }
+                #configurator .review-savings-row .rsr-amount {
+                    font-size: 1.3rem !important;
+                }
+                #configurator .review-savings-row .rsr-label {
+                    font-size: 0.68rem !important;
+                    letter-spacing: 0.14em !important;
+                }
+
+                /* ---------- 11. FOOTER NAV — 48px+ touch targets ---------- */
+                #configurator .wiz-foot {
+                    margin-top: 1.1rem !important;
+                    padding: 0 0.15rem !important;
+                    gap: 0.75rem !important;
+                    align-items: center !important;
+                    flex-wrap: nowrap !important;
+                }
+                #configurator .wiz-foot .wiz-foot-left,
+                #configurator .wiz-foot .wiz-foot-right {
+                    flex: 0 1 auto !important;
+                    gap: 0.6rem !important;
+                }
+                #configurator .wiz-foot .wiz-foot-right {
+                    margin-left: auto !important;
+                }
+                #configurator .wiz-back {
+                    padding: 0 1.2rem !important;
+                    min-height: 48px !important;
+                    font-size: 0.9rem !important;
+                    font-weight: 600 !important;
+                    border-radius: 9999px !important;
+                    gap: 0.45rem !important;
+                }
+                #configurator .wiz-continue {
+                    padding: 0 1.6rem !important;
+                    min-height: 48px !important;
+                    font-size: 0.95rem !important;
+                    font-weight: 600 !important;
+                    border-radius: 9999px !important;
+                    gap: 0.5rem !important;
+                    letter-spacing: 0.005em !important;
+                }
+                #configurator .wiz-skip {
+                    font-size: 0.78rem !important;
+                    padding: 0.5rem 0.4rem !important;
+                    min-height: 40px;
+                }
+
+                /* ---------- 12. FOCUS RINGS ---------- */
+                #configurator .opt:focus-visible,
+                #configurator .wiz-back:focus-visible,
+                #configurator .wiz-continue:focus-visible,
+                #configurator .wiz-pill:focus-visible,
+                #configurator .swatch:focus-visible {
+                    outline: 3px solid rgba(217,168,106,0.55) !important;
+                    outline-offset: 2px !important;
+                }
+
+                /* ---------- 13. SAVE BADGES INSIDE OPTIONS ---------- */
+                #configurator .opt-save-badge {
+                    font-size: 0.6rem !important;
+                    padding: 0.16rem 0.5rem !important;
+                    margin-left: 0.4rem !important;
+                    letter-spacing: 0.06em !important;
+                }
+
+                /* ---------- 14. TACTILE PRESS FEEDBACK ---------- */
+                #configurator .opt:active:not(.locked):not(:disabled) {
+                    transform: translateY(0) scale(0.985) !important;
+                    transition: transform 90ms ease !important;
+                }
+                #configurator .wiz-continue:active,
+                #configurator .wiz-back:active {
+                    transform: translateY(0) scale(0.98) !important;
+                    transition: transform 90ms ease !important;
+                }
+            }
+
+            /* Extra-small phones (iPhone SE / Mini / older Androids) */
+            @media (max-width: 380px) {
+                #configurator .wiz-card h3 { font-size: 1.45rem !important; }
+                #configurator .wiz-step-title { font-size: 1.2rem !important; }
+                #configurator .wiz-price-chip .chip-total { font-size: 1.35rem !important; }
+                #configurator .wiz-continue { padding: 0 1.25rem !important; font-size: 0.9rem !important; }
+                #configurator .wiz-back    { padding: 0 0.95rem !important; font-size: 0.85rem !important; }
+                #configurator .tier-hero-card .thc-name  { font-size: 1.55rem !important; }
+                #configurator .tier-hero-card .thc-price { font-size: 1.3rem !important; }
+            }
+            /* ================== END MOBILE POLISH ================== */
         </style>
 
         <div class="wiz-shell">
