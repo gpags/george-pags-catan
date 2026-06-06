@@ -5963,52 +5963,6 @@ shorter target and a non-stretching card.
     </div><!-- /giveawayModal -->
 
     <!-- ============================================================
-         SCARCITY POPUP — "Only 10 Sets Available"
-         Floats bottom-right on desktop, bottom full-width on mobile.
-         Shows once per session (localStorage gate). Dismissible via
-         X button, click-outside, or Escape key.
-         ============================================================ -->
-    <div id="scarcityPopup"
-         class="hidden fixed bottom-4 right-4 z-[9998] sm:w-auto"
-         style="width: calc(100% - 2rem); max-width: 320px;"
-         role="alert"
-         aria-live="polite"
-         aria-label="Limited availability notice">
-      <div class="relative overflow-hidden rounded-2xl border border-red-500/30 shadow-glow"
-           style="background-color: var(--sand-50); background-image: url('data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><filter id=%27n%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.85%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.04 0%27/></filter><rect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/></svg>');">
-
-        <!-- Red left accent bar (mirrors top giveaway banner) -->
-        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600" aria-hidden="true"></div>
-
-        <div class="flex items-start gap-3 px-4 py-3.5 pl-5">
-          <div class="flex-1 min-w-0">
-            <div class="font-semibold text-red-600 leading-tight"
-                 style="font-family: 'Inter', sans-serif; font-size: 15px; letter-spacing: -0.01em;">
-              Only 10 Sets Available
-            </div>
-            <div class="mt-0.5 leading-snug"
-                 style="font-family: 'Inter', sans-serif; font-size: 12.5px; color: rgba(26,32,24,0.72);">
-              Handcrafted in our New Jersey workshop.<br>
-              Next batch ships in 6&thinsp;+ weeks.
-            </div>
-          </div>
-
-          <button id="closeScarcityPopup"
-                  aria-label="Dismiss availability notice"
-                  class="mt-0.5 flex-shrink-0 flex items-center justify-center rounded-full transition-colors"
-                  style="width: 28px; height: 28px; color: rgba(26,32,24,0.55);"
-                  onmouseover="this.style.background='rgba(220,38,38,0.1)'; this.style.color='#dc2626';"
-                  onmouseout="this.style.background='transparent'; this.style.color='rgba(26,32,24,0.55)';">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ============================================================
          GIVEAWAY FORM SUBMISSION SCRIPT
          Sends entry data to Google Apps Script → Google Sheets CRM.
          SETUP: Replace GIVEAWAY_SCRIPT_URL with your deployed Apps Script URL.
@@ -6214,55 +6168,101 @@ shorter target and a non-stretching card.
         applyTheme(current);
         startAutoplay();
     })();
-
-    // ---- Scarcity Popup — "Only 10 Sets Available" ----
-    // Shows once per session after a 5s delay.
-    // Dismissible via X button, click-outside on the wrapper, or Escape key.
-    (function initScarcityPopup() {
-        var popup = document.getElementById('scarcityPopup');
-        if (!popup) return;
-
-        // Gate: never show again once dismissed
-        if (localStorage.getItem('scarcityPopupDismissed')) return;
-
-        function dismiss() {
-            popup.style.transition = 'opacity 220ms ease, transform 220ms ease';
-            popup.style.opacity = '0';
-            popup.style.transform = 'translateY(10px)';
-            setTimeout(function() { popup.style.display = 'none'; }, 230);
-            localStorage.setItem('scarcityPopupDismissed', '1');
-            document.removeEventListener('keydown', onEsc);
-        }
-
-        function onEsc(e) {
-            if (e.key === 'Escape' && popup.style.display !== 'none') {
-                dismiss();
-            }
-        }
-
-        setTimeout(function() {
-            popup.style.opacity = '0';
-            popup.style.transform = 'translateY(10px)';
-            popup.style.transition = 'opacity 280ms ease, transform 280ms ease';
-            popup.classList.remove('hidden');
-            popup.style.display = 'block';
-            // Trigger reflow so the transition plays
-            void popup.offsetWidth;
-            popup.style.opacity = '1';
-            popup.style.transform = 'translateY(0)';
-
-            var closeBtn = document.getElementById('closeScarcityPopup');
-            if (closeBtn) closeBtn.addEventListener('click', dismiss);
-
-            // Click-outside: only if the outer wrapper itself is clicked
-            popup.addEventListener('click', function(e) {
-                if (e.target === popup) dismiss();
-            });
-
-            document.addEventListener('keydown', onEsc);
-        }, 5000);
-    })();
     </script>
+
+    <!-- Limited Supply Badge -->
+    <div id="limitedSupplyBadge" aria-label="Limited supply notice" style="
+        position: fixed;
+        bottom: 1.75rem;
+        right: 1.75rem;
+        z-index: 9999;
+        width: 210px;
+        border-radius: 14px;
+        overflow: hidden;
+        cursor: default;
+        user-select: none;
+        animation: lsBadgeDrift 6s ease-in-out infinite;
+        box-shadow:
+            0 2px 4px rgba(100,40,0,0.18),
+            0 20px 48px -10px rgba(100,40,0,0.40),
+            0 8px 20px -8px rgba(184,133,66,0.45),
+            0 0 0 1.5px rgba(184,133,66,0.55);
+    ">
+
+        <!-- Grain overlay -->
+        <div aria-hidden="true" style="
+            position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
+            background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%222%22 stitchTiles=%22stitch%22/><feColorMatrix values=%220 0 0 0 0.6  0 0 0 0 0.35  0 0 0 0 0  0 0 0 0.055 0%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');
+            mix-blend-mode:multiply;opacity:1;
+        "></div>
+
+        <!-- Red top banner -->
+        <div style="
+            position:relative;z-index:2;
+            background: linear-gradient(90deg, #9b1c1c 0%, #c0392b 45%, #9b1c1c 100%);
+            padding: 0.42rem 1rem 0.42rem 1rem;
+            display:flex;align-items:center;justify-content:space-between;
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.2);
+        ">
+            <span style="
+                font-family:'Inter',sans-serif;
+                font-size:0.59rem;font-weight:700;
+                letter-spacing:0.18em;text-transform:uppercase;
+                color:#fff;
+                text-shadow:0 1px 2px rgba(0,0,0,0.35);
+            ">⬥ Limited Supply ⬥</span>
+            <button
+                onclick="document.getElementById('limitedSupplyBadge').style.display='none'"
+                aria-label="Dismiss"
+                style="background:none;border:none;padding:0;cursor:pointer;color:rgba(255,255,255,0.55);font-size:0.65rem;line-height:1;transition:color 150ms ease;"
+                onmouseover="this.style.color='#fff'"
+                onmouseout="this.style.color='rgba(255,255,255,0.55)'"
+            >✕</button>
+        </div>
+
+        <!-- Gold body -->
+        <div style="
+            position:relative;z-index:2;
+            background:
+                radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255,230,140,0.55) 0%, transparent 65%),
+                radial-gradient(ellipse 70% 80% at 100% 100%, rgba(142,100,50,0.35) 0%, transparent 60%),
+                linear-gradient(160deg, #e8b84b 0%, #c89858 40%, #a87030 100%);
+            padding: 1rem 1rem 1rem;
+            text-align:center;
+        ">
+            <!-- Corner marks -->
+            <span aria-hidden="true" style="position:absolute;top:8px;left:8px;width:10px;height:10px;border-top:1.5px solid rgba(74,40,0,0.35);border-left:1.5px solid rgba(74,40,0,0.35);"></span>
+            <span aria-hidden="true" style="position:absolute;top:8px;right:8px;width:10px;height:10px;border-top:1.5px solid rgba(74,40,0,0.35);border-right:1.5px solid rgba(74,40,0,0.35);"></span>
+            <span aria-hidden="true" style="position:absolute;bottom:8px;left:8px;width:10px;height:10px;border-bottom:1.5px solid rgba(74,40,0,0.35);border-left:1.5px solid rgba(74,40,0,0.35);"></span>
+            <span aria-hidden="true" style="position:absolute;bottom:8px;right:8px;width:10px;height:10px;border-bottom:1.5px solid rgba(74,40,0,0.35);border-right:1.5px solid rgba(74,40,0,0.35);"></span>
+
+            <!-- Main text -->
+            <div style="
+                font-family:'Cormorant Garamond',serif;
+                font-size:1.45rem;font-weight:600;line-height:1.15;
+                color:#2c1800;
+                letter-spacing:-0.01em;
+                text-shadow:0 1px 0 rgba(255,210,100,0.5);
+                margin-bottom:0.3rem;
+            ">Only 10 Available</div>
+
+            <!-- Subline -->
+            <div style="
+                font-family:'Inter',sans-serif;
+                font-size:0.61rem;font-weight:500;
+                letter-spacing:0.08em;text-transform:uppercase;
+                color:rgba(44,24,0,0.6);
+            ">Hand-crafted · Signed &amp; Numbered</div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes lsBadgeDrift {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-4px); }
+        }
+    </style>
 
 </body>
 </html>
