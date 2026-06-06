@@ -1472,27 +1472,62 @@ shorter target and a non-stretching card.
     </header>
 
     <!-- ============================================================
-         GIVEAWAY BANNER ADDED — Father's Day Artisan Catan Heirloom Giveaway
-         Inserts immediately after #nav / </header>
+         GIVEAWAY BANNER — Father's Day Heirloom Giveaway
+         Crimson/ruby color to stand out against the forest/honey palette
          ============================================================ -->
-    <div id="giveawayBanner" role="region" aria-label="Father's Day Giveaway Announcement"
-         style="background:linear-gradient(90deg,#8b1a1a 0%,#a52020 50%,#8b1a1a 100%);border-bottom:2px solid rgba(255,200,100,0.35);position:relative;z-index:40;width:100%;">
-        <div style="max-width:80rem;margin:0 auto;padding:0.65rem 1.25rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.8125rem;">
-            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
-                <span style="background:#ffc864;color:#5a1a00;font-size:0.65rem;font-weight:800;letter-spacing:0.1em;padding:0.2rem 0.65rem;border-radius:9999px;text-transform:uppercase;white-space:nowrap;">🎁 Father's Day Giveaway</span>
-                <span style="color:#ffffff;font-weight:700;letter-spacing:0.01em;font-size:0.875rem;">Win a FREE Customized Catan Heirloom Set</span>
-                <span style="color:rgba(255,255,255,0.45);">&#8226;</span>
-                <span style="color:rgba(255,255,255,0.88);font-style:italic;">$599 value &mdash; yours for FREE</span>
+    <div id="giveawayBanner" role="banner" aria-label="Father's Day Giveaway Announcement" style="
+        width: 100%;
+        background: linear-gradient(135deg, #8b1a1a 0%, #c0392b 50%, #922b21 100%);
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 2px 12px rgba(139,26,26,0.4);
+        position: relative;
+        z-index: 49;
+    ">
+        <div style="max-width:80rem; margin:0 auto; padding:0.65rem 1.25rem; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:0.5rem; text-align:center;"
+             class="sm-row-banner">
+            <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; justify-content:center;">
+                <span style="font-family:'Inter',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; color:rgba(255,220,180,0.85); text-transform:uppercase; background:rgba(0,0,0,0.2); padding:0.2rem 0.6rem; border-radius:999px; border:1px solid rgba(255,200,150,0.3);">🎁 Father's Day Giveaway</span>
+                <span style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:#ffffff; letter-spacing:-0.01em;">
+                    Win a FREE Customized Catan Heirloom Set&nbsp;
+                    <span style="color:#ffd580; font-style:italic;">— $599 for FREE</span>
+                </span>
             </div>
-            <button onclick="openGiveawayModal()"
-                    aria-haspopup="dialog"
-                    style="background:#ffc864;color:#5a1a00;font-family:'Inter',sans-serif;font-size:0.72rem;padding:0.45rem 1.15rem;border-radius:9999px;font-weight:800;letter-spacing:0.06em;white-space:nowrap;flex-shrink:0;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.25);transition:transform 0.15s,filter 0.15s;"
-                    onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter=''">
-                ENTER FREE &mdash; NO PURCHASE NECESSARY
+            <button
+                onclick="openGiveawayModal()"
+                aria-haspopup="dialog"
+                style="
+                    display:inline-flex; align-items:center; gap:0.4rem;
+                    background:#fff; color:#8b1a1a;
+                    font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:700;
+                    letter-spacing:0.08em; text-transform:uppercase;
+                    padding:0.42rem 1.1rem; border-radius:999px; border:none;
+                    cursor:pointer; white-space:nowrap;
+                    box-shadow:0 2px 8px rgba(0,0,0,0.25);
+                    transition:transform 150ms ease, box-shadow 150ms ease;
+                "
+                onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.3)'"
+                onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.25)'"
+            >
+                Enter Free — No Purchase Necessary
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
         </div>
+        <!-- Close button -->
+        <button
+            onclick="document.getElementById('giveawayBanner').style.display='none'"
+            aria-label="Dismiss giveaway banner"
+            style="
+                position:absolute; top:50%; right:0.75rem; transform:translateY(-50%);
+                background:transparent; border:none; color:rgba(255,255,255,0.55);
+                cursor:pointer; padding:0.25rem; font-size:1.1rem; line-height:1;
+            "
+        >✕</button>
     </div>
-    <!-- END GIVEAWAY BANNER -->
+    <style>
+        @media(min-width:640px){
+            .sm-row-banner { flex-direction:row !important; text-align:left !important; padding:0.55rem 1.5rem !important; }
+        }
+    </style>
 
     <!-- ============ HERO ============ -->
     <section class="relative overflow-hidden grain">
@@ -5698,294 +5733,419 @@ shorter target and a non-stretching card.
             document.head.appendChild(s);
         })();
 
-        // Soft-CTA placeholder behavior for any unattached buttons (kept for parity)
-        document.querySelectorAll('a.btn-primary').forEach(btn => {
-            btn.addEventListener('click', e => {
-                if (btn.getAttribute('href') === '#') {
-                    e.preventDefault();
-                    const original = btn.innerHTML;
-                    btn.innerHTML = '✓ Added — checkout coming soon';
-                    btn.style.background = 'linear-gradient(180deg, #8a6f4f, #6f5739)';
-                    setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 1800);
-                }
-            });
-        });
-
-        // ===== HERO CAROUSEL — adapted from index.html =====
-        (function initHeroCarousel() {
-            const carousel = document.getElementById('heroCarousel');
-            if (!carousel) return;
-            const slides = carousel.querySelectorAll('.carousel-slide');
-            const dots = carousel.querySelectorAll('#carouselDots button');
-            const prevBtn = document.getElementById('carouselPrev');
-            const nextBtn = document.getElementById('carouselNext');
-
-            // Theme rotation matches the warm heirloom palette
-            const SLIDE_THEMES = ['theme-brown', 'theme-honey', 'theme-sage', 'theme-copper', 'theme-brown', 'theme-honey'];
-            const ALL_THEMES = ['theme-brown', 'theme-honey', 'theme-sage', 'theme-copper'];
-
-            let current = 0;
-            let autoplayTimer = null;
-            const AUTOPLAY_MS = 4200;
-
-            function applyTheme(idx) {
-                ALL_THEMES.forEach(t => carousel.classList.remove(t));
-                const theme = SLIDE_THEMES[idx] || 'theme-brown';
-                carousel.classList.add(theme);
-            }
-
-            function goTo(idx) {
-                current = (idx + slides.length) % slides.length;
-                slides.forEach((s, i) => s.classList.toggle('active', i === current));
-                dots.forEach((d, i) => d.classList.toggle('active', i === current));
-                applyTheme(current);
-            }
-            function next() { goTo(current + 1); }
-            function prev() { goTo(current - 1); }
-
-            function startAutoplay() {
-                stopAutoplay();
-                autoplayTimer = setInterval(next, AUTOPLAY_MS);
-            }
-            function stopAutoplay() {
-                if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
-            }
-
-            if (nextBtn) nextBtn.addEventListener('click', (e) => { e.preventDefault(); next(); startAutoplay(); });
-            if (prevBtn) prevBtn.addEventListener('click', (e) => { e.preventDefault(); prev(); startAutoplay(); });
-            dots.forEach(dot => {
-                dot.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    goTo(parseInt(dot.dataset.dot, 10));
-                    startAutoplay();
-                });
-            });
-
-            carousel.addEventListener('mouseenter', stopAutoplay);
-            carousel.addEventListener('mouseleave', startAutoplay);
-
-            applyTheme(current);
-            startAutoplay();
-        })();
     </script>
 
+    <!-- ============================================================
+         GIVEAWAY MODAL — Father's Day Artisan Catan Heirloom Giveaway
+         ============================================================ -->
+    <div
+        id="giveawayModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="gwModalTitle"
+        aria-hidden="true"
+        hidden
+        style="
+            position:fixed; inset:0; z-index:9000;
+            display:flex; align-items:center; justify-content:center;
+            background:rgba(26,32,24,0.72);
+            backdrop-filter:blur(6px);
+            padding:1rem;
+        "
+    >
+        <!-- Modal panel -->
+        <div style="
+            position:relative;
+            background:var(--sand-50);
+            border-radius:1.5rem;
+            box-shadow:var(--shadow-glow), 0 0 0 1px rgba(184,133,66,0.18);
+            max-width:30rem;
+            width:100%;
+            max-height:90vh;
+            overflow-y:auto;
+            padding:2rem 2rem 1.75rem;
+            /* paper grain */
+            background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'240\' height=\'240\'><filter id=\'n\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix values=\'0 0 0 0 0.18 0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0.04 0\'/></filter><rect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/></svg>');
+        ">
+
+            <!-- Close button -->
+            <button
+                onclick="closeGiveawayModal()"
+                aria-label="Close giveaway modal"
+                style="
+                    position:absolute; top:1rem; right:1rem;
+                    background:var(--sand-100); border:1px solid var(--sand-200);
+                    border-radius:999px; width:2rem; height:2rem;
+                    display:flex; align-items:center; justify-content:center;
+                    cursor:pointer; color:var(--forest-800);
+                    font-size:1rem; line-height:1;
+                    transition:background 150ms ease;
+                "
+                onmouseover="this.style.background='var(--sand-200)'"
+                onmouseout="this.style.background='var(--sand-100)'"
+            >✕</button>
+
+            <!-- Honey accent bar -->
+            <div style="
+                width:2.5rem; height:3px;
+                background:linear-gradient(90deg,var(--honey-600),var(--honey-400));
+                border-radius:999px; margin-bottom:1rem;
+            "></div>
+
+            <!-- FORM STATE -->
+            <div id="gwForm">
+                <!-- Eyebrow -->
+                <p style="font-family:'Inter',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--honey-700); margin-bottom:0.4rem;">
+                    🎁 Father's Day Giveaway — Ends June 15, 2026
+                </p>
+
+                <!-- Headline -->
+                <h2 id="gwModalTitle" style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:600; line-height:1.1; letter-spacing:-0.02em; color:var(--forest-900); margin-bottom:0.6rem;">
+                    Win a Legacy-Worthy<br><em style="color:var(--honey-600);">Catan Heirloom Set</em>
+                </h2>
+
+                <!-- Body copy — NO mention of discount code per your request -->
+                <p style="font-size:0.85rem; color:var(--forest-800); line-height:1.55; margin-bottom:1.25rem;">
+                    One lucky winner receives our fully customized Premium Artisan Catan Set (ARV&nbsp;$599) — handcrafted in our Basking Ridge, NJ workshop. No purchase necessary to enter or win. Open to U.S. residents 18+. Void where prohibited.
+                </p>
+
+                <!-- Divider -->
+                <div style="border-top:1px solid var(--sand-200); margin-bottom:1.25rem;"></div>
+
+                <!-- Entry form -->
+                <form
+                    id="gwEntryForm"
+                    novalidate
+                    onsubmit="handleGiveawaySubmit(event)"
+                    style="display:flex; flex-direction:column; gap:0.875rem;"
+                >
+                    <!-- Full Name -->
+                    <div>
+                        <label for="gwName" style="display:block; font-size:0.75rem; font-weight:600; color:var(--forest-800); margin-bottom:0.3rem;">Full Name</label>
+                        <input
+                            type="text"
+                            id="gwName"
+                            name="name"
+                            autocomplete="name"
+                            required
+                            placeholder="Jane Smith"
+                            style="
+                                width:100%; padding:0.65rem 0.875rem;
+                                border:1.5px solid var(--sand-200);
+                                border-radius:0.625rem;
+                                background:var(--sand-50);
+                                font-family:'Inter',sans-serif; font-size:0.875rem;
+                                color:var(--forest-900);
+                                outline:none;
+                                transition:border-color 150ms ease, box-shadow 150ms ease;
+                            "
+                            onfocus="this.style.borderColor='var(--honey-600)';this.style.boxShadow='0 0 0 3px rgba(184,133,66,0.15)'"
+                            onblur="this.style.borderColor='var(--sand-200)';this.style.boxShadow=''"
+                        />
+                        <div id="gwNameErr" role="alert" style="display:none; font-size:0.72rem; color:#c0392b; margin-top:0.25rem;"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="gwEmail" style="display:block; font-size:0.75rem; font-weight:600; color:var(--forest-800); margin-bottom:0.3rem;">Email Address</label>
+                        <input
+                            type="email"
+                            id="gwEmail"
+                            name="email"
+                            autocomplete="email"
+                            required
+                            placeholder="jane@example.com"
+                            style="
+                                width:100%; padding:0.65rem 0.875rem;
+                                border:1.5px solid var(--sand-200);
+                                border-radius:0.625rem;
+                                background:var(--sand-50);
+                                font-family:'Inter',sans-serif; font-size:0.875rem;
+                                color:var(--forest-900);
+                                outline:none;
+                                transition:border-color 150ms ease, box-shadow 150ms ease;
+                            "
+                            onfocus="this.style.borderColor='var(--honey-600)';this.style.boxShadow='0 0 0 3px rgba(184,133,66,0.15)'"
+                            onblur="this.style.borderColor='var(--sand-200)';this.style.boxShadow=''"
+                        />
+                        <div id="gwEmailErr" role="alert" style="display:none; font-size:0.72rem; color:#c0392b; margin-top:0.25rem;"></div>
+                    </div>
+
+                    <!-- Eligibility checkbox -->
+                    <label style="display:flex; align-items:flex-start; gap:0.6rem; cursor:pointer; user-select:none;">
+                        <input
+                            type="checkbox"
+                            id="gwEligible"
+                            name="eligible"
+                            required
+                            style="
+                                width:1rem; height:1rem; margin-top:0.15rem;
+                                accent-color:var(--honey-600); flex-shrink:0; cursor:pointer;
+                            "
+                        />
+                        <span style="font-size:0.78rem; color:var(--forest-800); line-height:1.4;">
+                            I confirm I am a legal U.S. resident aged 18 or older and meet all eligibility requirements set forth in the <a href="giveaway-official-rules.html" target="_blank" rel="noopener" style="color:var(--honey-700); text-decoration:underline;">Official Rules</a>.
+                        </span>
+                    </label>
+                    <div id="gwEligibleErr" role="alert" style="display:none; font-size:0.72rem; color:#c0392b; margin-top:-0.5rem;"></div>
+
+                    <!-- Marketing consent checkbox (CRM opt-in) -->
+                    <label style="display:flex; align-items:flex-start; gap:0.6rem; cursor:pointer; user-select:none;">
+                        <input
+                            type="checkbox"
+                            id="gwConsent"
+                            name="marketingConsent"
+                            style="
+                                width:1rem; height:1rem; margin-top:0.15rem;
+                                accent-color:var(--honey-600); flex-shrink:0; cursor:pointer;
+                            "
+                        />
+                        <span style="font-size:0.78rem; color:var(--forest-800); line-height:1.4;">
+                            Yes, I'd like to receive updates, exclusive offers, and new product news from Realized Prints. You can unsubscribe anytime. (Optional)
+                        </span>
+                    </label>
+
+                    <!-- Submit error message -->
+                    <div id="gwSubmitErr" role="alert" style="display:none; font-size:0.78rem; color:#c0392b; padding:0.6rem 0.875rem; background:rgba(192,57,43,0.07); border-radius:0.5rem; border:1px solid rgba(192,57,43,0.2);"></div>
+
+                    <!-- Submit button -->
+                    <button
+                        type="submit"
+                        id="gwSubmitBtn"
+                        class="btn-primary"
+                        style="width:100%; padding:0.875rem 1.5rem; border-radius:0.75rem; font-size:0.9rem; font-weight:700; letter-spacing:0.04em; margin-top:0.25rem;"
+                    >
+                        Enter Now — It's Free!
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" style="margin-left:0.4rem;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+
+                    <!-- Legal fine print -->
+                    <p style="font-size:0.68rem; color:var(--forest-800); opacity:0.65; text-align:center; line-height:1.45;">
+                        No purchase necessary. Void where prohibited. Ends 11:59 PM ET June 15, 2026.<br>
+                        <a href="giveaway-official-rules.html" target="_blank" rel="noopener" style="color:var(--honey-700);">Official Rules</a> &middot;
+                        <a href="https://www.realizedprints.com/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--honey-700);">Privacy Policy</a>
+                    </p>
+                </form>
+            </div><!-- /gwForm -->
+
+            <!-- SUCCESS STATE (hidden until submission) -->
+            <div id="gwSuccess" style="display:none; text-align:center; padding:1.5rem 0.5rem;">
+                <div style="
+                    width:4rem; height:4rem;
+                    background:linear-gradient(135deg,var(--honey-400),var(--honey-600));
+                    border-radius:50%;
+                    display:flex; align-items:center; justify-content:center;
+                    margin:0 auto 1.25rem;
+                    box-shadow:0 8px 24px rgba(184,133,66,0.4);
+                    font-size:1.75rem;
+                ">🎉</div>
+                <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:600; color:var(--forest-900); margin-bottom:0.5rem;">
+                    You're In!
+                </h3>
+                <p style="font-size:0.875rem; color:var(--forest-800); line-height:1.55; margin-bottom:1.5rem;">
+                    Your entry is confirmed. We'll notify you by email before June 16, 2026 if you win the Grand Prize. Keep an eye on your inbox!
+                </p>
+                <button
+                    onclick="closeGiveawayModal()"
+                    class="btn-primary"
+                    style="padding:0.75rem 2rem; border-radius:0.75rem; font-size:0.875rem; font-weight:600;"
+                >
+                    Close
+                </button>
+                <p style="font-size:0.7rem; color:var(--forest-800); opacity:0.6; margin-top:1rem; line-height:1.4;">
+                    Odds of winning depend on total entries. Grand Prize ARV $599.<br>
+                    <a href="giveaway-official-rules.html" target="_blank" rel="noopener" style="color:var(--honey-700);">View Official Rules</a>
+                </p>
+            </div><!-- /gwSuccess -->
+
+        </div><!-- /modal panel -->
+    </div><!-- /giveawayModal -->
 
     <!-- ============================================================
-         GIVEAWAY MODAL ADDED — Father's Day Artisan Catan Heirloom Giveaway
-         Append before </body>
-         ============================================================ -->
-    <div id="giveawayModal"
-         role="dialog"
-         aria-modal="true"
-         aria-labelledby="giveawayModalHeading"
-         aria-describedby="giveawayModalDesc"
-         style="display:none;position:fixed;inset:0;z-index:9000;overflow-y:auto;padding:1.5rem 1rem;">
-        <div id="giveawayBackdrop"
-             onclick="closeGiveawayModal()"
-             style="position:fixed;inset:0;background:rgba(26,32,24,0.82);backdrop-filter:blur(4px);"></div>
-        <div style="position:relative;z-index:1;max-width:36rem;margin:0 auto;background:var(--sand-50);border-radius:1.5rem;box-shadow:var(--shadow-glow);overflow:hidden;border:1px solid var(--sand-200);">
-            <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%222%22 stitchTiles=%22stitch%22/><feColorMatrix values=%220 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.05 0%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');opacity:0.5;mix-blend-mode:multiply;"></div>
-            <!-- Modal header -->
-            <div style="position:relative;background:var(--forest-900);padding:1.5rem 1.75rem 1.25rem;text-align:center;">
-                <div style="display:inline-block;background:var(--honey-600);color:var(--sand-50);font-size:0.65rem;font-weight:700;letter-spacing:0.1em;padding:0.2rem 0.7rem;border-radius:9999px;text-transform:uppercase;margin-bottom:0.75rem;">Limited &mdash; 1 of 6 Sets Given Away Free</div>
-                <h2 id="giveawayModalHeading" style="font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:600;line-height:1.15;color:var(--sand-50);margin:0 0 0.5rem;letter-spacing:-0.01em;">Win a Legacy&#8209;Worthy<br><em style="color:var(--honey-400);">Catan Heirloom Set</em></h2>
-                <p style="color:rgba(244,236,220,0.78);font-size:0.875rem;margin:0;line-height:1.55;" id="giveawayModalDesc">This Father's Day, one lucky winner receives our fully customized Premium Artisan Catan Set &mdash; handcrafted by a father &amp; son in Basking Ridge, NJ. Approximate retail value: $599. Completely free to enter.</p>
-                <button onclick="closeGiveawayModal()"
-                        id="giveawayCloseBtn"
-                        aria-label="Close giveaway modal"
-                        style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.1);border:none;cursor:pointer;width:2rem;height:2rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,0.7);">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div style="position:relative;padding:1.75rem 1.75rem 1.5rem;">
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.5rem;">
-                    <div style="background:var(--sand-100);border:1px solid var(--sand-200);border-radius:0.75rem;padding:0.85rem 0.65rem;text-align:center;">
-                        <div style="font-size:1.25rem;margin-bottom:0.25rem;">&#127942;</div>
-                        <div style="font-size:0.7rem;font-weight:700;color:var(--forest-900);letter-spacing:0.04em;text-transform:uppercase;line-height:1.3;">Grand Prize</div>
-                        <div style="font-size:0.72rem;color:var(--forest-900);opacity:0.7;margin-top:0.2rem;">Full set ARV $599</div>
-                    </div>
-                    <div style="background:var(--sand-100);border:1px solid var(--sand-200);border-radius:0.75rem;padding:0.85rem 0.65rem;text-align:center;">
-                        <div style="font-size:1.25rem;margin-bottom:0.25rem;">&#9989;</div>
-                        <div style="font-size:0.7rem;font-weight:700;color:var(--forest-900);letter-spacing:0.04em;text-transform:uppercase;line-height:1.3;">100% Free</div>
-                        <div style="font-size:0.72rem;color:var(--forest-900);opacity:0.7;margin-top:0.2rem;">No purchase needed</div>
-                    </div>
-                    <div style="background:var(--sand-100);border:1px solid var(--sand-200);border-radius:0.75rem;padding:0.85rem 0.65rem;text-align:center;">
-                        <div style="font-size:1.25rem;margin-bottom:0.25rem;">&#129309;</div>
-                        <div style="font-size:0.7rem;font-weight:700;color:var(--forest-900);letter-spacing:0.04em;text-transform:uppercase;line-height:1.3;">Free to Enter</div>
-                        <div style="font-size:0.72rem;color:var(--forest-900);opacity:0.7;margin-top:0.2rem;">No purchase needed</div>
-                    </div>
-                </div>
-                <!-- Form (FIX 4: marketing consent + Google Sheet CRM) -->
-                <div id="giveawayFormWrap">
-                    <div style="display:flex;flex-direction:column;gap:0.875rem;">
-                        <div>
-                            <label for="giveName" style="display:block;font-size:0.78rem;font-weight:600;color:var(--forest-900);margin-bottom:0.35rem;letter-spacing:0.03em;">Full Name</label>
-                            <input id="giveName" type="text" autocomplete="name" placeholder="Your full name"
-                                   style="width:100%;padding:0.7rem 1rem;border:1.5px solid var(--sand-200);border-radius:0.625rem;background:white;font-size:0.9rem;font-family:'Inter',sans-serif;color:var(--forest-900);outline:none;" />
-                            <div id="giveNameErr" style="color:#c0392b;font-size:0.75rem;margin-top:0.25rem;display:none;">Please enter your full name.</div>
-                        </div>
-                        <div>
-                            <label for="giveEmail" style="display:block;font-size:0.78rem;font-weight:600;color:var(--forest-900);margin-bottom:0.35rem;letter-spacing:0.03em;">Email Address</label>
-                            <input id="giveEmail" type="email" autocomplete="email" placeholder="you@example.com"
-                                   style="width:100%;padding:0.7rem 1rem;border:1.5px solid var(--sand-200);border-radius:0.625rem;background:white;font-size:0.9rem;font-family:'Inter',sans-serif;color:var(--forest-900);outline:none;" />
-                            <div id="giveEmailErr" style="color:#c0392b;font-size:0.75rem;margin-top:0.25rem;display:none;">Please enter a valid email address.</div>
-                        </div>
-                        <!-- Eligibility checkbox -->
-                        <div style="display:flex;align-items:flex-start;gap:0.6rem;">
-                            <input id="giveEligible" type="checkbox"
-                                   style="margin-top:0.15rem;width:1.1rem;height:1.1rem;accent-color:var(--forest-800);flex-shrink:0;cursor:pointer;" />
-                            <label for="giveEligible" style="font-size:0.78rem;color:var(--forest-900);line-height:1.45;cursor:pointer;">
-                                I confirm I am a legal U.S. resident aged 18+ and meet all eligibility requirements. I have read and agree to the <a href="giveaway-official-rules.html" target="_blank" style="color:var(--honey-700);text-decoration:underline;font-weight:600;">Official Rules</a>.
-                            </label>
-                        </div>
-                        <div id="giveEligibleErr" style="color:#c0392b;font-size:0.75rem;margin-top:-0.5rem;display:none;">You must confirm eligibility to enter.</div>
-                        <!-- Marketing consent checkbox (matches main site CRM) -->
-                        <div style="display:flex;align-items:flex-start;gap:0.6rem;background:var(--sand-100);border:1px solid var(--sand-200);border-radius:0.625rem;padding:0.75rem;">
-                            <input id="giveConsent" type="checkbox"
-                                   style="margin-top:0.15rem;width:1.1rem;height:1.1rem;accent-color:var(--forest-800);flex-shrink:0;cursor:pointer;" />
-                            <label for="giveConsent" style="font-size:0.74rem;color:var(--forest-900);line-height:1.5;cursor:pointer;opacity:0.85;">
-                                Yes, I consent to receive marketing emails, promotions, product updates, and news from Realized Prints. I understand I can unsubscribe at any time. We will never sell your email address.
-                            </label>
-                        </div>
-                        <div id="giveConsentErr" style="color:#c0392b;font-size:0.75rem;margin-top:-0.5rem;display:none;">Please check the box to confirm your consent.</div>
-                        <button onclick="submitGiveawayForm()"
-                                id="giveSubmitBtn"
-                                class="btn-primary"
-                                style="width:100%;padding:0.875rem;border-radius:0.75rem;font-size:0.95rem;font-weight:700;letter-spacing:0.04em;margin-top:0.25rem;">
-                            Enter Now &mdash; It's Free!
-                        </button>
-                        <p style="font-size:0.69rem;color:var(--forest-900);opacity:0.45;text-align:center;line-height:1.5;margin:0;">By submitting, you agree your email may be used as described above and in our <a href="https://www.realizedprints.com/privacy-policy.html" target="_blank" style="color:var(--honey-700);">Privacy Policy</a>.</p>
-                    </div>
-                </div>
-                <!-- Success -->
-                <div id="giveawaySuccess" style="display:none;text-align:center;padding:1rem 0;">
-                    <div style="width:3.5rem;height:3.5rem;background:linear-gradient(135deg,var(--forest-700),var(--forest-900));border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:var(--shadow-glow);">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--honey-400)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--forest-900);margin:0 0 0.5rem;">You're In!</h3>
-                    <p style="font-size:0.875rem;color:var(--forest-900);opacity:0.75;line-height:1.6;margin:0 0 1.25rem;">Your entry is confirmed. Check your inbox for a confirmation email &mdash; and watch for the winner announcement on or about June&nbsp;16,&nbsp;2026.</p>
-                    <button onclick="closeGiveawayModal()" class="btn-primary" style="padding:0.65rem 1.75rem;border-radius:9999px;font-size:0.85rem;font-weight:700;">Continue Shopping</button>
-                </div>
-                <!-- Legal -->
-                <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--sand-200);font-size:0.7rem;color:var(--forest-900);opacity:0.55;line-height:1.6;text-align:center;">
-                    NO PURCHASE NECESSARY. Open to U.S. residents 18+. Ends 11:59:59 PM ET June&nbsp;15,&nbsp;2026. One entry per person. Odds depend on entries.
-                    <a href="giveaway-official-rules.html" target="_blank" style="color:var(--honey-700);text-decoration:underline;">Official Rules</a> &middot;
-                    <a href="https://www.realizedprints.com/privacy-policy.html" target="_blank" style="color:var(--honey-700);text-decoration:underline;">Privacy Policy</a>
-                    &middot; Sponsor: Realized Prints LLC, 60 Hickory Drive, Basking Ridge, NJ 07920. Void where prohibited.
-                </div>
-            </div>
-        </div>
-    <!-- ============================================================
-    <!-- ============================================================
-         GIVEAWAY JAVASCRIPT — placed just before </body> so all elements
-         are already in the DOM. Called directly (no event listener needed).
+         GIVEAWAY FORM SUBMISSION SCRIPT
+         Sends entry data to Google Apps Script → Google Sheets CRM.
+         SETUP: Replace GIVEAWAY_SCRIPT_URL with your deployed Apps Script URL.
          ============================================================ -->
     <script>
-    (function giveawayInit() {
+    // ---- Giveaway Modal Open/Close (defined here so they work from inline onclick) ----
+    function openGiveawayModal() {
+        var modal = document.getElementById('giveawayModal');
+        if (!modal) return;
+        modal.removeAttribute('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        var form = document.getElementById('gwForm');
+        var succ = document.getElementById('gwSuccess');
+        if (form) form.style.display = '';
+        if (succ) succ.style.display = 'none';
+        // Reset errors
+        ['gwNameErr','gwEmailErr','gwEligibleErr','gwSubmitErr'].forEach(function(id){
+            var el = document.getElementById(id);
+            if (el) { el.style.display = 'none'; el.textContent = ''; }
+        });
+        var btn = document.getElementById('gwSubmitBtn');
+        if (btn) { btn.disabled = false; btn.textContent = "Enter Now — It's Free! →"; }
+        setTimeout(function(){
+            var first = modal.querySelector('input');
+            if (first) first.focus();
+        }, 80);
+    }
 
-        var CRM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx0xwMoeNV4AodeH2ZCx1NsAjc8kp2tlN-NVsLI6tSsK3BmMnC0YlYXtlK8Juz6XIs9bw/exec';
-        var STORAGE_KEY  = 'giveaway_entered_2026';
-        var SESSION_KEY  = 'giveaway_popup_shown';
+    function closeGiveawayModal() {
+        var modal = document.getElementById('giveawayModal');
+        if (!modal) return;
+        modal.setAttribute('hidden', '');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
 
-        var modal       = document.getElementById('giveawayModal');
-        var formWrap    = document.getElementById('giveawayFormWrap');
-        var successWrap = document.getElementById('giveawaySuccess');
-        var submitBtn   = document.getElementById('giveSubmitBtn');
+    // Escape key & backdrop click close
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeGiveawayModal();
+    });
+    document.getElementById('giveawayModal').addEventListener('click', function(e) {
+        if (e.target === this) closeGiveawayModal();
+    });
 
-        if (!modal) { console.warn('[Giveaway] Modal not found in DOM'); return; }
+    // ---- Form Validation + Submission ----
+    function handleGiveawaySubmit(e) {
+        e.preventDefault();
 
-        // Open
-        window.openGiveawayModal = function () {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            if (localStorage.getItem(STORAGE_KEY)) { showSuccess(); }
-            var cb = document.getElementById('giveawayCloseBtn');
-            if (cb) cb.focus();
-        };
-
-        // Close
-        window.closeGiveawayModal = function () {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        };
-
-        // Escape key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && modal.style.display === 'block') {
-                window.closeGiveawayModal();
-            }
+        // Clear previous errors
+        ['gwNameErr','gwEmailErr','gwEligibleErr','gwSubmitErr'].forEach(function(id){
+            var el = document.getElementById(id);
+            if (el) { el.style.display = 'none'; el.textContent = ''; }
         });
 
-        function setErr(id, show) {
+        var nameVal     = (document.getElementById('gwName').value   || '').trim();
+        var emailVal    = (document.getElementById('gwEmail').value  || '').trim();
+        var eligibleVal =  document.getElementById('gwEligible').checked;
+        var consentVal  =  document.getElementById('gwConsent').checked;
+        var valid = true;
+
+        function showErr(id, msg) {
             var el = document.getElementById(id);
-            if (el) el.style.display = show ? 'block' : 'none';
-        }
-        function setInputBorder(id, isErr) {
-            var el = document.getElementById(id);
-            if (el) el.style.borderColor = isErr ? '#c0392b' : 'var(--sand-200)';
-        }
-        function showSuccess() {
-            if (formWrap)    formWrap.style.display    = 'none';
-            if (successWrap) successWrap.style.display = 'block';
+            if (el) { el.textContent = msg; el.style.display = 'block'; }
+            valid = false;
         }
 
-        // Submit — validates then posts to Google Sheet CRM
-        window.submitGiveawayForm = function () {
-            var nameEl    = document.getElementById('giveName');
-            var emailEl   = document.getElementById('giveEmail');
-            var eligEl    = document.getElementById('giveEligible');
-            var consentEl = document.getElementById('giveConsent');
+        if (!nameVal || nameVal.length < 2)                      showErr('gwNameErr', 'Please enter your full name.');
+        if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) showErr('gwEmailErr', 'Please enter a valid email address.');
+        if (!eligibleVal)                                          showErr('gwEligibleErr', 'You must confirm eligibility to enter.');
+        if (!valid) return;
 
-            var name    = nameEl    ? nameEl.value     : '';
-            var email   = emailEl   ? emailEl.value    : '';
-            var elig    = eligEl    ? eligEl.checked   : false;
-            var consent = consentEl ? consentEl.checked : false;
+        // Check for duplicate entry (localStorage)
+        if (localStorage.getItem('gwEntered_catan2026')) {
+            document.getElementById('gwForm').style.display = 'none';
+            document.getElementById('gwSuccess').style.display = '';
+            return;
+        }
 
-            var nameOk  = name.trim().length > 1;
-            var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+        // Disable button / show loading
+        var btn = document.getElementById('gwSubmitBtn');
+        var origHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;margin-right:0.5rem;vertical-align:middle;"></span>Submitting…';
 
-            setErr('giveNameErr',    !nameOk);   setInputBorder('giveName',  !nameOk);
-            setErr('giveEmailErr',   !emailOk);  setInputBorder('giveEmail', !emailOk);
-            setErr('giveEligibleErr',!elig);
-            setErr('giveConsentErr', !consent);
+        // Build form data for Google Apps Script
+        var formData = new FormData();
+        formData.append('name',            nameVal);
+        formData.append('email',           emailVal);
+        formData.append('eligible',        'Yes');
+        formData.append('marketingConsent', consentVal ? 'Yes' : 'No');
+        formData.append('source',          'catan-artisan-giveaway');
+        formData.append('timestamp',        new Date().toISOString());
 
-            if (!nameOk || !emailOk || !elig || !consent) return;
+        // IMPORTANT: Replace with your deployed Google Apps Script URL
+        var SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_APPS_SCRIPT_ID_HERE/exec';
 
-            if (submitBtn) { submitBtn.textContent = 'Submitting…'; submitBtn.disabled = true; }
-
-            fetch(CRM_ENDPOINT, {
-                method:  'POST',
-                mode:    'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body:    JSON.stringify({
-                    email: email.trim(), name: name.trim(), consent: true,
-                    source: 'giveaway-catan-2026', product: 'FathersDay_Catan_Giveaway',
-                    timestamp: new Date().toISOString()
-                })
+        fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
+            .then(function() {
+                // no-cors = opaque response; treat any response as success
+                localStorage.setItem('gwEntered_catan2026', '1');
+                document.getElementById('gwForm').style.display = 'none';
+                document.getElementById('gwSuccess').style.display = '';
             })
-            .then(function () {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: name.trim(), email: email.trim(), ts: Date.now() }));
-                showSuccess();
-            })
-            .catch(function (err) {
-                console.error('[Giveaway] Submit error:', err);
-                if (submitBtn) { submitBtn.textContent = 'Enter Now — It's Free!'; submitBtn.disabled = false; }
-                var errEl = document.getElementById('giveEmailErr');
-                if (errEl) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.style.display = 'block'; }
+            .catch(function(err) {
+                console.error('Giveaway submission error:', err);
+                var errEl = document.getElementById('gwSubmitErr');
+                if (errEl) {
+                    errEl.textContent = 'Something went wrong. Please try again or email hello@realizedprints.com.';
+                    errEl.style.display = 'block';
+                }
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
             });
-        };
+    }
 
-        // Auto-popup: 8 s, once per session, skip if already entered
-        if (!sessionStorage.getItem(SESSION_KEY) && !localStorage.getItem(STORAGE_KEY)) {
-            sessionStorage.setItem(SESSION_KEY, '1');
-            setTimeout(window.openGiveawayModal, 8000);
+    // ---- Auto-show popup after 12s (once per session) ----
+    (function autoShowGiveaway() {
+        if (sessionStorage.getItem('gwPopupShown')) return;
+        setTimeout(function() {
+            var modal = document.getElementById('giveawayModal');
+            if (modal && modal.getAttribute('aria-hidden') !== 'false') {
+                openGiveawayModal();
+                sessionStorage.setItem('gwPopupShown', '1');
+            }
+        }, 12000);
+    })();
+
+    // ===== HERO CAROUSEL — adapted from index.html =====
+    (function initHeroCarousel() {
+        const carousel = document.getElementById('heroCarousel');
+        if (!carousel) return;
+        const slides = carousel.querySelectorAll('.carousel-slide');
+        const dots = carousel.querySelectorAll('#carouselDots button');
+        const prevBtn = document.getElementById('carouselPrev');
+        const nextBtn = document.getElementById('carouselNext');
+
+        const SLIDE_THEMES = ['theme-brown', 'theme-honey', 'theme-sage', 'theme-copper', 'theme-brown', 'theme-honey'];
+        const ALL_THEMES = ['theme-brown', 'theme-honey', 'theme-sage', 'theme-copper'];
+
+        let current = 0;
+        let autoplayTimer = null;
+        const AUTOPLAY_MS = 4200;
+
+        function applyTheme(idx) {
+            ALL_THEMES.forEach(t => carousel.classList.remove(t));
+            const theme = SLIDE_THEMES[idx] || 'theme-brown';
+            carousel.classList.add(theme);
         }
 
-    }()); // immediately invoked — script is at end of body, DOM is ready
-    </script>
-    <!-- END GIVEAWAY JAVASCRIPT -->
+        function goTo(idx) {
+            current = (idx + slides.length) % slides.length;
+            slides.forEach((s, i) => s.classList.toggle('active', i === current));
+            dots.forEach((d, i) => d.classList.toggle('active', i === current));
+            applyTheme(current);
+        }
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
 
-    <!-- END GIVEAWAY JAVASCRIPT -->
+        function startAutoplay() {
+            stopAutoplay();
+            autoplayTimer = setInterval(next, AUTOPLAY_MS);
+        }
+        function stopAutoplay() {
+            if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
+        }
+
+        if (nextBtn) nextBtn.addEventListener('click', (e) => { e.preventDefault(); next(); startAutoplay(); });
+        if (prevBtn) prevBtn.addEventListener('click', (e) => { e.preventDefault(); prev(); startAutoplay(); });
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                e.preventDefault();
+                goTo(parseInt(dot.dataset.dot, 10));
+                startAutoplay();
+            });
+        });
+
+        carousel.addEventListener('mouseenter', stopAutoplay);
+        carousel.addEventListener('mouseleave', startAutoplay);
+
+        applyTheme(current);
+        startAutoplay();
+    })();
+    </script>
+
 </body>
 </html>
