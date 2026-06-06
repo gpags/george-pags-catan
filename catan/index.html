@@ -1471,6 +1471,29 @@ shorter target and a non-stretching card.
         </div>
     </header>
 
+    <!-- ============================================================
+         GIVEAWAY BANNER ADDED — Father's Day Artisan Catan Heirloom Giveaway
+         Inserts immediately after #nav / </header>
+         ============================================================ -->
+    <div id="giveawayBanner" role="region" aria-label="Father's Day Giveaway Announcement"
+         style="background:var(--forest-900);border-bottom:1px solid rgba(184,133,66,0.3);position:relative;z-index:40;width:100%;">
+        <div style="max-width:80rem;margin:0 auto;padding:0.65rem 1.25rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.8125rem;">
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+                <span style="background:var(--honey-600);color:var(--sand-50);font-size:0.65rem;font-weight:700;letter-spacing:0.08em;padding:0.2rem 0.6rem;border-radius:9999px;text-transform:uppercase;white-space:nowrap;">Father's Day Giveaway</span>
+                <span style="color:var(--sand-100);font-weight:600;letter-spacing:0.02em;">Win a Customized Artisan Catan Heirloom Set</span>
+                <span style="color:rgba(244,236,220,0.55);">&#8226;</span>
+                <span style="color:rgba(244,236,220,0.82);">ARV $599 &mdash; Every entrant gets <strong style="color:var(--honey-400);">$125 off</strong>. Ends June&nbsp;15.</span>
+            </div>
+            <button onclick="openGiveawayModal()"
+                    aria-haspopup="dialog"
+                    class="btn-primary"
+                    style="font-size:0.72rem;padding:0.45rem 1.15rem;border-radius:9999px;font-weight:700;letter-spacing:0.06em;white-space:nowrap;flex-shrink:0;">
+                ENTER FREE &mdash; NO PURCHASE NECESSARY
+            </button>
+        </div>
+    </div>
+    <!-- END GIVEAWAY BANNER -->
+
     <!-- ============ HERO ============ -->
     <section class="relative overflow-hidden grain">
         <div class="absolute inset-0 bg-gradient-to-br from-sand-50 via-sand-100 to-sand-200"></div>
@@ -5746,5 +5769,194 @@ shorter target and a non-stretching card.
         })();
     </script>
 
+
+    <!-- ============================================================
+         GIVEAWAY MODAL ADDED — Father's Day Artisan Catan Heirloom Giveaway
+         Append before </body>
+         ============================================================ -->
+    <div id="giveawayModal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="giveawayModalHeading"
+         aria-describedby="giveawayModalDesc"
+         style="display:none;position:fixed;inset:0;z-index:9000;overflow-y:auto;padding:1.5rem 1rem;">
+        <div id="giveawayBackdrop"
+             onclick="closeGiveawayModal()"
+             style="position:fixed;inset:0;background:rgba(26,32,24,0.82);backdrop-filter:blur(4px);"></div>
+        <div style="position:relative;z-index:1;max-width:36rem;margin:0 auto;background:var(--sand-50);border-radius:1.5rem;box-shadow:var(--shadow-glow);overflow:hidden;border:1px solid var(--sand-200);">
+            <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%222%22 stitchTiles=%22stitch%22/><feColorMatrix values=%220 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.05 0%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');opacity:0.5;mix-blend-mode:multiply;"></div>
+            <!-- Modal header -->
+            <div style="position:relative;background:var(--forest-900);padding:1.5rem 1.75rem 1.25rem;text-align:center;">
+                <div style="display:inline-block;background:var(--honey-600);color:var(--sand-50);font-size:0.65rem;font-weight:700;letter-spacing:0.1em;padding:0.2rem 0.7rem;border-radius:9999px;text-transform:uppercase;margin-bottom:0.75rem;">Limited &mdash; 1 of 6 Sets Given Away Free</div>
+                <h2 id="giveawayModalHeading" style="font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:600;line-height:1.15;color:var(--sand-50);margin:0 0 0.5rem;letter-spacing:-0.01em;">Win a Legacy&#8209;Worthy<br><em style="color:var(--honey-400);">Catan Heirloom Set</em></h2>
+                <p style="color:rgba(244,236,220,0.78);font-size:0.875rem;margin:0;line-height:1.55;" id="giveawayModalDesc">This Father's Day, one lucky winner receives our Premium Artisan Catan Set &mdash; handcrafted in Basking Ridge, NJ. Every valid entry also wins a <strong style="color:var(--honey-400);">$125 discount code</strong>.</p>
+                <button onclick="closeGiveawayModal()"
+                        id="giveawayCloseBtn"
+                        aria-label="Close giveaway modal"
+                        style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.1);border:none;cursor:pointer;width:2rem;height:2rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,0.7);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div style="position:relative;padding:1.75rem 1.75rem 1.5rem;">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.5rem;">
+                    <div style="background:var(--sand-100);border:1px solid var(--sand-200);border-radius:0.75rem;padding:0.85rem 0.65rem;text-align:center;">
+                        <div style="font-size:1.25rem;margin-bottom:0.25rem;">&#127942;</div>
+                        <div style="font-size:0.7rem;font-weight:700;color:var(--forest-900);letter-spacing:0.04em;text-transform:uppercase;line-height:1.3;">Grand Prize</div>
+                        <div style="font-size:0.72rem;color:var(--forest-900);opacity:0.7;margin-top:0.2rem;">Full set ARV $599</div>
+                    </div>
+                    <div style="background:var(--sand-100);border:1px solid var(--sand-200);border-radius:0.75rem;padding:0.85rem 0.65rem;text-align:center;">
+                        <div style="font-size:1.25rem;margin-bottom:0.25rem;">&#127873;</div>
+                        <div style="font-size:0.7rem;font-weight:700;color:var(--forest-900);letter-spacing:0.04em;text-transform:uppercase;line-height:1.3;">Everyone Wins</div>
+                        <div style="font-size:0.72rem;color:var(--forest-900);opacity:0.7;margin-top:0.2rem;">$125 off code</div>
+                    </div>
+                    <div style="background:var(--sand-100);border:1px solid var(--sand-200);border-radius:0.75rem;padding:0.85rem 0.65rem;text-align:center;">
+                        <div style="font-size:1.25rem;margin-bottom:0.25rem;">&#129309;</div>
+                        <div style="font-size:0.7rem;font-weight:700;color:var(--forest-900);letter-spacing:0.04em;text-transform:uppercase;line-height:1.3;">Free to Enter</div>
+                        <div style="font-size:0.72rem;color:var(--forest-900);opacity:0.7;margin-top:0.2rem;">No purchase needed</div>
+                    </div>
+                </div>
+                <!-- Form -->
+                <div id="giveawayFormWrap">
+                    <div style="display:flex;flex-direction:column;gap:0.875rem;">
+                        <div>
+                            <label for="giveName" style="display:block;font-size:0.78rem;font-weight:600;color:var(--forest-900);margin-bottom:0.35rem;letter-spacing:0.03em;">Full Name</label>
+                            <input id="giveName" type="text" autocomplete="name" placeholder="Your full name"
+                                   style="width:100%;padding:0.7rem 1rem;border:1.5px solid var(--sand-200);border-radius:0.625rem;background:white;font-size:0.9rem;font-family:'Inter',sans-serif;color:var(--forest-900);outline:none;" />
+                            <div id="giveNameErr" style="color:#c0392b;font-size:0.75rem;margin-top:0.25rem;display:none;">Please enter your full name.</div>
+                        </div>
+                        <div>
+                            <label for="giveEmail" style="display:block;font-size:0.78rem;font-weight:600;color:var(--forest-900);margin-bottom:0.35rem;letter-spacing:0.03em;">Email Address</label>
+                            <input id="giveEmail" type="email" autocomplete="email" placeholder="you@example.com"
+                                   style="width:100%;padding:0.7rem 1rem;border:1.5px solid var(--sand-200);border-radius:0.625rem;background:white;font-size:0.9rem;font-family:'Inter',sans-serif;color:var(--forest-900);outline:none;" />
+                            <div id="giveEmailErr" style="color:#c0392b;font-size:0.75rem;margin-top:0.25rem;display:none;">Please enter a valid email address.</div>
+                        </div>
+                        <div style="display:flex;align-items:flex-start;gap:0.6rem;">
+                            <input id="giveEligible" type="checkbox"
+                                   style="margin-top:0.15rem;width:1.1rem;height:1.1rem;accent-color:var(--forest-800);flex-shrink:0;cursor:pointer;" />
+                            <label for="giveEligible" style="font-size:0.78rem;color:var(--forest-900);line-height:1.45;cursor:pointer;">
+                                I confirm I am a legal U.S. resident aged 18+ and meet all eligibility requirements. I have read and agree to the <a href="giveaway-official-rules.html" target="_blank" style="color:var(--honey-700);text-decoration:underline;font-weight:600;">Official Rules</a>.
+                            </label>
+                        </div>
+                        <div id="giveEligibleErr" style="color:#c0392b;font-size:0.75rem;margin-top:-0.5rem;display:none;">You must confirm eligibility to enter.</div>
+                        <button onclick="submitGiveawayForm()"
+                                id="giveSubmitBtn"
+                                class="btn-primary"
+                                style="width:100%;padding:0.875rem;border-radius:0.75rem;font-size:0.95rem;font-weight:700;letter-spacing:0.04em;margin-top:0.25rem;">
+                            Enter Now &mdash; It's Free!
+                        </button>
+                    </div>
+                </div>
+                <!-- Success -->
+                <div id="giveawaySuccess" style="display:none;text-align:center;padding:1rem 0;">
+                    <div style="width:3.5rem;height:3.5rem;background:linear-gradient(135deg,var(--forest-700),var(--forest-900));border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:var(--shadow-glow);">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--honey-400)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--forest-900);margin:0 0 0.5rem;">You're In!</h3>
+                    <p style="font-size:0.875rem;color:var(--forest-900);opacity:0.75;line-height:1.6;margin:0 0 1.25rem;">Your entry is confirmed. Check your inbox for details &mdash; and keep an eye out for your <strong>$125 discount code</strong> after the drawing on June&nbsp;16,&nbsp;2026.</p>
+                    <button onclick="closeGiveawayModal()" class="btn-primary" style="padding:0.65rem 1.75rem;border-radius:9999px;font-size:0.85rem;font-weight:700;">Continue Shopping</button>
+                </div>
+                <!-- Legal -->
+                <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--sand-200);font-size:0.7rem;color:var(--forest-900);opacity:0.55;line-height:1.6;text-align:center;">
+                    NO PURCHASE NECESSARY. Open to U.S. residents 18+. Ends 11:59:59 PM ET June&nbsp;15,&nbsp;2026. One entry per person. Odds depend on entries.
+                    <a href="giveaway-official-rules.html" target="_blank" style="color:var(--honey-700);text-decoration:underline;">Official Rules</a> &middot;
+                    <a href="https://www.realizedprints.com/privacy-policy.html" target="_blank" style="color:var(--honey-700);text-decoration:underline;">Privacy Policy</a>
+                    &middot; Sponsor: Realized Prints LLC, 60 Hickory Drive, Basking Ridge, NJ 07920. Void where prohibited.
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END GIVEAWAY MODAL -->
+
+    <!-- ============================================================
+         GIVEAWAY JAVASCRIPT ADDED
+         Minimal, clean, non-breaking. Namespaced to window globals.
+         ============================================================ -->
+    <script>
+    (function () {
+        'use strict';
+        var modal       = document.getElementById('giveawayModal');
+        var formWrap    = document.getElementById('giveawayFormWrap');
+        var successWrap = document.getElementById('giveawaySuccess');
+        var submitBtn   = document.getElementById('giveSubmitBtn');
+        var STORAGE_KEY = 'giveaway_entered_2026';
+
+        window.openGiveawayModal = function () {
+            if (!modal) return;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            if (localStorage.getItem(STORAGE_KEY)) { showSuccess(); }
+            requestAnimationFrame(function () {
+                var cb = document.getElementById('giveawayCloseBtn');
+                if (cb) cb.focus();
+            });
+        };
+
+        window.closeGiveawayModal = function () {
+            if (!modal) return;
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        };
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+                window.closeGiveawayModal();
+            }
+        });
+
+        function setErr(id, show) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = show ? 'block' : 'none';
+        }
+        function setInputBorder(id, err) {
+            var el = document.getElementById(id);
+            if (el) el.style.borderColor = err ? '#c0392b' : 'var(--sand-200)';
+        }
+        function showSuccess() {
+            if (formWrap) formWrap.style.display = 'none';
+            if (successWrap) successWrap.style.display = 'block';
+        }
+
+        window.submitGiveawayForm = function () {
+            var name  = (document.getElementById('giveName')     || {value:''}).value;
+            var email = (document.getElementById('giveEmail')    || {value:''}).value;
+            var elig  = (document.getElementById('giveEligible') || {checked:false}).checked;
+
+            var nameOk  = name.trim().length > 1;
+            var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+            var eligOk  = elig;
+
+            setErr('giveNameErr',    !nameOk);    setInputBorder('giveName',    !nameOk);
+            setErr('giveEmailErr',   !emailOk);   setInputBorder('giveEmail',   !emailOk);
+            setErr('giveEligibleErr',!eligOk);
+
+            if (!nameOk || !emailOk || !eligOk) return;
+
+            if (submitBtn) { submitBtn.textContent = 'Submitting…'; submitBtn.disabled = true; }
+
+            // TODO: replace with real fetch to your endpoint / Klaviyo webhook
+            // fetch('/api/giveaway-entry', {
+            //   method: 'POST',
+            //   headers: {'Content-Type':'application/json'},
+            //   body: JSON.stringify({ name: name.trim(), email: email.trim(), promotion: 'FathersDay_Catan_2026' })
+            // })
+
+            setTimeout(function () {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: name.trim(), email: email.trim(), ts: Date.now() }));
+                showSuccess();
+            }, 900);
+        };
+
+        // Auto-show after 8 s, once per session, not if already entered
+        var SESSION_KEY = 'giveaway_popup_shown';
+        if (!sessionStorage.getItem(SESSION_KEY) && !localStorage.getItem(STORAGE_KEY)) {
+            sessionStorage.setItem(SESSION_KEY, '1');
+            setTimeout(function () {
+                if (modal && modal.style.display !== 'block') { window.openGiveawayModal(); }
+            }, 8000);
+        }
+    }());
+    </script>
+    <!-- END GIVEAWAY JAVASCRIPT -->
 </body>
 </html>
