@@ -6061,21 +6061,27 @@ shorter target and a non-stretching card.
         btn.disabled = true;
         btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;margin-right:0.5rem;vertical-align:middle;"></span>Submitting…';
 
-        // Build form data for Google Apps Script
-        var formData = new FormData();
-        formData.append('name',            nameVal);
-        formData.append('email',           emailVal);
-        formData.append('eligible',        'Yes');
-        formData.append('marketingConsent', consentVal ? 'Yes' : 'No');
-        formData.append('source',          'catan-artisan-giveaway');
-        formData.append('timestamp',        new Date().toISOString());
+        // Build JSON payload — "type: giveaway" is the router key for Apps Script doPost
+        var payload = JSON.stringify({
+            type:             'giveaway',
+            name:             nameVal,
+            email:            emailVal,
+            eligible:         'Yes',
+            marketingConsent: consentVal ? 'Yes' : 'No',
+            source:           'catan-artisan-giveaway',
+            timestamp:        new Date().toISOString()
+        });
 
-        // IMPORTANT: Replace with your deployed Google Apps Script URL
         var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXxOFOEL9VFdua7Xl_AvfHmo4Ge2MafGLJASzTZG5-jTH7PxY8lUBHP7DcRjhUpEScGQ/exec';
 
-        fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
-            .then(function() {
-                // no-cors = opaque response; treat any response as success
+        fetch(SCRIPT_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    payload
+        })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.status !== 'ok') throw new Error(data.message || 'Server error');
                 localStorage.setItem('gwEntered_catan2026', '1');
                 document.getElementById('gwForm').style.display = 'none';
                 document.getElementById('gwSuccess').style.display = '';
