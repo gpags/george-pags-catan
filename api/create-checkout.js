@@ -138,16 +138,16 @@ module.exports = async (req, res) => {
             billing_address_collection: 'auto',
             phone_number_collection: { enabled: true },
 
-            // Free shipping for orders ? $75 (every Catan tier qualifies � but we keep it explicit)
+            // Flat rate shipping (change the amount below as needed)
             shipping_options: [
                 {
                     shipping_rate_data: {
                         type: 'fixed_amount',
-                        fixed_amount: { amount: 0, currency: 'usd' },
-                        display_name: 'Free US Shipping (orders $75+)',
+                        fixed_amount: { amount: 15000, currency: 'usd' }, // $15.00 shipping
+                        display_name: 'USPS Ground Shipping',
                         delivery_estimate: {
                             minimum: { unit: 'business_day', value: 5 },
-                            maximum: { unit: 'business_day', value: 14 },
+                            maximum: { unit: 'business_day', value: 7 },
                         },
                         tax_behavior: 'exclusive',
                     },
