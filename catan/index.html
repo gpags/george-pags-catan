@@ -5876,32 +5876,35 @@ shorter target and a non-stretching card.
                 </div>
             </div>
         </div>
-    </div>
-    <!-- END GIVEAWAY MODAL -->
-
     <!-- ============================================================
          GIVEAWAY JAVASCRIPT ADDED
-         Minimal, clean, non-breaking. Namespaced to window globals.
+         Uses DOMContentLoaded so the modal <div> (which appears after
+         this <script> in source order) is fully parsed before any
+         getElementById call runs. Previously the IIFE executed immediately,
+         found modal=null, and every function silently returned early.
          ============================================================ -->
     <script>
-    (function () {
+    document.addEventListener('DOMContentLoaded', function () {
         'use strict';
 
-        // ── Same Google Apps Script endpoint used by the main realizedprints.com site ──
+        // Google Apps Script endpoint — same one used by main realizedprints.com site
         var CRM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx0xwMoeNV4AodeH2ZCx1NsAjc8kp2tlN-NVsLI6tSsK3BmMnC0YlYXtlK8Juz6XIs9bw/exec';
 
+        var STORAGE_KEY = 'giveaway_entered_2026';
+        var SESSION_KEY = 'giveaway_popup_shown';
+
+        // DOM refs — safe here because DOMContentLoaded guarantees all HTML is parsed
         var modal       = document.getElementById('giveawayModal');
         var formWrap    = document.getElementById('giveawayFormWrap');
         var successWrap = document.getElementById('giveawaySuccess');
         var submitBtn   = document.getElementById('giveSubmitBtn');
-        var STORAGE_KEY = 'giveaway_entered_2026';
 
-        // ── Open modal ────────────────────────────────────────────────────────
+        if (!modal) { console.warn('[Giveaway] Modal element not found.'); return; }
+
+        // Open
         window.openGiveawayModal = function () {
-            if (!modal) return;
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
-            // If already entered this session, skip straight to success
             if (localStorage.getItem(STORAGE_KEY)) { showSuccess(); }
             requestAnimationFrame(function () {
                 var cb = document.getElementById('giveawayCloseBtn');
@@ -5909,76 +5912,66 @@ shorter target and a non-stretching card.
             });
         };
 
-        // ── Close modal ───────────────────────────────────────────────────────
+        // Close
         window.closeGiveawayModal = function () {
-            if (!modal) return;
             modal.style.display = 'none';
             document.body.style.overflow = '';
         };
 
         // Escape key
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
                 window.closeGiveawayModal();
             }
         });
 
-        // ── Helpers ───────────────────────────────────────────────────────────
+        // Helpers
         function setErr(id, show) {
             var el = document.getElementById(id);
             if (el) el.style.display = show ? 'block' : 'none';
         }
-        function setInputBorder(id, err) {
+        function setInputBorder(id, isErr) {
             var el = document.getElementById(id);
-            if (el) el.style.borderColor = err ? '#c0392b' : 'var(--sand-200)';
+            if (el) el.style.borderColor = isErr ? '#c0392b' : 'var(--sand-200)';
         }
         function showSuccess() {
             if (formWrap)    formWrap.style.display    = 'none';
             if (successWrap) successWrap.style.display = 'block';
         }
 
-        // ── Submit — validates, posts to Google Sheet CRM, shows success ──────
+        // Submit
         window.submitGiveawayForm = function () {
             var nameEl    = document.getElementById('giveName');
             var emailEl   = document.getElementById('giveEmail');
             var eligEl    = document.getElementById('giveEligible');
             var consentEl = document.getElementById('giveConsent');
 
-            var name    = nameEl    ? nameEl.value    : '';
-            var email   = emailEl   ? emailEl.value   : '';
+            var name    = nameEl    ? nameEl.value     : '';
+            var email   = emailEl   ? emailEl.value    : '';
             var elig    = eligEl    ? eligEl.checked   : false;
             var consent = consentEl ? consentEl.checked : false;
 
-            var nameOk    = name.trim().length > 1;
-            var emailOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-            var eligOk    = elig;
-            var consentOk = consent;
+            var nameOk  = name.trim().length > 1;
+            var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
-            setErr('giveNameErr',    !nameOk);    setInputBorder('giveName',    !nameOk);
-            setErr('giveEmailErr',   !emailOk);   setInputBorder('giveEmail',   !emailOk);
-            setErr('giveEligibleErr',!eligOk);
-            setErr('giveConsentErr', !consentOk);
+            setErr('giveNameErr',    !nameOk);   setInputBorder('giveName',  !nameOk);
+            setErr('giveEmailErr',   !emailOk);  setInputBorder('giveEmail', !emailOk);
+            setErr('giveEligibleErr',!elig);
+            setErr('giveConsentErr', !consent);
 
-            if (!nameOk || !emailOk || !eligOk || !consentOk) return;
+            if (!nameOk || !emailOk || !elig || !consent) return;
 
-            if (submitBtn) {
-                submitBtn.textContent = 'Submitting…';
-                submitBtn.disabled = true;
-            }
+            if (submitBtn) { submitBtn.textContent = 'Submitting…'; submitBtn.disabled = true; }
 
-            // Build payload — same shape as the main site so it lands cleanly
-            // in the same Google Sheet with a "source" column distinguishing it
             var payload = {
-                email:   email.trim(),
-                name:    name.trim(),
-                consent: true,
-                source:  'giveaway-catan-2026',
-                product: 'FathersDay_Catan_Giveaway',
+                email:     email.trim(),
+                name:      name.trim(),
+                consent:   true,
+                source:    'giveaway-catan-2026',
+                product:   'FathersDay_Catan_Giveaway',
                 timestamp: new Date().toISOString()
             };
 
-            // Google Apps Script requires no-cors + text/plain body
-            // (same pattern as realizedprints.com index.html)
             fetch(CRM_ENDPOINT, {
                 method:  'POST',
                 mode:    'no-cors',
@@ -5986,7 +5979,6 @@ shorter target and a non-stretching card.
                 body:    JSON.stringify(payload)
             })
             .then(function () {
-                // Response is opaque (no-cors), so resolution = success
                 localStorage.setItem(STORAGE_KEY, JSON.stringify({
                     name: name.trim(), email: email.trim(), ts: Date.now()
                 }));
@@ -5994,28 +5986,21 @@ shorter target and a non-stretching card.
             })
             .catch(function (err) {
                 console.error('[Realized Prints Giveaway] Submission error:', err);
-                if (submitBtn) {
-                    submitBtn.textContent = 'Enter Now — It's Free!';
-                    submitBtn.disabled = false;
-                }
-                setErr('giveEmailErr', true);
+                if (submitBtn) { submitBtn.textContent = 'Enter Now — It's Free!'; submitBtn.disabled = false; }
                 var errEl = document.getElementById('giveEmailErr');
-                if (errEl) errEl.textContent = 'Something went wrong. Please try again.';
+                if (errEl) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.style.display = 'block'; }
             });
         };
 
-        // ── Auto-popup: after 8 s, once per session, skip if already entered ─
-        var SESSION_KEY = 'giveaway_popup_shown';
+        // Auto-popup: 8 s delay, once per session, skip if already entered
         if (!sessionStorage.getItem(SESSION_KEY) && !localStorage.getItem(STORAGE_KEY)) {
             sessionStorage.setItem(SESSION_KEY, '1');
             setTimeout(function () {
-                if (modal && modal.style.display !== 'block') {
-                    window.openGiveawayModal();
-                }
+                if (modal.style.display !== 'block') { window.openGiveawayModal(); }
             }, 8000);
         }
 
-    }());
+    }); // end DOMContentLoaded
     </script>
     <!-- END GIVEAWAY JAVASCRIPT -->
 </body>
