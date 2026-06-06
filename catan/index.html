@@ -1647,7 +1647,7 @@ shorter target and a non-stretching card.
         <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
             <div class="flex items-center gap-3 justify-center md:justify-start">
                 <span class="text-xl">📦</span>
-                <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs text-sand-300/70">2–4 day delivery</div></div>
+                <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs text-sand-300/70">3–5 day delivery</div></div>
             </div>
             <div class="flex items-center gap-3 justify-center md:justify-start">
                 <span class="text-xl">🇺🇸</span>
@@ -5963,6 +5963,52 @@ shorter target and a non-stretching card.
     </div><!-- /giveawayModal -->
 
     <!-- ============================================================
+         SCARCITY POPUP — "Only 10 Sets Available"
+         Floats bottom-right on desktop, bottom full-width on mobile.
+         Shows once per session (localStorage gate). Dismissible via
+         X button, click-outside, or Escape key.
+         ============================================================ -->
+    <div id="scarcityPopup"
+         class="hidden fixed bottom-4 right-4 z-[9998] sm:w-auto"
+         style="width: calc(100% - 2rem); max-width: 320px;"
+         role="alert"
+         aria-live="polite"
+         aria-label="Limited availability notice">
+      <div class="relative overflow-hidden rounded-2xl border border-red-500/30 shadow-glow"
+           style="background-color: var(--sand-50); background-image: url('data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><filter id=%27n%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.85%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.04 0%27/></filter><rect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/></svg>');">
+
+        <!-- Red left accent bar (mirrors top giveaway banner) -->
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600" aria-hidden="true"></div>
+
+        <div class="flex items-start gap-3 px-4 py-3.5 pl-5">
+          <div class="flex-1 min-w-0">
+            <div class="font-semibold text-red-600 leading-tight"
+                 style="font-family: 'Inter', sans-serif; font-size: 15px; letter-spacing: -0.01em;">
+              Only 10 Sets Available
+            </div>
+            <div class="mt-0.5 leading-snug"
+                 style="font-family: 'Inter', sans-serif; font-size: 12.5px; color: rgba(26,32,24,0.72);">
+              Handcrafted in our New Jersey workshop.<br>
+              Next batch ships in 6&thinsp;+ weeks.
+            </div>
+          </div>
+
+          <button id="closeScarcityPopup"
+                  aria-label="Dismiss availability notice"
+                  class="mt-0.5 flex-shrink-0 flex items-center justify-center rounded-full transition-colors"
+                  style="width: 28px; height: 28px; color: rgba(26,32,24,0.55);"
+                  onmouseover="this.style.background='rgba(220,38,38,0.1)'; this.style.color='#dc2626';"
+                  onmouseout="this.style.background='transparent'; this.style.color='rgba(26,32,24,0.55)';">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
          GIVEAWAY FORM SUBMISSION SCRIPT
          Sends entry data to Google Apps Script → Google Sheets CRM.
          SETUP: Replace GIVEAWAY_SCRIPT_URL with your deployed Apps Script URL.
@@ -6167,6 +6213,54 @@ shorter target and a non-stretching card.
 
         applyTheme(current);
         startAutoplay();
+    })();
+
+    // ---- Scarcity Popup — "Only 10 Sets Available" ----
+    // Shows once per session after a 5s delay.
+    // Dismissible via X button, click-outside on the wrapper, or Escape key.
+    (function initScarcityPopup() {
+        var popup = document.getElementById('scarcityPopup');
+        if (!popup) return;
+
+        // Gate: never show again once dismissed
+        if (localStorage.getItem('scarcityPopupDismissed')) return;
+
+        function dismiss() {
+            popup.style.transition = 'opacity 220ms ease, transform 220ms ease';
+            popup.style.opacity = '0';
+            popup.style.transform = 'translateY(10px)';
+            setTimeout(function() { popup.style.display = 'none'; }, 230);
+            localStorage.setItem('scarcityPopupDismissed', '1');
+            document.removeEventListener('keydown', onEsc);
+        }
+
+        function onEsc(e) {
+            if (e.key === 'Escape' && popup.style.display !== 'none') {
+                dismiss();
+            }
+        }
+
+        setTimeout(function() {
+            popup.style.opacity = '0';
+            popup.style.transform = 'translateY(10px)';
+            popup.style.transition = 'opacity 280ms ease, transform 280ms ease';
+            popup.classList.remove('hidden');
+            popup.style.display = 'block';
+            // Trigger reflow so the transition plays
+            void popup.offsetWidth;
+            popup.style.opacity = '1';
+            popup.style.transform = 'translateY(0)';
+
+            var closeBtn = document.getElementById('closeScarcityPopup');
+            if (closeBtn) closeBtn.addEventListener('click', dismiss);
+
+            // Click-outside: only if the outer wrapper itself is clicked
+            popup.addEventListener('click', function(e) {
+                if (e.target === popup) dismiss();
+            });
+
+            document.addEventListener('keydown', onEsc);
+        }, 5000);
     })();
     </script>
 
