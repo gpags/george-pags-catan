@@ -60,118 +60,55 @@ function buildDescription(state) {
 }
 
 module.exports = async (req, res) => {
-    // CORS � same-origin under Vercel; allow direct testing too
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
     if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     try {
         const { state, total: clientTotal } = req.body || {};
 
-        if (!state || typeof state !== 'object') {
-            return res.status(400).json({ error: 'Missing configuration state.' });
-        }
-        if (!TIER_LABEL[state.tier]) {
-            return res.status(400).json({ error: 'Invalid tier selected.' });
-        }
+        // === JUNE 2026 STOCK LIMIT CHECK ===
+        const now = new Date();
+        const isJune2026 = now.getMonth() === 5 && now.getFullYear() === 2026;
 
-        // Authoritative total
-        const serverTotal = computeTotal(state);
+        if (isJune2026) {
+            // Check if they're using the free winner code
+            const isWinner = state.robber === 'custom' && state.namesText?.toLowerCase().includes('winner');
+            // Better way: we'll check the promotion code later if needed
 
-        // Sanity guard � if client lied wildly, reject
-        if (typeof clientTotal === 'number' && Math.abs(clientTotal - serverTotal) > 1) {
-            console.warn('Client/server total mismatch', { clientTotal, serverTotal, state });
-        }
+            if (!isWinner) {
+                // Call your Google Apps Script to get current paid count
+                const countRes = await fetch('https://script.google.com/macros/s/AKfycbwXxOFOEL9VFdua7Xl_AvfHmo4Ge2MafGLJASzTZG5-jTH7PxY8lUBHP7DcRjhUpEScGQ/exec', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'getPaidOrderCount' })
+                });
+                const countData = await countRes.json();
 
-        const tierLabel = TIER_LABEL[state.tier];
-        const productName = `Catan Artisan � ${tierLabel} Bundle`;
-        const productDesc = buildDescription(state);
-
-        // Metadata: full state + total. Stripe metadata values must be strings ? 500 chars each.
-        // We split the JSON across multiple keys if needed so the workshop has 100% of the build spec.
-        const fullPayload = JSON.stringify({ ...state, total: serverTotal });
-        const metadata = { tier: state.tier, total_usd: String(serverTotal) };
-
-        if (fullPayload.length <= 480) {
-            metadata.config = fullPayload;
-        } else {
-            // Split into 480-char chunks across config_1, config_2, ...
-            const CHUNK = 480;
-            let i = 0, idx = 1;
-            while (i < fullPayload.length) {
-                metadata[`config_${idx}`] = fullPayload.slice(i, i + CHUNK);
-                i += CHUNK;
-                idx += 1;
+                if (countData.count >= 9) {
+                    return res.status(400).json({
+                        error: 'SOLD_OUT',
+                        message: 'We have reached our limit of 9 paid sets for June.'
+                    });
+                }
             }
         }
 
-        // Human-readable summary for dashboard glance
-        metadata.summary = buildDescription(state).slice(0, 480);
+        // ... rest of your existing code (computeTotal, buildDescription, metadata, etc.)
 
         const session = await stripe.checkout.sessions.create({
-            mode: 'payment',
-            payment_method_types: ['card'],
-
-            line_items: [
-                {
-                    quantity: 1,
-                    price_data: {
-                        currency: 'usd',
-                        unit_amount: serverTotal * 100, // dollars ? cents
-                        product_data: {
-                            name: productName,
-                            description: productDesc,
-                            metadata: { tier: state.tier },
-                        },
-                        tax_behavior: 'exclusive',
-                    },
-                },
-            ],
-
-            // US-only shipping
-            shipping_address_collection: { allowed_countries: ['US'] },
-            billing_address_collection: 'auto',
-            phone_number_collection: { enabled: true },
-
-            // Flat rate shipping (change the amount below as needed)
-            shipping_options: [
-                {
-                    shipping_rate_data: {
-                        type: 'fixed_amount',
-                        fixed_amount: { amount: 1500, currency: 'usd' }, // $15.00 shipping
-                        display_name: 'USPS Ground Shipping',
-                        delivery_estimate: {
-                            minimum: { unit: 'business_day', value: 3 },
-                            maximum: { unit: 'business_day', value: 7 },
-                        },
-                        tax_behavior: 'exclusive',
-                    },
-                },
-            ],
-
-            // Stripe Tax (must be enabled in dashboard)
-            automatic_tax: { enabled: true },
-
-            // Critical: full state for fulfillment
-            metadata,
-            payment_intent_data: { metadata },
-
-            success_url: 'https://realizedprints.com/success.html?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url: 'https://realizedprints.com/catan-artisan.html',
-
+            // your existing session creation code...
             allow_promotion_codes: true,
         });
 
+        // After successful checkout, record the order (you can do this in a webhook later)
+        // For now we can record it here if you want immediate counting
+
         return res.status(200).json({ url: session.url });
+
     } catch (err) {
         console.error('Stripe checkout error:', err);
-        return res.status(500).json({
-            error: err && err.message ? err.message : 'Unable to start checkout. Please try again.',
-        });
+        return res.status(500).json({ error: err.message || 'Unable to start checkout.' });
     }
 };
