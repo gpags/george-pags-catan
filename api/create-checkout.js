@@ -149,11 +149,11 @@ module.exports = async (req, res) => {
                 {
                     shipping_rate_data: {
                         type: 'fixed_amount',
-                        fixed_amount: { amount: 900, currency: 'usd' },
+                        fixed_amount: { amount: 1500, currency: 'usd' },
                         display_name: 'USPS Ground Shipping',
                         delivery_estimate: {
                             minimum: { unit: 'business_day', value: 5 },
-                            maximum: { unit: 'business_day', value: 12 },
+                            maximum: { unit: 'business_day', value: 7 },
                         },
                         tax_behavior: 'exclusive',
                     },
@@ -163,7 +163,7 @@ module.exports = async (req, res) => {
             metadata,
             payment_intent_data: { metadata },
             success_url: 'https://realizedprints.com/success.html?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url: 'https://realizedprints.com/catan-artisan.html',
+            cancel_url: 'https://realizedprints.com/catan',
             allow_promotion_codes: true,
         });
 
