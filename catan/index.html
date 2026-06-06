@@ -5744,10 +5744,10 @@ shorter target and a non-stretching card.
         aria-modal="true"
         aria-labelledby="gwModalTitle"
         aria-hidden="true"
-        hidden
         style="
+            display:none;
             position:fixed; inset:0; z-index:9000;
-            display:flex; align-items:center; justify-content:center;
+            align-items:center; justify-content:center;
             background:rgba(26,32,24,0.72);
             backdrop-filter:blur(6px);
             padding:1rem;
@@ -5967,24 +5967,34 @@ shorter target and a non-stretching card.
          SETUP: Replace GIVEAWAY_SCRIPT_URL with your deployed Apps Script URL.
          ============================================================ -->
     <script>
-    // ---- Giveaway Modal Open/Close (defined here so they work from inline onclick) ----
+    // ---- Giveaway Modal Open/Close ----
+    // Uses display:flex / display:none exclusively — no 'hidden' attribute —
+    // so the toggle is always unambiguous regardless of inline style specificity.
+
     function openGiveawayModal() {
         var modal = document.getElementById('giveawayModal');
         if (!modal) return;
-        modal.removeAttribute('hidden');
+        // Show via flex (matches the centering layout)
+        modal.style.display = 'flex';
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        // Reset to form state
         var form = document.getElementById('gwForm');
         var succ = document.getElementById('gwSuccess');
         if (form) form.style.display = '';
         if (succ) succ.style.display = 'none';
-        // Reset errors
+        // Clear any previous validation errors
         ['gwNameErr','gwEmailErr','gwEligibleErr','gwSubmitErr'].forEach(function(id){
             var el = document.getElementById(id);
             if (el) { el.style.display = 'none'; el.textContent = ''; }
         });
+        // Restore submit button in case it was mid-loading
         var btn = document.getElementById('gwSubmitBtn');
-        if (btn) { btn.disabled = false; btn.textContent = "Enter Now — It's Free! →"; }
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = 'Enter Now \u2014 It\u2019s Free! <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" style="margin-left:0.4rem;vertical-align:middle;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+        }
+        // Focus first field for accessibility
         setTimeout(function(){
             var first = modal.querySelector('input');
             if (first) first.focus();
@@ -5994,15 +6004,19 @@ shorter target and a non-stretching card.
     function closeGiveawayModal() {
         var modal = document.getElementById('giveawayModal');
         if (!modal) return;
-        modal.setAttribute('hidden', '');
+        modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
     }
 
-    // Escape key & backdrop click close
+    // Escape key closes modal
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeGiveawayModal();
     });
+
+    // Backdrop click closes modal.
+    // We check that the click landed directly on the backdrop div (not the inner panel)
+    // by comparing the event target to the modal element itself.
     document.getElementById('giveawayModal').addEventListener('click', function(e) {
         if (e.target === this) closeGiveawayModal();
     });
@@ -6078,16 +6092,17 @@ shorter target and a non-stretching card.
             });
     }
 
-    // ---- Auto-show popup after 12s (once per session) ----
+    // ---- Auto-show popup: 5 seconds after page load, once ever (localStorage) ----
     (function autoShowGiveaway() {
-        if (sessionStorage.getItem('gwPopupShown')) return;
+        if (localStorage.getItem('gwAutoShown_catan2026')) return;
         setTimeout(function() {
             var modal = document.getElementById('giveawayModal');
-            if (modal && modal.getAttribute('aria-hidden') !== 'false') {
+            // Only auto-open if modal isn't already visible
+            if (modal && modal.style.display !== 'flex') {
                 openGiveawayModal();
-                sessionStorage.setItem('gwPopupShown', '1');
+                localStorage.setItem('gwAutoShown_catan2026', '1');
             }
-        }, 12000);
+        }, 5000);
     })();
 
     // ===== HERO CAROUSEL — adapted from index.html =====
