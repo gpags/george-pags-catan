@@ -6074,10 +6074,11 @@ shorter target and a non-stretching card.
 
         var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXxOFOEL9VFdua7Xl_AvfHmo4Ge2MafGLJASzTZG5-jTH7PxY8lUBHP7DcRjhUpEScGQ/exec';
 
+        // No Content-Type header = no CORS preflight triggered.
+        // Apps Script still receives the JSON string in e.postData.contents.
         fetch(SCRIPT_URL, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    payload
+            method: 'POST',
+            body:   payload
         })
             .then(function(res) { return res.json(); })
             .then(function(data) {
