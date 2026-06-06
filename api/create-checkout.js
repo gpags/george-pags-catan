@@ -143,10 +143,10 @@ module.exports = async (req, res) => {
                 {
                     shipping_rate_data: {
                         type: 'fixed_amount',
-                        fixed_amount: { amount: 15000, currency: 'usd' }, // $15.00 shipping
+                        fixed_amount: { amount: 1500, currency: 'usd' }, // $15.00 shipping
                         display_name: 'USPS Ground Shipping',
                         delivery_estimate: {
-                            minimum: { unit: 'business_day', value: 5 },
+                            minimum: { unit: 'business_day', value: 3 },
                             maximum: { unit: 'business_day', value: 7 },
                         },
                         tax_behavior: 'exclusive',
