@@ -5877,39 +5877,31 @@ shorter target and a non-stretching card.
             </div>
         </div>
     <!-- ============================================================
-         GIVEAWAY JAVASCRIPT ADDED
-         Uses DOMContentLoaded so the modal <div> (which appears after
-         this <script> in source order) is fully parsed before any
-         getElementById call runs. Previously the IIFE executed immediately,
-         found modal=null, and every function silently returned early.
+    <!-- ============================================================
+         GIVEAWAY JAVASCRIPT — placed just before </body> so all elements
+         are already in the DOM. Called directly (no event listener needed).
          ============================================================ -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        'use strict';
+    (function giveawayInit() {
 
-        // Google Apps Script endpoint — same one used by main realizedprints.com site
         var CRM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx0xwMoeNV4AodeH2ZCx1NsAjc8kp2tlN-NVsLI6tSsK3BmMnC0YlYXtlK8Juz6XIs9bw/exec';
+        var STORAGE_KEY  = 'giveaway_entered_2026';
+        var SESSION_KEY  = 'giveaway_popup_shown';
 
-        var STORAGE_KEY = 'giveaway_entered_2026';
-        var SESSION_KEY = 'giveaway_popup_shown';
-
-        // DOM refs — safe here because DOMContentLoaded guarantees all HTML is parsed
         var modal       = document.getElementById('giveawayModal');
         var formWrap    = document.getElementById('giveawayFormWrap');
         var successWrap = document.getElementById('giveawaySuccess');
         var submitBtn   = document.getElementById('giveSubmitBtn');
 
-        if (!modal) { console.warn('[Giveaway] Modal element not found.'); return; }
+        if (!modal) { console.warn('[Giveaway] Modal not found in DOM'); return; }
 
         // Open
         window.openGiveawayModal = function () {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             if (localStorage.getItem(STORAGE_KEY)) { showSuccess(); }
-            requestAnimationFrame(function () {
-                var cb = document.getElementById('giveawayCloseBtn');
-                if (cb) cb.focus();
-            });
+            var cb = document.getElementById('giveawayCloseBtn');
+            if (cb) cb.focus();
         };
 
         // Close
@@ -5925,7 +5917,6 @@ shorter target and a non-stretching card.
             }
         });
 
-        // Helpers
         function setErr(id, show) {
             var el = document.getElementById(id);
             if (el) el.style.display = show ? 'block' : 'none';
@@ -5939,7 +5930,7 @@ shorter target and a non-stretching card.
             if (successWrap) successWrap.style.display = 'block';
         }
 
-        // Submit
+        // Submit — validates then posts to Google Sheet CRM
         window.submitGiveawayForm = function () {
             var nameEl    = document.getElementById('giveName');
             var emailEl   = document.getElementById('giveEmail');
@@ -5963,45 +5954,38 @@ shorter target and a non-stretching card.
 
             if (submitBtn) { submitBtn.textContent = 'Submitting…'; submitBtn.disabled = true; }
 
-            var payload = {
-                email:     email.trim(),
-                name:      name.trim(),
-                consent:   true,
-                source:    'giveaway-catan-2026',
-                product:   'FathersDay_Catan_Giveaway',
-                timestamp: new Date().toISOString()
-            };
-
             fetch(CRM_ENDPOINT, {
                 method:  'POST',
                 mode:    'no-cors',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body:    JSON.stringify(payload)
+                body:    JSON.stringify({
+                    email: email.trim(), name: name.trim(), consent: true,
+                    source: 'giveaway-catan-2026', product: 'FathersDay_Catan_Giveaway',
+                    timestamp: new Date().toISOString()
+                })
             })
             .then(function () {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                    name: name.trim(), email: email.trim(), ts: Date.now()
-                }));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: name.trim(), email: email.trim(), ts: Date.now() }));
                 showSuccess();
             })
             .catch(function (err) {
-                console.error('[Realized Prints Giveaway] Submission error:', err);
+                console.error('[Giveaway] Submit error:', err);
                 if (submitBtn) { submitBtn.textContent = 'Enter Now — It's Free!'; submitBtn.disabled = false; }
                 var errEl = document.getElementById('giveEmailErr');
                 if (errEl) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.style.display = 'block'; }
             });
         };
 
-        // Auto-popup: 8 s delay, once per session, skip if already entered
+        // Auto-popup: 8 s, once per session, skip if already entered
         if (!sessionStorage.getItem(SESSION_KEY) && !localStorage.getItem(STORAGE_KEY)) {
             sessionStorage.setItem(SESSION_KEY, '1');
-            setTimeout(function () {
-                if (modal.style.display !== 'block') { window.openGiveawayModal(); }
-            }, 8000);
+            setTimeout(window.openGiveawayModal, 8000);
         }
 
-    }); // end DOMContentLoaded
+    }()); // immediately invoked — script is at end of body, DOM is ready
     </script>
+    <!-- END GIVEAWAY JAVASCRIPT -->
+
     <!-- END GIVEAWAY JAVASCRIPT -->
 </body>
 </html>
