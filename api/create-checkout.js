@@ -175,4 +175,4 @@ module.exports = async (req, res) => {
             error: err && err.message ? err.message : 'Unable to start checkout. Please try again.',
         });
     }
-};        });
+};
