@@ -69,19 +69,24 @@ module.exports = async (req, res) => {
     try {
         const { state, total: clientTotal } = req.body || {};
 
+        if (!state || typeof state !== 'object') {
+            return res.status(400).json({ error: 'Missing configuration state.' });
+        }
+        if (!TIER_LABEL[state.tier]) {
+            return res.status(400).json({ error: 'Invalid tier selected.' });
+        }
+
         // === JUNE 2026 STOCK LIMIT CHECK ===
         const now = new Date();
         const isJune2026 = now.getMonth() === 5 && now.getFullYear() === 2026;
 
         if (isJune2026) {
-            // Check if they're using the free winner code
             const isWinner = state.robber === 'custom' && state.namesText?.toLowerCase().includes('winner');
-            // Better way: we'll check the promotion code later if needed
 
             if (!isWinner) {
-                // Call your Google Apps Script to get current paid count
                 const countRes = await fetch('https://script.google.com/macros/s/AKfycbwXxOFOEL9VFdua7Xl_AvfHmo4Ge2MafGLJASzTZG5-jTH7PxY8lUBHP7DcRjhUpEScGQ/exec', {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'getPaidOrderCount' })
                 });
                 const countData = await countRes.json();
@@ -95,20 +100,79 @@ module.exports = async (req, res) => {
             }
         }
 
-        // ... rest of your existing code (computeTotal, buildDescription, metadata, etc.)
+        // === RESTORE ORIGINAL LOGIC ===
+        const serverTotal = computeTotal(state);
+        const tierLabel = TIER_LABEL[state.tier];
+        const productName = `Catan Artisan — ${tierLabel} Bundle`;
+        const productDesc = buildDescription(state);
 
+        // Metadata
+        const fullPayload = JSON.stringify({ ...state, total: serverTotal });
+        const metadata = { tier: state.tier, total_usd: String(serverTotal) };
+
+        if (fullPayload.length <= 480) {
+            metadata.config = fullPayload;
+        } else {
+            const CHUNK = 480;
+            let i = 0, idx = 1;
+            while (i < fullPayload.length) {
+                metadata[`config_${idx}`] = fullPayload.slice(i, i + CHUNK);
+                i += CHUNK;
+                idx += 1;
+            }
+        }
+        metadata.summary = buildDescription(state).slice(0, 480);
+
+        // === CREATE CHECKOUT SESSION ===
         const session = await stripe.checkout.sessions.create({
-            // your existing session creation code...
+            mode: 'payment',
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    quantity: 1,
+                    price_data: {
+                        currency: 'usd',
+                        unit_amount: serverTotal * 100,
+                        product_data: {
+                            name: productName,
+                            description: productDesc,
+                            metadata: { tier: state.tier },
+                        },
+                        tax_behavior: 'exclusive',
+                    },
+                },
+            ],
+            shipping_address_collection: { allowed_countries: ['US'] },
+            billing_address_collection: 'auto',
+            phone_number_collection: { enabled: true },
+            shipping_options: [
+                {
+                    shipping_rate_data: {
+                        type: 'fixed_amount',
+                        fixed_amount: { amount: 900, currency: 'usd' },
+                        display_name: 'USPS Ground Shipping',
+                        delivery_estimate: {
+                            minimum: { unit: 'business_day', value: 5 },
+                            maximum: { unit: 'business_day', value: 12 },
+                        },
+                        tax_behavior: 'exclusive',
+                    },
+                },
+            ],
+            automatic_tax: { enabled: true },
+            metadata,
+            payment_intent_data: { metadata },
+            success_url: 'https://realizedprints.com/success.html?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url: 'https://realizedprints.com/catan-artisan.html',
             allow_promotion_codes: true,
         });
-
-        // After successful checkout, record the order (you can do this in a webhook later)
-        // For now we can record it here if you want immediate counting
 
         return res.status(200).json({ url: session.url });
 
     } catch (err) {
         console.error('Stripe checkout error:', err);
-        return res.status(500).json({ error: err.message || 'Unable to start checkout.' });
+        return res.status(500).json({
+            error: err && err.message ? err.message : 'Unable to start checkout. Please try again.',
+        });
     }
-};
+};        });
