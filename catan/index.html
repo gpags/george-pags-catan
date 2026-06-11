@@ -4513,78 +4513,6 @@ shorter target and a non-stretching card.
                         <p class="wiz-card-sub">Pick the color of the trim. This includes the corners and the edges of the box itself.</p>
 
                         <div class="trim-color-row">
-                            <button class="trim-color-opt opt trim-color-card active rounded-xl text-xs text-center" data-color="Red" data-hex="#c0392b" aria-label="Red trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with red painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">Red</span>
-                                    <span class="trim-color-chip" style="background:#c0392b;"></span>
-                                </div>
-                            </button>
-                            <button class="trim-color-opt opt trim-color-card rounded-xl text-xs text-center" data-color="Green" data-hex="#2e7d4f" aria-label="Green trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with green painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">Green</span>
-                                    <span class="trim-color-chip" style="background:#2e7d4f;"></span>
-                                </div>
-                            </button>
-                            <button class="trim-color-opt opt trim-color-card rounded-xl text-xs text-center" data-color="Blue" data-hex="#1f4e8c" aria-label="Blue trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with blue painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">Blue</span>
-                                    <span class="trim-color-chip" style="background:#1f4e8c;"></span>
-                                </div>
-                            </button>
-                            <button class="trim-color-opt opt trim-color-card rounded-xl text-xs text-center" data-color="Yellow" data-hex="#f1c40f" aria-label="Yellow trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with yellow painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">Yellow</span>
-                                    <span class="trim-color-chip" style="background:#f1c40f;"></span>
-                                </div>
-                            </button>
-                            <button class="trim-color-opt opt trim-color-card rounded-xl text-xs text-center" data-color="Orange" data-hex="#e67e22" aria-label="Orange trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with orange painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">Orange</span>
-                                    <span class="trim-color-chip" style="background:#e67e22;"></span>
-                                </div>
-                            </button>
-                            <button class="trim-color-opt opt trim-color-card rounded-xl text-xs text-center" data-color="Pink" data-hex="#ff5f9e" aria-label="Pink trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with pink painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">Pink</span>
-                                    <span class="trim-color-chip" style="background:#ff5f9e;"></span>
-                                </div>
-                            </button>
-                            <button class="trim-color-opt opt trim-color-card rounded-xl text-xs text-center" data-color="Purple" data-hex="#6c3a8c" aria-label="Purple trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with purple painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">Purple</span>
-                                    <span class="trim-color-chip" style="background:#6c3a8c;"></span>
-                                </div>
-                            </button>
-                            <button class="trim-color-opt opt trim-color-card rounded-xl text-xs text-center" data-color="White" data-hex="#f5f5f0" aria-label="White trim color">
-                                <div class="trim-color-photo">
-                                    <img alt="Wooden Catan Artisan box with white painted trim" loading="lazy" data-trim-img>
-                                </div>
-                                <div class="trim-color-meta">
-                                    <span class="trim-color-name">White</span>
-                                    <span class="trim-color-chip" style="background:#f5f5f0; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.22);"></span>
-                                </div>
-                            </button>
                         </div>
                     </div>
                     <div class="wiz-foot">
@@ -4927,6 +4855,35 @@ shorter target and a non-stretching card.
             { name: 'Silk Pink', hex: '#ff0066', image: '/images/Pieces_PinkSilkPieces.JPG' },
         ];
 
+        // ===================================================================
+        // TRIM COLOR PALETTES — mirrors the DEFAULT_SWATCHES / SILK_SWATCHES
+        // pattern above. Basic and Silk trims are SEPARATE lists. In Silk mode
+        // the warm "Rose Gold" replaces Yellow and "Mint Green" replaces Orange
+        // for a more premium feel; every other color is shared by both modes.
+        // paintTrimImages() stays the single source of truth for the actual
+        // product photos (Silk-only filenames are special-cased there).
+        // ===================================================================
+        const BASIC_TRIM_COLORS = [
+            { name: 'Red',    hex: '#c0392b' },
+            { name: 'Green',  hex: '#2e7d4f' },
+            { name: 'Blue',   hex: '#1f4e8c' },
+            { name: 'Yellow', hex: '#f1c40f' },
+            { name: 'Orange', hex: '#e67e22' },
+            { name: 'Pink',   hex: '#ff5f9e' },
+            { name: 'Purple', hex: '#6c3a8c' },
+            { name: 'White',  hex: '#f5f5f0' },
+        ];
+        const SILK_TRIM_COLORS = [
+            { name: 'Red',        hex: '#c0392b' },
+            { name: 'Green',      hex: '#2e7d4f' },
+            { name: 'Blue',       hex: '#1f4e8c' },
+            { name: 'Rose Gold',  hex: '#c9a38a' },   // replaces Yellow in Silk mode
+            { name: 'Mint Green', hex: '#a8d9c4' },   // replaces Orange in Silk mode
+            { name: 'Pink',       hex: '#ff5f9e' },
+            { name: 'Purple',     hex: '#6c3a8c' },
+            { name: 'White',      hex: '#f5f5f0' },
+        ];
+
         const state = {
             tier: 'core',
             texture: 'basic',
@@ -5102,9 +5059,20 @@ shorter target and a non-stretching card.
                 const img = btn.querySelector('[data-trim-img]');
                 if (!img) return;
                 const color = btn.dataset.color;
-                img.src = mode === 'silk'
-                    ? '/images/' + color + 'SilkTrim.JPG'
-                    : '/images/' + color + 'Trim.JPG';
+                if (mode === 'silk') {
+                    // Silk-only colors use bespoke filenames; everything else
+                    // follows the standard "<Color>SilkTrim.JPG" convention
+                    // (and avoids breaking on the space in "Rose Gold").
+                    if (color === 'Rose Gold') {
+                        img.src = '/images/RoseGoldSilkTrim.JPG';
+                    } else if (color === 'Mint Green') {
+                        img.src = '/images/MintGreenSilkTrim.JPG';
+                    } else {
+                        img.src = '/images/' + color + 'SilkTrim.JPG';
+                    }
+                } else {
+                    img.src = '/images/' + color + 'Trim.JPG';
+                }
             });
         }
 
@@ -5301,6 +5269,57 @@ shorter target and a non-stretching card.
             });
         }
 
+        // Builds the Step 8 trim-color grid for the CURRENT trim texture.
+        // This is the trim-color twin of renderSwatches(): it owns BOTH its
+        // markup and its click handlers, so switching Trim Texture in Step 7
+        // just re-renders the correct palette here. The two Silk-only colors
+        // (Rose Gold / Mint Green) live only in SILK_TRIM_COLORS, so this is
+        // also where state.trimColor is kept valid for the active mode.
+        function renderTrimColorOptions() {
+            const container = document.querySelector('.trim-color-row');
+            if (!container) return;
+
+            const palette = state.trim === 'silk' ? SILK_TRIM_COLORS : BASIC_TRIM_COLORS;
+
+            // If the selected color isn't in this palette (e.g. "Yellow" while
+            // switching to Silk), fall back to a safe default: prefer "Rose Gold"
+            // on Silk, otherwise the first color in the list.
+            const isValid = palette.some(c => c.name === state.trimColor);
+            if (!isValid) {
+                state.trimColor = state.trim === 'silk' ? 'Rose Gold' : palette[0].name;
+            }
+
+            container.innerHTML = palette.map(c => {
+                const isActive = state.trimColor === c.name;
+                const chipShadow = c.name === 'White'
+                    ? ' box-shadow: inset 0 0 0 1px rgba(0,0,0,0.22);'
+                    : '';
+                return `
+                            <button class="trim-color-opt opt trim-color-card${isActive ? ' active' : ''} rounded-xl text-xs text-center" data-color="${c.name}" data-hex="${c.hex}" aria-label="${c.name} trim color">
+                                <div class="trim-color-photo">
+                                    <img alt="Wooden Catan Artisan box with ${c.name.toLowerCase()} painted trim" loading="lazy" data-trim-img>
+                                </div>
+                                <div class="trim-color-meta">
+                                    <span class="trim-color-name">${c.name}</span>
+                                    <span class="trim-color-chip" style="background:${c.hex};${chipShadow}"></span>
+                                </div>
+                            </button>`;
+            }).join('');
+
+            // Re-attach click handlers to the freshly-rendered buttons.
+            container.querySelectorAll('.trim-color-opt').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    container.querySelectorAll('.trim-color-opt').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.trimColor = btn.dataset.color;
+                    recalc();
+                });
+            });
+
+            // Paint the correct photo for each card in the current trim texture.
+            paintTrimImages();
+        }
+
         function recalc() {
             const t = state.tier;
             let total = TIER_BASE[t];
@@ -5475,6 +5494,11 @@ shorter target and a non-stretching card.
                     state.colors = newPalette.slice(0, 4).map(s => s.name);
                     renderSwatches();
                 }
+                if (group === 'trim') {
+                    // Trim texture changed -> rebuild Step 8 with the matching
+                    // palette and keep state.trimColor valid for the new mode.
+                    renderTrimColorOptions();
+                }
                 if (group === 'names') {
                     document.getElementById('namesInputRow').classList.toggle('hidden', value !== 'add');
                 }
@@ -5483,14 +5507,10 @@ shorter target and a non-stretching card.
             });
         });
 
-        document.querySelectorAll('.trim-color-opt').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.trim-color-opt').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                state.trimColor = btn.dataset.color;
-                recalc();
-            });
-        });
+        // Trim-color buttons are rendered (and wired) by renderTrimColorOptions(),
+        // the trim-color twin of renderSwatches(). The previous static
+        // querySelectorAll('.trim-color-opt') listener was removed to keep a
+        // single source of truth and avoid stale handlers after re-renders.
 
         document.getElementById('namesInput').addEventListener('input', (e) => {
             state.namesText = e.target.value.slice(0, 30);
@@ -5512,6 +5532,7 @@ shorter target and a non-stretching card.
         applyTierLocks();
         updateHints();
         renderSwatches();
+        renderTrimColorOptions();
         recalc();
 
         // ----- Stamp the "save up to $X" teaser into the Hero tier card -----
