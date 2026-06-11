@@ -1465,10 +1465,80 @@ shorter target and a non-stretching card.
         section.py-20.lg\:py-28.bg-sand-100\/60 h2 .italic.text-honey-600 {
             color: #3b5a34;        /* deep workshop sage */
         }
+
         /* Section eyebrows on these same sections — keep them dark too */
         section.py-20.lg\:py-28 > .max-w-6xl .text-honey-600.font-semibold,
         section.py-20.lg\:py-28.bg-sand-100\/60 .text-honey-600.font-semibold {
             color: #5e7e54;        /* same family, slightly lighter for the small eyebrow */
+        }
+
+        /* =========================================================
+           DETAIL REEL inside TRUST BAR — Continuous Marquee (NEW)
+           Lives inside the existing dark trust bar (section.bg-forest-900
+           .text-sand-100), so the warm grain, brass borders and inset
+           shadows are inherited — only the marquee mechanics live here.
+           Scoped under .tb-reel-* with NO animation-play-state rule, so the
+           reel NEVER pauses on hover (the only hover effect warms the brass edge).
+           ========================================================= */
+
+        .tb-reel-viewport {
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+                    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+        }
+
+        .tb-reel-track {
+            display: flex;
+            width: max-content;
+            animation: tbReelScroll 62s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes tbReelScroll {
+            from { transform: translate3d(0, 0, 0); }
+            to   { transform: translate3d(-50%, 0, 0); }
+        }
+
+        .tb-reel-figure {
+            flex: 0 0 auto;
+            margin: 0 1.25rem 0 0;          /* right-margin = the marquee gap */
+            height: 9rem;                   /* desktop frame height (≈ h-36) */
+            border-radius: 1rem;            /* matches rounded-2xl */
+            overflow: hidden;
+            border: 1px solid rgba(217,168,106,0.30);
+            background: #14180f;
+            box-shadow: 0 1px 2px rgba(9,12,8,0.5),
+                        0 14px 30px -14px rgba(0,0,0,0.6),
+                        inset 0 1px 0 rgba(255,255,255,0.06);
+            transition: border-color 320ms ease, box-shadow 320ms ease;
+        }
+        .tb-reel-figure img {
+            display: block;
+            height: 100%;
+            width: auto;                    /* preserve each photo's aspect ratio */
+            object-fit: cover;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Calm, restrained hover: brass edge warms slightly — the track keeps
+           moving (no transform lift, so nothing jitters against the motion). */
+        .tb-reel-figure:hover {
+            border-color: rgba(217,168,106,0.60);
+            box-shadow: 0 1px 2px rgba(9,12,8,0.55),
+                        0 18px 36px -14px rgba(0,0,0,0.65),
+                        0 0 22px rgba(184,133,66,0.18);
+        }
+
+        @media (max-width: 640px) {
+            .tb-reel-track  { animation-duration: 52s; }
+            .tb-reel-figure { height: 7rem; margin-right: 0.85rem; border-radius: 0.85rem; }
+        }
+
+        /* Respect reduced-motion: stop the drift; allow manual horizontal scroll. */
+        @media (prefers-reduced-motion: reduce) {
+            .tb-reel-track { animation: none; overflow-x: auto; scrollbar-width: none; }
+            .tb-reel-track::-webkit-scrollbar { display: none; }
         }
     </style>
 </head>
@@ -1681,7 +1751,8 @@ shorter target and a non-stretching card.
 
     <!-- ============ TRUST BAR ============ -->
     <section class="bg-forest-900 text-sand-100">
-        <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+        <!-- Compact trust signals — preserved in spirit, condensed to give the reel room -->
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 pt-6 pb-5 grid grid-cols-2 md:grid-cols-4 gap-5 text-center md:text-left">
             <div class="flex items-center gap-3 justify-center md:justify-start">
                 <span class="text-xl">📦</span>
                 <div class="text-sm"><div class="font-semibold">Fast Shipping</div><div class="text-xs text-sand-300/70">3–5 day delivery</div></div>
@@ -1692,13 +1763,76 @@ shorter target and a non-stretching card.
             </div>
             <div class="flex items-center gap-3 justify-center md:justify-start">
                 <span class="text-xl">♡</span>
-                <div class="text-sm"><div class="font-semibold">90-Day Guarantee</div><div class="text-xs text-sand-300/70">Play it & love it</div></div>
+                <div class="text-sm"><div class="font-semibold">90-Day Guarantee</div><div class="text-xs text-sand-300/70">Play it &amp; love it</div></div>
             </div>
             <div class="flex items-center gap-3 justify-center md:justify-start">
                 <span class="text-xl">👨‍👦</span>
-                <div class="text-sm"><div class="font-semibold">Family Owned</div><div class="text-xs text-sand-300/70">Father & son craft</div></div>
+                <div class="text-sm"><div class="font-semibold">Family Owned</div><div class="text-xs text-sand-300/70">Father &amp; son craft</div></div>
             </div>
         </div>
+
+        <!-- Micro-label: tracked eyebrow flanked by two brass rules (trust-bar weight) -->
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-center gap-3 mb-5">
+                <div class="h-px w-8 bg-honey-600/30"></div>
+                <span class="uppercase tracking-[0.2em] text-[10px] font-semibold text-honey-400">Hand-finished in our workshop</span>
+                <div class="h-px w-8 bg-honey-600/30"></div>
+            </div>
+        </div>
+
+        <!-- Continuous detail reel — full-bleed, right-to-left, NEVER pauses on hover -->
+        <div class="tb-reel-viewport">
+            <!-- One track, two identical groups (A + A′). translateX(-50%) lands A′ exactly
+                 where A began → seamless loop. Equal right-margins keep the period exact. -->
+            <div class="tb-reel-track">
+
+                <!-- GROUP A — box → robber & pieces → tiles → ports & cards → in-game -->
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/CustomNamePlayerBoxTopDown.JPG" alt="Top-down view of a hand-finished player box lid engraved with custom family names"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/robber-front.JPG" alt="Close-up of the hand-sculpted robber piece, front view, showing crisp printed detail"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Pieces_PurpleSilkPieces.JPG" alt="A full set of purple silk-finish settlements, cities and roads with a soft pearlescent sheen"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Tiles_Wood_Single.JPG" alt="Single magnetic lumber hex tile, close-up of the layered hand-detailed wood-grain texture"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Tiles_Brick_Single.JPG" alt="Single magnetic brick hex tile showing the kiln-fired stacked-clay texture up close"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Tiles_Sheep_Single.JPG" alt="Single magnetic pasture hex tile with a finely sculpted rolling sheep field"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Tiles_Wheat_Single.JPG" alt="Single magnetic wheat-field hex tile, close-up of the combed grain rows"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Tiles_Ore_Single.JPG" alt="Single magnetic ore-mountain hex tile with sharp, faceted rock detail"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Tiles_Desert_Single.JPG" alt="Single magnetic desert hex tile showing rippled, sun-bleached sand texture"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/port-brick.JPG" alt="Close-up of the brick harbor port piece with its hand-finished 2-for-1 trade marking"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/port-3forany.JPG" alt="Close-up of the 3-for-1 any-resource harbor port piece, cleanly finished by hand"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/Cards_Tray.JPG" alt="A custom-fitted card tray cradling the resource and development decks"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/card-shot.JPG" alt="Close-up of a single resource card with a crisp, durable artisan print"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/devcards-shot.JPG" alt="A fan of development cards showing rich color and clean edge finishing"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/token-shot.JPG" alt="Color-matched number tokens, macro view of the engraved pips and digits"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/ingame-shot-wheattile.JPG" alt="In-play detail of a wheat tile ringed by magnetic settlements and roads"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/ingame-shot-oretile.JPG" alt="In-play detail of an ore tile with cities snapped firmly into place"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/ingame-shot-bricktile.JPG" alt="In-play detail of a brick tile surrounded by hand-finished roads"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/ingame-shot-sheeptile.JPG" alt="In-play detail of a pasture tile mid-game with player pieces in position"></figure>
+                <figure class="tb-reel-figure"><img loading="lazy" src="/images/ingame-shot-grasstile.JPG" alt="In-play detail of a lush grass tile on the fully assembled magnetic board"></figure>
+
+                <!-- GROUP A′ — exact duplicate, hidden from assistive tech for a seamless loop -->
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/CustomNamePlayerBoxTopDown.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/robber-front.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Pieces_PurpleSilkPieces.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Tiles_Wood_Single.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Tiles_Brick_Single.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Tiles_Sheet_Single.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Tiles_Wheat_Single.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Tiles_Ore_Single.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Tiles_Desert_Single.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/port-brick.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/port-3forany.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/Cards_Tray.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/card-shot.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/devcards-shot.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/token-shot.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/ingame-shot-wheattile.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/ingame-shot-oretile.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/ingame-shot-bricktile.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/ingame-shot-sheeptile.JPG"></figure>
+                <figure class="tb-reel-figure" aria-hidden="true"><img loading="lazy" alt="" src="/images/ingame-shot-grasstile.JPG"></figure>
+
+            </div>
+        </div>
+        <div class="h-7"></div> <!-- bottom breathing room inside the bar -->
     </section>
 
     <!-- ============================================================
@@ -4568,6 +4702,8 @@ shorter target and a non-stretching card.
             </div>
         </div>
     </section>
+
+
 
 
 
