@@ -13,6 +13,40 @@ shorter target and a non-stretching card.
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catan Artisan Collection — Realized Prints | catan-artisan.html</title>
+
+    <!-- =================================================================== -->
+    <!-- FEATURE FLAGS — Marketing Campaigns (THE ONLY SWITCH YOU NEED)       -->
+    <!-- This runs FIRST, in <head>, on its own — independent of Stripe or any -->
+    <!-- other script — so the campaign is reliably hidden even if some other  -->
+    <!-- script fails to load (e.g. offline / local preview / ad-blocker).     -->
+    <!-- =================================================================== -->
+    <script>
+        // ↓↓↓ CHANGE false → true TO RE-ENABLE THE FATHER'S DAY GIVEAWAY ↓↓↓
+        const GIVEAWAY_ENABLED = false;
+        // ↑↑↑ THE ONLY LINE YOU EVER NEED TO TOUCH ↑↑↑
+        //
+        // true  = red top banner + modal popup (form + Google Apps Script) +
+        //         "Only 10 Available" Limited Supply badge + 5-second auto-popup.
+        // false = all of the above hidden. Every line of giveaway code stays in
+        //         the file, fully intact and instantly reversible.
+        //
+        // HOW IT WORKS (all keyed off the one flag above):
+        //   1. (here) When disabled, inject a CSS rule hiding #giveawayBanner and
+        //      #limitedSupplyBadge. Injected from <head> BEFORE the page paints,
+        //      so there is ZERO flash and ZERO layout shift. A CSS selector hides
+        //      them regardless of where in the DOM they are parsed.
+        //   2. (bottom of file) The 5-second auto-popup IIFE is wrapped so it only
+        //      fires when the flag is true.
+        //   3. The modal itself is left fully functional and can still be opened
+        //      via openGiveawayModal() whenever the flag is true.
+        if (!GIVEAWAY_ENABLED) {
+            var gwDisabledStyle = document.createElement('style');
+            gwDisabledStyle.id = 'giveaway-disabled-style';
+            gwDisabledStyle.textContent =
+                '#giveawayBanner,#limitedSupplyBadge{display:none !important;}';
+            (document.head || document.documentElement).appendChild(gwDisabledStyle);
+        }
+    </script>
     <meta name="description" content="Magnetic, signed & numbered Catan heirloom sets. 3 premium tiers, fully customizable, hand-crafted by a father & son in the USA.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1475,6 +1509,10 @@ shorter target and a non-stretching card.
          GIVEAWAY BANNER — Father's Day Heirloom Giveaway
          Crimson/ruby color to stand out against the forest/honey palette
          ============================================================ -->
+    <!-- ⚙ CAMPAIGN TOGGLE: This banner is shown/hidden by the GIVEAWAY_ENABLED
+         feature flag in the main <script> (search "FEATURE FLAGS"). When that flag
+         is false, an injected CSS rule hides #giveawayBanner. Do NOT delete this
+         markup — set GIVEAWAY_ENABLED = true to bring it back. -->
     <div id="giveawayBanner" role="banner" aria-label="Father's Day Giveaway Announcement" style="
         width: 100%;
         background: linear-gradient(135deg, #8b1a1a 0%, #c0392b 50%, #922b21 100%);
@@ -4804,6 +4842,12 @@ shorter target and a non-stretching card.
         const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TC500E8CXX0QGip3XQ4QqpI8KA7v6t91u0ocMtgRqSTlRJ8F8cbsaYXBkJenF1IoB1tmvnH9nWOMvJVbF9TbXCh00lHqhCZSQ';
         const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 
+        // NOTE: The Father's Day Giveaway campaign on/off switch lives in a
+        // dedicated <script> in the <head> — search "FEATURE FLAGS" or
+        // "GIVEAWAY_ENABLED". It is intentionally kept OUT of this Stripe block so
+        // that an unrelated failure here (e.g. Stripe not loading) can never stop
+        // the campaign from being hidden.
+
         // Mobile menu (untouched)
         const menuBtn = document.getElementById('menuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -6100,17 +6144,21 @@ shorter target and a non-stretching card.
     }
 
     // ---- Auto-show popup: 5 seconds after page load, once ever (localStorage) ----
-    (function autoShowGiveaway() {
-        if (localStorage.getItem('gwAutoShown_catan2026')) return;
-        setTimeout(function() {
-            var modal = document.getElementById('giveawayModal');
-            // Only auto-open if modal isn't already visible
-            if (modal && modal.style.display !== 'flex') {
-                openGiveawayModal();
-                localStorage.setItem('gwAutoShown_catan2026', '1');
-            }
-        }, 5000);
-    })();
+    // GATED BY FEATURE FLAG: only fires when GIVEAWAY_ENABLED === true.
+    // (The IIFE body below is 100% unchanged — it's merely wrapped in the flag check.)
+    if (typeof GIVEAWAY_ENABLED !== 'undefined' && GIVEAWAY_ENABLED) {
+        (function autoShowGiveaway() {
+            if (localStorage.getItem('gwAutoShown_catan2026')) return;
+            setTimeout(function() {
+                var modal = document.getElementById('giveawayModal');
+                // Only auto-open if modal isn't already visible
+                if (modal && modal.style.display !== 'flex') {
+                    openGiveawayModal();
+                    localStorage.setItem('gwAutoShown_catan2026', '1');
+                }
+            }, 5000);
+        })();
+    }
 
     // ===== HERO CAROUSEL — adapted from index.html =====
     (function initHeroCarousel() {
@@ -6170,6 +6218,10 @@ shorter target and a non-stretching card.
     </script>
 
     <!-- Limited Supply Badge -->
+    <!-- ⚙ CAMPAIGN TOGGLE: This badge is shown/hidden by the GIVEAWAY_ENABLED
+         feature flag in the main <script> (search "FEATURE FLAGS"). When that flag
+         is false, an injected CSS rule hides #limitedSupplyBadge. Do NOT delete
+         this markup — set GIVEAWAY_ENABLED = true to bring it back. -->
     <div id="limitedSupplyBadge" aria-label="Limited supply notice" style="
         position: fixed;
         bottom: 1.75rem;
