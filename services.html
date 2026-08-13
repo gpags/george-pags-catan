@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cat Sitting Services &amp; Pricing — BaskingPaws, Somerset County NJ</title>
+<meta name="description" content="Cat sitting prices in Basking Ridge, Warren, Bernardsville, Gillette and Bedminster NJ: $34 per 30-minute drop-in visit, with 10- and 25-visit packages from $28. New clients start with the &ldquo;Try Me&rdquo; Package: a free Meet &amp; Greet plus 3 visits for $75. Full FAQ included.">
+<meta name="theme-color" content="#FDF8F5">
+<link rel="icon" type="image/jpeg" href="assets/favicon.jfif">
+<link rel="apple-touch-icon" href="assets/favicon.jfif">
+<link rel="canonical" href="https://baskingpaws.com/services">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        cream:'#FDF8F5', sand:'#F6EBE3', blush:'#F8DDD3', lav:'#EFE5F1',
+        coral:'#E2664A', coralDark:'#C4512F', apricot:'#F0A868',
+        plum:'#5E3F58', plumSoft:'#8A6A83', ink:'#3A2A31', muted:'#7C6A72'
+      },
+      fontFamily: {
+        display:['Lora','Georgia','Times New Roman','serif'],
+        sans:['Inter','system-ui','sans-serif']
+      },
+      boxShadow: {
+        soft:'0 10px 40px -12px rgba(94,63,88,0.18)',
+        card:'0 2px 18px -6px rgba(94,63,88,0.14)',
+        lift:'0 24px 60px -20px rgba(94,63,88,0.30)'
+      }
+    }}
+  }
+</script>
+
+<style>
+  body { -webkit-font-smoothing: antialiased; }
+  .paper-grain { background-image: radial-gradient(rgba(94,63,88,0.05) 1px, transparent 1px); background-size: 22px 22px; }
+  .paw-watermark { position:absolute; pointer-events:none; opacity:.045; color:#5E3F58; }
+  .reveal { opacity:0; transform: translateY(26px); }
+  .reveal.in { opacity:1; transform:none; transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+  .reveal-scale { opacity:0; transform: scale(.965) translateY(18px); }
+  .reveal-scale.in { opacity:1; transform:none; transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+  .lift { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease; }
+  .lift:hover { transform: translateY(-4px); }
+  #siteHeader { transition: box-shadow .3s ease; }
+  #siteHeader.scrolled { box-shadow: 0 6px 30px -18px rgba(94,63,88,.5); }
+  .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .faq-q[aria-expanded="true"] { box-shadow:0 0 0 2px #E2664A; }
+  .faq-q[aria-expanded="true"] .faq-plus { background:#E2664A; color:#fff; transform:rotate(45deg); }
+  .faq-chevron { transition: transform .2s ease; }
+  .no-js .reveal, .no-js .reveal-scale { opacity:1 !important; transform:none !important; }
+  /* offset anchor jumps so the sticky header doesn't cover the heading */
+  #faq { scroll-margin-top: 96px; }
+  @media (max-width: 767px) { body { padding-bottom: 76px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+    html { scroll-behavior:auto; }
+  }
+</style>
+</head>
+
+<body class="bg-cream text-ink font-sans antialiased no-js">
+<script>document.body.classList.remove('no-js');</script>
+
+<svg width="0" height="0" class="hidden" aria-hidden="true">
+  <symbol id="pawGlyph" viewBox="0 0 24 24">
+    <circle cx="7" cy="9" r="1.7"/><circle cx="12" cy="7.4" r="1.7"/><circle cx="17" cy="9" r="1.7"/>
+    <path d="M12 11.2c-3 0-5.2 2.2-5.2 4.4 0 1.7 1.4 2.6 3 2.6 1 0 1.6-.4 2.2-.4s1.2.4 2.2.4c1.6 0 3-.9 3-2.6 0-2.2-2.2-4.4-5.2-4.4Z"/>
+  </symbol>
+</svg>
+
+<!-- ===================== HEADER ========================================= -->
+<header id="siteHeader" class="sticky top-0 z-40 bg-cream/90 backdrop-blur border-b border-plum/10">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a href="/" class="flex items-center gap-2.5 group">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-apricot/25 ring-1 ring-apricot/40 group-hover:bg-apricot/40 transition">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-coral" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+        </span>
+        <span class="font-display text-xl md:text-[22px] font-semibold text-plum tracking-tight">Basking<span class="text-coral">Paws</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-5 text-[15px] font-medium text-ink/80">
+        <a href="/how-it-works" class="hover:text-coral transition">How It Works</a>
+        <a href="/services"     class="text-coral font-semibold" aria-current="page">Services &amp; Pricing</a>
+        <a href="/about"        class="hover:text-coral transition">About</a>
+        <a href="/areas"        class="hover:text-coral transition">Service Areas</a>
+        <a href="#faq"              class="hover:text-coral transition">FAQ</a>
+        <a href="/login" class="hover:text-coral transition">Client Login</a>
+        <button data-open-modal class="ml-1 inline-flex items-center rounded-full bg-coral hover:bg-coralDark text-white px-5 py-2.5 text-[15px] font-semibold shadow-soft hover:shadow-lift transition">Book Free Meet &amp; Greet</button>
+      </nav>
+      <button id="navToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-plum hover:bg-sand transition" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobileNav" class="md:hidden hidden border-t border-plum/10 bg-cream">
+    <div class="px-5 py-4 flex flex-col gap-1 text-[16px]">
+      <a href="/how-it-works" class="py-2.5 border-b border-plum/5">How It Works</a>
+      <a href="/services"     class="py-2.5 border-b border-plum/5 text-coral font-semibold">Services &amp; Pricing</a>
+      <a href="/about"        class="py-2.5 border-b border-plum/5">About</a>
+      <a href="/areas"        class="py-2.5 border-b border-plum/5">Service Areas</a>
+      <a href="#faq"              class="py-2.5 border-b border-plum/5">FAQ</a>
+      <a href="/login" class="py-2.5 border-b border-plum/5">Client Login</a>
+      <button data-open-modal class="mt-3 w-full rounded-full bg-coral hover:bg-coralDark text-white px-5 py-3 font-semibold shadow-soft transition">Book Free Meet &amp; Greet</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ===================== PAGE HERO ===================================== -->
+<section class="relative overflow-hidden bg-gradient-to-b from-blush/60 via-cream to-cream">
+  <div class="absolute inset-0 paper-grain opacity-60 pointer-events-none"></div>
+  <svg class="paw-watermark w-[420px] h-[420px] -left-24 top-6 -rotate-12 hidden md:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full bg-apricot/20 blur-3xl pointer-events-none"></div>
+
+  <div class="relative mx-auto max-w-4xl px-5 pt-14 pb-14 md:pt-20 md:pb-16 text-center">
+    <p class="reveal inline-flex items-center gap-2 rounded-full bg-white/80 ring-1 ring-plum/10 px-3.5 py-1.5 text-[13px] font-medium text-plum mb-6 shadow-card">
+      <span class="w-1.5 h-1.5 rounded-full bg-coral"></span> Services &amp; pricing
+    </p>
+    <h1 class="reveal font-display text-[34px] leading-tight sm:text-5xl md:text-[52px] font-semibold text-plum tracking-tight">
+      Reliable and Professional
+    </h1>
+    <p class="reveal mt-5 text-[17px] md:text-lg leading-relaxed text-ink/80 max-w-2xl mx-auto">
+      One service, done properly: 30-minute in-home drop-in visits for cats. Same sitter every time, photo and video proof after every visit, and a full refund if you are ever unhappy.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== PRICING ======================================= -->
+<section class="relative bg-cream overflow-hidden">
+  <!-- pt-2/pt-3 is not spacing, it is clearance. This section is
+       overflow-hidden and the cards below carry .lift, which raises them 4px on
+       hover; with no top padding they lifted straight into the clipping edge and
+       the ring-2 on the middle card read as "the top is cut off". -->
+  <div class="relative mx-auto max-w-6xl px-5 pt-2 md:pt-3 pb-16 md:pb-20">
+
+    <div class="grid gap-5 sm:grid-cols-3">
+
+      <div class="reveal lift bg-white rounded-2xl p-6 ring-1 ring-plum/8 shadow-card hover:shadow-lift">
+        <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">Single visit</p>
+        <p class="mt-3 font-display text-4xl font-semibold text-plum">$34</p>
+        <p class="text-[14px] text-ink/65">per 30-minute visit</p>
+        <p class="mt-4 text-[14.5px] text-ink/75">A weekend away, a late night at the office, or a one-off need.</p>
+      </div>
+
+      <!-- The badge sits INSIDE the card so the section's overflow-hidden cannot
+           clip it. Two things about its position, and both were wrong before:
+
+           TOP RIGHT, not top left. On the left it sat directly above the title
+           and read as part of it.
+
+           pt-11, not pt-9. The badge runs from y=16 to y=40; pt-9 started the
+           title at y=36, so it covered the first four pixels of "10-visit
+           package". The title now clears it completely.
+
+           Deliberately NOT solved with right padding on the title: at the `sm`
+           breakpoint these cards are about 138px wide inside, and reserving
+           room for the badge on the same line would break the title over three
+           lines. -->
+      <div class="reveal lift relative bg-white rounded-2xl p-6 pt-11 ring-2 ring-coral shadow-soft hover:shadow-lift">
+        <span class="absolute top-4 right-5 rounded-full bg-coral text-white text-[11.5px] font-semibold px-3 py-1 tracking-wide">MOST BOOKED</span>
+        <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">10-visit package</p>
+        <p class="mt-3 font-display text-4xl font-semibold text-plum">$31</p>
+        <p class="text-[14px] text-ink/65">per visit &middot; $310 total</p>
+        <p class="mt-4 text-[14.5px] text-ink/75">Vacations and regular travel. Visits valid 24 months.</p>
+      </div>
+
+      <div class="reveal lift bg-white rounded-2xl p-6 ring-1 ring-plum/8 shadow-card hover:shadow-lift">
+        <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">25-visit package</p>
+        <p class="mt-3 font-display text-4xl font-semibold text-plum">$28</p>
+        <p class="text-[14px] text-ink/65">per visit &middot; $700 total</p>
+        <p class="mt-4 text-[14.5px] text-ink/75">Frequent travellers and long-term arrangements.</p>
+      </div>
+
+    </div>
+
+    <p class="reveal mt-5 text-[14.5px] text-ink/75 flex items-start gap-2">
+      <span class="text-coral mt-0.5">&bull;</span>
+      <span>One or two cats are the same price. A <strong class="text-plum">third cat and beyond is +$5 per visit</strong> each. Everything else &mdash; medication, photo and video updates, home touches, even a custom 3D-printed keychain of your cat &mdash; is included at every tier.</span>
+    </p>
+
+    <!-- New client offer -->
+    <div class="reveal mt-8 text-center">
+      <div class="inline-flex flex-col items-center rounded-[24px] bg-white ring-2 ring-coral/30 shadow-lift px-8 py-7 ">
+        <p class="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-coral">New client offer</p>
+        <p class="mt-2 font-display text-[22px] font-semibold text-plum">The &ldquo;Try Me&rdquo; Package</p>
+        <div class="mt-2.5 flex items-end justify-center gap-3">
+          <span class="font-display text-5xl font-semibold text-plum">$75</span>
+          <span class="text-[18px] text-muted line-through mb-1.5">$102</span>
+        </div>
+        <p class="mt-1.5 text-[15px] text-ink/75">Free Meet &amp; Greet + your first 3 visits</p>
+        <span class="mt-3 rounded-full bg-coral/10 text-coral text-[13px] font-semibold px-3.5 py-1.5">Save about 26%</span>
+        <button data-open-modal class="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-full bg-coral hover:bg-coralDark text-white text-[16.5px] font-semibold px-8 py-4 shadow-soft hover:shadow-lift hover:-translate-y-0.5 transition">
+          Claim the &ldquo;Try Me&rdquo; Package
+        </button>
+        <p class="mt-3 text-[12.5px] text-muted">Once per household &middot; no obligation to continue</p>
+      </div>
+    </div>
+
+    <!-- TODO (Roselie): confirm and add — holiday rates, multi-cat pricing,
+         medication surcharge (if any), cancellation window, and how payment is
+         collected. Nothing is published here until you confirm it. -->
+    <p class="reveal mt-6 text-[14px] text-muted">
+      Holiday rates, multi-cat pricing and cancellation terms are confirmed at the Meet &amp; Greet before
+      anything is booked.
+    </p>
+
+  </div>
+</section>
+
+<!-- ===================== WHAT'S INCLUDED =============================== -->
+<section class="relative bg-lav/50 overflow-hidden">
+  <svg class="paw-watermark w-[340px] h-[340px] left-[-80px] bottom-8 rotate-[8deg] hidden lg:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="relative mx-auto max-w-5xl px-5 py-16 md:py-20">
+
+    <div class="max-w-2xl reveal">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.14em] text-coral">What's included</p>
+      <h2 class="mt-3 font-display text-3xl md:text-[38px] leading-tight font-semibold text-plum">Every visit, every time</h2>
+      <p class="mt-4 text-[16.5px] text-ink/75">No tiers of attention and no à la carte add-ons for the basics.</p>
+    </div>
+
+    <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+      <div class="reveal flex gap-3">
+        <span class="mt-1 text-coral">✓</span>
+        <div><p class="font-semibold text-ink text-[15.5px]">Fresh food &amp; water</p><p class="text-[14.5px] text-ink/70">Your portions, your brand, your timing.</p></div>
+      </div>
+      <div class="reveal flex gap-3">
+        <span class="mt-1 text-coral">✓</span>
+        <div><p class="font-semibold text-ink text-[15.5px]">Litter scooped &amp; refreshed</p><p class="text-[14.5px] text-ink/70">Every visit, plus a tidy of the surrounding area.</p></div>
+      </div>
+      <div class="reveal flex gap-3">
+        <span class="mt-1 text-coral">✓</span>
+        <div><p class="font-semibold text-ink text-[15.5px]">Medication support</p><p class="text-[14.5px] text-ink/70">Pills, liquids and topicals, using your method.</p></div>
+      </div>
+      <div class="reveal flex gap-3">
+        <span class="mt-1 text-coral">✓</span>
+        <div><p class="font-semibold text-ink text-[15.5px]">Play &amp; real company</p><p class="text-[14.5px] text-ink/70">Wand toys, brushing, or quiet time near a shy cat.</p></div>
+      </div>
+      <div class="reveal flex gap-3">
+        <span class="mt-1 text-coral">✓</span>
+        <div><p class="font-semibold text-ink text-[15.5px]">Photo + video update</p><p class="text-[14.5px] text-ink/70">Sent after every visit, with a written note.</p></div>
+      </div>
+      <div class="reveal flex gap-3">
+        <span class="mt-1 text-coral">✓</span>
+        <div><p class="font-semibold text-ink text-[15.5px]">Home touches</p><p class="text-[14.5px] text-ink/70">Mail and packages in, lights rotated, plants watered on request.</p></div>
+      </div>
+    </div>
+
+    <div class="reveal mt-10 rounded-2xl bg-white ring-2 ring-coral/25 shadow-card p-6 md:p-7 flex flex-col sm:flex-row sm:items-center gap-5">
+      <span class="shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-full bg-coral/10 text-coral">
+        <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6.5V12c0 5 3.4 8.2 8 9 4.6-.8 8-4 8-9V6.5z"/><path d="m9 12 2 2 4-4"/></svg>
+      </span>
+      <div>
+        <p class="font-display text-xl font-semibold text-plum">Unconditional Satisfaction Guarantee</p>
+        <p class="mt-1.5 text-[15.5px] text-ink/78">
+          Love the care, or it's free. If you're unhappy for any reason, tell us within 72 hours of the first
+          visit and we'll refund the entire booking.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== FAQ (lives on this page) ======================= -->
+<section id="faq" class="relative bg-cream overflow-hidden">
+  <svg class="paw-watermark w-[300px] h-[300px] right-[-70px] top-24 rotate-[20deg] hidden lg:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+
+  <div class="relative mx-auto max-w-3xl px-5 py-16 md:py-24">
+
+    <div class="text-center reveal">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.14em] text-coral">Frequently asked questions</p>
+      <h2 class="mt-3 font-display text-3xl md:text-[40px] leading-tight font-semibold text-plum">Everything people ask before booking</h2>
+      <p class="mt-4 text-[16px] text-ink/70">Tap any question to see the answer.</p>
+    </div>
+
+    <!-- Question grid. Clicking a card opens the shared answer panel below it;
+         clicking the same card again closes it, clicking another swaps it. -->
+    <div class="faq-wrap mt-9">
+      <div class="faq-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="0" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Do you serve all of Somerset County, NJ?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="1" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">How much does cat sitting cost in Somerset County, NJ?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="2" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">What is the &ldquo;Try Me&rdquo; Package?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="3" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Do you only sit cats?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="4" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Will the same person come every time?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="5" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Do I get photos and videos?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="6" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Is the Meet &amp; Greet really free?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="7" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">What if my cat needs medication?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="8" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">What is your cancellation policy?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="9" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">How often should a cat sitter visit while I&rsquo;m away?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="10" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Is a cat sitter better than boarding my cat?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="11" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">What does a cat sitter actually do in 30 minutes?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="12" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">How far in advance should I book a cat sitter?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="13" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Do you offer holiday cat sitting?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="14" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Can you care for kittens or senior cats?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="15" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">What happens if my cat gets sick while I&rsquo;m away?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="16" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Do you need a key to my house?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="17" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Are you bonded and insured?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="18" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">How do I pay for cat sitting?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="19" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">What makes you different from Rover or an app sitter?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="20" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">Do you do overnight stays or dog walking?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+        <button class="faq-q group text-left rounded-2xl bg-white ring-1 ring-plum/8 shadow-card hover:shadow-lift hover:-translate-y-0.5 transition p-5 flex items-start justify-between gap-3" data-faq="21" aria-expanded="false">
+          <span class="font-semibold text-[15px] leading-snug text-plum">What does the guarantee actually cover?</span>
+          <span class="faq-plus shrink-0 mt-0.5 w-6 h-6 rounded-full bg-coral/10 text-coral flex items-center justify-center transition"><svg viewBox="0 0 20 20" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
+        </button>
+      </div>
+
+      <!-- Shared answer panel -->
+      <div class="faq-panel hidden mt-4 rounded-[24px] bg-white ring-2 ring-coral/30 shadow-lift p-6 md:p-8 relative">
+        <button class="faq-close absolute top-4 right-4 w-8 h-8 rounded-lg text-muted hover:text-coral hover:bg-sand transition flex items-center justify-center" aria-label="Close answer">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+        <div class="faq-panel-body pr-6"></div>
+      </div>
+
+      <!-- Answer source, kept in the document for search engines and AI assistants -->
+      <div class="sr-only">
+        <div class="faq-a hidden" data-faq-a="0"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Do you serve all of Somerset County, NJ?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Yes. We cover Somerset County top to bottom &mdash; Basking Ridge, Bernardsville, Bedminster, Warren, Watchung, Bridgewater, Branchburg, Somerville, Raritan, Hillsborough, Montgomery, Franklin, Far Hills, Peapack-Gladstone, Green Brook, North Plainfield, Bound Brook, South Bound Brook, Manville, Millstone and Rocky Hill. We also serve Gillette, which sits just over the line in Long Hill Township. Staying inside one county is what keeps drives short and visits unhurried.</p></div>
+        <div class="faq-a hidden" data-faq-a="1"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">How much does cat sitting cost in Somerset County, NJ?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">A single 30-minute drop-in visit is $34. A 10-visit package brings that to $31 per visit ($310), and a 25-visit package to $28 per visit ($700). Package visits stay valid for 24 months from purchase. One or two cats are the same price; a third cat and beyond is $5 per visit each. New clients start with the &ldquo;Try Me&rdquo; Package: a free Meet &amp; Greet plus your first 3 visits for $75, normally $102.</p></div>
+        <div class="faq-a hidden" data-faq-a="2"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">What is the &ldquo;Try Me&rdquo; Package?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">It&rsquo;s how every new client starts: a free in-home Meet &amp; Greet plus your first three visits for $75 instead of $102 &mdash; about 26% off. You get the same 30-minute visits, the same photo and video updates and the same guarantee. It&rsquo;s available once per household and there&rsquo;s no obligation to continue afterward.</p></div>
+        <div class="faq-a hidden" data-faq-a="3"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Do you only sit cats?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Yes &mdash; cats only. It&rsquo;s the entire business. That focus is why we can spot a cat who&rsquo;s eating less, hiding in a new spot, or heading toward a litter box problem before it becomes a vet visit. We don&rsquo;t walk dogs between your visits.</p></div>
+        <div class="faq-a hidden" data-faq-a="4"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Will the same person come every time?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Yes. Roselie is the primary sitter and she handles your visits start to finish &mdash; that&rsquo;s the whole reason we limit how many clients we take. Your cat learns one set of footsteps instead of meeting a new stranger each day.</p></div>
+        <div class="faq-a hidden" data-faq-a="5"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Do I get photos and videos?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">After every single visit &mdash; at least one photo, a short video, and a plain-language note on how your cat did: what they ate, how the litter looked, whether they played or stayed tucked away.</p></div>
+        <div class="faq-a hidden" data-faq-a="6"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Is the Meet &amp; Greet really free?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Completely free, with no obligation to book afterward. It&rsquo;s how you decide whether you&rsquo;re comfortable having us in your home &mdash; and how we make sure we&rsquo;re the right fit for your cat.</p></div>
+        <div class="faq-a hidden" data-faq-a="7"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">What if my cat needs medication?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Bring it up at the Meet &amp; Greet. Pills, liquids and topicals are routine for us &mdash; we&rsquo;ll walk through the exact method that works for your cat so nothing is improvised while you&rsquo;re away. Roselie also has experience with special-needs and senior cats.</p></div>
+        <div class="faq-a hidden" data-faq-a="8"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">What is your cancellation policy?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Cancel 48 hours or more before the first scheduled visit and you get a full refund, no questions. Inside 48 hours we keep a flat $10 cancellation fee and refund everything else &mdash; one $10 fee per cancellation, not per visit. If you&rsquo;re cancelling visits paid from a package, those visits go back into your balance instead of being refunded. Come home early? Same rule applies to the visits you no longer need. If we ever have to cancel, you&rsquo;re refunded in full.</p></div>
+        <div class="faq-a hidden" data-faq-a="9"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">How often should a cat sitter visit while I&rsquo;m away?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Once a day is the minimum for a healthy adult cat, and it&rsquo;s what most clients book. Twice a day is better for cats on medication, kittens, seniors, cats with medical conditions, multi-cat homes, or any cat who gets anxious alone. We&rsquo;ll give you an honest recommendation at the Meet &amp; Greet rather than upselling you into visits your cat doesn&rsquo;t need.</p></div>
+        <div class="faq-a hidden" data-faq-a="10"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Is a cat sitter better than boarding my cat?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">For most cats, yes. Cats bond to territory more than to the people travelling with them, so staying home means no carrier, no car ride, no unfamiliar smells and no other animals nearby. They keep their own litter box, their own food, their own hiding spots and their own schedule. Boarding can make sense for cats with medical needs requiring on-site supervision &mdash; we&rsquo;ll tell you if we think that&rsquo;s the better call.</p></div>
+        <div class="faq-a hidden" data-faq-a="11"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">What does a cat sitter actually do in 30 minutes?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Fresh food and water, litter scooped and refreshed, medication given per your written plan, then play or quiet companionship depending on what your cat wants that day. We also do a quick pass on the house &mdash; mail and packages in, lights rotated, plants watered on request &mdash; and finish by sending your photo, video and written update.</p></div>
+        <div class="faq-a hidden" data-faq-a="12"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">How far in advance should I book a cat sitter?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">For ordinary trips, one to two weeks is comfortable. For Thanksgiving, Christmas, New Year, spring break and summer weeks, book as early as you can &mdash; we cap how many clients we take, so holiday dates genuinely run out. If you&rsquo;re travelling last minute, ask anyway; we&rsquo;ll tell you honestly whether we can fit you in.</p></div>
+        <div class="faq-a hidden" data-faq-a="13"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Do you offer holiday cat sitting?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Yes, and holidays are our busiest stretch. Because we keep the client list small, holiday dates are first-come. Any holiday surcharge is disclosed before you book &mdash; never added afterward.</p></div>
+        <div class="faq-a hidden" data-faq-a="14"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Can you care for kittens or senior cats?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Yes to both. Kittens usually need twice-daily visits. Senior cats often need medication, closer monitoring of eating and litter habits, and more patience &mdash; all of which Roselie has handled extensively, including through shelter work at Best Friends Animal Society in Los Angeles.</p></div>
+        <div class="faq-a hidden" data-faq-a="15"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">What happens if my cat gets sick while I&rsquo;m away?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">We contact you and your emergency contact immediately. If we can&rsquo;t reach you and the situation looks urgent, you&rsquo;ve authorized us to get your cat to your listed veterinarian, or the nearest emergency clinic if yours is closed. You&rsquo;re responsible for veterinary costs, and we keep you updated the whole way through with documentation.</p></div>
+        <div class="faq-a hidden" data-faq-a="16"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Do you need a key to my house?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">You&rsquo;ll need to give us reliable access &mdash; a key, lockbox, code, fob or building arrangement. We recommend a lockbox: it removes the handoff hassle and means a spare is always available. Access details are kept confidential and restricted to your sitter.</p></div>
+        <div class="faq-a hidden" data-faq-a="17"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Are you bonded and insured?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Insured, yes &mdash; BaskingPaws carries pet-sitting liability insurance. Not bonded: we have chosen not to carry a bond at this time, and we would rather say so plainly than let the phrase &ldquo;bonded and insured&rdquo; imply something we do not hold. Roselie also holds Rover Star Sitter status and has passed an enhanced background check. Ask us at your Meet &amp; Greet and we will give you the coverage details in writing.</p></div>
+        <div class="faq-a hidden" data-faq-a="18"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">How do I pay for cat sitting?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">You&rsquo;re charged after visits are completed, not upfront. Clients can keep a card on file through our payment processor so future bookings take one tap &mdash; we never see or store your card number. Package visits are purchased upfront, drawn down as you use them, and stay valid for 24 months.</p></div>
+        <div class="faq-a hidden" data-faq-a="19"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">What makes you different from Rover or an app sitter?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">With an app you often get whoever is available, which can mean a different stranger each trip. With us it&rsquo;s the same professional sitter every visit, in a deliberately small service area, with a written care plan and a full refund if you&rsquo;re unhappy. We also only hire experienced adult professionals &mdash; never high school or college students looking for casual work.</p></div>
+        <div class="faq-a hidden" data-faq-a="20"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">Do you do overnight stays or dog walking?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">No. We do 30-minute in-home drop-in visits for cats, and nothing else. Staying narrow is what lets us do this one thing properly.</p></div>
+        <div class="faq-a hidden" data-faq-a="21"><h3 class="font-display text-xl md:text-2xl font-semibold text-plum">What does the guarantee actually cover?</h3><p class="mt-3 text-[16px] leading-relaxed text-ink/85">The full booking. If you&rsquo;re unhappy for any reason, tell us within 72 hours of the first visit and we refund everything you paid for that booking. No forms, no debate, no hard feelings.</p></div>
+      </div>
+    </div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Do you serve all of Somerset County, NJ?","acceptedAnswer":{"@type":"Answer","text":"Yes. We cover Somerset County top to bottom - Basking Ridge, Bernardsville, Bedminster, Warren, Watchung, Bridgewater, Branchburg, Somerville, Raritan, Hillsborough, Montgomery, Franklin, Far Hills, Peapack-Gladstone, Green Brook, North Plainfield, Bound Brook, South Bound Brook, Manville, Millstone and Rocky Hill. We also serve Gillette, which sits just over the line in Long Hill Township. Staying inside one county is what keeps drives short and visits unhurried."}},
+{"@type":"Question","name":"How much does cat sitting cost in Somerset County, NJ?","acceptedAnswer":{"@type":"Answer","text":"A single 30-minute drop-in visit is $34. A 10-visit package brings that to $31 per visit ($310), and a 25-visit package to $28 per visit ($700). Package visits stay valid for 24 months from purchase. One or two cats are the same price; a third cat and beyond is $5 per visit each. New clients start with the 'Try Me' Package: a free Meet and Greet plus your first 3 visits for $75, normally $102."}},
+{"@type":"Question","name":"What is the 'Try Me' Package?","acceptedAnswer":{"@type":"Answer","text":"It's how every new client starts: a free in-home Meet and Greet plus your first three visits for $75 instead of $102 - about 26% off. You get the same 30-minute visits, the same photo and video updates and the same guarantee. It's available once per household and there's no obligation to continue afterward."}},
+{"@type":"Question","name":"Do you only sit cats?","acceptedAnswer":{"@type":"Answer","text":"Yes - cats only. It's the entire business. That focus is why we can spot a cat who's eating less, hiding in a new spot, or heading toward a litter box problem before it becomes a vet visit. We don't walk dogs between your visits."}},
+{"@type":"Question","name":"Will the same person come every time?","acceptedAnswer":{"@type":"Answer","text":"Yes. Roselie is the primary sitter and she handles your visits start to finish - that's the whole reason we limit how many clients we take. Your cat learns one set of footsteps instead of meeting a new stranger each day."}},
+{"@type":"Question","name":"Do I get photos and videos?","acceptedAnswer":{"@type":"Answer","text":"After every single visit - at least one photo, a short video, and a plain-language note on how your cat did: what they ate, how the litter looked, whether they played or stayed tucked away."}},
+{"@type":"Question","name":"Is the Meet and Greet really free?","acceptedAnswer":{"@type":"Answer","text":"Completely free, with no obligation to book afterward. It's how you decide whether you're comfortable having us in your home - and how we make sure we're the right fit for your cat."}},
+{"@type":"Question","name":"What if my cat needs medication?","acceptedAnswer":{"@type":"Answer","text":"Bring it up at the Meet and Greet. Pills, liquids and topicals are routine for us - we'll walk through the exact method that works for your cat so nothing is improvised while you're away. Roselie also has experience with special-needs and senior cats."}},
+{"@type":"Question","name":"What is your cancellation policy?","acceptedAnswer":{"@type":"Answer","text":"Cancel 48 hours or more before the first scheduled visit and you get a full refund, no questions. Inside 48 hours we keep a flat $10 cancellation fee and refund everything else - one $10 fee per cancellation, not per visit. If you're cancelling visits paid from a package, those visits go back into your balance instead of being refunded. Come home early? Same rule applies to the visits you no longer need. If we ever have to cancel, you're refunded in full."}},
+{"@type":"Question","name":"How often should a cat sitter visit while I'm away?","acceptedAnswer":{"@type":"Answer","text":"Once a day is the minimum for a healthy adult cat, and it's what most clients book. Twice a day is better for cats on medication, kittens, seniors, cats with medical conditions, multi-cat homes, or any cat who gets anxious alone. We'll give you an honest recommendation at the Meet and Greet rather than upselling you into visits your cat doesn't need."}},
+{"@type":"Question","name":"Is a cat sitter better than boarding my cat?","acceptedAnswer":{"@type":"Answer","text":"For most cats, yes. Cats bond to territory more than to the people travelling with them, so staying home means no carrier, no car ride, no unfamiliar smells and no other animals nearby. They keep their own litter box, their own food, their own hiding spots and their own schedule. Boarding can make sense for cats with medical needs requiring on-site supervision - we'll tell you if we think that's the better call."}},
+{"@type":"Question","name":"What does a cat sitter actually do in 30 minutes?","acceptedAnswer":{"@type":"Answer","text":"Fresh food and water, litter scooped and refreshed, medication given per your written plan, then play or quiet companionship depending on what your cat wants that day. We also do a quick pass on the house - mail and packages in, lights rotated, plants watered on request - and finish by sending your photo, video and written update."}},
+{"@type":"Question","name":"How far in advance should I book a cat sitter?","acceptedAnswer":{"@type":"Answer","text":"For ordinary trips, one to two weeks is comfortable. For Thanksgiving, Christmas, New Year, spring break and summer weeks, book as early as you can - we cap how many clients we take, so holiday dates genuinely run out. If you're travelling last minute, ask anyway; we'll tell you honestly whether we can fit you in."}},
+{"@type":"Question","name":"Do you offer holiday cat sitting?","acceptedAnswer":{"@type":"Answer","text":"Yes, and holidays are our busiest stretch. Because we keep the client list small, holiday dates are first-come. Any holiday surcharge is disclosed before you book - never added afterward."}},
+{"@type":"Question","name":"Can you care for kittens or senior cats?","acceptedAnswer":{"@type":"Answer","text":"Yes to both. Kittens usually need twice-daily visits. Senior cats often need medication, closer monitoring of eating and litter habits, and more patience - all of which Roselie has handled extensively, including through shelter work at Best Friends Animal Society in Los Angeles."}},
+{"@type":"Question","name":"What happens if my cat gets sick while I'm away?","acceptedAnswer":{"@type":"Answer","text":"We contact you and your emergency contact immediately. If we can't reach you and the situation looks urgent, you've authorized us to get your cat to your listed veterinarian, or the nearest emergency clinic if yours is closed. You're responsible for veterinary costs, and we keep you updated the whole way through with documentation."}},
+{"@type":"Question","name":"Do you need a key to my house?","acceptedAnswer":{"@type":"Answer","text":"You'll need to give us reliable access - a key, lockbox, code, fob or building arrangement. We recommend a lockbox: it removes the handoff hassle and means a spare is always available. Access details are kept confidential and restricted to your sitter."}},
+{"@type":"Question","name":"Are you bonded and insured?","acceptedAnswer":{"@type":"Answer","text":"Insured, yes - BaskingPaws carries pet-sitting liability insurance. Not bonded: we have chosen not to carry a bond at this time, and we would rather say so plainly than let the phrase 'bonded and insured' imply something we do not hold. Roselie also holds Rover Star Sitter status and has passed an enhanced background check. Ask us at your Meet and Greet and we will give you the coverage details in writing."}},
+{"@type":"Question","name":"How do I pay for cat sitting?","acceptedAnswer":{"@type":"Answer","text":"You're charged after visits are completed, not upfront. Clients can keep a card on file through our payment processor so future bookings take one tap - we never see or store your card number. Package visits are purchased upfront, drawn down as you use them, and stay valid for 24 months."}},
+{"@type":"Question","name":"What makes you different from Rover or an app sitter?","acceptedAnswer":{"@type":"Answer","text":"With an app you often get whoever is available, which can mean a different stranger each trip. With us it's the same professional sitter every visit, in a deliberately small service area, with a written care plan and a full refund if you're unhappy. We also only hire experienced adult professionals - never high school or college students looking for casual work."}},
+{"@type":"Question","name":"Do you do overnight stays or dog walking?","acceptedAnswer":{"@type":"Answer","text":"No. We do 30-minute in-home drop-in visits for cats, and nothing else. Staying narrow is what lets us do this one thing properly."}},
+{"@type":"Question","name":"What does the guarantee actually cover?","acceptedAnswer":{"@type":"Answer","text":"The full booking. If you're unhappy for any reason, tell us within 72 hours of the first visit and we refund everything you paid for that booking. No forms, no debate, no hard feelings."}}
+]}
+</script>
+
+
+
+
+    <div class="reveal mt-10 text-center">
+      <p class="text-[15.5px] text-ink/75">Still have a question?</p>
+      <button data-open-modal class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-coral hover:bg-coralDark text-white text-[16px] font-semibold px-7 py-3.5 shadow-soft hover:shadow-lift hover:-translate-y-0.5 transition">
+        Ask at your Free Meet &amp; Greet
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ======================================== -->
+<footer class="relative bg-plum text-white/75 overflow-hidden">
+  <svg class="absolute -left-16 -bottom-20 w-80 h-80 text-white opacity-[0.05] -rotate-12" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="relative mx-auto max-w-6xl px-5 py-14">
+    <div class="grid gap-10 md:grid-cols-4">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2.5">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10">
+            <svg viewBox="0 0 24 24" class="w-5 h-5 text-apricot" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+          </span>
+          <span class="font-display text-xl font-semibold text-white">Basking<span class="text-apricot">Paws</span></span>
+        </div>
+        <p class="mt-4 text-[15px] leading-relaxed max-w-sm">
+          Professional cat-only in-home drop-in care. Serving Somerset County, New Jersey —
+          Basking Ridge, Warren, Bernardsville, Gillette and Bedminster.
+        </p>
+        <p class="mt-5 text-[13px] text-white/55">Rover Star Sitter &bull; Background Checked &bull; Insured</p>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-[15px]">Explore</p>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="/how-it-works" class="hover:text-apricot transition">How It Works</a></li>
+          <li><a href="/services" class="hover:text-apricot transition">Services &amp; Pricing</a></li>
+          <li><a href="/about" class="hover:text-apricot transition">About Us</a></li>
+          <li><a href="/areas" class="hover:text-apricot transition">Service Areas</a></li>
+          <li><a href="#faq" class="hover:text-apricot transition">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-[15px]">Get in touch</p>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="tel:+19088388598" class="hover:text-apricot transition">(908) 838-8598</a></li>
+          <li><a href="mailto:RoseliesPetCare@gmail.com" class="hover:text-apricot transition">RoseliesPetCare@gmail.com</a></li>
+          <li><a href="/login" class="hover:text-apricot transition">Client Login</a></li>
+          <li><a href="/signup" class="hover:text-apricot transition">Create Account</a></li>
+          <li><button data-open-modal class="text-apricot font-semibold hover:text-white transition">Book Free Meet &amp; Greet</button></li>
+        </ul>
+        <ul class="mt-6 space-y-2.5 text-[14px] text-white/55">
+          <li><a href="/privacy" class="hover:text-apricot transition">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-apricot transition">Terms of Service</a></li>
+          <li><a href="/unsubscribe" class="hover:text-apricot transition">Unsubscribe</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-white/10 text-[13px] text-white/50 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
+      <p>© <span id="year">2026</span> BaskingPaws. All rights reserved.</p>
+      <p>Basking Ridge · Warren · Bernardsville · Gillette · Bedminster, NJ</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== STICKY MOBILE CTA ============================= -->
+<div class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-cream/95 backdrop-blur border-t border-plum/10 px-4 py-3">
+  <button data-open-modal class="w-full rounded-full bg-coral hover:bg-coralDark text-white text-[16px] font-semibold py-3.5 shadow-soft transition">Book Free Meet &amp; Greet</button>
+</div>
+
+<!-- ===================== BOOKING MODAL ================================= -->
+<div id="mgModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="mgModalTitle">
+  <div data-close-modal class="fixed inset-0 bg-plum/50 backdrop-blur-sm"></div>
+  <div class="relative min-h-full flex items-start justify-center p-4 md:p-6">
+    <div class="w-full max-w-lg bg-cream rounded-[24px] shadow-lift ring-1 ring-plum/10 my-8">
+      <div class="flex items-start justify-between gap-4 p-6 pb-0">
+        <div>
+          <h2 id="mgModalTitle" class="font-display text-2xl md:text-[28px] font-semibold text-plum leading-tight">Book your Free Meet &amp; Greet</h2>
+          <p class="mt-2 text-[15px] text-ink/70">A few details and I'll get back to you — usually within minutes.</p>
+        </div>
+        <button data-close-modal class="shrink-0 w-9 h-9 rounded-lg text-plum hover:bg-sand transition inline-flex items-center justify-center" aria-label="Close">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <form class="js-mg-form p-6 pt-5" novalidate>
+        <div class="space-y-4">
+          <div>
+            <label for="name-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Full name <span class="text-coral">*</span></label>
+            <input id="name-modal" name="fullName" type="text" required autocomplete="name" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="Jane Doe">
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="email-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Email <span class="text-coral">*</span></label>
+              <input id="email-modal" name="email" type="email" required autocomplete="email" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="jane@email.com">
+            </div>
+            <div>
+              <label for="phone-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Phone <span class="text-coral">*</span></label>
+              <input id="phone-modal" name="phone" type="tel" required autocomplete="tel" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="(908) 555-0123">
+            </div>
+          </div>
+          <div>
+            <label for="address-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Street address <span class="text-coral">*</span></label>
+            <input id="address-modal" name="street" type="text" required autocomplete="street-address" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="12 Maple Ave">
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="town-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Town <span class="text-coral">*</span></label>
+              <select id="town-modal" name="town" required class="js-town w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition">
+                <option value="" selected disabled>Select your town</option>
+                <option>Basking Ridge</option><option>Warren</option><option>Bernardsville</option>
+                <option>Gillette</option><option>Bedminster</option><option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="cats-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Number of cats</label>
+              <select id="cats-modal" name="cats" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition">
+                <option value="" selected disabled>Select</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+              </select>
+            </div>
+          </div>
+          <div class="js-other-town hidden">
+            <label for="othertown-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Which town are you in?</label>
+            <input id="othertown-modal" name="otherTown" type="text" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="Tell me where you are">
+            <p class="mt-1.5 text-[12.5px] text-muted">I'll let you know honestly whether I can reach you without rushing.</p>
+          </div>
+
+          <!-- "Try Me" is once per household. Checked by address; see the script below. -->
+          <div class="js-trymeused hidden rounded-xl bg-blush/60 ring-1 ring-coral/25 p-4">
+            <p class="text-[14px] font-semibold text-plum">Welcome back!</p>
+            <p class="mt-1 text-[13.5px] leading-relaxed text-ink/80">
+              It looks like the &ldquo;Try Me&rdquo; Package has already been used at this address &mdash;
+              it's a one-time offer per household. You're very welcome to book again at our normal rates.
+              <a href="/login" class="text-coral font-semibold underline decoration-apricot underline-offset-4">Sign in to your account &rarr;</a>
+            </p>
+            <p class="mt-2 text-[12.5px] text-muted">Just moved in, or think this is wrong? Send the form anyway and we'll sort it out.</p>
+          </div>
+          <div>
+            <label for="notes-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Anything I should know? <span class="font-normal text-muted">(optional)</span></label>
+            <textarea id="notes-modal" name="notes" rows="3" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="Travel dates, medication, a shy cat, a senior cat…"></textarea>
+          </div>
+          <!-- Consent. Email marketing is bundled into submission and disclosed here.
+               SMS marketing is a SEPARATE, unchecked, optional box — required by the
+               TCPA, which does not allow promotional texts to be a condition of service. -->
+          <div class="rounded-xl bg-sand/60 ring-1 ring-plum/10 p-4 space-y-3">
+            <label class="flex gap-2.5 items-start cursor-pointer">
+              <input type="checkbox" name="agree" required class="mt-0.5 accent-coral w-4 h-4 shrink-0">
+              <span class="text-[13px] leading-relaxed text-ink/80">
+                I agree to the <a href="/terms" target="_blank" class="text-coral font-medium underline decoration-apricot underline-offset-4">Terms</a>
+                and <a href="/privacy" target="_blank" class="text-coral font-medium underline decoration-apricot underline-offset-4">Privacy Policy</a>,
+                and to receive service messages and marketing email from BaskingPaws.
+                <a href="/unsubscribe" class="underline decoration-plum/20 hover:text-coral">Unsubscribe</a> any time. <span class="text-coral">*</span>
+              </span>
+            </label>
+            <label class="flex gap-2.5 items-start cursor-pointer pt-3 border-t border-plum/10">
+              <input type="checkbox" name="smsOptIn" class="mt-0.5 accent-coral w-4 h-4 shrink-0">
+              <span class="text-[13px] leading-relaxed text-ink/80">
+                <strong class="text-plum">Optional:</strong> text me occasional promotions and availability.
+                Not required to book and it never changes your price. Msg &amp; data rates may apply;
+                reply STOP to opt out.
+              </span>
+            </label>
+          </div>
+
+          <p class="js-mg-error hidden rounded-xl bg-coral/10 ring-1 ring-coral/30 px-4 py-3 text-[13.5px] text-ink/85"></p>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"
+                 class="absolute opacity-0 pointer-events-none h-0 w-0" style="position:absolute;left:-9999px">
+
+          <button type="submit" class="w-full rounded-full bg-coral hover:bg-coralDark text-white text-[16.5px] font-semibold px-6 py-4 shadow-soft hover:shadow-lift transition">Request My Free Meet &amp; Greet</button>
+          <p class="text-[12.5px] text-muted text-center leading-relaxed">
+            I'll text you back as soon as possible! Your details are never shared.
+            <a href="/privacy" class="underline decoration-plum/20 hover:text-coral">Privacy Policy</a>
+          </p>
+          <p class="text-[13px] text-center text-ink/70 pt-1">
+            Already a client?
+            <a href="/login" class="text-coral font-semibold underline decoration-apricot underline-offset-4 hover:text-coralDark">Sign in to your account</a>
+          </p>
+        </div>
+        <div class="js-mg-success hidden text-center py-8">
+          <span class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-coral/10 text-coral">
+            <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <h3 class="mt-4 font-display text-2xl font-semibold text-plum">Got it — thank you!</h3>
+          <p class="mt-2 text-[15.5px] text-ink/75">I'll reach out shortly to set up your Free Meet &amp; Greet.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var yr = document.getElementById('year'); if (yr) yr.textContent = new Date().getFullYear();
+
+  var header = document.getElementById('siteHeader');
+  function onScroll(){ header.classList.toggle('scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+
+  var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(!e.isIntersecting) return; e.target.classList.add('in'); io.unobserve(e.target); });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:0.08 });
+    revealEls.forEach(function(el){
+      var sibs = Array.prototype.slice.call(el.parentElement.children)
+        .filter(function(n){ return n.classList.contains('reveal') || n.classList.contains('reveal-scale'); });
+      var i = sibs.indexOf(el);
+      if (i > 0) el.style.transitionDelay = Math.min(i*70,350) + 'ms';
+      io.observe(el);
+    });
+    window.setTimeout(function(){ revealEls.forEach(function(el){ el.classList.add('in'); }); }, 2500);
+  } else { revealEls.forEach(function(el){ el.classList.add('in'); }); }
+
+  /* ---- FAQ: click a question card, answer opens in the shared panel ---- */
+  document.querySelectorAll('.faq-wrap').forEach(function (wrap) {
+    var panel = wrap.querySelector('.faq-panel');
+    var body  = wrap.querySelector('.faq-panel-body');
+    var open  = null;
+
+    function close() {
+      panel.classList.add('hidden');
+      wrap.querySelectorAll('.faq-q').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
+      open = null;
+    }
+
+    wrap.querySelectorAll('.faq-q').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.dataset.faq;
+        if (open === id) { close(); return; }          /* same card -> collapse */
+        var src = wrap.querySelector('[data-faq-a="' + id + '"]');
+        if (!src) return;
+        body.innerHTML = src.innerHTML;
+        panel.classList.remove('hidden');
+        wrap.querySelectorAll('.faq-q').forEach(function (b) {
+          b.setAttribute('aria-expanded', String(b === btn));
+        });
+        open = id;
+        /* keep the panel in view without yanking the page around */
+        var r = panel.getBoundingClientRect();
+        if (r.bottom > window.innerHeight) panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      });
+    });
+
+    wrap.querySelector('.faq-close').addEventListener('click', close);
+  });
+
+
+  var navToggle = document.getElementById('navToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  navToggle.addEventListener('click', function(){
+    var open = mobileNav.classList.toggle('hidden') === false;
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  var modal = document.getElementById('mgModal'); var lastFocused = null;
+  function openModal(){ lastFocused = document.activeElement; modal.classList.remove('hidden'); document.body.style.overflow='hidden'; mobileNav.classList.add('hidden'); var f = modal.querySelector('input,select,textarea,button'); if(f) f.focus(); }
+  function closeModal(){ modal.classList.add('hidden'); document.body.style.overflow=''; if(lastFocused) lastFocused.focus(); }
+  document.querySelectorAll('[data-open-modal]').forEach(function(b){ b.addEventListener('click', openModal); });
+  document.querySelectorAll('[data-close-modal]').forEach(function(b){ b.addEventListener('click', closeModal); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !modal.classList.contains('hidden')) closeModal(); });
+
+  document.querySelectorAll('.js-town').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var form = sel.closest('form'); var other = form.querySelector('.js-other-town'); if(!other) return;
+      var isOther = sel.value === 'Other';
+      other.classList.toggle('hidden', !isOther);
+      var input = other.querySelector('input');
+      if (isOther) { input.focus(); } else { input.value = ''; }
+    });
+  });
+
+  /* ---- "Try Me" eligibility, checked by address --------------------
+     The offer is once per household, so we look the address up rather
+     than trusting anyone to remember. This is advisory only: it shows a
+     friendly notice and never blocks the form, because people do move
+     into houses where a previous tenant already used it.
+
+     STEP 2: replace the stub with a debounced call to the CRM, e.g.
+       GET /api/tryme-eligibility?street=...&town=...  ->  { used: bool }
+     Normalise the address server-side (case, punctuation, "Ave" vs
+     "Avenue") before comparing, and treat any network failure as
+     "not used" so an outage never turns away a genuine new client. */
+  var trialCache = {};
+  function checkTrial(street, town, cb) {
+    var key = street + '|' + town;
+    if (key in trialCache) { cb(trialCache[key]); return; }
+    fetch('/api/trial-eligibility?street=' + encodeURIComponent(street) +
+          '&town=' + encodeURIComponent(town))
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        var used = !!(res && res.data && res.data.used);
+        trialCache[key] = used;
+        cb(used);
+      })
+      .catch(function () { cb(false); });   /* fail open */
+  }
+
+  document.querySelectorAll('.js-mg-form').forEach(function (form) {
+    var street = form.querySelector('input[name="street"]');
+    var town   = form.querySelector('select[name="town"]');
+    var notice = form.querySelector('.js-trymeused');
+    if (!street || !town || !notice) return;
+
+    function check() {
+      if (!street.value.trim() || !town.value) { notice.classList.add('hidden'); return; }
+      checkTrial(street.value, town.value, function (used) {
+        notice.classList.toggle('hidden', !used);
+      });
+    }
+    street.addEventListener('blur', check);
+    town.addEventListener('change', check);
+  });
+
+  /* ---- Meet & Greet submission -------------------------------------
+     Posts to /api/leads, which saves the lead, emails Roselie so she can
+     text back immediately, and confirms to the visitor. */
+  document.querySelectorAll('.js-mg-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+
+      var btn = form.querySelector('button[type="submit"]');
+      var original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      var g = function (n) { var el = form.querySelector('[name="' + n + '"]'); return el ? el.value : ''; };
+      var c = function (n) { var el = form.querySelector('[name="' + n + '"]'); return !!(el && el.checked); };
+      var consentEl = form.querySelector('[name="agree"]');
+      var consentText = consentEl && consentEl.closest('label')
+        ? consentEl.closest('label').innerText.replace(/\s+/g, ' ').trim() : '';
+
+      fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: g('fullName'), email: g('email'), phone: g('phone'),
+          street: g('street'), town: g('town'), otherTown: g('otherTown'),
+          cats: g('cats'), notes: g('notes'),
+          emailMarketingConsent: c('agree'),
+          smsMarketingConsent: c('smsOptIn'),
+          consentText: consentText,
+          website: g('website')
+        })
+      })
+      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (res) {
+        if (res && res.error) throw new Error(res.error.message || 'Something went wrong.');
+        form.querySelectorAll('.space-y-4').forEach(function (el) { el.classList.add('hidden'); });
+        form.querySelector('.js-mg-success').classList.remove('hidden');
+      })
+      .catch(function (err) {
+        btn.disabled = false;
+        btn.textContent = original;
+        var box = form.querySelector('.js-mg-error');
+        if (box) {
+          box.textContent = err.message + ' You can also call or text (908) 838-8598.';
+          box.classList.remove('hidden');
+        } else {
+          alert(err.message + '\n\nYou can also call or text (908) 838-8598.');
+        }
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

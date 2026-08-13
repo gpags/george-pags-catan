@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — BaskingPaws</title>
+<meta name="description" content="How BaskingPaws collects, uses and protects your personal information. We never sell or rent your data.">
+<meta name="theme-color" content="#FDF8F5">
+<link rel="icon" type="image/jpeg" href="assets/favicon.jfif">
+<link rel="apple-touch-icon" href="assets/favicon.jfif">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://baskingpaws.com/privacy">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { cream:'#FDF8F5', sand:'#F6EBE3', blush:'#F8DDD3', lav:'#EFE5F1',
+      coral:'#E2664A', coralDark:'#C4512F', apricot:'#F0A868',
+      plum:'#5E3F58', ink:'#3A2A31', muted:'#7C6A72' },
+    fontFamily: { display:['Lora','Georgia','Times New Roman','serif'], sans:['Inter','system-ui','sans-serif'] },
+    boxShadow: { soft:'0 10px 40px -12px rgba(94,63,88,0.18)', card:'0 2px 18px -6px rgba(94,63,88,0.14)', lift:'0 24px 60px -20px rgba(94,63,88,0.30)' }
+  }}}
+</script>
+
+<style>
+  body { -webkit-font-smoothing: antialiased; }
+  .paw-watermark { position:absolute; pointer-events:none; opacity:.045; color:#5E3F58; }
+  #siteHeader { transition: box-shadow .3s ease; }
+  #siteHeader.scrolled { box-shadow: 0 6px 30px -18px rgba(94,63,88,.5); }
+  .legal h2 { scroll-margin-top: 96px; }
+  .legal p, .legal li { line-height: 1.7; }
+</style>
+</head>
+
+<body class="bg-cream text-ink font-sans antialiased">
+
+<svg width="0" height="0" class="hidden" aria-hidden="true">
+  <symbol id="pawGlyph" viewBox="0 0 24 24">
+    <circle cx="7" cy="9" r="1.7"/><circle cx="12" cy="7.4" r="1.7"/><circle cx="17" cy="9" r="1.7"/>
+    <path d="M12 11.2c-3 0-5.2 2.2-5.2 4.4 0 1.7 1.4 2.6 3 2.6 1 0 1.6-.4 2.2-.4s1.2.4 2.2.4c1.6 0 3-.9 3-2.6 0-2.2-2.2-4.4-5.2-4.4Z"/>
+  </symbol>
+</svg>
+
+<!-- ===================== HEADER ========================================= -->
+<header id="siteHeader" class="sticky top-0 z-40 bg-cream/90 backdrop-blur border-b border-plum/10">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a href="/" class="flex items-center gap-2.5 group">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-apricot/25 ring-1 ring-apricot/40 group-hover:bg-apricot/40 transition">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-coral" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+        </span>
+        <span class="font-display text-xl md:text-[22px] font-semibold text-plum tracking-tight">Basking<span class="text-coral">Paws</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-[15px] font-medium text-ink/80">
+        <a href="/how-it-works" class="hover:text-coral transition">How It Works</a>
+        <a href="/services"     class="hover:text-coral transition">Services &amp; Pricing</a>
+        <a href="/about"        class="hover:text-coral transition">About</a>
+        <a href="/areas"        class="hover:text-coral transition">Service Areas</a>
+        <a href="/login"        class="hover:text-coral transition">Client Login</a>
+        <a href="/#book" class="ml-1 inline-flex items-center rounded-full bg-coral hover:bg-coralDark text-white px-5 py-2.5 text-[15px] font-semibold shadow-soft hover:shadow-lift transition">Book Free Meet &amp; Greet</a>
+      </nav>
+      <button id="navToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-plum hover:bg-sand transition" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobileNav" class="md:hidden hidden border-t border-plum/10 bg-cream">
+    <div class="px-5 py-4 flex flex-col gap-1 text-[16px]">
+      <a href="/how-it-works" class="py-2.5 border-b border-plum/5">How It Works</a>
+      <a href="/services"     class="py-2.5 border-b border-plum/5">Services &amp; Pricing</a>
+      <a href="/about"        class="py-2.5 border-b border-plum/5">About</a>
+      <a href="/areas"        class="py-2.5 border-b border-plum/5">Service Areas</a>
+      <a href="/login"        class="py-2.5 border-b border-plum/5">Client Login</a>
+      <a href="/#book" class="mt-3 w-full text-center rounded-full bg-coral hover:bg-coralDark text-white px-5 py-3 font-semibold shadow-soft transition">Book Free Meet &amp; Greet</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ===================== PAGE HERO ===================================== -->
+<section class="relative overflow-hidden bg-gradient-to-b from-blush/50 to-cream">
+  <svg class="paw-watermark w-[360px] h-[360px] -left-20 top-4 -rotate-12 hidden md:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="relative mx-auto max-w-3xl px-5 pt-14 pb-10 md:pt-20 md:pb-12">
+    <p class="text-[13px] font-semibold uppercase tracking-[0.14em] text-coral">Legal</p>
+    <h1 class="mt-3 font-display text-[34px] leading-tight sm:text-5xl font-semibold text-plum tracking-tight">Privacy Policy</h1>
+    <p class="mt-4 text-[15px] text-muted">Last updated: August 2, 2026</p>
+
+    <div class="mt-7 rounded-2xl bg-white ring-2 ring-coral/25 shadow-card p-6">
+      <div class="flex gap-4">
+        <span class="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full bg-coral/10 text-coral">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6.5V12c0 5 3.4 8.2 8 9 4.6-.8 8-4 8-9V6.5z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <div>
+          <p class="font-display text-xl font-semibold text-plum">We will never sell your data.</p>
+          <p class="mt-2 text-[15.5px] leading-relaxed text-ink/80">
+            We do not sell, rent, trade or share your personal information with data brokers, advertisers or
+            any third party for their own marketing. Not now, not later, not for any price. The only people
+            who ever see your details are us and the small set of service providers listed in section 4 who
+            help us run the business.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POLICY BODY =================================== -->
+<section class="bg-cream">
+  <div class="mx-auto max-w-3xl px-5 pb-16 md:pb-24 legal">
+
+    <!-- Contents -->
+    <nav class="rounded-2xl bg-sand/70 ring-1 ring-plum/8 p-5 mb-10">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-plum">On this page</p>
+      <ol class="mt-3 grid sm:grid-cols-2 gap-x-6 gap-y-1.5 text-[14.5px] text-ink/80 list-decimal list-inside">
+        <li><a href="#who" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Who we are</a></li>
+        <li><a href="#collect" class="hover:text-coral underline decoration-plum/15 underline-offset-4">What we collect</a></li>
+        <li><a href="#use" class="hover:text-coral underline decoration-plum/15 underline-offset-4">How we use it</a></li>
+        <li><a href="#share" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Who we share it with</a></li>
+        <li><a href="#marketing" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Marketing &amp; how to opt out</a></li>
+        <li><a href="#payments" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Payments &amp; card on file</a></li>
+        <li><a href="#cookies" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Cookies</a></li>
+        <li><a href="#security" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Security</a></li>
+        <li><a href="#retention" class="hover:text-coral underline decoration-plum/15 underline-offset-4">How long we keep it</a></li>
+        <li><a href="#rights" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Your rights</a></li>
+        <li><a href="#children" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Children</a></li>
+        <li><a href="#contact" class="hover:text-coral underline decoration-plum/15 underline-offset-4">Contact us</a></li>
+      </ol>
+    </nav>
+
+    <div class="space-y-10 text-[16px] text-ink/85">
+
+      <div>
+        <h2 id="who" class="font-display text-2xl font-semibold text-plum">1. Who we are</h2>
+        <p class="mt-3">
+          BaskingPaws is a cat-only in-home pet sitting business operating in Somerset County, New Jersey,
+          serving Basking Ridge, Warren, Bernardsville, Gillette and Bedminster. In this policy,
+          “we,” “us” and “our” mean BaskingPaws. “You” means anyone who visits this website, submits a form,
+          creates an account or books our services.
+        </p>
+        <p class="mt-3">
+          This policy explains what personal information we collect, why we collect it, who we share it with,
+          and the choices you have. It applies to baskingpaws.com and to the services we provide.
+        </p>
+      </div>
+
+      <div>
+        <h2 id="collect" class="font-display text-2xl font-semibold text-plum">2. What we collect</h2>
+        <p class="mt-3">We only collect what we actually need to care for your cat and run the business.</p>
+
+        <p class="mt-4 font-semibold text-plum">Information you give us directly</p>
+        <ul class="mt-2 space-y-1.5 list-disc list-outside pl-5">
+          <li><strong>Contact details</strong> — your name, email address and phone number.</li>
+          <li><strong>Your home address</strong> — required, because we come to your home to provide the service.</li>
+          <li><strong>Access details</strong> — key, lockbox code, alarm code, gate code or building entry instructions.</li>
+          <li><strong>Pet information</strong> — your cats' names, ages, medical conditions, medication, feeding routine, behavior notes and your veterinarian's contact details.</li>
+          <li><strong>Booking details</strong> — travel dates, visit schedule and any notes you send us.</li>
+          <li><strong>Account information</strong> — if you create a client account, your login email and a securely hashed password.</li>
+          <li><strong>Anything else you choose to tell us</strong> — by email, text or in the notes field of a form.</li>
+        </ul>
+
+        <p class="mt-4 font-semibold text-plum">Information collected automatically</p>
+        <ul class="mt-2 space-y-1.5 list-disc list-outside pl-5">
+          <li>Basic technical data your browser sends, such as IP address, browser type and the pages you viewed.</li>
+          <li>The date and time you submitted a form, and what consent boxes were checked — we keep this as proof of consent.</li>
+        </ul>
+
+        <p class="mt-4 font-semibold text-plum">What we do <em>not</em> collect</p>
+        <ul class="mt-2 space-y-1.5 list-disc list-outside pl-5">
+          <li>We never see or store your full credit or debit card number. See section 6.</li>
+          <li>We do not collect Social Security numbers, government ID numbers or financial account numbers.</li>
+          <li>We do not buy personal information about you from data brokers or third-party lists.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 id="use" class="font-display text-2xl font-semibold text-plum">3. How we use it</h2>
+        <ul class="mt-3 space-y-1.5 list-disc list-outside pl-5">
+          <li>To schedule and provide cat sitting visits, including entering your home as agreed.</li>
+          <li>To contact you about your request, your bookings and your cat — by phone, text or email.</li>
+          <li>To send you photo, video and written updates after visits.</li>
+          <li>To reach your veterinarian or emergency contact if your cat needs care.</li>
+          <li>To take payment and keep records of what you were charged.</li>
+          <li>To create and secure your client account.</li>
+          <li>To send marketing and promotional messages, subject to section 5.</li>
+          <li>To keep records we're required to keep, resolve disputes, and enforce our Terms of Service.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 id="share" class="font-display text-2xl font-semibold text-plum">4. Who we share it with</h2>
+        <p class="mt-3 font-semibold text-plum">We never sell or rent your personal information. Full stop.</p>
+        <p class="mt-3">
+          We share limited information with a small number of service providers who help us operate, and only
+          the information each one needs to do its job. They are contractually restricted from using your
+          information for their own purposes.
+        </p>
+        <ul class="mt-3 space-y-1.5 list-disc list-outside pl-5">
+          <li><strong>Email delivery</strong> — to send confirmations, visit updates and, if you've opted in, marketing email.</li>
+          <li><strong>Text messaging</strong> — to send you booking-related texts and, if you've separately opted in, promotional texts.</li>
+          <li><strong>Payment processing</strong> — to charge you and store your card securely on their systems, not ours.</li>
+          <li><strong>Scheduling and records</strong> — the tools we use to keep your care plan, visit history and client notes.</li>
+          <li><strong>Website hosting</strong> — the service that serves you this page.</li>
+        </ul>
+        <p class="mt-3">
+          We may also disclose information if the law requires it — a valid subpoena, court order or legal
+          obligation — or where we reasonably believe it's necessary to protect the safety of a person or an
+          animal. If our business is ever sold or transferred, client information may transfer with it, and we
+          will tell you before that happens so you can delete your information if you'd rather not come along.
+        </p>
+        <!-- Vendors named below. Add any new processor here before you start using it. -->
+      </div>
+
+      <div>
+        <h2 id="marketing" class="font-display text-2xl font-semibold text-plum">5. Marketing &amp; how to opt out</h2>
+
+        <p class="mt-3 font-semibold text-plum">Email</p>
+        <p class="mt-2">
+          When you submit a form on this site, you are signing up to receive marketing and promotional email
+          from us — things like seasonal availability, holiday booking reminders, service updates and offers.
+          This is disclosed on the form itself, directly above the submit button.
+        </p>
+        <p class="mt-3">
+          You can stop these at any time. Every marketing email we send has an unsubscribe link at the bottom,
+          and you can also
+          <a href="/unsubscribe" class="text-coral font-medium underline decoration-apricot underline-offset-4 hover:text-coralDark">unsubscribe here</a>
+          or simply reply and ask. We'll process it promptly and in no case later than ten business days.
+          Unsubscribing from marketing does not stop messages about a booking you've actually made — you'll
+          still get visit updates, confirmations and anything about your cat's care.
+        </p>
+
+        <p class="mt-4 font-semibold text-plum">Text messages</p>
+        <p class="mt-2">
+          Messages about your request or your booking — replying to your inquiry, confirming a visit, telling
+          you about something concerning your cat — are part of providing the service and are covered by your
+          submission.
+        </p>
+        <p class="mt-3">
+          <strong>Promotional texts are separate and entirely optional.</strong> We only send them if you check
+          the specific box for them on the form. That box is never pre-checked, and declining it has no effect
+          on your ability to book or on the price you pay. If you do opt in, message and data rates may apply,
+          message frequency varies, and you can stop at any time by replying <strong>STOP</strong>. Reply
+          <strong>HELP</strong> for help.
+        </p>
+        <p class="mt-3">
+          We keep a record of when and how you gave consent, and we honor withdrawal of consent promptly.
+        </p>
+      </div>
+
+      <div>
+        <h2 id="payments" class="font-display text-2xl font-semibold text-plum">6. Payments &amp; card on file</h2>
+        <p class="mt-3">
+          Payments are handled by a PCI-DSS compliant third-party payment processor. When you save a card for
+          future bookings, your card details are sent directly to that processor and stored on their systems.
+          <strong>We never receive, see or store your full card number, CVV or expiry date.</strong> What we can
+          see is limited to the card brand, the last four digits and the expiry month — enough to show you
+          which card is on file and nothing more.
+        </p>
+        <p class="mt-3">
+          You can remove a saved card from your account at any time. Removing it doesn't cancel bookings you've
+          already made; it just means we'll ask you for a payment method next time.
+        </p>
+      </div>
+
+      <div>
+        <h2 id="cookies" class="font-display text-2xl font-semibold text-plum">7. Cookies</h2>
+        <p class="mt-3">
+          This site uses only what it needs to function — for example, keeping you signed in to your client
+          account. We do not run advertising cookies, and we do not allow third parties to track you across
+          other websites from here.
+        </p>
+        <!-- TODO (Roselie): if you later add analytics (Google Analytics, Plausible,
+             Meta Pixel, etc.), this section must be updated and you may need a
+             consent banner depending on the tool. -->
+      </div>
+
+      <div>
+        <h2 id="security" class="font-display text-2xl font-semibold text-plum">8. Security</h2>
+        <p class="mt-3">
+          We take your home access details seriously — they're the most sensitive thing you give us. Access
+          codes and key information are kept restricted to the sitter assigned to your home and are not shared
+          more widely. Account passwords are stored hashed, never in plain text. This site is served over an
+          encrypted connection.
+        </p>
+        <p class="mt-3">
+          No system is perfectly secure, and we won't pretend otherwise. If a breach ever affects your personal
+          information, we will notify you as required by New Jersey law.
+        </p>
+      </div>
+
+      <div>
+        <h2 id="retention" class="font-display text-2xl font-semibold text-plum">9. How long we keep it</h2>
+        <ul class="mt-3 space-y-1.5 list-disc list-outside pl-5">
+          <li><strong>Client and pet records</strong> — for as long as you're a client, plus a reasonable period afterward in case you return.</li>
+          <li><strong>Home access details</strong> — deleted when you stop being a client, or sooner if you ask.</li>
+          <li><strong>Billing records</strong> — kept as long as tax and accounting rules require.</li>
+          <li><strong>Marketing lists</strong> — until you unsubscribe. We keep a minimal suppression record afterward so we don't accidentally email you again.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 id="rights" class="font-display text-2xl font-semibold text-plum">10. Your rights</h2>
+        <p class="mt-3">
+          Wherever you live, you can ask us to show you what we hold about you, correct anything wrong, or
+          delete it. Email us and we'll take care of it — we won't make you jump through hoops, and we won't
+          treat you differently for asking.
+        </p>
+        <p class="mt-3">
+          New Jersey residents have rights under the New Jersey Data Privacy Act, including the right to
+          access, correct, delete and obtain a copy of your personal data, and to opt out of targeted
+          advertising, sale of personal data and certain profiling. We don't sell personal data or use it for
+          targeted advertising at all, so there's nothing to opt out of on those points — but the right to
+          access, correct and delete is fully available to you. If we deny a request, you may appeal by
+          replying to our response, and you may contact the New Jersey Division of Consumer Affairs.
+        </p>
+        <p class="mt-3">
+          California residents have comparable rights under the CCPA/CPRA, including the right to know,
+          delete, correct and opt out of sale or sharing. Again: we do not sell or share your personal
+          information as those terms are defined.
+        </p>
+      </div>
+
+      <div>
+        <h2 id="children" class="font-display text-2xl font-semibold text-plum">11. Children</h2>
+        <p class="mt-3">
+          Our services are for adults. This site isn't directed at children under 13 and we don't knowingly
+          collect their information. If you believe a child has given us personal information, contact us and
+          we'll delete it.
+        </p>
+      </div>
+
+      <div>
+        <h2 id="contact" class="font-display text-2xl font-semibold text-plum">12. Contact us</h2>
+        <p class="mt-3">
+          Questions about this policy, or want your information corrected or deleted? Reach out and a human
+          will answer.
+        </p>
+        <!-- TODO (Roselie): replace with the real business email, phone and a
+             mailing address. CAN-SPAM requires a valid physical postal address in
+             every marketing email — a PO box is acceptable. -->
+        <ul class="mt-3 space-y-1.5">
+          <li><strong>Email:</strong> <a href="mailto:RoseliesPetCare@gmail.com" class="text-coral underline decoration-apricot underline-offset-4 hover:text-coralDark">RoseliesPetCare@gmail.com</a></li>
+          <li><strong>Phone:</strong> (908) 838-8598</li>
+          <li><strong>Mail:</strong> BaskingPaws, Basking Ridge, NJ 07920 &mdash; full mailing address available on request</li>
+        </ul>
+        <p class="mt-4">
+          We may update this policy from time to time. If we make a meaningful change, we'll update the date
+          at the top and, for significant changes, tell you by email.
+        </p>
+      </div>
+
+      <!-- Reviewer note removed at Roselie's request. Standing reminder, kept in
+           source only: have a New Jersey attorney review this policy alongside the
+           Terms of Service before launch — particularly the marketing consent
+           language, the SMS provisions and the home-access sections. -->
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ======================================== -->
+<footer class="relative bg-plum text-white/75 overflow-hidden">
+  <svg class="absolute -left-16 -bottom-20 w-80 h-80 text-white opacity-[0.05] -rotate-12" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="relative mx-auto max-w-6xl px-5 py-14">
+    <div class="grid gap-10 md:grid-cols-4">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2.5">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10">
+            <svg viewBox="0 0 24 24" class="w-5 h-5 text-apricot" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+          </span>
+          <span class="font-display text-xl font-semibold text-white">Basking<span class="text-apricot">Paws</span></span>
+        </div>
+        <p class="mt-4 text-[15px] leading-relaxed max-w-sm">
+          Professional cat-only in-home drop-in care. Serving Somerset County, New Jersey —
+          Basking Ridge, Warren, Bernardsville, Gillette and Bedminster.
+        </p>
+        <p class="mt-5 text-[13px] text-white/55">Rover Star Sitter &bull; Background Checked &bull; Insured</p>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-[15px]">Explore</p>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="/how-it-works" class="hover:text-apricot transition">How It Works</a></li>
+          <li><a href="/services" class="hover:text-apricot transition">Services &amp; Pricing</a></li>
+          <li><a href="/about" class="hover:text-apricot transition">About Us</a></li>
+          <li><a href="/areas" class="hover:text-apricot transition">Service Areas</a></li>
+          <li><a href="/services#faq" class="hover:text-apricot transition">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-[15px]">Your account</p>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="/login" class="hover:text-apricot transition">Client Login</a></li>
+          <li><a href="/signup" class="hover:text-apricot transition">Create Account</a></li>
+          <li><a href="/#book" class="text-apricot font-semibold hover:text-white transition">Book Free Meet &amp; Greet</a></li>
+        </ul>
+        <ul class="mt-6 space-y-2.5 text-[14px] text-white/55">
+          <li><a href="/privacy" class="hover:text-apricot transition">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-apricot transition">Terms of Service</a></li>
+          <li><a href="/unsubscribe" class="hover:text-apricot transition">Unsubscribe</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-white/10 text-[13px] text-white/50 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
+      <p>© <span id="year">2026</span> BaskingPaws. All rights reserved.</p>
+      <p>Basking Ridge · Warren · Bernardsville · Gillette · Bedminster, NJ</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var yr = document.getElementById('year'); if (yr) yr.textContent = new Date().getFullYear();
+  var header = document.getElementById('siteHeader');
+  function onScroll(){ header.classList.toggle('scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+  var navToggle = document.getElementById('navToggle'), mobileNav = document.getElementById('mobileNav');
+  navToggle.addEventListener('click', function(){
+    var open = mobileNav.classList.toggle('hidden') === false;
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+})();
+</script>
+
+</body>
+</html>

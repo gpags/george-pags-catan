@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About BaskingPaws — Professional Cat Sitters in Basking Ridge, NJ</title>
+<meta name="description" content="BaskingPaws is a husband-and-wife cat sitting company in Somerset County, NJ. We only hire professional cat sitters — never casual high school or college help. Roselie is our primary sitter, with shelter experience at Best Friends in Los Angeles.">
+<meta name="theme-color" content="#FDF8F5">
+<link rel="icon" type="image/jpeg" href="assets/favicon.jfif">
+<link rel="apple-touch-icon" href="assets/favicon.jfif">
+<link rel="canonical" href="https://baskingpaws.com/about">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        cream:'#FDF8F5', sand:'#F6EBE3', blush:'#F8DDD3', lav:'#EFE5F1',
+        coral:'#E2664A', coralDark:'#C4512F', apricot:'#F0A868',
+        plum:'#5E3F58', plumSoft:'#8A6A83', ink:'#3A2A31', muted:'#7C6A72'
+      },
+      fontFamily: {
+        display:['Lora','Georgia','Times New Roman','serif'],
+        sans:['Inter','system-ui','sans-serif']
+      },
+      boxShadow: {
+        soft:'0 10px 40px -12px rgba(94,63,88,0.18)',
+        card:'0 2px 18px -6px rgba(94,63,88,0.14)',
+        lift:'0 24px 60px -20px rgba(94,63,88,0.30)'
+      }
+    }}
+  }
+</script>
+
+<style>
+  body { -webkit-font-smoothing: antialiased; }
+  .paper-grain { background-image: radial-gradient(rgba(94,63,88,0.05) 1px, transparent 1px); background-size: 22px 22px; }
+  .paw-watermark { position:absolute; pointer-events:none; opacity:.045; color:#5E3F58; }
+  .photo-ph { background: linear-gradient(135deg,#F8DDD3 0%,#EFE5F1 50%,#F6EBE3 100%); }
+  .glow-frame { position: relative; }
+  .glow-frame::before {
+    content:''; position:absolute; inset:-10px; border-radius:36px; z-index:0;
+    background: conic-gradient(from 180deg at 50% 50%, #F0A868, #E2664A, #C9A7D6, #F8DDD3, #F0A868);
+    filter: blur(26px); opacity:.55; transition: opacity .6s ease, transform .6s ease;
+  }
+  .glow-frame:hover::before { opacity:.85; transform: scale(1.02); }
+  .glow-frame > * { position: relative; z-index: 1; }
+  .reveal { opacity:0; transform: translateY(26px); }
+  .reveal.in { opacity:1; transform:none; transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+  .reveal-scale { opacity:0; transform: scale(.965) translateY(18px); }
+  .reveal-scale.in { opacity:1; transform:none; transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+  .lift { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease; }
+  .lift:hover { transform: translateY(-4px); }
+  #siteHeader { transition: box-shadow .3s ease; }
+  #siteHeader.scrolled { box-shadow: 0 6px 30px -18px rgba(94,63,88,.5); }
+  .no-js .reveal, .no-js .reveal-scale { opacity:1 !important; transform:none !important; }
+  @media (max-width: 767px) { body { padding-bottom: 76px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+    html { scroll-behavior:auto; }
+  }
+</style>
+</head>
+
+<body class="bg-cream text-ink font-sans antialiased no-js">
+<script>document.body.classList.remove('no-js');</script>
+
+<svg width="0" height="0" class="hidden" aria-hidden="true">
+  <symbol id="pawGlyph" viewBox="0 0 24 24">
+    <circle cx="7" cy="9" r="1.7"/><circle cx="12" cy="7.4" r="1.7"/><circle cx="17" cy="9" r="1.7"/>
+    <path d="M12 11.2c-3 0-5.2 2.2-5.2 4.4 0 1.7 1.4 2.6 3 2.6 1 0 1.6-.4 2.2-.4s1.2.4 2.2.4c1.6 0 3-.9 3-2.6 0-2.2-2.2-4.4-5.2-4.4Z"/>
+  </symbol>
+</svg>
+
+<!-- ===================== HEADER ========================================= -->
+<header id="siteHeader" class="sticky top-0 z-40 bg-cream/90 backdrop-blur border-b border-plum/10">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a href="/" class="flex items-center gap-2.5 group">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-apricot/25 ring-1 ring-apricot/40 group-hover:bg-apricot/40 transition">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-coral" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+        </span>
+        <span class="font-display text-xl md:text-[22px] font-semibold text-plum tracking-tight">Basking<span class="text-coral">Paws</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-5 text-[15px] font-medium text-ink/80">
+        <a href="/how-it-works" class="hover:text-coral transition">How It Works</a>
+        <a href="/services"     class="hover:text-coral transition">Services &amp; Pricing</a>
+        <a href="/about"        class="text-coral font-semibold" aria-current="page">About</a>
+        <a href="/areas"        class="hover:text-coral transition">Service Areas</a>
+        <a href="/services#faq" class="hover:text-coral transition">FAQ</a>
+        <a href="/login" class="hover:text-coral transition">Client Login</a>
+        <button data-open-modal class="ml-1 inline-flex items-center rounded-full bg-coral hover:bg-coralDark text-white px-5 py-2.5 text-[15px] font-semibold shadow-soft hover:shadow-lift transition">Book Free Meet &amp; Greet</button>
+      </nav>
+      <button id="navToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-plum hover:bg-sand transition" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobileNav" class="md:hidden hidden border-t border-plum/10 bg-cream">
+    <div class="px-5 py-4 flex flex-col gap-1 text-[16px]">
+      <a href="/how-it-works" class="py-2.5 border-b border-plum/5">How It Works</a>
+      <a href="/services"     class="py-2.5 border-b border-plum/5">Services &amp; Pricing</a>
+      <a href="/about"        class="py-2.5 border-b border-plum/5 text-coral font-semibold">About</a>
+      <a href="/areas"        class="py-2.5 border-b border-plum/5">Service Areas</a>
+      <a href="/services#faq" class="py-2.5 border-b border-plum/5">FAQ</a>
+      <a href="/login" class="py-2.5 border-b border-plum/5">Client Login</a>
+      <button data-open-modal class="mt-3 w-full rounded-full bg-coral hover:bg-coralDark text-white px-5 py-3 font-semibold shadow-soft transition">Book Free Meet &amp; Greet</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ===================== PAGE HERO ===================================== -->
+<section class="relative overflow-hidden bg-gradient-to-b from-blush/60 via-cream to-cream">
+  <div class="absolute inset-0 paper-grain opacity-60 pointer-events-none"></div>
+  <svg class="paw-watermark w-[420px] h-[420px] -left-24 top-6 -rotate-12 hidden md:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full bg-apricot/20 blur-3xl pointer-events-none"></div>
+
+  <div class="relative mx-auto max-w-4xl px-5 pt-14 pb-14 md:pt-20 md:pb-16 text-center">
+    <p class="reveal inline-flex items-center gap-2 rounded-full bg-white/80 ring-1 ring-plum/10 px-3.5 py-1.5 text-[13px] font-medium text-plum mb-6 shadow-card">
+      <span class="w-1.5 h-1.5 rounded-full bg-coral"></span> About us
+    </p>
+    <h1 class="reveal font-display text-[34px] leading-tight sm:text-5xl md:text-[52px] font-semibold text-plum tracking-tight">
+      A husband-and-wife company, built around cats
+    </h1>
+    <p class="reveal mt-5 text-[17px] md:text-lg leading-relaxed text-ink/80 max-w-2xl mx-auto">
+      BaskingPaws isn&rsquo;t an app or a franchise. It&rsquo;s humans who deeply love pets and want to serve our community properly.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== OUR STORY ===================================== -->
+<section class="relative bg-cream overflow-hidden">
+  <div class="relative mx-auto max-w-6xl px-5 py-14 md:py-20">
+    <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+
+      <div class="reveal-scale glow-frame order-2 md:order-1">
+        <img src="assets/our-story.jpg" alt="The married couple behind BaskingPaws"
+             class="w-full aspect-[4/5] md:aspect-[4/4.4] object-cover rounded-[28px] ring-4 ring-white/70 shadow-lift"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="photo-ph rounded-[28px] aspect-[4/5] ring-4 ring-white/70 shadow-lift items-center justify-center text-center px-6" style="display:none">
+          <span class="text-plum/45 text-sm font-medium leading-relaxed">[ assets/our-story.jpg ]</span>
+        </div>
+      </div>
+
+      <div class="order-1 md:order-2">
+        <p class="reveal text-[13px] font-semibold uppercase tracking-[0.14em] text-coral">Our story</p>
+        <h2 class="reveal mt-3 font-display text-3xl md:text-[38px] leading-tight font-semibold text-plum">
+          Our next chapter, and it's a feline one
+        </h2>
+
+        <!-- TODO (Roselie): swap "one of us / the other" for real first names once
+             you decide how you want to be introduced on the site. -->
+        <p class="reveal mt-5 text-[16.5px] leading-relaxed text-ink/80">
+          We're a married couple who started BaskingPaws as the next chapter in our life together.
+          One of us grew up right here in Basking Ridge; the other moved east from Orange County,
+          California. Between the two of us we've cared for twelve cats over our lifetimes, and today
+          our home is run by four cats and one very opinionated Siberian Husky.
+        </p>
+        <p class="reveal mt-4 text-[16.5px] leading-relaxed text-ink/80">
+          That's not a marketing story — it's the reason the business exists. We know what it feels like
+          to leave town and wonder whether the cat who hides from everyone is eating. We know the
+          difference between someone who feeds a cat and someone who notices a cat.
+        </p>
+
+        <div class="reveal mt-8 grid grid-cols-3 gap-4">
+          <div class="rounded-2xl bg-white ring-1 ring-plum/8 shadow-card p-4 text-center">
+            <p class="font-display text-3xl font-semibold text-plum">12</p>
+            <p class="mt-1 text-[13px] text-ink/70 leading-snug">cats between us over our lifetimes</p>
+          </div>
+          <div class="rounded-2xl bg-white ring-1 ring-plum/8 shadow-card p-4 text-center">
+            <p class="font-display text-3xl font-semibold text-plum">4</p>
+            <p class="mt-1 text-[13px] text-ink/70 leading-snug">cats at home right now</p>
+          </div>
+          <div class="rounded-2xl bg-white ring-1 ring-plum/8 shadow-card p-4 text-center">
+            <p class="font-display text-3xl font-semibold text-plum">1</p>
+            <p class="mt-1 text-[13px] text-ink/70 leading-snug">Siberian Husky who thinks he's a cat</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WE ONLY HIRE PROFESSIONALS ==================== -->
+<section class="relative bg-sand/70 overflow-hidden">
+  <svg class="paw-watermark w-[340px] h-[340px] right-[-80px] top-10 rotate-[18deg] hidden lg:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+
+  <div class="relative mx-auto max-w-4xl px-5 py-16 md:py-20">
+    <div class="max-w-2xl reveal">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.14em] text-coral">Our standard</p>
+      <h2 class="mt-3 font-display text-3xl md:text-[38px] leading-tight font-semibold text-plum">
+        We only hire professional cat sitters
+      </h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-ink/80">
+        Not high schoolers. Not college students looking for casual summer work. Every sitter who
+        represents BaskingPaws is an experienced professional who does this as their craft — because your
+        cat's medication schedule and your house key aren't a side gig.
+      </p>
+      <p class="mt-4 text-[16.5px] leading-relaxed text-ink/80">
+        Roselie is our primary cat sitter today, and she handles visits start to finish. If we ever grow
+        the team, the bar doesn't move.
+      </p>
+    </div>
+
+    <div class="mt-10 grid sm:grid-cols-3 gap-5">
+      <div class="reveal lift bg-white rounded-2xl p-6 ring-1 ring-plum/8 shadow-card hover:shadow-lift">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-blush text-plum mb-4">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6.5V12c0 5 3.4 8.2 8 9 4.6-.8 8-4 8-9V6.5z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <h3 class="font-display text-lg font-semibold text-plum">Experienced adults only</h3>
+        <p class="mt-2 text-[14.5px] leading-relaxed text-ink/75">Real cat-care experience, background checked, and accountable to us directly.</p>
+      </div>
+      <div class="reveal lift bg-white rounded-2xl p-6 ring-1 ring-plum/8 shadow-card hover:shadow-lift">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-lav text-plum mb-4">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><use href="#pawGlyph"/></svg>
+        </span>
+        <h3 class="font-display text-lg font-semibold text-plum">Cats, and only cats</h3>
+        <p class="mt-2 text-[14.5px] leading-relaxed text-ink/75">No dog walks squeezed between your visits. Feline behavior is the whole specialty.</p>
+      </div>
+      <div class="reveal lift bg-white rounded-2xl p-6 ring-1 ring-plum/8 shadow-card hover:shadow-lift">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-sand text-plum mb-4">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.2"/><path d="M9 6l1.2-2h3.6L15 6"/></svg>
+        </span>
+        <h3 class="font-display text-lg font-semibold text-plum">Proof, not promises</h3>
+        <p class="mt-2 text-[14.5px] leading-relaxed text-ink/75">A photo, a short video and a written note after every visit — so you never have to wonder.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MEET ROSELIE ================================== -->
+<section class="relative bg-lav/50 overflow-hidden">
+  <svg class="paw-watermark w-[360px] h-[360px] left-[-80px] bottom-10 -rotate-[15deg] hidden lg:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+
+  <div class="relative mx-auto max-w-6xl px-5 py-16 md:py-20">
+    <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+
+      <div class="reveal-scale glow-frame">
+        <img src="assets/roselie-sitter.jpg" alt="Roselie feeding and playing with a group of cats"
+             class="w-full aspect-[4/5] md:aspect-[4/4.4] object-cover rounded-[28px] ring-4 ring-white/70 shadow-lift"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="photo-ph rounded-[28px] aspect-[4/5] ring-4 ring-white/70 shadow-lift items-center justify-center text-center px-6" style="display:none">
+          <span class="text-plum/45 text-sm font-medium leading-relaxed">[ assets/roselie-sitter.jpg ]<br>Save the photo of Roselie with the cats here</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="reveal text-[13px] font-semibold uppercase tracking-[0.14em] text-coral">Your primary sitter</p>
+        <h2 class="reveal mt-3 font-display text-3xl md:text-[38px] leading-tight font-semibold text-plum">Roselie</h2>
+        <p class="reveal mt-5 text-[16.5px] leading-relaxed text-ink/80">
+          Roselie has years of hands-on cat sitting behind her, along with shelter work at organizations
+          including <strong class="font-semibold text-plum">Best Friends Animal Society</strong> in Los Angeles.
+          Shelter floors are where you learn to read the cat under the bed — the one who won't come out for
+          treats, food or a friendly voice, and who still needs to eat, be medicated and be checked on.
+        </p>
+        <p class="reveal mt-4 text-[16.5px] leading-relaxed text-ink/80">
+          She's the person at your door for every visit. That consistency is deliberate: cats settle for
+          someone familiar, and they don't settle for a rotating cast.
+        </p>
+
+        <div class="reveal mt-7 flex flex-wrap gap-2.5">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-plum/10 px-3.5 py-1.5 text-[13.5px] font-medium text-plum shadow-card">
+            <svg viewBox="0 0 20 20" class="w-3.5 h-3.5 text-apricot" fill="currentColor"><path d="m10 1.8 2.4 5 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L2.2 7.6l5.4-.8z"/></svg>
+            Rover Star Sitter
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-plum/10 px-3.5 py-1.5 text-[13.5px] font-medium text-plum shadow-card">
+            <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-coral" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6.5V12c0 5 3.4 8.2 8 9 4.6-.8 8-4 8-9V6.5z"/><path d="m9 12 2 2 4-4"/></svg>
+            Enhanced background check
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-plum/10 px-3.5 py-1.5 text-[13.5px] font-medium text-plum shadow-card">
+            <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-coral" fill="currentColor"><use href="#pawGlyph"/></svg>
+            Shelter &amp; special-needs experience
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EARLY TRACK RECORD ============================ -->
+<section class="relative bg-cream overflow-hidden">
+  <div class="relative mx-auto max-w-5xl px-5 py-16 md:py-20">
+
+    <div class="max-w-2xl reveal">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.14em] text-coral">Where we stand today</p>
+      <h2 class="mt-3 font-display text-3xl md:text-[38px] leading-tight font-semibold text-plum">
+        A strong start, and we intend to keep it that way
+      </h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-ink/80">
+        We're new to New Jersey but not new to cats. Every client so far has left a five-star review, and
+        two thirds have already booked again — which is the number we actually watch, because anyone
+        can be good once.
+      </p>
+    </div>
+
+    <div class="mt-10 grid sm:grid-cols-3 gap-5">
+      <div class="reveal rounded-2xl bg-plum text-white p-7 text-center shadow-card">
+        <p class="font-display text-5xl font-semibold text-apricot">9</p>
+        <p class="mt-2 text-[14.5px] text-white/80 leading-snug">five-star reviews, zero at any other rating</p>
+      </div>
+      <div class="reveal rounded-2xl bg-plum text-white p-7 text-center shadow-card">
+        <p class="font-display text-5xl font-semibold text-apricot">6 of 9</p>
+        <p class="mt-2 text-[14.5px] text-white/80 leading-snug">of clients have already booked again</p>
+      </div>
+      <div class="reveal rounded-2xl bg-plum text-white p-7 text-center shadow-card">
+        <p class="font-display text-5xl font-semibold text-apricot">5</p>
+        <p class="mt-2 text-[14.5px] text-white/80 leading-snug">towns served, and we're not adding more</p>
+      </div>
+    </div>
+
+    <p class="reveal mt-6 text-[14px] text-muted">
+      Reviews verified on
+      <a href="https://www.rover.com/members/roselie-m-from-leash-to-litter-box/" target="_blank" rel="noopener"
+         class="text-coral font-medium underline decoration-apricot underline-offset-4 hover:text-coralDark">Roselie's Rover profile</a>.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== FINAL CTA ===================================== -->
+<section class="relative bg-gradient-to-b from-blush/70 to-cream overflow-hidden">
+  <svg class="paw-watermark w-[400px] h-[400px] left-[-100px] bottom-0 rotate-[10deg] hidden lg:block" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="relative mx-auto max-w-3xl px-5 py-16 md:py-20 text-center">
+    <h2 class="reveal font-display text-3xl md:text-[40px] font-semibold text-plum leading-tight">Come meet us — and let us meet your cat</h2>
+    <p class="reveal mt-4 text-[16.5px] text-ink/80">
+      The Meet &amp; Greet is free, in your home, with no obligation to book anything afterward.
+    </p>
+    <div class="reveal mt-8">
+      <div class="inline-flex flex-col items-center rounded-[24px] bg-white ring-2 ring-coral/30 shadow-lift px-8 py-7 ">
+        <p class="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-coral">New client offer</p>
+        <p class="mt-2 font-display text-[22px] font-semibold text-plum">The &ldquo;Try Me&rdquo; Package</p>
+        <div class="mt-2.5 flex items-end justify-center gap-3">
+          <span class="font-display text-5xl font-semibold text-plum">$75</span>
+          <span class="text-[18px] text-muted line-through mb-1.5">$102</span>
+        </div>
+        <p class="mt-1.5 text-[15px] text-ink/75">Free Meet &amp; Greet + your first 3 visits</p>
+        <span class="mt-3 rounded-full bg-coral/10 text-coral text-[13px] font-semibold px-3.5 py-1.5">Save about 26%</span>
+        <button data-open-modal class="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-full bg-coral hover:bg-coralDark text-white text-[16.5px] font-semibold px-8 py-4 shadow-soft hover:shadow-lift hover:-translate-y-0.5 transition">
+          Claim the &ldquo;Try Me&rdquo; Package
+        </button>
+        <p class="mt-3 text-[12.5px] text-muted">Once per household &middot; no obligation to continue</p>
+      </div>
+    </div>
+    <p class="reveal mt-3.5 text-[13px] text-muted">Cat-Only Specialist • Free Meet &amp; Greet • Limited Clients Accepted</p>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ======================================== -->
+<footer class="relative bg-plum text-white/75 overflow-hidden">
+  <svg class="absolute -left-16 -bottom-20 w-80 h-80 text-white opacity-[0.05] -rotate-12" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+  <div class="relative mx-auto max-w-6xl px-5 py-14">
+    <div class="grid gap-10 md:grid-cols-4">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2.5">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10">
+            <svg viewBox="0 0 24 24" class="w-5 h-5 text-apricot" fill="currentColor" aria-hidden="true"><use href="#pawGlyph"/></svg>
+          </span>
+          <span class="font-display text-xl font-semibold text-white">Basking<span class="text-apricot">Paws</span></span>
+        </div>
+        <p class="mt-4 text-[15px] leading-relaxed max-w-sm">
+          Professional cat-only in-home drop-in care. Serving Somerset County, New Jersey —
+          Basking Ridge, Warren, Bernardsville, Gillette and Bedminster.
+        </p>
+        <p class="mt-5 text-[13px] text-white/55">Rover Star Sitter &bull; Background Checked &bull; Insured</p>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-[15px]">Explore</p>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="/how-it-works" class="hover:text-apricot transition">How It Works</a></li>
+          <li><a href="/services" class="hover:text-apricot transition">Services &amp; Pricing</a></li>
+          <li><a href="/about" class="hover:text-apricot transition">About Us</a></li>
+          <li><a href="/areas" class="hover:text-apricot transition">Service Areas</a></li>
+          <li><a href="/services#faq" class="hover:text-apricot transition">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-[15px]">Get in touch</p>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="tel:+19088388598" class="hover:text-apricot transition">(908) 838-8598</a></li>
+          <li><a href="mailto:RoseliesPetCare@gmail.com" class="hover:text-apricot transition">RoseliesPetCare@gmail.com</a></li>
+          <li><a href="/login" class="hover:text-apricot transition">Client Login</a></li>
+          <li><a href="/signup" class="hover:text-apricot transition">Create Account</a></li>
+          <li><button data-open-modal class="text-apricot font-semibold hover:text-white transition">Book Free Meet &amp; Greet</button></li>
+        </ul>
+        <ul class="mt-6 space-y-2.5 text-[14px] text-white/55">
+          <li><a href="/privacy" class="hover:text-apricot transition">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-apricot transition">Terms of Service</a></li>
+          <li><a href="/unsubscribe" class="hover:text-apricot transition">Unsubscribe</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-white/10 text-[13px] text-white/50 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
+      <p>© <span id="year">2026</span> BaskingPaws. All rights reserved.</p>
+      <p>Basking Ridge · Warren · Bernardsville · Gillette · Bedminster, NJ</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== STICKY MOBILE CTA ============================= -->
+<div class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-cream/95 backdrop-blur border-t border-plum/10 px-4 py-3">
+  <button data-open-modal class="w-full rounded-full bg-coral hover:bg-coralDark text-white text-[16px] font-semibold py-3.5 shadow-soft transition">Book Free Meet &amp; Greet</button>
+</div>
+
+<!-- ===================== BOOKING MODAL ================================= -->
+<div id="mgModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="mgModalTitle">
+  <div data-close-modal class="fixed inset-0 bg-plum/50 backdrop-blur-sm"></div>
+  <div class="relative min-h-full flex items-start justify-center p-4 md:p-6">
+    <div class="w-full max-w-lg bg-cream rounded-[24px] shadow-lift ring-1 ring-plum/10 my-8">
+      <div class="flex items-start justify-between gap-4 p-6 pb-0">
+        <div>
+          <h2 id="mgModalTitle" class="font-display text-2xl md:text-[28px] font-semibold text-plum leading-tight">Book your Free Meet &amp; Greet</h2>
+          <p class="mt-2 text-[15px] text-ink/70">A few details and I'll get back to you — usually within minutes.</p>
+        </div>
+        <button data-close-modal class="shrink-0 w-9 h-9 rounded-lg text-plum hover:bg-sand transition inline-flex items-center justify-center" aria-label="Close">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <form class="js-mg-form p-6 pt-5" novalidate>
+        <div class="space-y-4">
+          <div>
+            <label for="name-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Full name <span class="text-coral">*</span></label>
+            <input id="name-modal" name="fullName" type="text" required autocomplete="name" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="Jane Doe">
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="email-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Email <span class="text-coral">*</span></label>
+              <input id="email-modal" name="email" type="email" required autocomplete="email" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="jane@email.com">
+            </div>
+            <div>
+              <label for="phone-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Phone <span class="text-coral">*</span></label>
+              <input id="phone-modal" name="phone" type="tel" required autocomplete="tel" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="(908) 555-0123">
+            </div>
+          </div>
+          <div>
+            <label for="address-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Street address <span class="text-coral">*</span></label>
+            <input id="address-modal" name="street" type="text" required autocomplete="street-address" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="12 Maple Ave">
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="town-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Town <span class="text-coral">*</span></label>
+              <select id="town-modal" name="town" required class="js-town w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition">
+                <option value="" selected disabled>Select your town</option>
+                <option>Basking Ridge</option><option>Warren</option><option>Bernardsville</option>
+                <option>Gillette</option><option>Bedminster</option><option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="cats-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Number of cats</label>
+              <select id="cats-modal" name="cats" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition">
+                <option value="" selected disabled>Select</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+              </select>
+            </div>
+          </div>
+          <div class="js-other-town hidden">
+            <label for="othertown-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Which town are you in?</label>
+            <input id="othertown-modal" name="otherTown" type="text" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="Tell me where you are">
+            <p class="mt-1.5 text-[12.5px] text-muted">I'll let you know honestly whether I can reach you without rushing.</p>
+          </div>
+
+          <!-- "Try Me" is once per household. Checked by address; see the script below. -->
+          <div class="js-trymeused hidden rounded-xl bg-blush/60 ring-1 ring-coral/25 p-4">
+            <p class="text-[14px] font-semibold text-plum">Welcome back!</p>
+            <p class="mt-1 text-[13.5px] leading-relaxed text-ink/80">
+              It looks like the &ldquo;Try Me&rdquo; Package has already been used at this address &mdash;
+              it's a one-time offer per household. You're very welcome to book again at our normal rates.
+              <a href="/login" class="text-coral font-semibold underline decoration-apricot underline-offset-4">Sign in to your account &rarr;</a>
+            </p>
+            <p class="mt-2 text-[12.5px] text-muted">Just moved in, or think this is wrong? Send the form anyway and we'll sort it out.</p>
+          </div>
+          <div>
+            <label for="notes-modal" class="block text-[14px] font-semibold text-plum mb-1.5">Anything I should know? <span class="font-normal text-muted">(optional)</span></label>
+            <textarea id="notes-modal" name="notes" rows="3" class="w-full rounded-xl border border-plum/15 bg-white px-4 py-3 text-[15.5px] placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-coral/40 focus:border-coral transition" placeholder="Travel dates, medication, a shy cat, a senior cat…"></textarea>
+          </div>
+          <!-- Consent. Email marketing is bundled into submission and disclosed here.
+               SMS marketing is a SEPARATE, unchecked, optional box — required by the
+               TCPA, which does not allow promotional texts to be a condition of service. -->
+          <div class="rounded-xl bg-sand/60 ring-1 ring-plum/10 p-4 space-y-3">
+            <label class="flex gap-2.5 items-start cursor-pointer">
+              <input type="checkbox" name="agree" required class="mt-0.5 accent-coral w-4 h-4 shrink-0">
+              <span class="text-[13px] leading-relaxed text-ink/80">
+                I agree to the <a href="/terms" target="_blank" class="text-coral font-medium underline decoration-apricot underline-offset-4">Terms</a>
+                and <a href="/privacy" target="_blank" class="text-coral font-medium underline decoration-apricot underline-offset-4">Privacy Policy</a>,
+                and to receive service messages and marketing email from BaskingPaws.
+                <a href="/unsubscribe" class="underline decoration-plum/20 hover:text-coral">Unsubscribe</a> any time. <span class="text-coral">*</span>
+              </span>
+            </label>
+            <label class="flex gap-2.5 items-start cursor-pointer pt-3 border-t border-plum/10">
+              <input type="checkbox" name="smsOptIn" class="mt-0.5 accent-coral w-4 h-4 shrink-0">
+              <span class="text-[13px] leading-relaxed text-ink/80">
+                <strong class="text-plum">Optional:</strong> text me occasional promotions and availability.
+                Not required to book and it never changes your price. Msg &amp; data rates may apply;
+                reply STOP to opt out.
+              </span>
+            </label>
+          </div>
+
+          <p class="js-mg-error hidden rounded-xl bg-coral/10 ring-1 ring-coral/30 px-4 py-3 text-[13.5px] text-ink/85"></p>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"
+                 class="absolute opacity-0 pointer-events-none h-0 w-0" style="position:absolute;left:-9999px">
+
+          <button type="submit" class="w-full rounded-full bg-coral hover:bg-coralDark text-white text-[16.5px] font-semibold px-6 py-4 shadow-soft hover:shadow-lift transition">Request My Free Meet &amp; Greet</button>
+          <p class="text-[12.5px] text-muted text-center leading-relaxed">
+            I'll text you back as soon as possible! Your details are never shared.
+            <a href="/privacy" class="underline decoration-plum/20 hover:text-coral">Privacy Policy</a>
+          </p>
+          <p class="text-[13px] text-center text-ink/70 pt-1">
+            Already a client?
+            <a href="/login" class="text-coral font-semibold underline decoration-apricot underline-offset-4 hover:text-coralDark">Sign in to your account</a>
+          </p>
+        </div>
+        <div class="js-mg-success hidden text-center py-8">
+          <span class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-coral/10 text-coral">
+            <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <h3 class="mt-4 font-display text-2xl font-semibold text-plum">Got it — thank you!</h3>
+          <p class="mt-2 text-[15.5px] text-ink/75">I'll reach out shortly to set up your Free Meet &amp; Greet.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var yr = document.getElementById('year'); if (yr) yr.textContent = new Date().getFullYear();
+
+  var header = document.getElementById('siteHeader');
+  function onScroll(){ header.classList.toggle('scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+
+  var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(!e.isIntersecting) return; e.target.classList.add('in'); io.unobserve(e.target); });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:0.08 });
+    revealEls.forEach(function(el){
+      var sibs = Array.prototype.slice.call(el.parentElement.children)
+        .filter(function(n){ return n.classList.contains('reveal') || n.classList.contains('reveal-scale'); });
+      var i = sibs.indexOf(el);
+      if (i > 0) el.style.transitionDelay = Math.min(i*70,350) + 'ms';
+      io.observe(el);
+    });
+    window.setTimeout(function(){ revealEls.forEach(function(el){ el.classList.add('in'); }); }, 2500);
+  } else { revealEls.forEach(function(el){ el.classList.add('in'); }); }
+
+  var navToggle = document.getElementById('navToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  navToggle.addEventListener('click', function(){
+    var open = mobileNav.classList.toggle('hidden') === false;
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  var modal = document.getElementById('mgModal'); var lastFocused = null;
+  function openModal(){ lastFocused = document.activeElement; modal.classList.remove('hidden'); document.body.style.overflow='hidden'; mobileNav.classList.add('hidden'); var f = modal.querySelector('input,select,textarea,button'); if(f) f.focus(); }
+  function closeModal(){ modal.classList.add('hidden'); document.body.style.overflow=''; if(lastFocused) lastFocused.focus(); }
+  document.querySelectorAll('[data-open-modal]').forEach(function(b){ b.addEventListener('click', openModal); });
+  document.querySelectorAll('[data-close-modal]').forEach(function(b){ b.addEventListener('click', closeModal); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !modal.classList.contains('hidden')) closeModal(); });
+
+  document.querySelectorAll('.js-town').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var form = sel.closest('form'); var other = form.querySelector('.js-other-town'); if(!other) return;
+      var isOther = sel.value === 'Other';
+      other.classList.toggle('hidden', !isOther);
+      var input = other.querySelector('input');
+      if (isOther) { input.focus(); } else { input.value = ''; }
+    });
+  });
+
+  /* ---- "Try Me" eligibility, checked by address --------------------
+     The offer is once per household, so we look the address up rather
+     than trusting anyone to remember. This is advisory only: it shows a
+     friendly notice and never blocks the form, because people do move
+     into houses where a previous tenant already used it.
+
+     STEP 2: replace the stub with a debounced call to the CRM, e.g.
+       GET /api/tryme-eligibility?street=...&town=...  ->  { used: bool }
+     Normalise the address server-side (case, punctuation, "Ave" vs
+     "Avenue") before comparing, and treat any network failure as
+     "not used" so an outage never turns away a genuine new client. */
+  var trialCache = {};
+  function checkTrial(street, town, cb) {
+    var key = street + '|' + town;
+    if (key in trialCache) { cb(trialCache[key]); return; }
+    fetch('/api/trial-eligibility?street=' + encodeURIComponent(street) +
+          '&town=' + encodeURIComponent(town))
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        var used = !!(res && res.data && res.data.used);
+        trialCache[key] = used;
+        cb(used);
+      })
+      .catch(function () { cb(false); });   /* fail open */
+  }
+
+  document.querySelectorAll('.js-mg-form').forEach(function (form) {
+    var street = form.querySelector('input[name="street"]');
+    var town   = form.querySelector('select[name="town"]');
+    var notice = form.querySelector('.js-trymeused');
+    if (!street || !town || !notice) return;
+
+    function check() {
+      if (!street.value.trim() || !town.value) { notice.classList.add('hidden'); return; }
+      checkTrial(street.value, town.value, function (used) {
+        notice.classList.toggle('hidden', !used);
+      });
+    }
+    street.addEventListener('blur', check);
+    town.addEventListener('change', check);
+  });
+
+  /* ---- Meet & Greet submission -------------------------------------
+     Posts to /api/leads, which saves the lead, emails Roselie so she can
+     text back immediately, and confirms to the visitor. */
+  document.querySelectorAll('.js-mg-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+
+      var btn = form.querySelector('button[type="submit"]');
+      var original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      var g = function (n) { var el = form.querySelector('[name="' + n + '"]'); return el ? el.value : ''; };
+      var c = function (n) { var el = form.querySelector('[name="' + n + '"]'); return !!(el && el.checked); };
+      var consentEl = form.querySelector('[name="agree"]');
+      var consentText = consentEl && consentEl.closest('label')
+        ? consentEl.closest('label').innerText.replace(/\s+/g, ' ').trim() : '';
+
+      fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: g('fullName'), email: g('email'), phone: g('phone'),
+          street: g('street'), town: g('town'), otherTown: g('otherTown'),
+          cats: g('cats'), notes: g('notes'),
+          emailMarketingConsent: c('agree'),
+          smsMarketingConsent: c('smsOptIn'),
+          consentText: consentText,
+          website: g('website')
+        })
+      })
+      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (res) {
+        if (res && res.error) throw new Error(res.error.message || 'Something went wrong.');
+        form.querySelectorAll('.space-y-4').forEach(function (el) { el.classList.add('hidden'); });
+        form.querySelector('.js-mg-success').classList.remove('hidden');
+      })
+      .catch(function (err) {
+        btn.disabled = false;
+        btn.textContent = original;
+        var box = form.querySelector('.js-mg-error');
+        if (box) {
+          box.textContent = err.message + ' You can also call or text (908) 838-8598.';
+          box.classList.remove('hidden');
+        } else {
+          alert(err.message + '\n\nYou can also call or text (908) 838-8598.');
+        }
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
