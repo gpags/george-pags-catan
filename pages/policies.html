@@ -179,15 +179,17 @@ personalised print starts we can't change it. Up to 18 characters.</p>
 <h2 id="bundles">Bundle offers</h2>
 <p>Bundle pricing applies automatically in the cart on eligible products — you'll see the discount
 before you pay, and the price never changes between the product page and checkout.</p>
+<p><strong>Offers vary by product.</strong> The exact bundle available on an item is shown on its own
+product page. Across the range these are the tiers we run:</p>
 <table>
   <tr><th>You receive</th><th>You pay for</th><th>Free</th></tr>
   <tr><td>2</td><td>1</td><td>1</td></tr>
-  <tr><td>5</td><td>3</td><td>2</td></tr>
+  <tr><td>5</td><td>2</td><td>3</td></tr>
   <tr><td>15</td><td>5</td><td>10</td></tr>
-  <tr><td>30</td><td>10</td><td>20</td></tr>
 </table>
 <ul>
-  <li>The largest tier applies first; anything left over falls back to buy-1-get-1.</li>
+  <li>Where a product has more than one tier, the largest applies first and anything left over falls
+      back to the next one down.</li>
   <li>Bundles apply <strong>per product line</strong> — free units are the same product, and you can
       pick a different colour for each.</li>
   <li>Add-ons like engraving and pattern match are charged on the units you pay for.</li>
@@ -234,9 +236,10 @@ decorative figurines and desk accessories.</div>
   <div class="cart-body" id="cartBody"></div>
   <div class="cart-f" id="cartFoot" style="display:none">
     <div class="cart-tot"><span>Subtotal</span><span id="cartTotal">$0</span></div>
-    <button class="pay-shop" id="shopPay">Buy with Shop Pay</button>
-    <button class="btn btn-ghost btn-block">Check out</button>
-    <span class="pay-alt">Shop Pay · Apple Pay · Google Pay · Card</span>
+    <button class="pay-shop" id="expressPay">Express checkout</button>
+    <button class="btn btn-ghost btn-block" id="checkoutBtn">Check out</button>
+    <span class="pay-alt">Link · Apple Pay · Google Pay · Card</span>
+    <p class="cart-err" id="cartErr" style="display:none"></p>
   </div>
 </aside>
 
@@ -276,6 +279,7 @@ decorative figurines and desk accessories.</div>
     </div>
   </div>
 </footer>
+<script src="../assets/catalog.js"></script>
 <script src="../assets/rp.js"></script>
 </body>
 </html>

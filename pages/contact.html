@@ -149,9 +149,10 @@
   <div class="cart-body" id="cartBody"></div>
   <div class="cart-f" id="cartFoot" style="display:none">
     <div class="cart-tot"><span>Subtotal</span><span id="cartTotal">$0</span></div>
-    <button class="pay-shop" id="shopPay">Buy with Shop Pay</button>
-    <button class="btn btn-ghost btn-block">Check out</button>
-    <span class="pay-alt">Shop Pay · Apple Pay · Google Pay · Card</span>
+    <button class="pay-shop" id="expressPay">Express checkout</button>
+    <button class="btn btn-ghost btn-block" id="checkoutBtn">Check out</button>
+    <span class="pay-alt">Link · Apple Pay · Google Pay · Card</span>
+    <p class="cart-err" id="cartErr" style="display:none"></p>
   </div>
 </aside>
 
@@ -191,6 +192,7 @@
     </div>
   </div>
 </footer>
+<script src="../assets/catalog.js"></script>
 <script src="../assets/rp.js"></script>
 </body>
 </html>

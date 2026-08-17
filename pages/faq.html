@@ -106,7 +106,7 @@
 
 
 <h2 id="bundles-pricing">Bundles &amp; pricing</h2>
-<details class="acc"><summary>How do the bundles work?</summary><div class="acc-in"><p>On eligible products: take 2 and pay for 1, or take 15 and pay for 5. The discount is applied automatically in the cart and shown on the product page first, so the price never changes on you at checkout.</p></div></details>
+<details class="acc"><summary>How do the bundles work?</summary><div class="acc-in"><p>Eligible products show a "Bundle &amp; save" row on their page with the exact offer for that item — the smaller ones run buy-1-get-1, the bigger ones run a different tier. The discount is applied automatically in the cart and shown on the product page first, so the price never changes on you at checkout.</p></div></details>
 <details class="acc"><summary>Do free units have to be the same colour?</summary><div class="acc-in"><p>They have to be the same product, but you can pick a different colour for each one.</p></div></details>
 <details class="acc"><summary>Can I stack a discount code on a bundle?</summary><div class="acc-in"><p>No — bundles are already the best price we do.</p></div></details>
 
@@ -140,9 +140,10 @@
   <div class="cart-body" id="cartBody"></div>
   <div class="cart-f" id="cartFoot" style="display:none">
     <div class="cart-tot"><span>Subtotal</span><span id="cartTotal">$0</span></div>
-    <button class="pay-shop" id="shopPay">Buy with Shop Pay</button>
-    <button class="btn btn-ghost btn-block">Check out</button>
-    <span class="pay-alt">Shop Pay · Apple Pay · Google Pay · Card</span>
+    <button class="pay-shop" id="expressPay">Express checkout</button>
+    <button class="btn btn-ghost btn-block" id="checkoutBtn">Check out</button>
+    <span class="pay-alt">Link · Apple Pay · Google Pay · Card</span>
+    <p class="cart-err" id="cartErr" style="display:none"></p>
   </div>
 </aside>
 
@@ -182,6 +183,7 @@
     </div>
   </div>
 </footer>
+<script src="../assets/catalog.js"></script>
 <script src="../assets/rp.js"></script>
 </body>
 </html>
