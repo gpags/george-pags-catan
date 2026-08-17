@@ -228,7 +228,44 @@ function cardHTML(p){
   </a>`;
 }
 
-function boot(){ mountCountdown(); mountMarquee(); mountShopDropdown(); mountCart(); }
+/* ---------- contact form ----------
+   No backend yet. Validates, then hands off to the mail client so a
+   message can't be silently swallowed by a form that goes nowhere. */
+function mountContactForm(){
+  const form = document.getElementById('contactForm'); if (!form) return;
+  const status = document.getElementById('cf-status');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name  = form.name.value.trim();
+    const email = form.email.value.trim();
+    const msg   = form.message.value.trim();
+    const order = form.order.value.trim();
+    const topic = form.topic.value;
+
+    if (!name || !email || !msg) {
+      status.style.color = '#c62b6d';
+      status.textContent = 'Please fill in your name, email and message.';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      status.style.color = '#c62b6d';
+      status.textContent = 'That email address doesn’t look right.';
+      return;
+    }
+    const body = [
+      'From: ' + name + ' <' + email + '>',
+      order ? 'Order: ' + order : null,
+      'Topic: ' + topic, '', msg
+    ].filter(Boolean).join('\n');
+    status.style.color = '#0f7a5a';
+    status.textContent = 'Opening your email app so you can send it…';
+    window.location.href = 'mailto:gpags987@gmail.com'
+      + '?subject=' + encodeURIComponent('[' + topic + ']' + (order ? ' ' + order : ''))
+      + '&body=' + encodeURIComponent(body);
+  });
+}
+
+function boot(){ mountCountdown(); mountMarquee(); mountShopDropdown(); mountCart(); mountContactForm(); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
 
