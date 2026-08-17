@@ -179,9 +179,10 @@
   <div class="cart-body" id="cartBody"></div>
   <div class="cart-f" id="cartFoot" style="display:none">
     <div class="cart-tot"><span>Subtotal</span><span id="cartTotal">$0</span></div>
-    <button class="pay-shop" id="shopPay">Buy with Shop Pay</button>
-    <button class="btn btn-ghost btn-block">Check out</button>
-    <span class="pay-alt">Shop Pay · Apple Pay · Google Pay · Card</span>
+    <button class="pay-shop" id="expressPay">Express checkout</button>
+    <button class="btn btn-ghost btn-block" id="checkoutBtn">Check out</button>
+    <span class="pay-alt">Link · Apple Pay · Google Pay · Card</span>
+    <p class="cart-err" id="cartErr" style="display:none"></p>
   </div>
 </aside>
 
@@ -222,6 +223,7 @@
   </div>
 </footer>
 
+<script src="assets/catalog.js"></script>
 <script src="assets/rp.js"></script>
 <script>
 /* ---------- vibe switcher ---------- */
@@ -260,14 +262,17 @@ document.getElementById('pColor').innerHTML=
   '<button class="fclear" data-clear="color">Clear</button>';
 
 function matches(p){
-  if(state.avail.size && !state.avail.has(p.stock?'in':'out')) return false;
+  if(state.avail.size && !state.avail.has(p.stock>0?'in':'out')) return false;
   if(state.price.size){
     let ok=false;
     state.price.forEach(r=>{const[lo,hi]=r.split('-').map(Number); if(p.price>=lo&&p.price<hi) ok=true;});
     if(!ok) return false;
   }
   if(state.vibe.size && !state.vibe.has(p.v)) return false;
-  return true;  // every figure ships in all nine colors, so color never excludes
+  /* Colors are per product now — a figure only matches if it actually
+     ships in one of the selected colors. */
+  if(state.color.size && ![...state.color].some(c=>p.colorsAvailable.indexOf(c)!==-1)) return false;
+  return true;
 }
 function sortList(l){
   const s=state.sort;
