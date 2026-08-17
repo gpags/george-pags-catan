@@ -76,31 +76,10 @@ module.exports = async (req, res) => {
             return res.status(400).json({ error: 'Invalid tier selected.' });
         }
 
-        // === JUNE 2026 STOCK LIMIT CHECK ===
-        const now = new Date();
-        const isJune2026 = now.getMonth() === 5 && now.getFullYear() === 2026;
+        // The June-2026 nine-set stock gate was removed in August 2026: the
+        // window it fired in has passed, so it could never trigger again, and
+        // it cost every order a blocking round trip to a Google Apps Script.
 
-        if (isJune2026) {
-            const isWinner = state.robber === 'custom' && state.namesText?.toLowerCase().includes('winner');
-
-            if (!isWinner) {
-                const countRes = await fetch('https://script.google.com/macros/s/AKfycbwXxOFOEL9VFdua7Xl_AvfHmo4Ge2MafGLJASzTZG5-jTH7PxY8lUBHP7DcRjhUpEScGQ/exec', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'getPaidOrderCount' })
-                });
-                const countData = await countRes.json();
-
-                if (countData.count >= 9) {
-                    return res.status(400).json({
-                        error: 'SOLD_OUT',
-                        message: 'We have reached our limit of 9 paid sets for June.'
-                    });
-                }
-            }
-        }
-
-        // === RESTORE ORIGINAL LOGIC ===
         const serverTotal = computeTotal(state);
         const tierLabel = TIER_LABEL[state.tier];
         const productName = `Catan Artisan — ${tierLabel} Bundle`;
