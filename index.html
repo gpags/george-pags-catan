@@ -1,1775 +1,331 @@
+<!-- index-new.html — Realized Prints homepage (cat shop).
+     Rename to index.html to go live. Does not touch /catan, output.css or Images/. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realized Prints — Premium 3D Printed Heirlooms & Collectibles</title>
-    <meta name="description" content="Family-crafted 3D printed Catan sets, anime figurines, blind bag collectibles, and cat scratchers. Made with obsessive care in the USA.">
-    <!-- FAVICON -->
-    <link rel="icon" href="images/RPLogo_favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="images/RPLogo_favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="output.css" rel="stylesheet">
-    <style>
-        /* ─── RESET & BASE ─────────────────────────────────── */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --ink: #0c1a28;
-            --deep: #102438;
-            --navy: #19395e;
-            --ocean: #2260a8;
-            --sky: #4b8fd4;
-            --mist: #ddeeff;
-            --ivory: #f4f7fd;
-            --gold: #f0a500;
-            --gold-lt: #ffc030;
-
-            /* ── Carousel theme tokens (dynamically swapped per slide) ── */
-            --car-accent: #4b8fd4;             /* default sky */
-            --car-accent-soft: rgba(74,143,212,0.45);
-            --car-caption-bg: rgba(9,21,32,0.88);
-            --car-caption-border: rgba(74,143,212,0.28);
-        }
-
-        /* Per-theme tokens applied to the carousel root */
-        .hero-carousel.theme-brown {
-            --car-accent: #c8915a;
-            --car-accent-soft: rgba(200,145,90,0.5);
-            --car-caption-bg: rgba(46,32,21,0.92);
-            --car-caption-border: rgba(200,145,90,0.5);
-        }
-        .hero-carousel.theme-red {
-            --car-accent: #ff4d4d;
-            --car-accent-soft: rgba(255,77,77,0.5);
-            --car-caption-bg: rgba(46,13,13,0.92);
-            --car-caption-border: rgba(255,77,77,0.5);
-        }
-        .hero-carousel.theme-green {
-            --car-accent: #34d399;
-            --car-accent-soft: rgba(52,211,153,0.5);
-            --car-caption-bg: rgba(10,58,37,0.92);
-            --car-caption-border: rgba(52,211,153,0.5);
-        }
-        .hero-carousel.theme-pink {
-            --car-accent: #ff8ec7;
-            --car-accent-soft: rgba(255,142,199,0.5);
-            --car-caption-bg: rgba(58,19,42,0.92);
-            --car-caption-border: rgba(255,142,199,0.5);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif !important;
-            background-color: var(--ivory) !important;
-            color: var(--ink) !important;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ─── TYPOGRAPHY ────────────────────────────────────── */
-        .serif {
-            font-family: 'Cormorant Garamond', Georgia, serif !important;
-        }
-
-        /* ─── BUTTONS ──────────────────────────────────────── */
-        .btn-gold {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--gold) !important;
-            color: var(--ink) !important;
-            font-weight: 700;
-            font-size: 0.9rem;
-            padding: 14px 28px;
-            border-radius: 99px;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-            box-shadow: 0 4px 16px rgba(240,165,0,0.35);
-        }
-
-            .btn-gold:hover {
-                background: var(--gold-lt) !important;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 24px rgba(240,165,0,0.45);
-            }
-
-        .btn-ghost {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: transparent !important;
-            color: #e8f4ff !important;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 14px 28px;
-            border-radius: 99px;
-            border: 1.5px solid rgba(255,255,255,0.38);
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s, border-color 0.2s;
-        }
-
-            .btn-ghost:hover {
-                background: rgba(255,255,255,0.1) !important;
-                border-color: rgba(255,255,255,0.6);
-            }
-
-        /* ─── SECTION LABEL PILL ───────────────────────────── */
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 0.13em;
-            text-transform: uppercase;
-            padding: 6px 14px;
-            border-radius: 99px;
-            background: rgba(74,143,212,0.12);
-            border: 1px solid rgba(74,143,212,0.28);
-            color: var(--sky);
-            margin-bottom: 18px;
-        }
-
-            .pill::before {
-                content: '';
-                width: 5px;
-                height: 5px;
-                border-radius: 50%;
-                background: var(--sky);
-                flex-shrink: 0;
-            }
-
-        .pill-light {
-            background: rgba(255,255,255,0.12) !important;
-            border-color: rgba(255,255,255,0.22) !important;
-            color: rgba(255,255,255,0.85) !important;
-        }
-
-            .pill-light::before {
-                background: rgba(255,255,255,0.7) !important;
-            }
-
-        /* ─── CARD COMPONENT ───────────────────────────────── */
-        .card {
-            border-radius: 22px;
-            overflow: hidden;
-            transition: transform 0.36s cubic-bezier(0.4,0,0.2,1), box-shadow 0.36s cubic-bezier(0.4,0,0.2,1), border-color 0.36s ease;
-            position: relative;
-            text-decoration: none;
-            display: block;
-            color: inherit;
-            cursor: pointer;
-        }
-
-            .card .card-img img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: transform 0.6s ease;
-            }
-
-            .card:hover .card-img img {
-                transform: scale(1.05);
-            }
-
-        /* ─── COLLECTION COLOR THEMES ─────────────────────── */
-        /* Catan = Brown */
-        .col-brown {
-            background: linear-gradient(160deg, #4a3424 0%, #2e2015 100%) !important;
-            border: 2px solid rgba(140, 95, 55, 0.5) !important;
-        }
-
-            .col-brown:hover {
-                transform: translateY(-10px) rotate(-0.35deg);
-                border-color: #c8915a !important;
-                box-shadow: 0 28px 56px -10px rgba(10,20,38,0.55), 0 0 0 2px rgba(200,145,90,0.5), 0 0 40px rgba(200,145,90,0.45);
-            }
-
-        /* CSGO Knives = Red */
-        .col-red {
-            background: linear-gradient(160deg, #4a1818 0%, #2e0d0d 100%) !important;
-            border: 2px solid rgba(220, 60, 60, 0.45) !important;
-        }
-
-            .col-red:hover {
-                transform: translateY(-10px) rotate(-0.35deg);
-                border-color: #ff4d4d !important;
-                box-shadow: 0 28px 56px -10px rgba(10,20,38,0.55), 0 0 0 2px rgba(255,77,77,0.5), 0 0 40px rgba(255,77,77,0.45);
-            }
-
-        /* Custom Anime Figures = Blue */
-        .col-blue {
-            background: linear-gradient(160deg, #16365e 0%, #0d2240 100%) !important;
-            border: 2px solid rgba(80, 145, 230, 0.45) !important;
-        }
-
-            .col-blue:hover {
-                transform: translateY(-10px) rotate(-0.35deg);
-                border-color: #5fa5ff !important;
-                box-shadow: 0 28px 56px -10px rgba(10,20,38,0.55), 0 0 0 2px rgba(95,165,255,0.5), 0 0 40px rgba(95,165,255,0.45);
-            }
-
-        /* Meow Meow Blind Bags = Pink */
-        .col-pink {
-            background: linear-gradient(160deg, #5a1f3e 0%, #3a132a 100%) !important;
-            border: 2px solid rgba(240, 110, 175, 0.45) !important;
-        }
-
-            .col-pink:hover {
-                transform: translateY(-10px) rotate(-0.35deg);
-                border-color: #ff8ec7 !important;
-                box-shadow: 0 28px 56px -10px rgba(10,20,38,0.55), 0 0 0 2px rgba(255,142,199,0.5), 0 0 40px rgba(255,142,199,0.45);
-            }
-
-        /* NEW GREEN THEME – Custom Anime Figures */
-        .col-green {
-            background: linear-gradient(160deg, #0f5132 0%, #0a3a25 100%) !important;
-            border: 2px solid rgba(52, 211, 153, 0.45) !important;
-        }
-
-            .col-green:hover {
-                transform: translateY(-10px) rotate(-0.35deg);
-                border-color: #34d399 !important;
-                box-shadow: 0 28px 56px -10px rgba(10,20,38,0.55), 0 0 0 2px rgba(52,211,153,0.5), 0 0 40px rgba(52,211,153,0.45);
-            }
-
-        .bd-green {
-            background: #34d399;
-            color: #0f5132;
-        }
-
-        /* Cat Scratchers = Yellow */
-        .col-yellow {
-            background: linear-gradient(160deg, #4d3d10 0%, #2e2509 100%) !important;
-            border: 2px solid rgba(240, 200, 65, 0.45) !important;
-        }
-
-            .col-yellow:hover {
-                transform: translateY(-10px) rotate(-0.35deg);
-                border-color: #ffd84d !important;
-                box-shadow: 0 28px 56px -10px rgba(10,20,38,0.55), 0 0 0 2px rgba(255,216,77,0.5), 0 0 40px rgba(255,216,77,0.45);
-            }
-
-        /* Badge pills */
-        .badge {
-            position: absolute;
-            top: 18px;
-            left: 18px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 5px 13px;
-            border-radius: 99px;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .bd-brown {
-            background: #c8915a;
-            color: #2e2015;
-        }
-
-        .bd-red {
-            background: #ff4d4d;
-            color: #fff;
-        }
-
-        .bd-blue {
-            background: #5fa5ff;
-            color: #0d2240;
-        }
-
-        .bd-pink {
-            background: #ff8ec7;
-            color: #3a132a;
-        }
-
-        .bd-yellow {
-            background: #ffd84d;
-            color: #2e2509;
-        }
-
-        /* Stat chip */
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.67rem;
-            font-weight: 700;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-            padding: 5px 12px;
-            border-radius: 99px;
-            background: rgba(74,143,212,0.13);
-            color: var(--sky);
-            margin-top: 10px;
-        }
-
-            .chip::before {
-                content: '';
-                width: 5px;
-                height: 5px;
-                border-radius: 50%;
-                background: currentColor;
-                animation: blink 2s ease infinite;
-            }
-
-        @keyframes blink {
-            0%,100% {
-                opacity: 1
-            }
-
-            50% {
-                opacity: .35
-            }
-        }
-
-        /* ─── TRUST BAR ICONS ──────────────────────────────── */
-        .trust-ring {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            flex-shrink: 0;
-            background: rgba(74,143,212,0.14);
-            border: 1px solid rgba(74,143,212,0.28);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.35rem;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        .trust-item:hover .trust-ring {
-            background: rgba(74,143,212,0.26);
-            transform: scale(1.07);
-        }
-
-        /* ─── FEATURE CARD ─────────────────────────────────── */
-        .feat-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 36px 28px;
-            border: 1px solid rgba(34,96,168,0.1);
-            box-shadow: 0 4px 22px rgba(34,96,168,0.06);
-            transition: transform 0.25s, box-shadow 0.25s;
-            text-align: center;
-        }
-
-            .feat-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 14px 40px rgba(34,96,168,0.13);
-            }
-
-        .feat-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 14px;
-            background: rgba(34,96,168,0.09);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin: 0 auto 20px;
-        }
-
-        /* ─── CORNER MARKS (hero image) ───────────────────── */
-        .cm {
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            border-color: rgba(74,143,212,0.55);
-            border-style: solid;
-            z-index: 3;
-            pointer-events: none;
-            transition: border-color 0.55s ease;
-        }
-
-        /* Corner marks inside the themed carousel follow the active slide */
-        .hero-carousel .cm {
-            border-color: var(--car-accent);
-        }
-
-        .cm-tl {
-            top: 14px;
-            left: 14px;
-            border-width: 2px 0 0 2px;
-        }
-
-        .cm-tr {
-            top: 14px;
-            right: 14px;
-            border-width: 2px 2px 0 0;
-        }
-
-        .cm-bl {
-            bottom: 14px;
-            left: 14px;
-            border-width: 0 0 2px 2px;
-        }
-
-        .cm-br {
-            bottom: 14px;
-            right: 14px;
-            border-width: 0 2px 2px 0;
-        }
-
-        /* ─── AVATAR ───────────────────────────────────────── */
-        .av {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            background: var(--ocean);
-            color: #fff;
-            font-size: 0.6rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(255,255,255,0.25);
-            flex-shrink: 0;
-        }
-
-        /* ─── SCROLL FADE ──────────────────────────────────── */
-        .fadein {
-            opacity: 0;
-            transform: translateY(22px);
-            transition: opacity 0.65s ease, transform 0.65s ease;
-        }
-
-            .fadein.vis {
-                opacity: 1;
-                transform: none;
-            }
-
-        /* ─── NAV LINK ─────────────────────────────────────── */
-        .nav-link {
-            color: var(--ink);
-            text-decoration: none;
-            opacity: 0.65;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: opacity 0.18s, color 0.18s;
-        }
-
-            .nav-link:hover {
-                opacity: 1;
-                color: var(--ocean);
-            }
-
-        /* ─── STORY QUOTE CARD ─────────────────────────────── */
-        .story-quote-card {
-            background: linear-gradient(135deg, var(--ocean), var(--navy));
-            border: 1px solid rgba(74,143,212,0.4);
-            border-radius: 20px;
-            padding: 22px 20px;
-            max-width: 210px;
-            box-shadow: 0 18px 40px rgba(10,20,38,0.32);
-            position: absolute;
-            bottom: -10px;
-            right: 0px;
-        }
-
-        /* ─── FOOTER LINKS ─────────────────────────────────── */
-        .flink {
-            color: rgba(220,238,255,0.5);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.2s;
-            display: block;
-            padding: 3px 0;
-        }
-
-            .flink:hover {
-                color: var(--mist);
-            }
-
-        /* ─── COMPACT FOOTER LAYOUT ────────────────────────── */
-        .footer-row {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 48px;
-            flex-wrap: wrap;
-        }
-
-        .footer-shop-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px 22px;
-        }
-
-        .footer-shop-links .flink {
-            padding: 2px 0;
-        }
-
-        .footer-bottom {
-            margin-top: 28px;
-            padding-top: 22px;
-            border-top: 1px solid rgba(74,143,212,0.1);
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.75rem;
-            color: rgba(220,238,255,0.32);
-        }
-
-        @media(max-width:700px) {
-            .footer-row {
-                flex-direction: column;
-                gap: 24px;
-            }
-            .footer-bottom {
-                justify-content: center;
-                text-align: center;
-            }
-        }
-
-        /* ─── RESPONSIVE GRIDS ─────────────────────────────── */
-        .grid2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 26px;
-        }
-
-        .grid3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 26px;
-        }
-
-        .grid4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        @media(max-width:900px) {
-            .grid2 {
-                grid-template-columns: 1fr;
-            }
-
-            .grid4 {
-                grid-template-columns: repeat(2,1fr);
-            }
-
-            .hero-cols {
-                grid-template-columns: 1fr !important;
-            }
-
-            .story-cols {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        @media(max-width:700px) {
-            .grid3 {
-                grid-template-columns: 1fr;
-            }
-
-            .grid4 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ─── HERO CAROUSEL ─────────────────────────────────── */
-        .hero-carousel {
-            position: relative;
-            border-radius: 24px;
-            overflow: hidden;
-            /* 20% larger overall: hero-cols column is now 1.2fr (vs 1fr), and aspect ratio
-               is preserved so width AND height scale together by the same ~20%. */
-            aspect-ratio: 5/4;
-            border: 2px solid var(--car-accent-soft);
-            background: #0e2035;
-            box-shadow: 0 24px 60px rgba(9,21,32,0.5),
-                        0 0 0 1px var(--car-accent-soft);
-            transition: transform 0.36s cubic-bezier(0.4,0,0.2,1),
-                        border-color 0.55s ease,
-                        box-shadow 0.55s ease;
-            will-change: transform;
-        }
-
-            /* Premium hover treatment — matches col-brown/red/green/pink cards */
-            .hero-carousel:hover {
-                transform: translateY(-10px) rotate(-0.35deg);
-                border-color: var(--car-accent) !important;
-                box-shadow: 0 28px 56px -10px rgba(10,20,38,0.55),
-                            0 0 0 2px var(--car-accent-soft),
-                            0 0 40px var(--car-accent-soft);
-            }
-
-        .carousel-track {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .carousel-slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity 0.7s ease;
-            text-decoration: none;
-            display: block;
-            cursor: pointer;
-        }
-
-            .carousel-slide.active {
-                opacity: 1;
-                z-index: 1;
-            }
-
-            .carousel-slide img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                opacity: 0.92;
-            }
-
-        .carousel-caption {
-            position: absolute;
-            bottom: 18px;
-            left: 18px;
-            background: var(--car-caption-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--car-caption-border);
-            border-radius: 16px;
-            padding: 14px 18px;
-            max-width: 230px;
-            z-index: 2;
-            transition: background 0.55s ease, border-color 0.55s ease;
-        }
-
-            .carousel-caption .label {
-                font-size: 0.6rem;
-                font-weight: 800;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                color: var(--car-accent);
-                margin-bottom: 6px;
-                transition: color 0.55s ease;
-            }
-
-            .carousel-caption .title {
-                font-family: 'Cormorant Garamond', Georgia, serif;
-                font-size: 1rem;
-                color: #deeeff;
-                line-height: 1.4;
-            }
-
-        .carousel-dots {
-            position: absolute;
-            bottom: 16px;
-            right: 18px;
-            display: flex;
-            gap: 7px;
-            z-index: 4;
-        }
-
-            .carousel-dots button {
-                width: 9px;
-                height: 9px;
-                border-radius: 50%;
-                background: rgba(255,255,255,0.32);
-                border: none;
-                padding: 0;
-                cursor: pointer;
-                transition: background 0.25s, transform 0.25s;
-            }
-
-                .carousel-dots button:hover {
-                    background: rgba(255,255,255,0.6);
-                }
-
-                .carousel-dots button.active {
-                    background: var(--car-accent);
-                    transform: scale(1.25);
-                }
-
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(9,21,32,0.7);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--car-accent-soft);
-            color: var(--car-accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 4;
-            transition: background 0.2s, transform 0.2s, border-color 0.55s ease, color 0.55s ease;
-        }
-
-            .carousel-arrow:hover {
-                background: rgba(9,21,32,0.92);
-                transform: translateY(-50%) scale(1.08);
-            }
-
-            .carousel-arrow.prev {
-                left: 12px;
-            }
-
-            .carousel-arrow.next {
-                right: 12px;
-            }
-
-        /* ─── MISC ─────────────────────────────────────────── */
-        img {
-            display: block;
-            max-width: 100%;
-        }
-
-        .prog-track {
-            height: 6px;
-            border-radius: 99px;
-            background: rgba(255,255,255,0.12);
-            overflow: hidden;
-        }
-
-        .prog-fill {
-            height: 100%;
-            border-radius: 99px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-lt));
-            width: 60%;
-        }
-
-        /* ─── COMING SOON MODAL ─────────────────────────────── */
-        .rp-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background: rgba(3, 8, 14, 0.78);
-            backdrop-filter: blur(12px) saturate(140%);
-            -webkit-backdrop-filter: blur(12px) saturate(140%);
-            opacity: 0;
-            transition: opacity 280ms ease;
-        }
-        .rp-modal.is-open { display: flex; opacity: 1; }
-        .rp-stars { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-        .rp-stars::before, .rp-stars::after {
-            content: '';
-            position: absolute;
-            inset: -20%;
-            background-image:
-                radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.7), transparent 50%),
-                radial-gradient(1px 1px at 38% 71%, rgba(255,255,255,0.5), transparent 50%),
-                radial-gradient(1.5px 1.5px at 71% 18%, rgba(255,255,255,0.8), transparent 50%),
-                radial-gradient(1px 1px at 88% 64%, rgba(255,255,255,0.45), transparent 50%),
-                radial-gradient(1px 1px at 24% 88%, rgba(255,255,255,0.6), transparent 50%),
-                radial-gradient(1.5px 1.5px at 56% 44%, rgba(240,165,0,0.55), transparent 50%),
-                radial-gradient(1px 1px at 8% 56%, rgba(255,255,255,0.4), transparent 50%),
-                radial-gradient(1px 1px at 92% 32%, rgba(255,77,77,0.4), transparent 50%);
-            background-repeat: repeat;
-            background-size: 600px 600px;
-            animation: rp-drift 60s linear infinite;
-            opacity: 0.55;
-        }
-        .rp-stars::after { background-size: 900px 900px; animation-duration: 110s; animation-direction: reverse; opacity: 0.35; }
-        @keyframes rp-drift { from { transform: translate3d(0,0,0); } to { transform: translate3d(-600px,-300px,0); } }
-        .rp-panel {
-            position: relative;
-            width: 100%;
-            max-width: 540px;
-            max-height: calc(100vh - 2rem);
-            overflow-y: auto;
-            background:
-                radial-gradient(ellipse at top, rgba(34,96,168,0.22) 0%, transparent 60%),
-                linear-gradient(160deg, #0e1f31 0%, #0a1422 60%, #060d18 100%);
-            border: 1px solid rgba(240,165,0,0.35);
-            border-radius: 18px;
-            box-shadow: 0 0 0 1px rgba(240,165,0,0.08), 0 30px 80px -10px rgba(0,0,0,0.75), 0 0 120px -20px rgba(240,165,0,0.25);
-            padding: clamp(1.75rem, 4vw, 2.75rem);
-            transform: translateY(16px) scale(0.97);
-            opacity: 0;
-            transition: transform 320ms cubic-bezier(0.16,1,0.3,1), opacity 280ms ease;
-        }
-        .rp-modal.is-open .rp-panel { transform: translateY(0) scale(1); opacity: 1; }
-        .rp-panel::before, .rp-panel::after {
-            content: ''; position: absolute; width: 36px; height: 36px;
-            border: 1px solid var(--gold); opacity: 0.7; pointer-events: none;
-        }
-        .rp-panel::before { top: 12px; left: 12px; border-right: none; border-bottom: none; border-top-left-radius: 12px; }
-        .rp-panel::after  { bottom: 12px; right: 12px; border-left: none; border-top: none; border-bottom-right-radius: 12px; }
-        .rp-panel::-webkit-scrollbar { width: 6px; }
-        .rp-panel::-webkit-scrollbar-track { background: transparent; }
-        .rp-panel::-webkit-scrollbar-thumb { background: rgba(240,165,0,0.3); border-radius: 99px; }
-        .rp-close {
-            position: absolute; top: 14px; right: 14px;
-            width: 36px; height: 36px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            color: rgba(221,238,255,0.7);
-            cursor: pointer;
-            transition: all 180ms ease;
-            z-index: 2;
-        }
-        .rp-close:hover { background: rgba(255,77,77,0.15); border-color: rgba(255,77,77,0.5); color: #fff; transform: rotate(90deg); }
-        .rp-close:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-        .rp-eyebrow {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em;
-            text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
-        }
-        .rp-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
-        .rp-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-weight: 600;
-            font-size: clamp(1.7rem, 4.5vw, 2.25rem);
-            line-height: 1.1;
-            color: var(--ivory);
-            margin-bottom: 14px;
-            letter-spacing: -0.01em;
-        }
-        .rp-title .accent { color: var(--gold-lt); font-style: italic; }
-        .rp-lede { font-size: 0.95rem; line-height: 1.6; color: rgba(221,238,255,0.78); margin-bottom: 8px; }
-        .rp-subline { font-size: 0.9rem; line-height: 1.55; color: rgba(221,238,255,0.65); margin-bottom: 24px; }
-        .rp-subline strong { color: var(--gold-lt); font-weight: 600; }
-        .rp-field { position: relative; margin-bottom: 18px; }
-        .rp-label {
-            display: block; font-size: 0.72rem; font-weight: 600;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: rgba(221,238,255,0.55); margin-bottom: 8px;
-        }
-        .rp-input {
-            width: 100%;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px;
-            padding: 16px 18px;
-            font-size: 1.05rem;
-            color: var(--ivory);
-            font-family: inherit;
-            transition: all 180ms ease;
-        }
-        .rp-input::placeholder { color: rgba(221,238,255,0.35); }
-        .rp-input:hover { border-color: rgba(240,165,0,0.35); background: rgba(255,255,255,0.05); }
-        .rp-input:focus { outline: none; border-color: var(--gold); background: rgba(240,165,0,0.05); box-shadow: 0 0 0 4px rgba(240,165,0,0.12); }
-        .rp-input.is-invalid { border-color: #ff4d4d; box-shadow: 0 0 0 4px rgba(255,77,77,0.12); }
-        .rp-error { display: none; font-size: 0.8rem; color: #ff7a7a; margin-top: 8px; }
-        .rp-error.is-shown { display: block; }
-        .rp-consent { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; cursor: pointer; user-select: none; }
-        .rp-checkbox {
-            position: relative; flex-shrink: 0;
-            width: 20px; height: 20px; margin-top: 2px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 5px;
-            cursor: pointer;
-            appearance: none; -webkit-appearance: none;
-            transition: all 160ms ease;
-        }
-        .rp-checkbox:hover { border-color: var(--gold); background: rgba(240,165,0,0.08); }
-        .rp-checkbox:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-        .rp-checkbox:checked { background: var(--gold); border-color: var(--gold); }
-        .rp-checkbox:checked::after {
-            content: ''; position: absolute; top: 2px; left: 6px;
-            width: 5px; height: 10px;
-            border: solid var(--ink); border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-        .rp-consent-text { font-size: 0.78rem; line-height: 1.55; color: rgba(221,238,255,0.72); }
-        .rp-fineprint { font-size: 0.75rem; line-height: 1.55; color: rgba(221,238,255,0.55); margin: 0 0 22px; }
-        .rp-fineprint a { color: var(--gold-lt); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
-        .rp-fineprint a:hover { color: var(--gold); }
-        .rp-submit {
-            position: relative;
-            width: 100%;
-            padding: 17px 28px;
-            background: linear-gradient(135deg, #ffc030 0%, #f0a500 45%, #d83a3a 100%);
-            color: #1a0e02;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 0.92rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 99px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: transform 160ms ease, box-shadow 200ms ease;
-            box-shadow: 0 8px 28px -6px rgba(240,165,0,0.55), inset 0 1px 0 rgba(255,255,255,0.35);
-        }
-        .rp-submit::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: translateX(-100%);
-            transition: transform 600ms ease;
-        }
-        .rp-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 36px -6px rgba(240,165,0,0.7), inset 0 1px 0 rgba(255,255,255,0.45); }
-        .rp-submit:hover:not(:disabled)::before { transform: translateX(100%); }
-        .rp-submit:active:not(:disabled) { transform: translateY(0); }
-        .rp-submit:focus-visible { outline: 2px solid var(--gold-lt); outline-offset: 3px; }
-        .rp-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-        .rp-submit .spinner {
-            display: none;
-            width: 16px; height: 16px;
-            border: 2px solid rgba(26,14,2,0.3);
-            border-top-color: #1a0e02;
-            border-radius: 50%;
-            animation: rp-spin 0.7s linear infinite;
-            margin-right: 10px;
-            vertical-align: -3px;
-        }
-        .rp-submit.is-loading .spinner { display: inline-block; }
-        .rp-submit.is-loading .label { opacity: 0.7; }
-        @keyframes rp-spin { to { transform: rotate(360deg); } }
-        .rp-footer-note { text-align: center; font-size: 0.72rem; color: rgba(221,238,255,0.45); margin-top: 16px; line-height: 1.5; }
-        .rp-footer-note a { color: rgba(240,165,0,0.8); text-decoration: underline; text-underline-offset: 2px; }
-        .rp-success { display: none; text-align: center; padding: 1.5rem 0 0.5rem; animation: rp-fadein 500ms ease both; }
-        .rp-success.is-shown { display: block; }
-        @keyframes rp-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .rp-check {
-            width: 84px; height: 84px; margin: 0 auto 22px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(240,165,0,0.25) 0%, transparent 70%);
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-        .rp-check svg { width: 56px; height: 56px; stroke: var(--gold-lt); stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-        .rp-check .circle { stroke-dasharray: 166; stroke-dashoffset: 166; animation: rp-draw 700ms 100ms ease forwards; }
-        .rp-check .tick   { stroke-dasharray: 36;  stroke-dashoffset: 36;  animation: rp-draw 400ms 700ms ease forwards; }
-        @keyframes rp-draw { to { stroke-dashoffset: 0; } }
-        .rp-success-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 1.85rem; font-weight: 600;
-            color: var(--ivory); margin-bottom: 12px; line-height: 1.15;
-        }
-        .rp-success-title .accent { color: var(--gold-lt); font-style: italic; }
-        .rp-success-body {
-            font-size: 0.95rem; line-height: 1.6;
-            color: rgba(221,238,255,0.75);
-            margin-bottom: 26px; max-width: 380px; margin-left: auto; margin-right: auto;
-        }
-        .rp-success-email { display: inline-block; color: var(--gold-lt); font-weight: 600; }
-        .rp-success-close {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 13px 28px;
-            background: transparent;
-            color: var(--ivory);
-            font-family: inherit; font-weight: 600;
-            font-size: 0.82rem; letter-spacing: 0.16em; text-transform: uppercase;
-            border: 1px solid rgba(240,165,0,0.5);
-            border-radius: 99px;
-            cursor: pointer;
-            transition: all 180ms ease;
-        }
-        .rp-success-close:hover { background: rgba(240,165,0,0.1); border-color: var(--gold); }
-        .rp-confetti { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
-        @media (max-width: 480px) {
-            .rp-panel { padding: 1.75rem 1.25rem 1.5rem; }
-            .rp-panel::before, .rp-panel::after { width: 24px; height: 24px; }
-            .rp-consent-text { font-size: 0.75rem; }
-            .rp-fineprint { font-size: 0.72rem; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .rp-stars::before, .rp-stars::after { animation: none !important; }
-            .rp-panel, .rp-modal, .rp-success { transition: none !important; animation: none !important; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Realized Prints — 3D printed cats in your cat's colors</title>
+<meta name="description" content="Husband-and-wife 3D print shop. Cat figurines, keychains and clickers in nine core animal colors, or send a photo for an exact pattern match.">
+<link rel="icon" href="images/RPLogo_favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="assets/rp.css" rel="stylesheet">
 </head>
-<body>
+<body data-base="">
 
-    <!-- ══════════════════════════════════════════════════
-         NAVBAR
-    ══════════════════════════════════════════════════ -->
-    <header id="nav" style="
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(244,247,253,0.95);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-bottom: 1px solid rgba(34,96,168,0.11);
-">
-        <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:66px;">
+<div class="drop-bar" id="dropBar">
+  <div class="drop-in">
+    <span class="drop-label">Next Inventory Drop</span>
+    <div class="cd" id="cd" aria-live="polite"></div>
+    <span class="drop-when" id="dropWhen">—</span>
+  </div>
+  <button class="drop-x" id="dropX" aria-label="Dismiss">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
 
-            <!-- POLISHED BRAND — SIZE FIXED -->
-            <a href="#" class="group flex items-center gap-3" style="text-decoration:none;">
-                <!-- Existing PNG logo -->
-                <img src="images/RPLogo_favicon.png" alt="Realized Prints"
-                     class="h-9 max-h-[24px] w-auto transition-transform duration-300 group-hover:rotate-[8deg]"
-                     style="filter: drop-shadow(0 3px 8px rgba(0,0,0,0.18));">
+<div class="marquee" aria-label="Store highlights"><div class="mq-track" id="mqTrack"></div></div>
 
-                <!-- Brand text - index navy theme -->
-                <span class="serif text-[1.65rem] leading-none tracking-[-0.025em] font-medium text-[#0c1a28] transition-colors group-hover:text-[#2260a8]">
-                    Realized Prints
-                </span>
-            </a>
+<header class="head-main">
+  <div class="wrap head-row">
+    <div class="head-left">
+      <a class="ibtn" href="#catalog" aria-label="Search">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+      </a>
+      <div class="soc">
+        <a class="ibtn" href="#" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a class="ibtn" href="#" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+        <a class="ibtn" href="#" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h2.5V6H14c-2.2 0-3.6 1.5-3.6 3.7V11H8.5v3h1.9v7h3v-7h2.3l.4-3h-2.7V9.9c0-.6.3-.9.6-.9z"/></svg></a>
+        <a class="ibtn" href="#" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a>
+      </div>
+    </div>
+    <a class="brand" href="index.html">
+      <span class="brand-name">Realized Prints</span>
+      <span class="brand-sub">Cats, printed to order</span>
+    </a>
+    <div class="head-right">
+      <a class="ibtn" href="#" aria-label="Account">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+      </a>
+      <button class="ibtn" id="cartBtn" aria-label="Open cart">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 7h12l-1.2 12H7.2z"/><path d="M9 7a3 3 0 016 0"/></svg>
+        <span class="cart-pill" id="cartPill">0</span>
+      </button>
+    </div>
+  </div>
+</header>
 
-            <nav id="desktopNav" style="display:flex;align-items:center;gap:36px;">
-                <a href="#collections" class="nav-link">Shop</a>
-                <a href="#collections" class="nav-link">Collections</a>
-                <a href="#story" class="nav-link">About</a>
-                <a href="#footer" class="nav-link">Contact</a>
-            </nav>
+<nav class="nav-strip" aria-label="Main">
+  <div class="wrap nav-in">
+    <div><a class="nlink" href="#story">About</a></div>
+    <div><a class="nlink" href="#story">Contact Us</a></div>
+    <div>
+      <button class="nlink" aria-expanded="false">Shop
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <ul class="ndrop" id="shopDrop"></ul>
+    </div>
+    <div><a class="nlink" href="catan/">Catan</a></div>
+    <div><a class="nlink" href="#policies">Policies</a></div>
+    <div><a class="nlink" href="#policies">FAQ</a></div>
+  </div>
+</nav>
 
-            <div style="display:flex;align-items:center;gap:12px;">
-                <a href="#collections" class="btn-gold" style="padding:10px 22px;font-size:0.85rem;">Shop Now</a>
-                <button id="menuBtn" aria-label="Open menu" style="
-                display:none;background:none;border:none;cursor:pointer;
-                color:var(--ink);padding:6px;
-            ">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 6h18M3 12h18M3 18h18" />
-                    </svg>
-                </button>
-            </div>
+<!-- ===== ABOVE THE FOLD ===== -->
+<section class="atf">
+  <div class="wrap atf-grid">
+    <div>
+      <span class="tagline">🐾 Husband &amp; Wife · Printed in the USA</span>
+      <h1>Cats in the <span class="vibe-word" id="vibeWord">chonky</span> style.</h1>
+      <p class="atf-lede" id="vibeBlurb">—</p>
+      <div class="atf-cta">
+        <a class="btn btn-pink" href="#catalog">Shop the drop</a>
+        <a class="btn btn-ghost" href="#catalog">Build a custom cat</a>
+      </div>
+      <div class="vibe-pick">
+        <div class="vp-label">Shop by vibe</div>
+        <div class="vibe-row" id="vibeRow" role="group" aria-label="Choose a vibe"></div>
+      </div>
+    </div>
+    <a class="atf-stage" id="vibeLink" href="#">
+      <span class="stage-ph">Placeholder</span>
+      <img id="vibeImg" alt="Featured cat figurine for the selected vibe" src="">
+      <span class="stage-chip" id="vibeChip">—</span>
+    </a>
+  </div>
+</section>
+
+<!-- ===== CATALOG (the homepage body) ===== -->
+<section class="cat-sec" id="catalog">
+  <div class="wrap">
+    <h2 class="cat-title" id="collections">Shop All Cats</h2>
+    <p class="cat-sub">Every figure comes in nine core animal colors. Add a name or an exact pattern match on any product page.</p>
+
+    <div class="cat-bar">
+      <div class="filters">
+        <span class="f-label">Filter:</span>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pAvail" aria-expanded="false">Availability
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pAvail">
+            <label><input type="checkbox" data-f="avail" value="in"> In stock</label>
+            <label><input type="checkbox" data-f="avail" value="out"> Out of stock</label>
+            <button class="fclear" data-clear="avail">Clear</button>
+          </div>
         </div>
-
-        <div id="mobileMenu" style="display:none;border-top:1px solid rgba(34,96,168,0.1);background:var(--ivory);padding:16px 28px;">
-            <div style="display:flex;flex-direction:column;gap:2px;font-size:0.9rem;font-weight:500;">
-                <a href="#collections" class="nav-link" style="padding:9px 0;opacity:1;">Shop</a>
-                <a href="#collections" class="nav-link" style="padding:9px 0;opacity:1;">Collections</a>
-                <a href="#story" class="nav-link" style="padding:9px 0;opacity:1;">About</a>
-                <a href="#footer" class="nav-link" style="padding:9px 0;opacity:1;">Contact</a>
-                <a href="#collections" class="btn-gold" style="margin-top:10px;justify-content:center;">Shop Now</a>
-            </div>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pPrice" aria-expanded="false">Price
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pPrice">
+            <label><input type="checkbox" data-f="price" value="0-15"> Under $15</label>
+            <label><input type="checkbox" data-f="price" value="15-25"> $15 – $25</label>
+            <label><input type="checkbox" data-f="price" value="25-30"> $25 – $30</label>
+            <label><input type="checkbox" data-f="price" value="30-999"> $30 and up</label>
+            <button class="fclear" data-clear="price">Clear</button>
+          </div>
         </div>
-    </header>
-
-    <!-- ══════════════════════════════════════════════════
-         HERO — all bg inline to beat output.css
-    ══════════════════════════════════════════════════ -->
-    <section style="
-    position:relative;overflow:hidden;
-    background-color:#0c1a28;
-    background-image:
-        radial-gradient(ellipse 65% 55% at 72% 50%, rgba(34,96,168,0.4) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 45% at 8% 80%,  rgba(74,143,212,0.2) 0%, transparent 60%),
-        repeating-linear-gradient(135deg, rgba(255,255,255,0.016) 0px, rgba(255,255,255,0.016) 1px, transparent 1px, transparent 18px),
-        linear-gradient(150deg,#091520 0%,#112032 45%,#0c1a28 100%);
-">
-        <div style="max-width:1280px;margin:0 auto;padding:84px 28px;position:relative;z-index:1;">
-            <div class="hero-cols" style="display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:center;">
-
-                <!-- LEFT: Copy -->
-                <div class="fadein">
-                    <div style="
-        display:inline-flex;align-items:center;gap:9px;
-        padding:8px 18px;border-radius:99px;margin-bottom:28px;
-        background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);
-        font-size:0.72rem;font-weight:700;letter-spacing:0.08em;
-        text-transform:uppercase;color:var(--gold);
-        backdrop-filter:blur(8px);
-    ">
-                        <span style="width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 2s ease infinite;flex-shrink:0;"></span>
-                        Handcrafted by a Father &amp; Son Team
-                    </div>
-
-                    <h1 class="serif" style="
-        font-size:clamp(2.6rem,5.5vw,4.4rem);
-        line-height:1.06;letter-spacing:-0.025em;
-        color:#deeeff;margin-bottom:22px;
-    ">
-                        Products <em style="color:var(--gold);font-style:italic;">WORTH <span style="color:#deeeff;">Obsessing Over</span></em>
-                    </h1>
-
-                    <p style="font-size:1.08rem;color:rgba(220,238,255,0.75);max-width:460px;line-height:1.78;margin-bottom:34px;">
-                        Collectible art. Custom figures. Limited drops. Built to last generations.
-                    </p>
-
-                    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:44px;">
-                        <a href="#collections" class="btn-gold">
-                            Shop All Collections
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
-                        </a>
-                        <a href="#story" class="btn-ghost">Meet the Makers</a>
-                    </div>
-
-                    <!-- Social proof -->
-                    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-                        <div>
-                            <div style="font-weight:600;color:rgba(220,238,255,0.85);font-size:0.82rem;">USA-made</div>
-                            <div style="font-size:0.73rem;color:rgba(220,238,255,0.45);">NJ workshop</div>
-                        </div>
-                        <div style="width:1px;height:34px;background:rgba(255,255,255,0.14);"></div>
-                        <div>
-                            <div style="font-weight:600;color:rgba(220,238,255,0.85);font-size:0.82rem;">Father &amp; Son</div>
-                            <div style="font-size:0.73rem;color:rgba(220,238,255,0.45);">Every print, every detail</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT: Carousel + scarcity -->
-                <div class="fadein" style="transition-delay:0.15s;">
-                    <div class="hero-carousel theme-brown" id="heroCarousel">
-                        <div class="carousel-track" id="carouselTrack">
-
-                            <a href="catan/" class="carousel-slide active" data-slide="0">
-                                <img src="images/hero-boxed.JPG" alt="Catan Artisan Set" loading="lazy">
-                                <div class="carousel-caption">
-                                    <div class="label">Limited Edition</div>
-                                    <div class="title">Catan Artisan — only 5 crafted this year.</div>
-                                </div>
-                            </a>
-
-                            <a href="cs2-knives.html" class="carousel-slide" data-slide="1" data-comingsoon data-product="CS 2 Knives">
-                                <img src="images/CSTalonSlaughterHero.JPG" alt="CSGO Knives Collection" loading="lazy">
-                                <div class="carousel-caption">
-                                    <div class="label">Replica Drop</div>
-                                    <div class="title">CSGO Knives — collector-grade replicas.</div>
-                                </div>
-                            </a>
-
-                            <a href="CustomFigurines.html" class="carousel-slide" data-slide="2" data-comingsoon data-product="Custom Anime Figures">
-                                <img src="images/CustomPrintsHero.JPG" alt="Custom Anime Figures" loading="lazy">
-                                <div class="carousel-caption">
-                                    <div class="label">Made to Order</div>
-                                    <div class="title">Custom Anime Figures — your character, your shelf.</div>
-                                </div>
-                            </a>
-
-                            <a href="meowmeow.html" class="carousel-slide" data-slide="3" data-comingsoon data-product="Meow Meow Blind Bags">
-                                <img src="images/MeowMeowsHero.JPG" alt="Meow Meow Blind Bags" loading="lazy">
-                                <div class="carousel-caption">
-                                    <div class="label">Drop Event</div>
-                                    <div class="title">Meow Meow Blind Bags — surprise collectibles.</div>
-                                </div>
-                            </a>
-
-                        </div>
-
-                        <div class="cm cm-tl"></div>
-                        <div class="cm cm-tr"></div>
-                        <div class="cm cm-bl"></div>
-                        <div class="cm cm-br"></div>
-
-                        <button class="carousel-arrow prev" id="carouselPrev" aria-label="Previous slide">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6" /></svg>
-                        </button>
-                        <button class="carousel-arrow next" id="carouselNext" aria-label="Next slide">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6" /></svg>
-                        </button>
-
-                        <div class="carousel-dots" id="carouselDots">
-                            <button class="active" data-dot="0" aria-label="Slide 1"></button>
-                            <button data-dot="1" aria-label="Slide 2"></button>
-                            <button data-dot="2" aria-label="Slide 3"></button>
-                            <button data-dot="3" aria-label="Slide 4"></button>
- 
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pVibe" aria-expanded="false">Vibe
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pVibe"></div>
         </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         TRUST BAR
-    ══════════════════════════════════════════════════ -->
-
-    <!-- ══════════════════════════════════════════════════
-         OUR STORY
-    ══════════════════════════════════════════════════ -->
-    <section id="story" style="
-    background-color:var(--ivory);
-    background-image:repeating-linear-gradient(-45deg,rgba(34,96,168,0.03) 0px,rgba(34,96,168,0.03) 1px,transparent 1px,transparent 9px);
-    padding:100px 0;
-">
-        <div style="max-width:1100px;margin:0 auto;padding:0 28px;">
-            <div class="story-cols" style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
-
-                <!-- Image side -->
-                <div class="fadein" style="position:relative;padding-bottom:40px;padding-right:24px;">
-                    <div style="border-radius:26px;overflow:hidden;border:1px solid rgba(34,96,168,0.15);box-shadow:0 28px 60px rgba(10,20,38,0.16);">
-                        <img src="images/ingame-shot-grasstile.JPG" alt="Catan in play" loading="lazy" style="width:100%;display:block;">
-                    </div>
-                    <div class="story-quote-card">
-                        <div class="serif" style="font-style:italic;font-size:0.92rem;color:#deeeff;line-height:1.55;">
-                            "We print every order like it's going on our own table."
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Copy side -->
-                <div class="fadein" style="transition-delay:0.1s;">
-                    <div class="pill">Our Story</div>
-                    <h2 class="serif" style="font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1.06;letter-spacing:-0.02em;color:var(--ink);margin-bottom:28px;">
-                        Two hands.<br>One workshop.<br>
-                        <em style="color:var(--ocean);">No compromises.</em>
-                    </h2>
-                    <p style="font-size:1rem;color:rgba(12,26,40,0.67);line-height:1.8;margin-bottom:18px;">
-                        What began as a family Catan set has become a mission: create objects worth keeping for generations.
-                    </p>
-                    <p style="font-size:1rem;color:rgba(12,26,40,0.67);line-height:1.8;margin-bottom:36px;">
-                        Every tile, every piece is printed, finished, inspected, and shipped by us — father and son — from our home workshop in New Jersey.
-                    </p>
-                    <div style="border-top:1px solid rgba(34,96,168,0.14);padding-top:30px;display:flex;align-items:center;gap:18px;">
-                        <span class="serif" style="font-size:3.8rem;font-weight:600;color:var(--ocean);line-height:1;">25+</span>
-                        <span style="font-size:0.82rem;color:rgba(12,26,40,0.52);line-height:1.55;">prototypes refined<br>by hand</span>
-                    </div>
-                </div>
-
-            </div>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pColor" aria-expanded="false">Color
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pColor"></div>
         </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         FEATURED COLLECTIONS
-    ══════════════════════════════════════════════════ -->
-    <section id="collections" style="
-    background-color:var(--ink);
-    background-image:radial-gradient(circle,rgba(74,143,212,0.18) 1px,transparent 1px);
-    background-size:26px 26px;
-    padding:100px 0;
-">
-        <div style="max-width:1280px;margin:0 auto;padding:0 28px;">
-            <!-- NEW HEADLINE -->
-            <div style="margin-bottom:60px;">
-                <div class="pill">Featured Collections</div>
-                <h2 class="serif" style="font-size:clamp(2.4rem,4.5vw,3.4rem);letter-spacing:-0.025em;color:var(--mist);line-height:1.1;">
-                    Limited Drops. Heirloom Quality.<br>Built for Collectors Who Get It.
-                </h2>
-            </div>
-
-            <div class="grid2">
-
-                <!-- CARD 1: Catan Artisan (BROWN) -->
-                <a href="catan/" class="card col-brown fadein">
-                    <div class="card-img" style="position:relative;aspect-ratio:16/9;overflow:hidden;">
-                        <img src="images/hero-boxed.JPG" alt="Catan Artisan" loading="lazy">
-                        <div class="badge bd-brown">Flagship</div>
-                    </div>
-                    <div style="padding:26px 26px 24px;">
-                        <h3 class="serif" style="font-size:1.85rem;color:var(--mist);margin-bottom:10px;">Catan Artisan</h3>
-                        <p style="font-size:0.875rem;color:rgba(220,238,255,0.62);line-height:1.65;">Magnetic heirloom sets. Three tiers. Full customization.</p>
-                        <div class="chip" style="background:rgba(200,145,90,0.15);color:#e0b489;">Limited Run · 5 per year</div>
-                    </div>
-                </a>
-
-                <!-- CARD 2: CS2 Knives (RED) -->
-                <a href="cs2-knives.html" class="card col-red fadein" style="transition-delay:0.05s;" data-comingsoon data-product="CS 2 Knives">
-                    <div class="card-img" style="position:relative;aspect-ratio:16/9;overflow:hidden;">
-                        <img src="images/CSTalonSlaughterHero.JPG" alt="CS 2 Knives" loading="lazy">
-                        <div class="badge bd-red">Replica</div>
-                    </div>
-                    <div style="padding:26px 26px 24px;">
-                        <h3 class="serif" style="font-size:1.85rem;color:var(--mist);margin-bottom:10px;">CS 2 Knives</h3>
-                        <p style="font-size:0.875rem;color:rgba(220,238,255,0.62);line-height:1.65;">Collector-grade replicas. Iconic finishes. Display-ready.</p>
-                        <div class="chip" style="background:rgba(255,77,77,0.13);color:#ff7a7a;">Pattern matched · Hand finished</div>
-                    </div>
-                </a>
-
-                <!-- CARD 3: Custom Anime Figures (GREEN) -->
-                <a href="CustomFigurines.html" class="card col-green fadein" style="transition-delay:0.1s;" data-comingsoon data-product="Custom Anime Figures">
-                    <div class="card-img" style="position:relative;aspect-ratio:16/9;overflow:hidden;">
-                        <img src="images/CustomPrintsHero.JPG" alt="Custom Figures" loading="lazy">
-                        <div class="badge bd-green">Custom</div>
-                    </div>
-                    <div style="padding:26px 26px 24px;">
-                        <h3 class="serif" style="font-size:1.85rem;color:var(--mist);margin-bottom:10px;">Custom Anime Figures</h3>
-                        <p style="font-size:0.875rem;color:rgba(220,238,255,0.62);line-height:1.65;">DIY kits or fully finished. Your character. Your pet. Your way.</p>
-                        <div class="chip" style="background:rgba(16,185,129,0.13);color:#34d399;">Made to order · Ships in 2 wks</div>
-                    </div>
-                </a>
-
-                <!-- CARD 4: Meow Meow Blind Bags (PINK) -->
-                <a href="meowmeow.html" class="card col-pink fadein" style="transition-delay:0.15s;" data-comingsoon data-product="Meow Meow Blind Bags">
-                    <div class="card-img" style="position:relative;aspect-ratio:16/9;overflow:hidden;">
-                        <img src="images/MeowMeowsHero.JPG" alt="Meow Meow Blind Bags" loading="lazy">
-                        <div class="badge bd-pink">Drop Event</div>
-                    </div>
-                    <div style="padding:26px 26px 24px;">
-                        <h3 class="serif" style="font-size:1.85rem;color:var(--mist);margin-bottom:10px;">Meow Meow Blind Bags</h3>
-                        <p style="font-size:0.875rem;color:rgba(220,238,255,0.62);line-height:1.65;">Surprise collectibles. Live drops on WhatsNot.</p>
-                        <div class="chip" style="background:rgba(255,142,199,0.13);color:#ffa8d2;">Live drops · Follow for dates</div>
-                    </div>
-                </a>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         WHY CHOOSE
-    ══════════════════════════════════════════════════ -->
-    <section style="
-    background-color:var(--ivory);
-    background-image:repeating-linear-gradient(-45deg,rgba(34,96,168,0.03) 0px,rgba(34,96,168,0.03) 1px,transparent 1px,transparent 9px);
-    padding:100px 0;
-">
-        <div style="max-width:1100px;margin:0 auto;padding:0 28px;text-align:center;">
-            <div class="pill" style="margin:0 auto 18px;">Why Realized Prints</div>
-            <h2 class="serif" style="font-size:clamp(2rem,4vw,3rem);color:var(--ink);letter-spacing:-0.02em;margin-bottom:60px;line-height:1.1;">
-                Printed with obsession.<br>Delivered with pride.
-            </h2>
-            <div class="grid3">
-                <div class="feat-card fadein">
-                    <div class="feat-icon">🎯</div>
-                    <h3 class="serif" style="font-size:1.4rem;color:var(--ink);margin-bottom:12px;">Obsessive Quality</h3>
-                    <p style="font-size:0.875rem;color:rgba(12,26,40,0.58);line-height:1.72;">25+ prototypes refined per product before it ever ships. Every detail matters.</p>
-                </div>
-                <div class="feat-card fadein" style="transition-delay:0.07s;">
-                    <div class="feat-icon">✍️</div>
-                    <h3 class="serif" style="font-size:1.4rem;color:var(--ink);margin-bottom:12px;">Signed &amp; Numbered</h3>
-                    <p style="font-size:0.875rem;color:rgba(12,26,40,0.58);line-height:1.72;">Each flagship piece is individually signed by the makers — a true limited edition.</p>
-                </div>
-                <div class="feat-card fadein" style="transition-delay:0.14s;">
-                    <div class="feat-icon">🛡️</div>
-                    <h3 class="serif" style="font-size:1.4rem;color:var(--ink);margin-bottom:12px;">30-Day Guarantee</h3>
-                    <p style="font-size:0.875rem;color:rgba(12,26,40,0.58);line-height:1.72;">Love it or we make it right. No hoops. Just good people doing right by you.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         FINAL CTA
-    ══════════════════════════════════════════════════ -->
-    <section style="
-    background-color:var(--ocean);
-    background-image:
-        radial-gradient(ellipse 60% 70% at 50% 50%,rgba(255,255,255,0.08) 0%,transparent 65%),
-        radial-gradient(circle,rgba(255,255,255,0.07) 1px,transparent 1px);
-    background-size:auto,26px 26px;
-    padding:100px 0;position:relative;overflow:hidden;
-">
-        <div style="max-width:680px;margin:0 auto;padding:0 28px;text-align:center;position:relative;z-index:1;">
-            <div class="pill pill-light" style="margin:0 auto 20px;">Ready to Order?</div>
-            <h2 class="serif" style="font-size:clamp(2.2rem,4.4vw,3.4rem);color:#fff;line-height:1.12;letter-spacing:-0.02em;margin-bottom:28px;">
-                Ready to Own Something Truly Unique?
-            </h2>
-            <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;">
-                <a href="#collections" class="btn-gold">Shop All Collections ...</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         FOOTER
-    ══════════════════════════════════════════════════ -->
-    <footer id="footer" style="
-    background-color:#080e18;
-    background-image:linear-gradient(180deg,#090e18 0%,#060c14 100%);
-    border-top:1px solid rgba(74,143,212,0.12);
-    padding:36px 0 24px;
-">
-        <div style="max-width:1280px;margin:0 auto;padding:0 28px;">
-
-            <div class="footer-row">
-
-                <!-- Brand -->
-                <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
-                    <img src="images/RPLogo.png" alt="Realized Prints" style="height:36px; width:auto;">
-                </div>
-
-                <!-- Shop links (horizontal) -->
-                <nav class="footer-shop-links" aria-label="Shop">
-                    <a href="catan/" class="flink">Catan Artisan</a>
-                    <a href="catan/" class="flink">CSGO Knives</a>
-                    <a href="catan/" class="flink">Custom Anime Figures</a>
-                    <a href="catan/" class="flink">Meow Meow Blind Bags</a>
-                    <a href="catan/" class="flink">Cat Scratchers</a>
-                </nav>
-
-                <!-- Contact -->
-                <div style="flex-shrink:0;text-align:right;min-width:200px;">
-                    <a href="mailto:realizedprints@gmail.com" class="flink" style="color:var(--sky);padding:0;font-weight:600;">realizedprints@gmail.com</a>
-                    <div style="font-size:0.75rem;color:rgba(220,238,255,0.4);margin-top:4px;">We respond personally.</div>
-                </div>
-
-            </div>
-
-            <div class="footer-bottom">
-                <span>© 2025 Realized Prints. All rights reserved.</span>
-                <span><a href="privacy-policy.html" class="flink" style="padding:0;color:rgba(220,238,255,0.55);">Privacy Policy</a></span>
-                <span>Made with care in New Jersey 🇺🇸</span>
-            </div>
-
-        </div>
-    </footer>
-
-    <script>
-        // Logo hover
-        const lm = document.getElementById('logoMark');
-        if (lm) { lm.addEventListener('mouseover', () => lm.style.transform = 'rotate(10deg)'); lm.addEventListener('mouseout', () => lm.style.transform = ''); }
-
-        // Mobile nav
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const desktopNav = document.getElementById('desktopNav');
-
-        function checkViewport() {
-            const mobile = window.innerWidth < 900;
-            menuBtn.style.display = mobile ? 'block' : 'none';
-            desktopNav.style.display = mobile ? 'none' : 'flex';
-            if (!mobile) mobileMenu.style.display = 'none';
-        }
-        checkViewport();
-        window.addEventListener('resize', checkViewport);
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // Scroll fade-in
-        const io = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.fadein').forEach(el => io.observe(el));
-
-        // ─── HERO CAROUSEL ─────────────────────────────────
-        (function () {
-            const slides = document.querySelectorAll('.carousel-slide');
-            const dots = document.querySelectorAll('#carouselDots button');
-            const prevBtn = document.getElementById('carouselPrev');
-            const nextBtn = document.getElementById('carouselNext');
-            const carousel = document.getElementById('heroCarousel');
-
-            // Theme mapping for each slide (matches the collection cards below)
-            const SLIDE_THEMES = ['theme-brown', 'theme-red', 'theme-green', 'theme-pink'];
-            const ALL_THEMES = SLIDE_THEMES.join(' ').split(' ');
-
-            let current = 0;
-            let autoplayTimer = null;
-            const AUTOPLAY_MS = 3000;
-
-            function applyTheme(idx) {
-                if (!carousel) return;
-                ALL_THEMES.forEach(t => carousel.classList.remove(t));
-                const theme = SLIDE_THEMES[idx];
-                if (theme) carousel.classList.add(theme);
-            }
-
-            function goTo(idx) {
-                current = (idx + slides.length) % slides.length;
-                slides.forEach((s, i) => s.classList.toggle('active', i === current));
-                dots.forEach((d, i) => d.classList.toggle('active', i === current));
-                applyTheme(current);
-            }
-            function next() { goTo(current + 1); }
-            function prev() { goTo(current - 1); }
-
-            function startAutoplay() {
-                stopAutoplay();
-                autoplayTimer = setInterval(next, AUTOPLAY_MS);
-            }
-            function stopAutoplay() {
-                if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
-            }
-
-            nextBtn.addEventListener('click', (e) => { e.preventDefault(); next(); startAutoplay(); });
-            prevBtn.addEventListener('click', (e) => { e.preventDefault(); prev(); startAutoplay(); });
-            dots.forEach(dot => {
-                dot.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    goTo(parseInt(dot.dataset.dot, 10));
-                    startAutoplay();
-                });
-            });
-
-            carousel.addEventListener('mouseenter', stopAutoplay);
-            carousel.addEventListener('mouseleave', startAutoplay);
-
-            // Initialize theme on load
-            applyTheme(current);
-            startAutoplay();
-        })();
-    </script>
-
-    <!-- ══════════════════════════════════════════════════
-         COMING SOON MODAL
-         Triggered by any element with [data-comingsoon].
-         Optional [data-product="..."] for analytics tagging.
-    ══════════════════════════════════════════════════ -->
-    <div id="rp-modal" class="rp-modal" role="dialog" aria-modal="true" aria-labelledby="rp-modal-title" aria-describedby="rp-modal-desc" aria-hidden="true">
-        <div class="rp-stars" aria-hidden="true"></div>
-        <div class="rp-panel" role="document">
-            <canvas class="rp-confetti" id="rp-confetti" aria-hidden="true"></canvas>
-
-            <button type="button" class="rp-close" id="rp-close" aria-label="Close dialog">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                    <path d="M1 1L13 13M13 1L1 13"/>
-                </svg>
-            </button>
-
-            <div class="rp-form-state" id="rp-form-state">
-                <div class="rp-eyebrow">Realized Prints</div>
-                <h2 id="rp-modal-title" class="rp-title">Website Launching <span class="accent">Soon</span> &mdash;<br>Be the First to Know!</h2>
-                <p id="rp-modal-desc" class="rp-lede">We're finalizing our online store packed with original 3D-printed toys, home goods, tools, functional parts, and accessories &mdash; all designed and printed right here in the USA.</p>
-                <p class="rp-subline">Enter your email to get notified the <strong>exact moment we go live</strong> and receive <strong>early-access drops</strong>.</p>
-
-                <form id="rp-form" novalidate>
-                    <div class="rp-field">
-                        <label for="rp-email" class="rp-label">Email Address</label>
-                        <input type="email" id="rp-email" name="email" class="rp-input" placeholder="your@email.com" required autocomplete="email" aria-describedby="rp-email-error">
-                        <div class="rp-error" id="rp-email-error" role="alert"></div>
-                    </div>
-
-                    <label class="rp-consent" for="rp-consent">
-                        <input type="checkbox" id="rp-consent" name="consent" class="rp-checkbox" required aria-describedby="rp-consent-error">
-                        <span class="rp-consent-text">Yes, I consent to receive marketing emails, promotions, product updates, and news about this website and the 3D-printed products sold here. I understand I can unsubscribe at any time using the link in every email or by replying &ldquo;STOP&rdquo;. We will never sell your email address.</span>
-                    </label>
-                    <div class="rp-error" id="rp-consent-error" role="alert" style="margin: -8px 0 14px 32px;"></div>
-
-                    <p class="rp-fineprint">By submitting, you agree that your email may be used solely for the purposes described above and in our <a href="privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
-
-                    <button type="submit" class="rp-submit" id="rp-submit">
-                        <span class="spinner" aria-hidden="true"></span>
-                        <span class="label">Submit</span>
-                    </button>
-
-                    <p class="rp-footer-note">We respect your privacy. Your information is protected under our <a href="privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
-                </form>
-            </div>
-
-            <div class="rp-success" id="rp-success" role="status" aria-live="polite">
-                <div class="rp-check">
-                    <svg viewBox="0 0 60 60">
-                        <circle class="circle" cx="30" cy="30" r="26"/>
-                        <path class="tick" d="M19 30 L27 38 L42 22"/>
-                    </svg>
-                </div>
-                <h2 class="rp-success-title">You're <span class="accent">on the list.</span></h2>
-                <p class="rp-success-body">We'll email <span class="rp-success-email" id="rp-confirm-email">your address</span> the moment the store goes live &mdash; and you'll get first access to early drops before anyone else.</p>
-                <button type="button" class="rp-success-close" id="rp-success-close">Close</button>
-            </div>
-        </div>
+      </div>
+      <div class="sortwrap">
+        <span class="f-label">Sort by:</span>
+        <select id="sortSel" aria-label="Sort products">
+          <option value="best">Best selling</option>
+          <option value="new">Newest</option>
+          <option value="plow">Price, low to high</option>
+          <option value="phigh">Price, high to low</option>
+          <option value="az">Alphabetically, A–Z</option>
+        </select>
+        <span class="pcount" id="pCount">0 products</span>
+      </div>
     </div>
 
-    <script>
-    (function () {
-        'use strict';
+    <div class="chips-active" id="activeChips"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
 
-        // ─── CONFIG ──────────────────────────────────────────
-        // SUBMIT_ENDPOINT: paste the /exec URL from your deployed Google Apps Script web app.
-        // (See setup instructions in the project README.)
-        var SUBMIT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx0xwMoeNV4AodeH2ZCx1NsAjc8kp2tlN-NVsLI6tSsK3BmMnC0YlYXtlK8Juz6XIs9bw/exec';
-        var SIMULATE_NETWORK = false;
+<!-- ===== STORY / ABOUT (anchor kept for the Catan page back-links) ===== -->
+<section class="rowsec" id="story">
+  <div class="wrap">
+    <h2>Husband &amp; wife, two printers, one spare room</h2>
+    <p style="max-width:44rem;color:var(--ink-2);font-size:15.5px">
+      We print, finish, and pack everything ourselves in the USA. Orders take 5–10 business days
+      because each one is made after you place it — nothing sits on a shelf waiting.
+      Questions go straight to the two people who made it.
+    </p>
+  </div>
+</section>
 
-        var modal        = document.getElementById('rp-modal');
-        var closeBtn     = document.getElementById('rp-close');
-        var form         = document.getElementById('rp-form');
-        var emailInput   = document.getElementById('rp-email');
-        var consentChk   = document.getElementById('rp-consent');
-        var emailError   = document.getElementById('rp-email-error');
-        var consentErr   = document.getElementById('rp-consent-error');
-        var submitBtn    = document.getElementById('rp-submit');
-        var formState    = document.getElementById('rp-form-state');
-        var successState = document.getElementById('rp-success');
-        var successClose = document.getElementById('rp-success-close');
-        var confirmEmail = document.getElementById('rp-confirm-email');
-        var confettiCvs  = document.getElementById('rp-confetti');
+<!-- ===== CART ===== -->
+<div class="cart-ov" id="cartOv"></div>
+<aside class="cart" id="cart" aria-label="Cart">
+  <div class="cart-h">
+    <h3>Your cart</h3>
+    <button class="ibtn" id="cartClose" aria-label="Close cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-f" id="cartFoot" style="display:none">
+    <div class="cart-tot"><span>Subtotal</span><span id="cartTotal">$0</span></div>
+    <button class="pay-shop" id="shopPay">Buy with Shop Pay</button>
+    <button class="btn btn-ghost btn-block">Check out</button>
+    <span class="pay-alt">Shop Pay · Apple Pay · Google Pay · Card</span>
+  </div>
+</aside>
 
-        var lastFocused = null;
-        var currentProduct = null;
+<footer class="foot" id="policies">
+  <div class="wrap">
+    <div class="foot-g">
+      <div>
+        <div class="foot-brand">Realized Prints</div>
+        <p class="foot-note">Husband &amp; wife, printed in the USA. Made to order in 5–10 business days.</p>
+        <div class="foot-soc">
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h2.5V6H14c-2.2 0-3.6 1.5-3.6 3.7V11H8.5v3h1.9v7h3v-7h2.3l.4-3h-2.7V9.9c0-.6.3-.9.6-.9z"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Shop</h4><ul>
+        <li><a href="#catalog">All cats</a></li><li><a href="#catalog">New arrivals</a></li>
+        <li><a href="#catalog">Bundles</a></li><li><a href="#catalog">Custom match</a></li>
+      </ul></div>
+      <div><h4>Other lines</h4><ul>
+        <li><a href="catan/">Catan Artisan</a></li>
+        <li><a href="meowmeow.html">Meow Meow Blind Bags</a></li>
+        <li><a href="CustomFigurines.html">Custom Figurines</a></li>
+        <li><a href="cs2-knives.html">CS2 Knives</a></li>
+      </ul></div>
+      <div><h4>Help</h4><ul>
+        <li><a href="#policies">Shipping</a></li><li><a href="#policies">Returns</a></li>
+        <li><a href="privacy-policy.html">Privacy</a></li><li><a href="#story">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-b">
+      <span>© 2026 Realized Prints · Husband &amp; wife, printed in the USA.</span>
+      <span>Product imagery is placeholder — see CAT-SHOP-REFERENCES.md.</span>
+    </div>
+  </div>
+</footer>
 
-        function openModal(product) {
-            lastFocused = document.activeElement;
-            currentProduct = product || null;
-            resetForm();
-            modal.classList.add('is-open');
-            modal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-            setTimeout(function () { emailInput.focus({ preventScroll: true }); }, 320);
-            if (window.dataLayer && currentProduct) {
-                window.dataLayer.push({ event: 'coming_soon_modal_open', product: currentProduct });
-            }
-        }
+<script src="assets/rp.js"></script>
+<script>
+/* ---------- vibe switcher ---------- */
+const vibeRow=document.getElementById('vibeRow'), vibeImg=document.getElementById('vibeImg'),
+      vibeWord=document.getElementById('vibeWord'), vibeChip=document.getElementById('vibeChip'),
+      vibeBlurb=document.getElementById('vibeBlurb'), vibeLink=document.getElementById('vibeLink');
 
-        function closeModal() {
-            modal.classList.remove('is-open');
-            modal.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
-            if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
-        }
+function setVibe(key){
+  const v=RP.VIBES[key];
+  const hero=RP.PRODUCTS.filter(p=>p.v===key).sort((a,b)=>b.sales-a.sales)[0];
+  vibeWord.textContent=v.name.toLowerCase(); vibeWord.style.color=v.color;
+  vibeBlurb.textContent=v.blurb;
+  vibeImg.src=hero.imgUrl; vibeImg.alt=hero.t+' — '+v.name+' vibe';
+  vibeChip.textContent=hero.t+' · $'+hero.price;
+  vibeLink.href='products/'+hero.h+'.html';
+  vibeRow.querySelectorAll('.vchip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.v===key)));
+}
+Object.entries(RP.VIBES).forEach(([key,v],i)=>{
+  const b=document.createElement('button');
+  b.className='vchip'; b.dataset.v=key; b.type='button';
+  b.setAttribute('aria-pressed',String(i===0));
+  b.innerHTML='<span class="vd" style="background:'+v.color+'"></span>'+v.name;
+  b.onclick=()=>setVibe(key);
+  vibeRow.appendChild(b);
+});
 
-        function resetForm() {
-            form.reset();
-            formState.style.display = '';
-            successState.classList.remove('is-shown');
-            emailInput.classList.remove('is-invalid');
-            emailError.classList.remove('is-shown');
-            emailError.textContent = '';
-            consentErr.classList.remove('is-shown');
-            consentErr.textContent = '';
-            submitBtn.classList.remove('is-loading');
-            submitBtn.disabled = false;
-        }
+/* ---------- catalog: filter + sort ---------- */
+const state={avail:new Set(),price:new Set(),vibe:new Set(),color:new Set(),sort:'best'};
+const grid=document.getElementById('grid'), pCount=document.getElementById('pCount');
 
-        document.addEventListener('click', function (e) {
-            var trigger = e.target.closest('[data-comingsoon]');
-            if (!trigger) return;
-            e.preventDefault();
-            openModal(trigger.dataset.product);
-        });
+document.getElementById('pVibe').innerHTML=
+  Object.entries(RP.VIBES).map(([k,v])=>`<label><input type="checkbox" data-f="vibe" value="${k}"> ${v.name}</label>`).join('')+
+  '<button class="fclear" data-clear="vibe">Clear</button>';
+document.getElementById('pColor').innerHTML=
+  RP.COLORS.map(([k,label,cls])=>`<label><input type="checkbox" data-f="color" value="${k}"> <span class="cdot ${cls}"></span> ${label}</label>`).join('')+
+  '<button class="fclear" data-clear="color">Clear</button>';
 
-        closeBtn.addEventListener('click', closeModal);
-        successClose.addEventListener('click', closeModal);
-        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
-        });
+function matches(p){
+  if(state.avail.size && !state.avail.has(p.stock?'in':'out')) return false;
+  if(state.price.size){
+    let ok=false;
+    state.price.forEach(r=>{const[lo,hi]=r.split('-').map(Number); if(p.price>=lo&&p.price<hi) ok=true;});
+    if(!ok) return false;
+  }
+  if(state.vibe.size && !state.vibe.has(p.v)) return false;
+  return true;  // every figure ships in all nine colors, so color never excludes
+}
+function sortList(l){
+  const s=state.sort;
+  return [...l].sort((a,b)=>
+    s==='plow'?a.price-b.price : s==='phigh'?b.price-a.price :
+    s==='az'?a.t.localeCompare(b.t) : s==='new'?(b.new-a.new)||(b.sales-a.sales) : b.sales-a.sales);
+}
+function renderChips(){
+  const all=[];
+  state.avail.forEach(v=>all.push(['avail',v,v==='in'?'In stock':'Out of stock']));
+  state.price.forEach(v=>{const[lo,hi]=v.split('-'); all.push(['price',v,hi==='999'?'$'+lo+'+':'$'+lo+'–$'+hi]);});
+  state.vibe.forEach(v=>all.push(['vibe',v,RP.VIBES[v].name]));
+  state.color.forEach(v=>all.push(['color',v,(RP.COLORS.find(c=>c[0]===v)||[])[1]]));
+  document.getElementById('activeChips').innerHTML=
+    all.map(([f,v,l])=>`<button class="achip" data-rm-f="${f}" data-rm-v="${v}">${l} ✕</button>`).join('');
+}
+function render(){
+  const list=sortList(RP.PRODUCTS.filter(matches));
+  grid.innerHTML=list.length ? list.map(RP.cardHTML).join('')
+    : '<div class="empty"><h3>No cats match that</h3><p>Try clearing a filter.</p></div>';
+  pCount.textContent=list.length+(list.length===1?' product':' products');
+  renderChips();
+}
+document.querySelectorAll('.fbtn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const panel=document.getElementById(btn.dataset.panel);
+    const isOpen=panel.classList.contains('open');
+    document.querySelectorAll('.fpanel').forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.fbtn').forEach(b=>b.setAttribute('aria-expanded','false'));
+    if(!isOpen){panel.classList.add('open'); btn.setAttribute('aria-expanded','true');}
+  });
+});
+document.addEventListener('click',e=>{
+  if(e.target.closest('.fpanel')||e.target.closest('.fbtn')) return;
+  document.querySelectorAll('.fpanel').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.fbtn').forEach(b=>b.setAttribute('aria-expanded','false'));
+});
+document.addEventListener('change',e=>{
+  const f=e.target.dataset&&e.target.dataset.f; if(!f) return;
+  e.target.checked?state[f].add(e.target.value):state[f].delete(e.target.value);
+  render();
+});
+document.addEventListener('click',e=>{
+  const clr=e.target.dataset&&e.target.dataset.clear;
+  if(clr){ state[clr].clear();
+    document.querySelectorAll('input[data-f="'+clr+'"]').forEach(i=>i.checked=false); render(); }
+  const rmF=e.target.dataset&&e.target.dataset.rmF;
+  if(rmF){ state[rmF].delete(e.target.dataset.rmV);
+    const inp=document.querySelector('input[data-f="'+rmF+'"][value="'+e.target.dataset.rmV+'"]');
+    if(inp) inp.checked=false; render(); }
+});
+document.getElementById('sortSel').addEventListener('change',e=>{state.sort=e.target.value; render();});
 
-        modal.addEventListener('keydown', function (e) {
-            if (e.key !== 'Tab') return;
-            var focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            var visible = Array.prototype.filter.call(focusable, function (el) { return !el.disabled && el.offsetParent !== null; });
-            if (!visible.length) return;
-            var first = visible[0], last = visible[visible.length - 1];
-            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-        });
-
-        function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); }
-
-        emailInput.addEventListener('input', function () {
-            if (emailInput.classList.contains('is-invalid')) {
-                emailInput.classList.remove('is-invalid');
-                emailError.classList.remove('is-shown');
-            }
-        });
-        consentChk.addEventListener('change', function () {
-            if (consentChk.checked) consentErr.classList.remove('is-shown');
-        });
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var email = emailInput.value.trim();
-            var valid = true;
-
-            if (!email) {
-                emailInput.classList.add('is-invalid');
-                emailError.textContent = 'Please enter your email address.';
-                emailError.classList.add('is-shown');
-                valid = false;
-            } else if (!isValidEmail(email)) {
-                emailInput.classList.add('is-invalid');
-                emailError.textContent = "That doesn't look like a valid email — please double-check.";
-                emailError.classList.add('is-shown');
-                valid = false;
-            }
-            if (!consentChk.checked) {
-                consentErr.textContent = 'Please check the box to confirm your consent.';
-                consentErr.classList.add('is-shown');
-                valid = false;
-            }
-            if (!valid) { if (!isValidEmail(email)) emailInput.focus(); return; }
-
-            submitBtn.classList.add('is-loading');
-            submitBtn.disabled = true;
-
-            var payload = {
-                email: email,
-                consent: true,
-                product: currentProduct,
-                source: 'coming-soon-modal',
-                timestamp: new Date().toISOString()
-            };
-
-            var done = function () { showSuccess(email); };
-            var fail = function (err) {
-                console.error('[Realized Prints] Submission error:', err);
-                submitBtn.classList.remove('is-loading');
-                submitBtn.disabled = false;
-                emailError.textContent = 'Something went wrong on our end. Please try again in a moment.';
-                emailError.classList.add('is-shown');
-            };
-
-            if (SIMULATE_NETWORK) {
-                setTimeout(function () { console.log('[Realized Prints] Subscribe payload:', payload); done(); }, 900);
-            } else {
-                // Google Apps Script web apps don't set CORS headers, so we use
-                // mode:'no-cors' with a text/plain body. Apps Script reads
-                // e.postData.contents as JSON. The response is opaque — we treat
-                // promise resolution as success since the row is logged server-side.
-                fetch(SUBMIT_ENDPOINT, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
-                }).then(function () { done(); }).catch(fail);
-            }
-        });
-
-        function showSuccess(email) {
-            confirmEmail.textContent = email;
-            formState.style.display = 'none';
-            successState.classList.add('is-shown');
-            successClose.focus();
-            fireConfetti();
-        }
-
-        function fireConfetti() {
-            var ctx = confettiCvs.getContext('2d');
-            var dpr = window.devicePixelRatio || 1;
-            var rect = confettiCvs.getBoundingClientRect();
-            confettiCvs.width  = rect.width  * dpr;
-            confettiCvs.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
-
-            var colors = ['#f0a500', '#ffc030', '#ff4d4d', '#ddeeff', '#ffffff'];
-            var pieces = [];
-            for (var i = 0; i < 90; i++) {
-                pieces.push({
-                    x: rect.width / 2 + (Math.random() - 0.5) * 80,
-                    y: rect.height / 2 - 40,
-                    vx: (Math.random() - 0.5) * 9,
-                    vy: (Math.random() * -8) - 4,
-                    g: 0.28 + Math.random() * 0.12,
-                    size: 4 + Math.random() * 5,
-                    rot: Math.random() * Math.PI * 2,
-                    vr: (Math.random() - 0.5) * 0.4,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    shape: Math.random() > 0.5 ? 'rect' : 'circle',
-                    life: 0,
-                    maxLife: 140 + Math.random() * 60
-                });
-            }
-
-            var raf;
-            function tick() {
-                ctx.clearRect(0, 0, rect.width, rect.height);
-                var alive = false;
-                for (var j = 0; j < pieces.length; j++) {
-                    var p = pieces[j];
-                    if (p.life > p.maxLife) continue;
-                    alive = true;
-                    p.life++; p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
-                    var alpha = Math.max(0, 1 - p.life / p.maxLife);
-                    ctx.save();
-                    ctx.globalAlpha = alpha;
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.rot);
-                    ctx.fillStyle = p.color;
-                    if (p.shape === 'rect') ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
-                    else { ctx.beginPath(); ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2); ctx.fill(); }
-                    ctx.restore();
-                }
-                if (alive) raf = requestAnimationFrame(tick);
-                else { cancelAnimationFrame(raf); ctx.clearRect(0, 0, rect.width, rect.height); }
-            }
-            tick();
-        }
-
-        window.RealizedPrintsModal = { open: openModal, close: closeModal };
-    })();
-    </script>
-
+/* deep link: index.html?vibe=chibi#catalog */
+const qv=new URLSearchParams(location.search).get('vibe');
+if(qv && RP.VIBES[qv]){
+  state.vibe.add(qv); setVibe(qv);
+  const inp=document.querySelector('input[data-f="vibe"][value="'+qv+'"]'); if(inp) inp.checked=true;
+} else { setVibe('chonky'); }
+render();
+</script>
 </body>
 </html>
