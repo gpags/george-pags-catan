@@ -14,7 +14,7 @@
 const Stripe = require('stripe');
 const CATALOG = require('../assets/catalog.js');
 
-const { BY_HANDLE, ADDONS, COLOR_LABEL, FREE_SHIP, unitsPaid } = CATALOG;
+const { BY_HANDLE, ADDONS, COLOR_LABEL, FREE_SHIP, unitsPaid, giftsFor } = CATALOG;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-06-20',
@@ -122,6 +122,10 @@ module.exports = async (req, res) => {
         const freeShipping = subtotalCents >= FREE_SHIP * 100;
         const shippingCents = freeShipping ? 0 : FLAT_SHIPPING_CENTS;
 
+        /* Gifts are decided here, never taken from the request — the client
+           could otherwise ask for a free keychain on a $5 order. */
+        const gifts = giftsFor(subtotalCents / 100);
+
         const line_items = lines.map(l => {
             const colorLabel = COLOR_LABEL[l.color] || l.color;
             const bits = [`Qty ${l.qty}`];
@@ -155,20 +159,49 @@ module.exports = async (req, res) => {
             };
         });
 
+        /* Gifts ride along as $0 line items so they appear on the Stripe
+           receipt and in the print queue, and the customer can see exactly
+           what they earned. */
+        for (const g of gifts) {
+            const gp = BY_HANDLE[g.handle];
+            if (!gp) continue;
+            line_items.push({
+                quantity: 1,
+                price_data: {
+                    currency: 'usd',
+                    unit_amount: 0,
+                    product_data: {
+                        name: `FREE GIFT: ${gp.t} — ${COLOR_LABEL[g.color] || g.color}`,
+                        description: `Free on orders over $${g.minSpend}`,
+                        metadata: {
+                            handle: gp.h, sku: gp.sku, color: g.color,
+                            qty: '1', free: '1', gift: 'true', name: '', match: 'false'
+                        },
+                    },
+                    tax_behavior: 'exclusive',
+                },
+            });
+        }
+
         // What success.html and the print queue read back.
         const metadata = {
             shop: 'cats',
             item_count: String(lines.reduce((n, l) => n + l.qty, 0)),
             subtotal_usd: (subtotalCents / 100).toFixed(2),
             needs_photo: String(lines.some(l => l.match)),
+            gifts: gifts.map(g => g.handle).join(',') || 'none',
         };
-        chunkInto(metadata, 'items', JSON.stringify(lines.map(l => ({
-            handle: l.product.h,
-            color: l.color,
-            qty: l.qty,
-            name: l.name,
-            match: l.match,
-        }))));
+        chunkInto(metadata, 'items', JSON.stringify(
+            lines.map(l => ({
+                handle: l.product.h,
+                color: l.color,
+                qty: l.qty,
+                name: l.name,
+                match: l.match,
+            })).concat(gifts.map(g => ({
+                handle: g.handle, color: g.color, qty: 1, name: '', match: false, gift: true
+            })))
+        ));
         chunkInto(metadata, 'summary', lines.map(l =>
             `${l.qty}× ${l.product.t} (${COLOR_LABEL[l.color] || l.color})` +
             (l.name ? ` “${l.name}”` : '') + (l.match ? ' +match' : '')
