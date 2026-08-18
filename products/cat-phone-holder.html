@@ -209,6 +209,21 @@
 <script src="../assets/catalog.js"></script>
 <script src="../assets/rp.js"></script>
 <script>
+/* Built against catalog 8pkxbq. If the browser loaded a different
+   catalog than this page was generated from, say so instead of silently
+   half-working — a stale page used to freeze the price and bundle buttons
+   while the quantity stepper kept moving. */
+if (RP.BUILD_ID !== "8pkxbq") {
+  console.error('Realized Prints: this page was built from catalog 8pkxbq '
+    + 'but assets/catalog.js is ' + RP.BUILD_ID + '. Run: node build-products.js');
+  /* The warning must never be the thing that breaks the page. */
+  try {
+    var stale = document.createElement('div');
+    stale.className = 'stale-warn';
+    stale.textContent = 'This page is out of date — please refresh. If it persists, the site needs rebuilding.';
+    document.body.insertBefore(stale, document.body.firstChild);
+  } catch (e) { /* console.error above is enough */ }
+}
 const PROD = RP.BY_HANDLE["cat-phone-holder"];
 const REL_IDS = [7,19,20,1,16];
 /* Only the colors this product actually ships in. */
@@ -250,12 +265,14 @@ function itemForCart(){
   };
 }
 function refresh(){
-  document.getElementById('qVal').textContent = qty;
+  /* Everything is computed before anything is written, so a failure can't
+     leave the quantity updated while the price stays stale. */
   const addons = (document.getElementById('addName').checked ? RP.ADDONS.name.price : 0)
                + (document.getElementById('addMatch').checked ? RP.ADDONS.match.price : 0);
   const due = RP.priceFor(PROD, qty) + addons * qty;
   const was = (PROD.price + addons) * qty;
   const saved = was - due;
+  document.getElementById('qVal').textContent = qty;
   document.getElementById('pTotal').innerHTML = saved > 0
     ? '<span class="was">'+RP.money(was)+'</span>'+RP.money(due) : RP.money(due);
   document.getElementById('saveNote').textContent = saved > 0
