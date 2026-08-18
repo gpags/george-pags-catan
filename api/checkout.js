@@ -14,7 +14,17 @@
 const Stripe = require('stripe');
 const CATALOG = require('../assets/catalog.js');
 
-const { BY_HANDLE, ADDONS, COLOR_LABEL, FREE_SHIP, unitsPaid, giftsFor } = CATALOG;
+const { BY_HANDLE, ADDONS, COLOR_LABEL, FREE_SHIP, priceFor, savingAt, giftsFor } = CATALOG;
+
+/* Explicit list, deliberately NOT Stripe's dynamic payment methods. Dynamic
+   keeps re-adding buy-now-pay-later options (Klarna, Affirm, Afterpay) as
+   Stripe enables them, and we don't want BNPL on made-to-order goods.
+   Apple Pay and Google Pay need no entry — they ride on 'card' automatically
+   once the domain is verified in Stripe.
+
+   Shop Pay is absent because it is Shopify's wallet and cannot be offered
+   through Stripe at all. 'link' is the equivalent: sign in, autofill, one tap. */
+const PAYMENT_METHODS = ['card', 'link', 'amazon_pay', 'cashapp', 'us_bank_account'];
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-06-20',
@@ -22,10 +32,30 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 const SITE = 'https://realizedprints.com';
 
-// PHASE 3 PLACEHOLDER — one flat rate below the free-shipping threshold.
-// Replace with the weight bands in LAUNCH-PLAN.md once you have real Pirate
-// Ship quotes; `weightOz` and `boxClass` are already on every product for it.
-const FLAT_SHIPPING_CENTS = 700;
+/* Weight-banded USPS Ground Advantage, computed before the session is made.
+   Stripe Checkout cannot fetch live carrier rates mid-session, so the band is
+   picked from the packed weight of the cart.
+
+   BAND PRICES ARE STILL ESTIMATES — replace each `cents` with a real Pirate
+   Ship quote for that weight in your actual boxes. The band structure is
+   right; only the numbers need confirming. Product `weightOz` values are also
+   placeholders (grep catalog.js for TODO). */
+const PACKAGING_OZ = 2;          // mailer/box + filler
+const SHIPPING_BANDS = [
+    { maxOz: 8,        cents: 500,  label: 'USPS Ground Advantage' },
+    { maxOz: 16,       cents: 700,  label: 'USPS Ground Advantage' },
+    { maxOz: 48,       cents: 1000, label: 'USPS Ground Advantage' },
+    { maxOz: Infinity, cents: 1400, label: 'USPS Ground Advantage' },
+];
+
+function shippingFor(lines, gifts) {
+    let oz = PACKAGING_OZ;
+    for (const l of lines) oz += (l.product.weightOz || 0) * l.qty;
+    /* Gifts go in the same parcel and still weigh something. */
+    for (const g of gifts) oz += (BY_HANDLE[g.handle] || {}).weightOz || 0;
+    const band = SHIPPING_BANDS.find(b => oz <= b.maxOz);
+    return { oz, cents: band.cents, label: band.label };
+}
 
 const MAX_LINES = 50;
 const MAX_QTY = 99;
@@ -65,17 +95,18 @@ function priceLine(raw) {
     const name = cleanName(addons.name);
     const match = addons.match === true || addons.match === 'true';
 
-    // Add-ons are charged per unit, on the units actually paid for.
-    const unitCents = Math.round(
-        (product.price + (name ? ADDONS.name.price : 0) + (match ? ADDONS.match.price : 0)) * 100
-    );
-    const paid = unitsPaid(qty, product.bundleTiers);
-    const free = qty - paid;
+    /* Bundle price comes from the catalog's explicit ladder. Add-ons are
+       charged on every unit — engraving three cats is three engravings. */
+    const addonsPerUnit = (name ? ADDONS.name.price : 0) + (match ? ADDONS.match.price : 0);
+    const bundleCents = Math.round(priceFor(product, qty) * 100);
+    const addonCents = Math.round(addonsPerUnit * 100) * qty;
+    const savedCents = Math.round(savingAt(product, qty) * 100);
 
     return {
-        product, qty, color, name, match, paid, free,
-        unitCents,
-        amountCents: unitCents * paid,
+        product, qty, color, name, match,
+        savedCents,
+        unitCents: Math.round((bundleCents + addonCents) / qty),
+        amountCents: bundleCents + addonCents,
     };
 }
 
@@ -119,18 +150,19 @@ module.exports = async (req, res) => {
             return res.status(400).json({ error: 'Your cart total came to nothing — please try again.' });
         }
 
-        const freeShipping = subtotalCents >= FREE_SHIP * 100;
-        const shippingCents = freeShipping ? 0 : FLAT_SHIPPING_CENTS;
-
         /* Gifts are decided here, never taken from the request — the client
            could otherwise ask for a free keychain on a $5 order. */
         const gifts = giftsFor(subtotalCents / 100);
 
+        const freeShipping = subtotalCents >= FREE_SHIP * 100;
+        const ship = shippingFor(lines, gifts);
+        const shippingCents = freeShipping ? 0 : ship.cents;
+
         const line_items = lines.map(l => {
             const colorLabel = COLOR_LABEL[l.color] || l.color;
             const bits = [`Qty ${l.qty}`];
-            if (l.free) bits.push(`${l.free} free`);
             bits.push(`$${(l.unitCents / 100).toFixed(2)} each`);
+            if (l.savedCents) bits.push(`bundle saving $${(l.savedCents / 100).toFixed(2)}`);
             if (l.name) bits.push(`Engraved “${l.name}”`);
             if (l.match) bits.push('Exact pattern match — photo to follow');
 
@@ -149,7 +181,7 @@ module.exports = async (req, res) => {
                             sku: l.product.sku,
                             color: l.color,
                             qty: String(l.qty),
-                            free: String(l.free),
+                            saved: (l.savedCents / 100).toFixed(2),
                             name: l.name,
                             match: String(l.match),
                         },
@@ -190,6 +222,9 @@ module.exports = async (req, res) => {
             subtotal_usd: (subtotalCents / 100).toFixed(2),
             needs_photo: String(lines.some(l => l.match)),
             gifts: gifts.map(g => g.handle).join(',') || 'none',
+            /* Packed weight, so a label can be bought without re-weighing. */
+            packed_oz: String(ship.oz),
+            shipping_usd: (shippingCents / 100).toFixed(2),
         };
         chunkInto(metadata, 'items', JSON.stringify(
             lines.map(l => ({
@@ -209,8 +244,7 @@ module.exports = async (req, res) => {
 
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
-            // No payment_method_types — Stripe's dynamic payment methods then
-            // offer Link, Apple Pay, Google Pay and card based on the buyer.
+            payment_method_types: PAYMENT_METHODS,
             line_items,
             shipping_address_collection: { allowed_countries: ['US'] },
             billing_address_collection: 'auto',
@@ -222,7 +256,7 @@ module.exports = async (req, res) => {
                         fixed_amount: { amount: shippingCents, currency: 'usd' },
                         display_name: freeShipping
                             ? 'Free USPS Ground Advantage'
-                            : 'USPS Ground Advantage',
+                            : ship.label,
                         delivery_estimate: {
                             minimum: { unit: 'business_day', value: 5 },
                             maximum: { unit: 'business_day', value: 10 },
