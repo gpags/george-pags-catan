@@ -15,6 +15,36 @@ module.exports = async (req, res) => {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         const md = session.metadata || {};
 
+        /* Chunked metadata: a value too long for one key is split across
+           key_1..key_N. Used by both shops. */
+        const joinChunks = (base) => {
+            if (md[base]) return md[base];
+            return Object.keys(md)
+                .filter(k => new RegExp('^' + base + '_\\d+$').test(k))
+                .sort((a, b) => parseInt(a.split('_').pop()) - parseInt(b.split('_').pop()))
+                .map(k => md[k])
+                .join('');
+        };
+
+        /* The cat shop stamps metadata.shop = 'cats'. Anything without it is a
+           Catan Artisan order and keeps the original response shape untouched. */
+        if (md.shop === 'cats') {
+            let items = [];
+            try { items = JSON.parse(joinChunks('items') || '[]'); } catch (_) { }
+            return res.status(200).json({
+                shop: 'cats',
+                items,
+                summary: joinChunks('summary') || '',
+                gifts: md.gifts && md.gifts !== 'none' ? md.gifts.split(',') : [],
+                needsPhoto: md.needs_photo === 'true',
+                packedOz: Number(md.packed_oz) || null,
+                shippingUsd: md.shipping_usd || null,
+                total: session.amount_total ? session.amount_total / 100 : 0,
+                paid: session.payment_status === 'paid',
+                email: session.customer_details?.email || null,
+            });
+        }
+
         // Reassemble JSON from chunked keys (config or config_1..N)
         let raw = md.config || '';
         if (!raw) {

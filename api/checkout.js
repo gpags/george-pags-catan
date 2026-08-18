@@ -268,7 +268,9 @@ module.exports = async (req, res) => {
             automatic_tax: { enabled: true },
             metadata,
             payment_intent_data: { metadata },
-            success_url: `${SITE}/success?session_id={CHECKOUT_SESSION_ID}`,
+            /* The cat shop has its own confirmation page. /success is Catan's and
+               renders a Catan order summary. */
+            success_url: `${SITE}/order-complete?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${SITE}/#catalog`,
             allow_promotion_codes: true,
         });
