@@ -25,6 +25,7 @@ const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE, FREE_SHIP,
 
 const BASE = (document.body && document.body.dataset.base) || '';
 const CHECKOUT_URL = '/api/checkout';
+const SHOP_EMAIL = 'realizedprints@gmail.com';   // fallback mailto target only
 
 const money = n => '$' + n.toFixed(2);
 
@@ -297,39 +298,68 @@ function cardHTML(p){
 }
 
 /* ---------- contact form ----------
-   No backend yet. Validates, then hands off to the mail client so a
-   message can't be silently swallowed by a form that goes nowhere. */
+   Posts to /api/contact so the message reaches the shop inbox. The old
+   behaviour only opened the visitor's mail client, which silently sent
+   nothing for anyone without one configured — most phone users. The mail
+   client is now only the fallback when the endpoint is unreachable. */
 function mountContactForm(){
   const form = document.getElementById('contactForm'); if (!form) return;
   const status = document.getElementById('cf-status');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const name  = form.name.value.trim();
-    const email = form.email.value.trim();
-    const msg   = form.message.value.trim();
-    const order = form.order.value.trim();
-    const topic = form.topic.value;
+  const btn = form.querySelector('button[type="submit"]');
 
-    if (!name || !email || !msg) {
-      status.style.color = '#c62b6d';
-      status.textContent = 'Please fill in your name, email and message.';
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      status.style.color = '#c62b6d';
-      status.textContent = 'That email address doesn’t look right.';
-      return;
-    }
+  const say = (msg, ok) => {
+    status.style.color = ok ? '#0f7a5a' : '#c62b6d';
+    status.textContent = msg;
+  };
+  const mailtoFallback = (payload) => {
     const body = [
-      'From: ' + name + ' <' + email + '>',
-      order ? 'Order: ' + order : null,
-      'Topic: ' + topic, '', msg
+      'From: ' + payload.name + ' <' + payload.email + '>',
+      payload.order ? 'Order: ' + payload.order : null,
+      'Topic: ' + payload.topic, '', payload.message
     ].filter(Boolean).join('\n');
-    status.style.color = '#0f7a5a';
-    status.textContent = 'Opening your email app so you can send it…';
-    window.location.href = 'mailto:gpags987@gmail.com'
-      + '?subject=' + encodeURIComponent('[' + topic + ']' + (order ? ' ' + order : ''))
+    window.location.href = 'mailto:' + SHOP_EMAIL
+      + '?subject=' + encodeURIComponent('[' + payload.topic + ']' + (payload.order ? ' ' + payload.order : ''))
       + '&body=' + encodeURIComponent(body);
+  };
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const payload = {
+      name:    form.name.value.trim(),
+      email:   form.email.value.trim(),
+      message: form.message.value.trim(),
+      order:   form.order.value.trim(),
+      topic:   form.topic.value,
+      company: form.company ? form.company.value : ''   // honeypot
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      return say('Please fill in your name, email and message.', false);
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+      return say('That email address doesn’t look right.', false);
+    }
+
+    const label = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    say('Sending…', true);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || data.error || 'send failed');
+      form.reset();
+      say('Thanks — that’s with us. We reply within 1–2 business days.', true);
+    } catch (err) {
+      say('We couldn’t send that automatically — opening your email app instead.', false);
+      mailtoFallback(payload);
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = label; }
+    }
   });
 }
 

@@ -9,6 +9,8 @@
   --pink:#ff3d9a; --pink-600:#e01f7f; --pink-300:#ff8ec7; --pink-50:#ffeaf5;
   --yellow:#ffd23f; --mint:#3ddc97; --grape:#a855f7; --tangerine:#ff8a3d;
   --mint-900:#0c4f3c; --mint-800:#0f6049; --mint-200:#a5ecd0; --mint-100:#d6f7e9;
+  --pink-900:#5c0b32; --pink-200:#ffc2df; --pink-100:#ffe4f1;
+  --blue-900:#0f2557; --blue-200:#bcd2ff; --blue-100:#e4edff;
   --ink:#1a1440; --ink-2:#3d3470; --muted:#6f6899;
   --paper:#ffffff; --paper-2:#f5f8ff; --line:#e2e8fb;
   --r-sm:10px; --r:18px; --r-lg:28px;
@@ -339,20 +341,23 @@ h1,h2,h3,h4{font-family:'Fredoka','Nunito',sans-serif;font-weight:600;line-heigh
   font-size:13px;font-weight:700;text-align:center}
 
 /* ---------- FOOTER ---------- */
-.foot{background:var(--mint-900);color:var(--mint-100);padding:52px 0 28px;margin-top:64px}
+/* Footer matches the pink nav strip and primary buttons so the page opens and
+   closes on the same brand colour. Swap --pink-900/--pink-100 below for
+   --blue-900/--blue-100 to make it blue instead. */
+.foot{background:var(--pink-900);color:var(--pink-100);padding:52px 0 28px;margin-top:64px}
 .foot-g{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px}
 .foot h4{font-family:'Nunito',sans-serif;font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--mint);margin-bottom:13px;font-weight:800}
+  color:var(--pink-300);margin-bottom:13px;font-weight:800}
 .foot ul{list-style:none;display:grid;gap:9px}
-.foot a{text-decoration:none;font-size:14px;color:var(--mint-100)}
+.foot a{text-decoration:none;font-size:14px;color:var(--pink-100)}
 .foot a:hover{color:#fff}
 .foot-brand{font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;color:#fff;margin-bottom:9px}
-.foot-note{font-size:13.5px;color:var(--mint-200);max-width:22rem}
+.foot-note{font-size:13.5px;color:var(--pink-200);max-width:22rem}
 .foot-soc{display:flex;gap:9px;margin-top:15px}
 .foot-soc a{width:37px;height:37px;border-radius:50%;background:rgba(255,255,255,.1);display:grid;place-items:center}
-.foot-soc a:hover{background:var(--mint);color:var(--mint-900)}
+.foot-soc a:hover{background:var(--pink);color:#fff}
 .foot-b{margin-top:34px;padding-top:19px;border-top:1px solid rgba(255,255,255,.13);display:flex;
-  justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mint-200)}
+  justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--pink-200)}
 
 /* ---------- RESPONSIVE ---------- */
 @media(max-width:1180px){.grid{grid-template-columns:repeat(4,1fr)}}
