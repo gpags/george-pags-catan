@@ -24,7 +24,7 @@ const UPDATED = 'August 17, 2026';
 /* Same catalog module the storefront and api/checkout.js read, so the
    generated pages, the cart and the Stripe line items cannot drift. */
 const CATALOG = require('./assets/catalog.js');
-const { PRODUCTS, VIBES, ADDONS, tierLabel } = CATALOG;
+const { PRODUCTS, VIBES, ADDONS, tierLabel, GIFTS, BY_HANDLE } = CATALOG;
 
 /* Every distinct bundle tier actually in use, so the policies table and
    the FAQ describe the real offer instead of a stale hardcoded list. */
@@ -251,10 +251,15 @@ ${chromeTop(b)}
 ${tiers.length ? `
       <div class="opt-t">Bundle &amp; save</div>
       <div class="tiers" id="tiers">
-        <button class="tier" data-q="1" aria-pressed="true"><b>1</b><em>Single</em><i class="tier-ea">$${p.price}.00 each</i></button>
+        <button class="tier" data-q="1" aria-pressed="true"><b>1 for $${p.price}</b><i class="tier-ea">$${p.price}.00 each</i></button>
 ${tiers.map(([recv, pay]) =>
-`        <button class="tier" data-q="${recv}" aria-pressed="false"><b>${recv}</b><span>${recv - pay} FREE</span><em>${tierLabel(recv, pay)}</em><i class="tier-ea">$${(p.price * pay / recv).toFixed(2)} each</i></button>`).join('\n')}
+`        <button class="tier" data-q="${recv}" aria-pressed="false"><span class="tier-free">${recv - pay} FREE</span><b>${recv} for $${p.price * pay}</b><i class="tier-ea">$${(p.price * pay / recv).toFixed(2)} each</i></button>`).join('\n')}
       </div>` : ''}
+
+      <div class="pdp-gift" id="pdpGift">
+        Free gift with every order over $${GIFTS[0].minSpend}
+        <span>Spend $${GIFTS[0].minSpend}+ for a free ${esc(BY_HANDLE[GIFTS[0].handle].t)}, or $${GIFTS[1].minSpend}+ to add a free ${esc(BY_HANDLE[GIFTS[1].handle].t)}.</span>
+      </div>
 
       <div class="qty-row">
         <div class="qty">
@@ -346,6 +351,17 @@ function refresh(){
   /* These tiers charge the remainder at full price, so some quantities cost
      more than a slightly larger one. Offer the better deal rather than let
      someone overpay without knowing. */
+  const gift = document.getElementById('pdpGift');
+  if (gift) {
+    const earned = RP.giftsFor(due), nxt = RP.nextGift(due);
+    const got = earned.map(g => RP.BY_HANDLE[g.handle].t);
+    gift.innerHTML = got.length
+      ? '🎁 Free ' + got.join(' + ') + ' included'
+        + (nxt ? '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + ' too.</span>' : '')
+      : '🎁 Free gift on orders over $' + nxt.minSpend
+        + '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + '.</span>';
+  }
+
   const nudge = document.getElementById('nudge');
   const deal = RP.betterDeal(qty, PROD.bundleTiers);
   if (nudge) {
@@ -811,6 +827,43 @@ const PAGES = [
    body:privacyBody}
 ];
 for (const pg of PAGES) fs.writeFileSync(path.join(OUT_G, pg.file), contentPage(pg), 'utf8');
+
+/* ================================================================
+   MARGIN REPORT — printed on every build so a pricing change can't
+   quietly go underwater. Costs come from the PLATE model in
+   assets/catalog.js (per-plate, not per-unit).
+   ================================================================ */
+const { costFor, marginFor, hoursFor } = CATALOG;
+const HOUR_FLOOR = 12;   // dollars of gross profit per printer-hour we won't go under
+const warnings = [];
+console.log('');
+console.log('Margin check — PROVISIONAL plate figures. Printer hours are the real constraint.');
+console.log('  ' + 'Product'.padEnd(23) + 'Sz ' + 'Price'.padEnd(7) + 'Cost'.padEnd(7) + 'Profit'.padEnd(8) + 'Hrs'.padEnd(7) + '$/printer-hr');
+for (const p of PRODUCTS) {
+  const m = marginFor(p, 1);
+  console.log('  ' + p.t.padEnd(23) + p.size.padEnd(3)
+    + ('$' + p.price).padEnd(7) + ('$' + m.cost.toFixed(2)).padEnd(7)
+    + ('$' + m.profit.toFixed(2)).padEnd(8) + hoursFor(p, 1).toFixed(2).padEnd(7)
+    + '$' + m.profitPerHour.toFixed(2));
+  if (m.profitPerHour < HOUR_FLOOR) {
+    warnings.push(p.t + ' earns only $' + m.profitPerHour.toFixed(2) + '/printer-hour at full price');
+  }
+  for (const [recv, pay] of (p.bundleTiers || [])) {
+    const t = marginFor(p, recv);
+    if (t.profit <= 0) warnings.push(p.t + ' tier ' + recv + '-for-' + pay + ' makes $' + t.profit.toFixed(2));
+    else if (t.profitPerHour < HOUR_FLOOR) {
+      warnings.push(p.t + ' tier ' + recv + '-for-' + pay + ' drops to $' + t.profitPerHour.toFixed(2) + '/printer-hour');
+    }
+  }
+}
+for (const g of GIFTS) {
+  const gp = BY_HANDLE[g.handle], c = costFor(gp, 1);
+  console.log('  GIFT over $' + g.minSpend + ': ' + gp.t + ' costs $' + c.toFixed(2) + ' and ' + hoursFor(gp, 1).toFixed(2) + 'h to make');
+  if (c > g.minSpend * 0.15) warnings.push('gift ' + gp.t + ' costs $' + c.toFixed(2) + ' against a $' + g.minSpend + ' threshold');
+}
+console.log('');
+if (warnings.length) { warnings.forEach(w => console.log('  !! ' + w)); } else { console.log('  no margin warnings'); }
+console.log('');
 
 console.log('Generated ' + PRODUCTS.length + ' product pages into products/');
 console.log('Generated ' + PAGES.length + ' content pages into pages/:');

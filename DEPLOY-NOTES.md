@@ -90,44 +90,64 @@ the files locally. In production `cleanUrls` redirects those to the pretty
 Duplicate handles, bad prices, unknown vibes and unknown colour keys throw at
 require time, so a bad hand-edit fails the build instead of shipping.
 
-## Bundle pricing — per product
+## Offers: free gift ladder, not quantity discounts
 
-`bundleTiers` is an array of `[units received, units paid for]` pairs, set per
-product. The maths lives in `unitsPaid()` in `assets/catalog.js` and is used by
-the product page, the cart and the checkout endpoint, so the number never
-changes between them.
+The old "3 for the price of 1" ladder was replaced. Two reasons, both from
+Alex Hormozi's *Money Models*:
+
+1. **Method 4 is not a discount.** The boots example: *"Buy 1 Pair of Boots,
+   Get TWO Pair Free — they charged 3x for a single pair of boots because they
+   came with two more pairs."* The price went UP; "free" was the framing. Our
+   version charged one unit's price for three, which is a 67% giveaway.
+2. **The free thing should be a different, cheaper thing.** *"Instead of Buy 1
+   shirt get 1 free, you can do buy 1 shirt get Socks Free"* and *"More Free
+   Cheaper Things can work better than Fewer Free Expensive Things."*
+
+So spending more earns a free **small** item, not a discount on the thing they
+came for. Set in `GIFTS` in `assets/catalog.js`:
+
+| Spend | Gift | Costs us | Perceived value |
+|---|---|---|---|
+| $25+ | Cat Paw Keychain | $1.50 | $10 |
+| $45+ | + Cat Clicker | $1.50 | $15 |
+| $65+ | (free shipping, unchanged) | — | — |
+
+Gifts are granted **server-side** in `api/checkout.js` from the recomputed
+subtotal and added as $0 line items. A client that injects `gift: true` or a
+fake subtotal gets nothing — there is a test for exactly that.
+
+Volume tiers run **alongside** the gifts, sized by profit per printer-hour
+(see below), not by percentage off:
+
+| Size | Tiers | Why |
+|---|---|---|
+| S | `[[3,1],[16,5],[40,10]]` | a small plate is 2.5h for 20 units, so even 40-for-$150 earns ~$28/printer-hour |
+| M | `[[5,4]]` | 1.67h per unit; anything deeper drops under $10/printer-hour |
+| L | `[]` | 13.5h per unit — already only ~$2/printer-hour at full price |
+
+## Cost model — per plate, not per unit
+
+`costUsd` was a flat per-unit guess and it was wrong. Owner's figures: a Cat
+Clicker costs ~$1.50 to make one and ~$1.70 to make two. The plate run is
+almost the whole cost; the marginal unit is ~$0.20. What scales is how many
+fit on a build plate — **L 2-3, M 5-8, S 10-30**.
 
 ```js
-bundleTiers: [[3,1],[16,5],[40,10]]   // S — pay 1 get 3, pay 5 get 16, pay 10 get 40
-bundleTiers: [[2,1],[7,2],[13,3]]     // M — pay 1 get 2, pay 2 get 7,  pay 3 get 13
-bundleTiers: []                       // L — no bundle
+cost(qty) = ceil(qty / plateQty) * plateRunUsd + qty * filamentUsd
 ```
 
-| Size | Products | Best per-unit | Example |
-|---|---|---|---|
-| S | 5 | 75% off | 40 keychains @ $10 = $100 ($2.50 ea) |
-| M | 11 | 77% off | 13 Sleepy Chonks @ $26 = $78 ($6.00 ea) |
-| L | 4 | — | never discounts |
+Set in `PLATE` in `assets/catalog.js`, calibrated to reproduce $1.50 / $1.70
+exactly. `node build-products.js` prints a margin table every build and warns
+if any single unit drops under 50% margin or any bundle tier would sell below
+cost.
 
-Product-page tier buttons, their per-unit prices, the policies table and the
-FAQ are all generated from these arrays. A tier larger than the product's
-`stock` is hidden rather than offered and then rejected at checkout.
+**Consequence worth knowing:** bulk is cheap here. 40 clickers cost $10.60 to
+make. Volume offers are far more affordable than a normal unit-cost business
+would allow — the binding constraint is printer *hours*, not dollars, so the
+number to watch is profit per plate-hour once plate times are measured.
 
-### The remainder gap, and `MONOTONIC_PRICING`
-
-Because the leftover units are charged at full price, some quantities cost
-**more** than a slightly larger one — 12 Sleepy Chonks is $130, but 13 is $78.
-Two ways to handle it, set by one constant in `assets/catalog.js`:
-
-- `MONOTONIC_PRICING = false` **(current)** — charge the tiers exactly as
-  written, and show a nudge on the product page: *"Take 13 instead and pay
-  $52.00 less"*. Nobody overpays without being offered the better deal, and it
-  pushes basket size up.
-- `MONOTONIC_PRICING = true` — never charge more than a larger quantity would.
-  The shopper at 12 simply pays the 13-unit price. Less revenue in those gaps,
-  but the price curve never goes backwards.
-
-Flip the constant and storefront, cart and Stripe all follow.
+`plateRunUsd`, `plateQty` and `filamentUsd` are PROVISIONAL and calibrated
+from one product. Time a real plate per size before trusting them.
 
 ## Buying
 
