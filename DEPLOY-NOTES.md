@@ -82,6 +82,28 @@ Links inside the site are written as `products/<name>.html` so they work when yo
 the files locally. In production `cleanUrls` redirects those to the pretty
 `/products/<name>` form.
 
+## Build stamp — stale pages announce themselves
+
+`assets/catalog.js` derives a `BUILD_ID` from the pricing-relevant data
+(size ladders, add-ons, gift thresholds, and every product's handle, price,
+size, stock and `bundlePrices`). `build-products.js` bakes that id into every
+generated page, and each page compares it against the catalog the browser
+actually loaded.
+
+If they differ the page logs a clear console error and shows a red banner,
+instead of half-working. **This is not hypothetical** — pages generated before
+the pricing rewrite called `RP.unitsPaid()`, which no longer exists. `refresh()`
+threw after updating the quantity but before the price, so the stepper kept
+moving while the price and bundle buttons silently froze. That is exactly the
+bug reported from the live site, and it means `products/` was deployed older
+than `assets/`.
+
+**Always push `assets/` and `products/` together.** If you ever see the banner,
+run `node build-products.js` and redeploy.
+
+`refresh()` now also computes every value before writing any of them, so a
+future error can't leave the quantity updated and the price stale.
+
 ## Adding a product later
 
 1. Add an entry to the `PRODUCTS` array in `assets/catalog.js`
@@ -90,64 +112,53 @@ the files locally. In production `cleanUrls` redirects those to the pretty
 Duplicate handles, bad prices, unknown vibes and unknown colour keys throw at
 require time, so a bad hand-edit fails the build instead of shipping.
 
-## Offers: free gift ladder, not quantity discounts
+## Offers: explicit bundle prices + a free gift ladder
 
-The old "3 for the price of 1" ladder was replaced. Two reasons, both from
-Alex Hormozi's *Money Models*:
+### Bundles are set prices, not ratios
 
-1. **Method 4 is not a discount.** The boots example: *"Buy 1 Pair of Boots,
-   Get TWO Pair Free — they charged 3x for a single pair of boots because they
-   came with two more pairs."* The price went UP; "free" was the framing. Our
-   version charged one unit's price for three, which is a 67% giveaway.
-2. **The free thing should be a different, cheaper thing.** *"Instead of Buy 1
-   shirt get 1 free, you can do buy 1 shirt get Socks Free"* and *"More Free
-   Cheaper Things can work better than Fewer Free Expensive Things."*
+`SIZE_BUNDLES` in `assets/catalog.js` holds `[quantity, dollars above base]`
+per size. Each product's `bundlePrices` is derived from it as
+`[quantity, TOTAL price]`:
 
-So spending more earns a free **small** item, not a discount on the thing they
-came for. Set in `GIFTS` in `assets/catalog.js`:
+| Size | Ladder | Example |
+|---|---|---|
+| S | 1, 3, 5, 10 @ base +$0/+$5/+$10/+$15 | $15 Cat Clicker: 1/$15, 3/$20, 5/$25, 10/$30 |
+| M | 1, 2, 3, 5 @ base +$0/+$5/+$10/+$15 | $26 Sleepy Chonk: 1/$26, 2/$31, 3/$36, 5/$41 |
+| L | 1, 2, 3 @ base +$0/+$10/+$20 | $34 Cat On The Moon: 1/$34, 2/$44, 3/$54 |
 
-| Spend | Gift | Costs us | Perceived value |
-|---|---|---|---|
-| $25+ | Cat Paw Keychain | $1.50 | $10 |
-| $45+ | + Cat Clicker | $1.50 | $15 |
-| $65+ | (free shipping, unchanged) | — | — |
+Edit those three rows and every product of that size follows. To take one
+product off the pattern, give it its own `bundlePrices` array of
+`[quantity, TOTAL price]` pairs.
+
+`priceFor(product, qty)` finds the **cheapest combination of rungs** that
+covers the requested quantity. Two consequences worth knowing:
+
+- A quantity between rungs is billed at whichever is cheaper — asking for 4
+  clickers costs $25, the 5-rung price, not $35.
+- The price curve never goes backwards. There is a test that walks quantities
+  1–60 and asserts buying one more is never cheaper.
+
+Add-ons are charged on **every unit** now (three engraved cats is three
+engravings), not just the "paid" units of the old ratio model.
+
+The old ratio machinery (`unitsPaid`, `freeUnits`, `MONOTONIC_PRICING`,
+`tierLabel`) is gone, as is the plate cost model and the build-time margin
+report — it needed maintenance the shop won't do.
+
+### Free gift ladder
+
+Runs alongside the bundles, from Hormozi's Method 4 (*"the Free Things can Be
+Different from the Paid Thing"*):
+
+| Spend | Gift | Costs us |
+|---|---|---|
+| $25+ | Cat Paw Keychain | ~$1.50 |
+| $45+ | + Cat Clicker | ~$1.50 |
+| $65+ | (free shipping, unchanged) | — |
 
 Gifts are granted **server-side** in `api/checkout.js` from the recomputed
 subtotal and added as $0 line items. A client that injects `gift: true` or a
 fake subtotal gets nothing — there is a test for exactly that.
-
-Volume tiers run **alongside** the gifts, sized by profit per printer-hour
-(see below), not by percentage off:
-
-| Size | Tiers | Why |
-|---|---|---|
-| S | `[[3,1],[16,5],[40,10]]` | a small plate is 2.5h for 20 units, so even 40-for-$150 earns ~$28/printer-hour |
-| M | `[[5,4]]` | 1.67h per unit; anything deeper drops under $10/printer-hour |
-| L | `[]` | 13.5h per unit — already only ~$2/printer-hour at full price |
-
-## Cost model — per plate, not per unit
-
-`costUsd` was a flat per-unit guess and it was wrong. Owner's figures: a Cat
-Clicker costs ~$1.50 to make one and ~$1.70 to make two. The plate run is
-almost the whole cost; the marginal unit is ~$0.20. What scales is how many
-fit on a build plate — **L 2-3, M 5-8, S 10-30**.
-
-```js
-cost(qty) = ceil(qty / plateQty) * plateRunUsd + qty * filamentUsd
-```
-
-Set in `PLATE` in `assets/catalog.js`, calibrated to reproduce $1.50 / $1.70
-exactly. `node build-products.js` prints a margin table every build and warns
-if any single unit drops under 50% margin or any bundle tier would sell below
-cost.
-
-**Consequence worth knowing:** bulk is cheap here. 40 clickers cost $10.60 to
-make. Volume offers are far more affordable than a normal unit-cost business
-would allow — the binding constraint is printer *hours*, not dollars, so the
-number to watch is profit per plate-hour once plate times are measured.
-
-`plateRunUsd`, `plateQty` and `filamentUsd` are PROVISIONAL and calibrated
-from one product. Time a real plate per size before trusting them.
 
 ## Buying
 
@@ -157,9 +168,75 @@ Two paths, both hitting `POST /api/checkout` and both repriced server-side:
 - **Buy it now** on a product page → straight to Stripe with just that one
   configuration, skipping the cart entirely.
 
-Express checkout is not a separate integration — Stripe Link, Apple Pay and
-Google Pay appear inside the session because `payment_method_types` is not
-pinned. Shop Pay is Shopify-only and cannot be offered here.
+### Payment methods are pinned, not dynamic
+
+`PAYMENT_METHODS` in `api/checkout.js`:
+
+```js
+['card', 'link', 'amazon_pay', 'cashapp', 'us_bank_account']
+```
+
+Dynamic payment methods were turned OFF deliberately. Left on, Stripe keeps
+adding buy-now-pay-later options (Klarna, Affirm, Afterpay) as it enables them,
+and we don't want BNPL on made-to-order goods. Pinning the list means a new
+BNPL can never appear without a code change.
+
+- **Apple Pay and Google Pay need no entry** — they ride on `card` automatically
+  once the domain is verified in Stripe (Settings → Payments → Payment method
+  domains).
+- **Shop Pay is not on the list and cannot be.** It is Shopify's own wallet;
+  Stripe does not offer it at any price. `link` is the equivalent — sign in,
+  card and address autofill, one tap. The only route to a real Shop Pay button
+  is moving the storefront to Shopify.
+- `us_bank_account` (ACH) is included because it was already enabled. Worth
+  knowing: ACH settles in days and can be reversed well after you've printed
+  and shipped. Drop it from the array if that risk isn't worth the lower fee.
+
+## Shipping — weight bands
+
+Stripe Checkout can't pull live carrier rates mid-session, so the rate is
+computed from the packed weight before the session is created:
+
+| Packed weight | Charge |
+|---|---|
+| ≤ 8 oz | $5 |
+| 8–16 oz | $7 |
+| 1–3 lb | $10 |
+| 3 lb+ | $14 |
+| Order ≥ $65 | **Free** |
+
+Packed weight = 2 oz packaging + each product's `weightOz` × qty + any gift's
+weight. It is written to session metadata as `packed_oz` so a label can be
+bought without re-weighing the parcel.
+
+**The band prices are still estimates and so are the product weights.** The
+structure is right; the numbers need real Pirate Ship quotes for your actual
+boxes, and `weightOz` needs a kitchen scale. Both are marked TODO.
+
+## Order confirmation — two pages, two shops
+
+| Page | Shop | Endpoint |
+|---|---|---|
+| `/success` | Catan Artisan | `GET /api/get-session` → `{state, total, paid, email}` |
+| `/order-complete` | cat shop | `GET /api/get-session` → `{shop:'cats', items, gifts, needsPhoto, ...}` |
+
+`success.html` renders a Catan order summary — tier, robber, box finish. The cat
+shop used to point at it, so a cat customer saw "Catan Artisan — Core Bundle"
+with empty fields. The cat shop now has its own generated `order-complete.html`
+and `success.html` was not modified.
+
+`api/get-session.js` is shared and was extended **additively**: an order whose
+metadata carries `shop: 'cats'` gets the cat response; anything else falls
+through to the original Catan response, byte for byte. There is a test asserting
+the Catan shape is unchanged.
+
+The confirmation page clears the cart, shows every line including free gifts,
+and — when the order has `needs_photo` — shows the exact-pattern-match photo
+request with the 7-day rule from the policies page.
+
+**The photo is still requested by email, not uploaded.** Real upload (Vercel
+Blob or S3 presigned PUT, keyed to the session id) is Phase 4.1 and is the next
+piece of work.
 
 ## "You may also like"
 
@@ -177,9 +254,9 @@ webhook and order sheet built first.
 - **`sales` is fake.** The bestseller row ranks on it. Real order counts need Phase 4.2.
 - **Catalog placeholders.** `weightOz`, `boxClass` and `stock` are guesses on all 20
   products, and `colorsAvailable` is all nine everywhere. Grep `catalog.js` for `TODO`.
-- **Shipping bands (Phase 3).** `api/checkout.js` charges one flat
-  `FLAT_SHIPPING_CENTS` rate under $65 and free over it. The weight bands need real
-  Pirate Ship quotes; `weightOz`/`boxClass` are already in place for them.
+- **Shipping band prices.** The weight-band structure is live, but the four band
+  prices and every `weightOz` are estimates. Get real Pirate Ship quotes and weigh
+  one packed parcel per size.
 - **`success.html` can't read the order back yet.** `api/checkout.js` writes
   `{handle, color, name, match}` into session metadata, but retrieving it needs a
   `GET /api/session?session_id=…` endpoint that doesn't exist. Blocks Phase 4.1.

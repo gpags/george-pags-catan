@@ -24,15 +24,12 @@ const UPDATED = 'August 17, 2026';
 /* Same catalog module the storefront and api/checkout.js read, so the
    generated pages, the cart and the Stripe line items cannot drift. */
 const CATALOG = require('./assets/catalog.js');
-const { PRODUCTS, VIBES, ADDONS, tierLabel, GIFTS, BY_HANDLE } = CATALOG;
+const { PRODUCTS, VIBES, ADDONS, GIFTS, BY_HANDLE, SIZE_BUNDLES, priceFor, savingAt, BUILD_ID } = CATALOG;
 
 /* Every distinct bundle tier actually in use, so the policies table and
    the FAQ describe the real offer instead of a stale hardcoded list. */
-const TIERS_IN_USE = (() => {
-  const seen = new Map();
-  for (const p of PRODUCTS) for (const [recv, pay] of (p.bundleTiers || [])) seen.set(recv + '/' + pay, [recv, pay]);
-  return [...seen.values()].sort((a, b) => a[0] - b[0]);
-})();
+/* The distinct ladder shapes in use, for the policies page. */
+const LADDERS = Object.entries(SIZE_BUNDLES).map(([size, rows]) => [size, rows]);
 
 /* Site-wide bestseller ranking, used by every product page's "You may also
    like" row. `sales` is currently seeded placeholder data — see the
@@ -202,8 +199,10 @@ function productPage(p) {
      first, so a product can carry any combination without a code change. */
   /* Smallest first. A tier we could not fulfil from stock is hidden rather
      than shown and then rejected by the checkout endpoint. */
-  const tiers = (p.bundleTiers || [])
-    .filter(([recv]) => recv <= p.stock)
+  /* Explicit [quantity, total price] rungs. A rung we could not fulfil from
+     stock is hidden rather than offered and then rejected at checkout. */
+  const tiers = (p.bundlePrices || [])
+    .filter(([qty]) => qty <= p.stock)
     .slice()
     .sort((a, x) => a[0] - x[0]);
 
@@ -251,9 +250,8 @@ ${chromeTop(b)}
 ${tiers.length ? `
       <div class="opt-t">Bundle &amp; save</div>
       <div class="tiers" id="tiers">
-        <button class="tier" data-q="1" aria-pressed="true"><b>1 for $${p.price}</b><i class="tier-ea">$${p.price}.00 each</i></button>
-${tiers.map(([recv, pay]) =>
-`        <button class="tier" data-q="${recv}" aria-pressed="false"><span class="tier-free">${recv - pay} FREE</span><b>${recv} for $${p.price * pay}</b><i class="tier-ea">$${(p.price * pay / recv).toFixed(2)} each</i></button>`).join('\n')}
+${tiers.map(([qty, total]) =>
+`        <button class="tier" data-q="${qty}" aria-pressed="${qty === 1}">${p.price * qty - total > 0 ? '<span class="tier-free">SAVE $' + (p.price * qty - total) + '</span>' : ''}<b>${qty} for $${total}</b><i class="tier-ea">$${(total / qty).toFixed(2)} each</i></button>`).join('\n')}
       </div>` : ''}
 
       <div class="pdp-gift" id="pdpGift">
@@ -294,6 +292,21 @@ ${tiers.map(([recv, pay]) =>
 ${cartDrawer()}
 ${footer(b)}
 <script>
+/* Built against catalog ${BUILD_ID}. If the browser loaded a different
+   catalog than this page was generated from, say so instead of silently
+   half-working — a stale page used to freeze the price and bundle buttons
+   while the quantity stepper kept moving. */
+if (RP.BUILD_ID !== ${JSON.stringify(BUILD_ID)}) {
+  console.error('Realized Prints: this page was built from catalog ${BUILD_ID} '
+    + 'but assets/catalog.js is ' + RP.BUILD_ID + '. Run: node build-products.js');
+  /* The warning must never be the thing that breaks the page. */
+  try {
+    var stale = document.createElement('div');
+    stale.className = 'stale-warn';
+    stale.textContent = 'This page is out of date — please refresh. If it persists, the site needs rebuilding.';
+    document.body.insertBefore(stale, document.body.firstChild);
+  } catch (e) { /* console.error above is enough */ }
+}
 const PROD = RP.BY_HANDLE[${JSON.stringify(p.h)}];
 const REL_IDS = ${JSON.stringify(rel.map(r => r.id))};
 /* Only the colors this product actually ships in. */
@@ -335,14 +348,18 @@ function itemForCart(){
   };
 }
 function refresh(){
+  /* Everything is computed before anything is written, so a failure can't
+     leave the quantity updated while the price stays stale. */
+  const addons = (document.getElementById('addName').checked ? RP.ADDONS.name.price : 0)
+               + (document.getElementById('addMatch').checked ? RP.ADDONS.match.price : 0);
+  const due = RP.priceFor(PROD, qty) + addons * qty;
+  const was = (PROD.price + addons) * qty;
+  const saved = was - due;
   document.getElementById('qVal').textContent = qty;
-  const paid = RP.unitsPaid(qty, PROD.bundleTiers);
-  const free = qty - paid;
-  const due = unitPrice() * paid, was = unitPrice() * qty;
-  document.getElementById('pTotal').innerHTML = free
+  document.getElementById('pTotal').innerHTML = saved > 0
     ? '<span class="was">'+RP.money(was)+'</span>'+RP.money(due) : RP.money(due);
-  document.getElementById('saveNote').textContent = free
-    ? free+' free — you save '+RP.money(was-due) : '';
+  document.getElementById('saveNote').textContent = saved > 0
+    ? 'You save '+RP.money(saved)+' on '+qty : '';
   document.getElementById('nameField').classList.toggle('show', document.getElementById('addName').checked);
   const tiers = document.getElementById('tiers');
   if (tiers) tiers.querySelectorAll('.tier').forEach(t =>
@@ -363,13 +380,12 @@ function refresh(){
   }
 
   const nudge = document.getElementById('nudge');
-  const deal = RP.betterDeal(qty, PROD.bundleTiers);
+  const deal = RP.betterDeal(PROD, qty);
   if (nudge) {
     if (deal && deal.qty <= PROD.stock) {
-      const saving = (unitPrice() * paid) - (unitPrice() * deal.paid);
       nudge.hidden = false;
       nudge.dataset.q = deal.qty;
-      nudge.textContent = 'Take ' + deal.qty + ' instead and pay ' + RP.money(saving) + ' less →';
+      nudge.textContent = 'Take ' + deal.qty + ' for the same price';
     } else {
       nudge.hidden = true;
     }
@@ -532,22 +548,25 @@ shading, and we'd rather tell you that now than disappoint you later.</div>
 personalised print starts we can't change it. Up to 18 characters.</p>
 
 <h2 id="bundles">Bundle offers</h2>
-<p>Bundle pricing applies automatically in the cart on eligible products — you'll see the discount
-before you pay, and the price never changes between the product page and checkout.</p>
-<p><strong>Offers vary by product.</strong> The exact bundle available on an item is shown on its own
-product page. Across the range these are the tiers we run:</p>
+<p>Buy more of the same cat and the price per cat drops. The bundle price is
+applied automatically in the cart, and it's shown on the product page first, so
+the price never changes on you at checkout.</p>
+<p>Which rungs a product has depends on its size — bigger cats take far longer to
+print, so their bundles are smaller:</p>
 <table>
-  <tr><th>You receive</th><th>You pay for</th><th>Free</th></tr>
-${TIERS_IN_USE.map(([recv, pay]) =>
-  `  <tr><td>${recv}</td><td>${pay}</td><td>${recv - pay}</td></tr>`).join('\n')}
+  <tr><th>Size</th><th>Bundles offered</th></tr>
+${LADDERS.map(([size, rows]) => `  <tr><td>${{S:'Small', M:'Medium', L:'Large'}[size]}</td><td>${rows.map(([q, add]) => q + (add ? ' for base +$' + add : ' at base price')).join(' &middot; ')}</td></tr>`).join('\n')}
 </table>
+<p>For example a $15 Cat Clicker runs 1 for $15, 3 for $20, 5 for $25 and 10 for $30.
+The exact prices are on every product page.</p>
 <ul>
-  <li>Where a product has more than one tier, the largest applies first and anything left over falls
-      back to the next one down.</li>
-  <li>Bundles apply <strong>per product line</strong> — free units are the same product, and you can
-      pick a different colour for each.</li>
-  <li>Add-ons like engraving and pattern match are charged on the units you pay for.</li>
-  <li>Eligible products are marked on the product page. Not combinable with discount codes.</li>
+  <li>Bundles apply <strong>per product line</strong> — the units are the same product,
+      and you can pick a different colour for each.</li>
+  <li>Engraving and pattern match are charged on <strong>every unit</strong>, since each
+      one is done by hand.</li>
+  <li>If a quantity falls between two rungs you're charged whichever is cheaper —
+      you'll never pay more for buying more.</li>
+  <li>Not combinable with discount codes.</li>
 </ul>
 
 <h2 id="variance">Colour, finish &amp; variance</h2>
@@ -610,8 +629,10 @@ const FAQ = [
   ]],
   ['bundles-pricing', 'Bundles &amp; pricing', [
     ['How do the bundles work?',
-     '<p>Eligible products show a "Bundle &amp; save" row on their page with the exact offer for that item — the smaller ones run buy-1-get-1, the bigger ones run a different tier. The discount is applied automatically in the cart and shown on the product page first, so the price never changes on you at checkout.</p>'],
-    ['Do free units have to be the same colour?',
+     '<p>Every product has a "Bundle &amp; save" row showing set prices for set quantities — a $15 Cat Clicker is 1 for $15, 3 for $20, 5 for $25 or 10 for $30. Pick a quantity and the price is applied automatically in the cart, so it never changes on you at checkout.</p>'],
+    ['What if I want a quantity that is not one of the options?',
+     '<p>You will be charged whichever bundle is cheapest for that amount. Ask for 4 clickers and you pay the 5-pack price of $25, because it is less than four singles. You will never pay more for buying more.</p>'],
+    ['Do bundled cats have to be the same colour?',
      '<p>They have to be the same product, but you can pick a different colour for each one.</p>'],
     ['Can I stack a discount code on a bundle?',
      '<p>No — bundles are already the best price we do.</p>']
@@ -795,6 +816,117 @@ if (!fs.existsSync(OUT_G)) fs.mkdirSync(OUT_G, { recursive: true });
 
 for (const p of PRODUCTS) fs.writeFileSync(path.join(OUT_P, p.h + '.html'), productPage(p), 'utf8');
 
+/* ================================================================
+   ORDER CONFIRMATION  (root: /order-complete)
+   Deliberately separate from /success, which belongs to Catan Artisan
+   and renders a Catan order summary.
+   ================================================================ */
+function orderCompletePage() {
+  const b = '';
+  return `<!-- order-complete.html — generated by build-products.js. Do not edit by hand. -->
+${head(b, 'Thank you — Realized Prints', 'Your order is confirmed. Here is what happens next.')}
+${chromeTop(b)}
+<div class="wrap">
+  <section class="page-hero">
+    <h1>Thank you<span id="ocName"></span>!</h1>
+    <p id="ocLede">Your order is confirmed. We're getting the printers warm.</p>
+  </section>
+
+  <div class="oc-grid">
+    <div class="oc-main">
+      <h2 class="oc-h">What you ordered</h2>
+      <div id="ocItems" class="oc-items"><p class="oc-muted">Loading your order…</p></div>
+      <div class="oc-tot" id="ocTotalRow" style="display:none">
+        <span>Total paid</span><span id="ocTotal"></span>
+      </div>
+
+      <div class="pdp-gift" id="ocPhoto" style="display:none">
+        📸 We need a photo of your cat
+        <span>You chose <strong>Exact pattern match</strong>. Reply to your confirmation email with
+        one clear, well-lit photo, or send it to <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>
+        quoting your order number below. If we haven't got a photo within 7 days we'll print the
+        preset colour you picked and refund the match fee.</span>
+      </div>
+    </div>
+
+    <aside class="oc-side">
+      <h2 class="oc-h">What happens next</h2>
+      <ol class="oc-steps">
+        <li>We print and finish your order by hand — <strong>5–10 business days</strong>.</li>
+        <li>You get a tracking email the moment the label is made.</li>
+        <li>Questions? Reply to your receipt, or use the <a href="${b}pages/contact.html">contact page</a>.</li>
+      </ol>
+      <div class="oc-ref">
+        <span class="oc-muted">Order reference</span>
+        <strong id="ocRef">—</strong>
+      </div>
+      <a class="btn btn-pink btn-block" href="${b}index.html#catalog">Keep shopping</a>
+    </aside>
+  </div>
+</div>
+${cartDrawer()}
+${footer(b)}
+<script>
+/* The cart is done — the order is with Stripe now. */
+try { localStorage.removeItem('rp_cart_v2'); } catch (e) {}
+
+const sessionId = new URLSearchParams(location.search).get('session_id');
+const itemsEl = document.getElementById('ocItems');
+document.getElementById('ocRef').textContent = sessionId ? sessionId.slice(-12).toUpperCase() : '—';
+
+function row(label, sub, price) {
+  return '<div class="oc-item"><div><div class="oc-item-t">' + label + '</div>'
+       + (sub ? '<div class="oc-muted">' + sub + '</div>' : '') + '</div>'
+       + '<div class="oc-item-p">' + price + '</div></div>';
+}
+
+async function loadOrder() {
+  if (!sessionId) {
+    itemsEl.innerHTML = '<p class="oc-muted">No order reference found. If you just paid, your receipt email has the details.</p>';
+    return;
+  }
+  try {
+    const res = await fetch('/api/get-session?session_id=' + encodeURIComponent(sessionId));
+    if (!res.ok) throw new Error('lookup failed');
+    const d = await res.json();
+    if (d.shop !== 'cats') {
+      itemsEl.innerHTML = '<p class="oc-muted">This looks like a Catan Artisan order — <a href="/success?session_id='
+        + encodeURIComponent(sessionId) + '">view it here</a>.</p>';
+      return;
+    }
+
+    const gifts = d.gifts || [];
+    const html = (d.items || []).map(function (i) {
+      const p = RP.BY_HANDLE[i.handle];
+      const title = p ? p.t : i.handle;
+      const bits = [];
+      bits.push(RP.COLOR_LABEL[i.color] || i.color);
+      if (i.qty > 1) bits.push('Qty ' + i.qty);
+      if (i.name) bits.push('engraved "' + i.name + '"');
+      if (i.match) bits.push('exact pattern match');
+      return row(i.gift ? '🎁 ' + title + ' (free gift)' : title, bits.join(' · '), i.gift ? 'FREE' : '');
+    }).join('');
+    itemsEl.innerHTML = html || '<p class="oc-muted">Your receipt email has the full details.</p>';
+
+    if (d.total) {
+      document.getElementById('ocTotal').textContent = RP.money(d.total);
+      document.getElementById('ocTotalRow').style.display = 'flex';
+    }
+    if (d.needsPhoto) document.getElementById('ocPhoto').style.display = 'block';
+    if (d.email) document.getElementById('ocLede').textContent =
+      'Your order is confirmed and a receipt is on its way to ' + d.email + '.';
+  } catch (e) {
+    itemsEl.innerHTML = '<p class="oc-muted">We could not load the order details here, but your payment went through '
+      + 'and your receipt email has everything. Contact us if anything looks wrong.</p>';
+  }
+}
+loadOrder();
+</script>
+</body>
+</html>
+`;
+}
+
 const PAGES = [
   {file:'policies.html', title:'Policies — Realized Prints',
    desc:'Shipping, returns, replacements, custom orders, bundles and safety information for Realized Prints.',
@@ -827,44 +959,9 @@ const PAGES = [
    body:privacyBody}
 ];
 for (const pg of PAGES) fs.writeFileSync(path.join(OUT_G, pg.file), contentPage(pg), 'utf8');
-
-/* ================================================================
-   MARGIN REPORT — printed on every build so a pricing change can't
-   quietly go underwater. Costs come from the PLATE model in
-   assets/catalog.js (per-plate, not per-unit).
-   ================================================================ */
-const { costFor, marginFor, hoursFor } = CATALOG;
-const HOUR_FLOOR = 12;   // dollars of gross profit per printer-hour we won't go under
-const warnings = [];
-console.log('');
-console.log('Margin check — PROVISIONAL plate figures. Printer hours are the real constraint.');
-console.log('  ' + 'Product'.padEnd(23) + 'Sz ' + 'Price'.padEnd(7) + 'Cost'.padEnd(7) + 'Profit'.padEnd(8) + 'Hrs'.padEnd(7) + '$/printer-hr');
-for (const p of PRODUCTS) {
-  const m = marginFor(p, 1);
-  console.log('  ' + p.t.padEnd(23) + p.size.padEnd(3)
-    + ('$' + p.price).padEnd(7) + ('$' + m.cost.toFixed(2)).padEnd(7)
-    + ('$' + m.profit.toFixed(2)).padEnd(8) + hoursFor(p, 1).toFixed(2).padEnd(7)
-    + '$' + m.profitPerHour.toFixed(2));
-  if (m.profitPerHour < HOUR_FLOOR) {
-    warnings.push(p.t + ' earns only $' + m.profitPerHour.toFixed(2) + '/printer-hour at full price');
-  }
-  for (const [recv, pay] of (p.bundleTiers || [])) {
-    const t = marginFor(p, recv);
-    if (t.profit <= 0) warnings.push(p.t + ' tier ' + recv + '-for-' + pay + ' makes $' + t.profit.toFixed(2));
-    else if (t.profitPerHour < HOUR_FLOOR) {
-      warnings.push(p.t + ' tier ' + recv + '-for-' + pay + ' drops to $' + t.profitPerHour.toFixed(2) + '/printer-hour');
-    }
-  }
-}
-for (const g of GIFTS) {
-  const gp = BY_HANDLE[g.handle], c = costFor(gp, 1);
-  console.log('  GIFT over $' + g.minSpend + ': ' + gp.t + ' costs $' + c.toFixed(2) + ' and ' + hoursFor(gp, 1).toFixed(2) + 'h to make');
-  if (c > g.minSpend * 0.15) warnings.push('gift ' + gp.t + ' costs $' + c.toFixed(2) + ' against a $' + g.minSpend + ' threshold');
-}
-console.log('');
-if (warnings.length) { warnings.forEach(w => console.log('  !! ' + w)); } else { console.log('  no margin warnings'); }
-console.log('');
+fs.writeFileSync(path.join(ROOT, 'order-complete.html'), orderCompletePage(), 'utf8');
 
 console.log('Generated ' + PRODUCTS.length + ' product pages into products/');
+console.log('Generated order-complete.html (cat shop confirmation page)');
 console.log('Generated ' + PAGES.length + ' content pages into pages/:');
 console.log(PAGES.map(p => '  /pages/' + p.file.replace('.html','')).join('\n'));
