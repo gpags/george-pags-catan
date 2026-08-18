@@ -113,9 +113,9 @@
       <div class="opt-t">Bundle &amp; save</div>
       <div class="tiers" id="tiers">
         <button class="tier" data-q="1" aria-pressed="true"><b>1 for $17</b><i class="tier-ea">$17.00 each</i></button>
-        <button class="tier" data-q="3" aria-pressed="false"><span class="tier-free">2 FREE</span><b>3 for $17</b><i class="tier-ea">$5.67 each</i></button>
-        <button class="tier" data-q="16" aria-pressed="false"><span class="tier-free">11 FREE</span><b>16 for $85</b><i class="tier-ea">$5.31 each</i></button>
-        <button class="tier" data-q="40" aria-pressed="false"><span class="tier-free">30 FREE</span><b>40 for $170</b><i class="tier-ea">$4.25 each</i></button>
+        <button class="tier" data-q="3" aria-pressed="false"><span class="tier-free">SAVE $29</span><b>3 for $22</b><i class="tier-ea">$7.33 each</i></button>
+        <button class="tier" data-q="5" aria-pressed="false"><span class="tier-free">SAVE $58</span><b>5 for $27</b><i class="tier-ea">$5.40 each</i></button>
+        <button class="tier" data-q="10" aria-pressed="false"><span class="tier-free">SAVE $138</span><b>10 for $32</b><i class="tier-ea">$3.20 each</i></button>
       </div>
 
       <div class="pdp-gift" id="pdpGift">
@@ -251,13 +251,15 @@ function itemForCart(){
 }
 function refresh(){
   document.getElementById('qVal').textContent = qty;
-  const paid = RP.unitsPaid(qty, PROD.bundleTiers);
-  const free = qty - paid;
-  const due = unitPrice() * paid, was = unitPrice() * qty;
-  document.getElementById('pTotal').innerHTML = free
+  const addons = (document.getElementById('addName').checked ? RP.ADDONS.name.price : 0)
+               + (document.getElementById('addMatch').checked ? RP.ADDONS.match.price : 0);
+  const due = RP.priceFor(PROD, qty) + addons * qty;
+  const was = (PROD.price + addons) * qty;
+  const saved = was - due;
+  document.getElementById('pTotal').innerHTML = saved > 0
     ? '<span class="was">'+RP.money(was)+'</span>'+RP.money(due) : RP.money(due);
-  document.getElementById('saveNote').textContent = free
-    ? free+' free — you save '+RP.money(was-due) : '';
+  document.getElementById('saveNote').textContent = saved > 0
+    ? 'You save '+RP.money(saved)+' on '+qty : '';
   document.getElementById('nameField').classList.toggle('show', document.getElementById('addName').checked);
   const tiers = document.getElementById('tiers');
   if (tiers) tiers.querySelectorAll('.tier').forEach(t =>
@@ -278,13 +280,12 @@ function refresh(){
   }
 
   const nudge = document.getElementById('nudge');
-  const deal = RP.betterDeal(qty, PROD.bundleTiers);
+  const deal = RP.betterDeal(PROD, qty);
   if (nudge) {
     if (deal && deal.qty <= PROD.stock) {
-      const saving = (unitPrice() * paid) - (unitPrice() * deal.paid);
       nudge.hidden = false;
       nudge.dataset.q = deal.qty;
-      nudge.textContent = 'Take ' + deal.qty + ' instead and pay ' + RP.money(saving) + ' less →';
+      nudge.textContent = 'Take ' + deal.qty + ' for the same price';
     } else {
       nudge.hidden = true;
     }
