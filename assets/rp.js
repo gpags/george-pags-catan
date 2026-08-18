@@ -20,7 +20,8 @@ const CATALOG = global.RP_CATALOG;
 if (!CATALOG) throw new Error('rp.js: assets/catalog.js must be loaded first');
 
 const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
-        FREE_SHIP, unitsPaid, freeUnits, tierLabel, betterDeal } = CATALOG;
+        FREE_SHIP, unitsPaid, freeUnits, tierLabel, betterDeal,
+        GIFTS, giftsFor, nextGift } = CATALOG;
 
 const BASE = (document.body && document.body.dataset.base) || '';
 const CHECKOUT_URL = '/api/checkout';
@@ -213,11 +214,24 @@ function renderCart(){
   }
   const total = cartTotal();
   const left = Math.max(0, FREE_SHIP - total);
+  /* Gift ladder, mirrored from the server. api/checkout.js decides the real
+     entitlement — this is only the shopper-facing preview of it. */
+  const earned = giftsFor(total);
+  const next = nextGift(total);
   body.innerHTML =
     `<div class="ship-bar">
        <p>${left > 0 ? "You're " + money(left) + ' away from free shipping' : '🎉 You’ve got free shipping'}</p>
        <div class="ship-track"><div class="ship-fill" style="width:${Math.min(100,total/FREE_SHIP*100)}%"></div></div>
      </div>` +
+    (next ? `<div class="gift-bar">Add ${money(next.minSpend - total)} more and we’ll throw in a free
+       <strong>${BY_HANDLE[next.handle].t}</strong></div>` : '') +
+    earned.map(g => `<div class="ci ci-gift">
+        <img src="${BY_HANDLE[g.handle].imgUrl}" alt="${BY_HANDLE[g.handle].t}">
+        <div>
+          <div class="ci-t">${BY_HANDLE[g.handle].t}</div>
+          <div class="ci-m">${COLOR_LABEL[g.color] || g.color} · our gift to you</div>
+          <div class="ci-p">FREE</div>
+        </div></div>`).join('') +
     CART.map((i,ix) => {
       const p = BY_HANDLE[i.h];
       const free = freeUnits(i.qty, tiersFor(i));
@@ -316,6 +330,7 @@ else boot();
 
 global.RP = { BASE, VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
               unitsPaid, freeUnits, tierLabel, betterDeal, money, unitPrice,
+              GIFTS, giftsFor, nextGift,
               addToCart, renderCart, openCart, closeCart, cardHTML, FREE_SHIP,
               startCheckout, buyNow, get cart(){ return CART; } };
 })(window);

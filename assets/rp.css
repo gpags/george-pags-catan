@@ -249,8 +249,9 @@ h1,h2,h3,h4{font-family:'Fredoka','Nunito',sans-serif;font-weight:600;line-heigh
   background:#fff;transition:.15s}
 .tier:hover{border-color:var(--pink-300)}
 .tier[aria-pressed="true"]{border-color:var(--grape);background:linear-gradient(150deg,#f6ecff,#ffeaf5)}
-.tier b{display:block;font-family:'Fredoka',sans-serif;font-size:1.15rem;font-weight:600}
-.tier span{display:block;font-size:11.5px;font-weight:700;color:var(--grape);margin-top:2px}
+.tier b{display:block;font-family:'Fredoka',sans-serif;font-size:1.15rem;font-weight:600;line-height:1.15}
+.tier-free{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:#fff;background:var(--grape);border-radius:999px;padding:2px 9px;margin-bottom:6px}
 .tier em{display:block;font-size:11px;color:var(--muted);font-style:normal;margin-top:2px}
 .tier-ea{display:block;font-size:12px;font-style:normal;font-weight:800;color:var(--ink);margin-top:5px}
 .tier[aria-pressed="true"] .tier-ea{color:var(--grape)}
@@ -306,6 +307,13 @@ h1,h2,h3,h4{font-family:'Fredoka','Nunito',sans-serif;font-weight:600;line-heigh
 .pay-shop:hover{background:#4a28d0}
 .pay-alt{display:block;text-align:center;font-size:12.5px;color:var(--muted);font-weight:700;margin-top:9px}
 .pay-shop:disabled,.cart-f .btn:disabled{opacity:.6;cursor:default}
+.gift-bar{margin:0 0 14px;padding:11px 13px;border-radius:13px;background:#eafaf2;border:2px dashed var(--mint);
+  color:#0c4f3c;font-size:13px;font-weight:800;text-align:center;line-height:1.4}
+.ci-gift{background:#f3fcf8;border-radius:14px;padding:10px;margin-bottom:10px}
+.ci-gift .ci-p{color:#0c7a52}
+.pdp-gift{margin:16px 0 4px;padding:13px 15px;border-radius:14px;background:#eafaf2;border:2px dashed var(--mint);
+  color:#0c4f3c;font-size:13.5px;font-weight:800;line-height:1.45}
+.pdp-gift span{display:block;font-weight:700;color:#14795c;font-size:12.5px;margin-top:3px}
 .cart-err{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fdeaf2;color:#c62b6d;
   font-size:13px;font-weight:700;text-align:center}
 
