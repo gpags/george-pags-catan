@@ -98,31 +98,63 @@ the product page, the cart and the checkout endpoint, so the number never
 changes between them.
 
 ```js
-bundleTiers: [[2,1],[15,5]]   // buy 1 get 1, and buy 5 get 10
-bundleTiers: [[5,2]]          // buy 2 get 3 free
-bundleTiers: []               // no bundle
+bundleTiers: [[3,1],[16,5],[40,10]]   // S — pay 1 get 3, pay 5 get 16, pay 10 get 40
+bundleTiers: [[2,1],[7,2],[13,3]]     // M — pay 1 get 2, pay 2 get 7,  pay 3 get 13
+bundleTiers: []                       // L — no bundle
 ```
 
-The largest tier applies as many whole times as it fits, the remainder falls
-through to smaller tiers, and anything left over is charged at full price.
-Degenerate tiers (`pay >= received`, or `received <= 1`) are ignored rather
-than trusted.
-
-Current assignment is by size class:
-
-| Size | Products | Tiers | Effective discount |
+| Size | Products | Best per-unit | Example |
 |---|---|---|---|
-| S | 5 | `[[2,1],[15,5]]` | 50% / 67% |
-| M | 11 | `[[5,2]]` | **60%** |
-| L | 4 | `[]` | none |
+| S | 5 | 75% off | 40 keychains @ $10 = $100 ($2.50 ea) |
+| M | 11 | 77% off | 13 Sleepy Chonks @ $26 = $78 ($6.00 ea) |
+| L | 4 | — | never discounts |
 
-The product-page tier buttons and the bundle table on `/pages/policies` are
-both generated from these arrays — they can't go stale.
+Product-page tier buttons, their per-unit prices, the policies table and the
+FAQ are all generated from these arrays. A tier larger than the product's
+`stock` is hidden rather than offered and then rejected at checkout.
+
+### The remainder gap, and `MONOTONIC_PRICING`
+
+Because the leftover units are charged at full price, some quantities cost
+**more** than a slightly larger one — 12 Sleepy Chonks is $130, but 13 is $78.
+Two ways to handle it, set by one constant in `assets/catalog.js`:
+
+- `MONOTONIC_PRICING = false` **(current)** — charge the tiers exactly as
+  written, and show a nudge on the product page: *"Take 13 instead and pay
+  $52.00 less"*. Nobody overpays without being offered the better deal, and it
+  pushes basket size up.
+- `MONOTONIC_PRICING = true` — never charge more than a larger quantity would.
+  The shopper at 12 simply pays the 13-unit price. Less revenue in those gaps,
+  but the price curve never goes backwards.
+
+Flip the constant and storefront, cart and Stripe all follow.
+
+## Buying
+
+Two paths, both hitting `POST /api/checkout` and both repriced server-side:
+
+- **Add to cart** → cart drawer → *Express checkout* / *Check out*.
+- **Buy it now** on a product page → straight to Stripe with just that one
+  configuration, skipping the cart entirely.
+
+Express checkout is not a separate integration — Stripe Link, Apple Pay and
+Google Pay appear inside the session because `payment_method_types` is not
+pinned. Shop Pay is Shopify-only and cannot be offered here.
+
+## "You may also like"
+
+One shared row on every product page, ranked by the `sales` field and
+excluding the current product, so the same hero items get promoted site-wide.
+
+**`sales` is seeded placeholder data, not real orders.** Feeding it real
+numbers is a Phase 4.2 job — see the plan in the summary; it needs the Stripe
+webhook and order sheet built first.
 
 ## Still to do
 
 - **Photography.** Every image is a MakerWorld placeholder. The gallery thumbnails on
   product pages are currently other products standing in for per-colour shots.
+- **`sales` is fake.** The bestseller row ranks on it. Real order counts need Phase 4.2.
 - **Catalog placeholders.** `weightOz`, `boxClass` and `stock` are guesses on all 20
   products, and `colorsAvailable` is all nine everywhere. Grep `catalog.js` for `TODO`.
 - **Shipping bands (Phase 3).** `api/checkout.js` charges one flat
