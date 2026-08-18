@@ -112,10 +112,15 @@
 
       <div class="opt-t">Bundle &amp; save</div>
       <div class="tiers" id="tiers">
-        <button class="tier" data-q="1" aria-pressed="true"><b>1</b><em>Single</em><i class="tier-ea">$10.00 each</i></button>
-        <button class="tier" data-q="3" aria-pressed="false"><b>3</b><span>2 FREE</span><em>Buy 1 get 2</em><i class="tier-ea">$3.33 each</i></button>
-        <button class="tier" data-q="16" aria-pressed="false"><b>16</b><span>11 FREE</span><em>Buy 5 get 11</em><i class="tier-ea">$3.13 each</i></button>
-        <button class="tier" data-q="40" aria-pressed="false"><b>40</b><span>30 FREE</span><em>Buy 10 get 30</em><i class="tier-ea">$2.50 each</i></button>
+        <button class="tier" data-q="1" aria-pressed="true"><b>1 for $10</b><i class="tier-ea">$10.00 each</i></button>
+        <button class="tier" data-q="3" aria-pressed="false"><span class="tier-free">2 FREE</span><b>3 for $10</b><i class="tier-ea">$3.33 each</i></button>
+        <button class="tier" data-q="16" aria-pressed="false"><span class="tier-free">11 FREE</span><b>16 for $50</b><i class="tier-ea">$3.13 each</i></button>
+        <button class="tier" data-q="40" aria-pressed="false"><span class="tier-free">30 FREE</span><b>40 for $100</b><i class="tier-ea">$2.50 each</i></button>
+      </div>
+
+      <div class="pdp-gift" id="pdpGift">
+        Free gift with every order over $25
+        <span>Spend $25+ for a free Cat Paw Keychain, or $45+ to add a free Cat Clicker.</span>
       </div>
 
       <div class="qty-row">
@@ -261,6 +266,17 @@ function refresh(){
   /* These tiers charge the remainder at full price, so some quantities cost
      more than a slightly larger one. Offer the better deal rather than let
      someone overpay without knowing. */
+  const gift = document.getElementById('pdpGift');
+  if (gift) {
+    const earned = RP.giftsFor(due), nxt = RP.nextGift(due);
+    const got = earned.map(g => RP.BY_HANDLE[g.handle].t);
+    gift.innerHTML = got.length
+      ? '🎁 Free ' + got.join(' + ') + ' included'
+        + (nxt ? '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + ' too.</span>' : '')
+      : '🎁 Free gift on orders over $' + nxt.minSpend
+        + '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + '.</span>';
+  }
+
   const nudge = document.getElementById('nudge');
   const deal = RP.betterDeal(qty, PROD.bundleTiers);
   if (nudge) {

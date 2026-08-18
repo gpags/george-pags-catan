@@ -111,6 +111,11 @@
       </label>
 
 
+      <div class="pdp-gift" id="pdpGift">
+        Free gift with every order over $25
+        <span>Spend $25+ for a free Cat Paw Keychain, or $45+ to add a free Cat Clicker.</span>
+      </div>
+
       <div class="qty-row">
         <div class="qty">
           <button id="qMinus" aria-label="Decrease quantity">−</button>
@@ -251,6 +256,17 @@ function refresh(){
   /* These tiers charge the remainder at full price, so some quantities cost
      more than a slightly larger one. Offer the better deal rather than let
      someone overpay without knowing. */
+  const gift = document.getElementById('pdpGift');
+  if (gift) {
+    const earned = RP.giftsFor(due), nxt = RP.nextGift(due);
+    const got = earned.map(g => RP.BY_HANDLE[g.handle].t);
+    gift.innerHTML = got.length
+      ? '🎁 Free ' + got.join(' + ') + ' included'
+        + (nxt ? '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + ' too.</span>' : '')
+      : '🎁 Free gift on orders over $' + nxt.minSpend
+        + '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + '.</span>';
+  }
+
   const nudge = document.getElementById('nudge');
   const deal = RP.betterDeal(qty, PROD.bundleTiers);
   if (nudge) {

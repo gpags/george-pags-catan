@@ -112,10 +112,13 @@
 
       <div class="opt-t">Bundle &amp; save</div>
       <div class="tiers" id="tiers">
-        <button class="tier" data-q="1" aria-pressed="true"><b>1</b><em>Single</em><i class="tier-ea">$25.00 each</i></button>
-        <button class="tier" data-q="2" aria-pressed="false"><b>2</b><span>1 FREE</span><em>Buy 1 get 1</em><i class="tier-ea">$12.50 each</i></button>
-        <button class="tier" data-q="7" aria-pressed="false"><b>7</b><span>5 FREE</span><em>Buy 2 get 5</em><i class="tier-ea">$7.14 each</i></button>
-        <button class="tier" data-q="13" aria-pressed="false"><b>13</b><span>10 FREE</span><em>Buy 3 get 10</em><i class="tier-ea">$5.77 each</i></button>
+        <button class="tier" data-q="1" aria-pressed="true"><b>1 for $25</b><i class="tier-ea">$25.00 each</i></button>
+        <button class="tier" data-q="5" aria-pressed="false"><span class="tier-free">1 FREE</span><b>5 for $100</b><i class="tier-ea">$20.00 each</i></button>
+      </div>
+
+      <div class="pdp-gift" id="pdpGift">
+        Free gift with every order over $25
+        <span>Spend $25+ for a free Cat Paw Keychain, or $45+ to add a free Cat Clicker.</span>
       </div>
 
       <div class="qty-row">
@@ -261,6 +264,17 @@ function refresh(){
   /* These tiers charge the remainder at full price, so some quantities cost
      more than a slightly larger one. Offer the better deal rather than let
      someone overpay without knowing. */
+  const gift = document.getElementById('pdpGift');
+  if (gift) {
+    const earned = RP.giftsFor(due), nxt = RP.nextGift(due);
+    const got = earned.map(g => RP.BY_HANDLE[g.handle].t);
+    gift.innerHTML = got.length
+      ? '🎁 Free ' + got.join(' + ') + ' included'
+        + (nxt ? '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + ' too.</span>' : '')
+      : '🎁 Free gift on orders over $' + nxt.minSpend
+        + '<span>Add ' + RP.money(nxt.minSpend - due) + ' more for a free ' + RP.BY_HANDLE[nxt.handle].t + '.</span>';
+  }
+
   const nudge = document.getElementById('nudge');
   const deal = RP.betterDeal(qty, PROD.bundleTiers);
   if (nudge) {
