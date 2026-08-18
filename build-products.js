@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = __dirname;
-const SUPPORT_EMAIL = 'gpags987@gmail.com';
+const SUPPORT_EMAIL = 'realizedprints@gmail.com';
 const BIZ = 'Realized Prints LLC';
 const ADDR = '60 Hickory Drive, Basking Ridge, NJ';
 const UPDATED = 'August 17, 2026';
@@ -112,7 +112,6 @@ const chromeTop = b => `
 
 <nav class="nav-strip" aria-label="Main">
   <div class="wrap nav-in">
-    <div><a class="nlink" href="${b}pages/contact.html#about">About</a></div>
     <div><a class="nlink" href="${b}pages/contact.html">Contact Us</a></div>
     <div>
       <button class="nlink" aria-expanded="false">Shop
@@ -120,7 +119,6 @@ const chromeTop = b => `
       </button>
       <ul class="ndrop" id="shopDrop"></ul>
     </div>
-    <div><a class="nlink" href="${b}catan/">Catan</a></div>
     <div><a class="nlink" href="${b}pages/policies.html">Policies</a></div>
     <div><a class="nlink" href="${b}pages/faq.html">FAQ</a></div>
   </div>
@@ -689,6 +687,9 @@ const contactBody = `
           <option>Wholesale &amp; stockists</option>
           <option>Something else</option>
         </select></div>
+      <div class="cfield" aria-hidden="true" style="position:absolute;left:-9999px">
+        <label for="cf-company">Company</label>
+        <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off"></div>
       <div class="cfield"><label for="cf-msg">Message</label>
         <textarea id="cf-msg" name="message" required></textarea>
         <div class="hint">Sending photos? Reply to our confirmation email and attach them there.</div></div>
