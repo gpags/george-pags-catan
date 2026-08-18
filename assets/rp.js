@@ -19,22 +19,27 @@
 const CATALOG = global.RP_CATALOG;
 if (!CATALOG) throw new Error('rp.js: assets/catalog.js must be loaded first');
 
-const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
-        FREE_SHIP, unitsPaid, freeUnits, tierLabel, betterDeal,
-        GIFTS, giftsFor, nextGift } = CATALOG;
+const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE, FREE_SHIP,
+        priceFor, unitPriceAt, savingAt, betterDeal,
+        GIFTS, giftsFor, nextGift, BUILD_ID } = CATALOG;
 
 const BASE = (document.body && document.body.dataset.base) || '';
 const CHECKOUT_URL = '/api/checkout';
 
 const money = n => '$' + n.toFixed(2);
 
-/* Unit price for a cart line = base + selected add-ons. Always read
-   from the catalog by handle, never from anything stored in the cart,
-   so an edited localStorage can't change what is displayed either. */
+/* Add-ons are per unit — engraving three cats is three engravings. */
+function addonsPerUnit(it) {
+  return (it.name ? ADDONS.name.price : 0) + (it.match ? ADDONS.match.price : 0);
+}
+
+/* Unit price for display. Always read from the catalog by handle, never
+   from anything stored in the cart, so an edited localStorage can't
+   change what is shown either. */
 function unitPrice(it) {
   const p = BY_HANDLE[it.h];
   if (!p) return 0;
-  return p.price + (it.name ? ADDONS.name.price : 0) + (it.match ? ADDONS.match.price : 0);
+  return unitPriceAt(p, it.qty) + addonsPerUnit(it);
 }
 
 /* ================================================================
@@ -50,8 +55,12 @@ try { CART = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { CART = [
 CART = CART.filter(i => i && BY_HANDLE[i.h] && i.qty > 0);
 
 const saveCart = () => { try { localStorage.setItem(KEY, JSON.stringify(CART)); } catch (e) {} };
-const tiersFor  = it => (BY_HANDLE[it.h] || {}).bundleTiers || [];
-const lineTotal = it => unitPrice(it) * unitsPaid(it.qty, tiersFor(it));
+/* Bundle price from the catalog ladder, plus add-ons on every unit. */
+const lineTotal = it => {
+  const p = BY_HANDLE[it.h];
+  if (!p) return 0;
+  return priceFor(p, it.qty) + addonsPerUnit(it) * it.qty;
+};
 const cartCount = () => CART.reduce((n, i) => n + i.qty, 0);
 const cartTotal = () => CART.reduce((s, i) => s + lineTotal(i), 0);
 
@@ -234,13 +243,13 @@ function renderCart(){
         </div></div>`).join('') +
     CART.map((i,ix) => {
       const p = BY_HANDLE[i.h];
-      const free = freeUnits(i.qty, tiersFor(i));
+      const saved = savingAt(p, i.qty);
       return `<div class="ci">
         <img src="${p.imgUrl}" alt="${p.t}">
         <div>
           <div class="ci-t">${p.t}</div>
           <div class="ci-m">${COLOR_LABEL[i.color] || i.color}${i.name ? ' · “'+i.name+'”' : ''}${i.match ? ' · exact match' : ''}</div>
-          <div class="ci-m">Qty ${i.qty}${free ? ' · '+free+' free' : ''}</div>
+          <div class="ci-m">Qty ${i.qty}${saved ? ' · saving '+money(saved) : ''}</div>
           <div class="ci-p">${money(lineTotal(i))}</div>
           <button class="ci-rm" data-rm="${ix}">Remove</button>
         </div></div>`;
@@ -328,8 +337,8 @@ function boot(){ mountCountdown(); mountMarquee(); mountShopDropdown(); mountCar
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
 
-global.RP = { BASE, VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
-              unitsPaid, freeUnits, tierLabel, betterDeal, money, unitPrice,
+global.RP = { BASE, BUILD_ID, VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
+              priceFor, unitPriceAt, savingAt, betterDeal, money, unitPrice,
               GIFTS, giftsFor, nextGift,
               addToCart, renderCart, openCart, closeCart, cardHTML, FREE_SHIP,
               startCheckout, buyNow, get cart(){ return CART; } };
