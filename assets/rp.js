@@ -20,7 +20,7 @@ const CATALOG = global.RP_CATALOG;
 if (!CATALOG) throw new Error('rp.js: assets/catalog.js must be loaded first');
 
 const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
-        FREE_SHIP, unitsPaid, freeUnits, tierLabel } = CATALOG;
+        FREE_SHIP, unitsPaid, freeUnits, tierLabel, betterDeal } = CATALOG;
 
 const BASE = (document.body && document.body.dataset.base) || '';
 const CHECKOUT_URL = '/api/checkout';
@@ -62,41 +62,47 @@ function addToCart(item) { CART.push(item); saveCart(); renderCart(); openCart()
    any price it is given and recomputes from assets/catalog.js.
    ================================================================ */
 let checkingOut = false;
-async function startCheckout(btn) {
-  if (checkingOut || !CART.length) return;
+
+/* One line of the checkout payload. Prices are deliberately absent — the
+   server recomputes them from the same catalog this page rendered from. */
+const toPayload = i => ({
+  handle: i.h,
+  color:  i.color,
+  qty:    i.qty,
+  addons: { name: i.name || '', match: !!i.match }
+});
+
+/* Shared by the cart drawer and the product page's "Buy it now". */
+async function postCheckout(items, btn, errEl) {
+  if (checkingOut || !items.length) return;
   checkingOut = true;
   const label = btn ? btn.textContent : '';
   if (btn) { btn.disabled = true; btn.textContent = 'Redirecting…'; }
-  const err = document.getElementById('cartErr');
-  if (err) { err.textContent = ''; err.style.display = 'none'; }
+  if (errEl) { errEl.textContent = ''; errEl.style.display = 'none'; }
 
   try {
     const res = await fetch(CHECKOUT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        items: CART.map(i => ({
-          handle: i.h,
-          color:  i.color,
-          qty:    i.qty,
-          addons: { name: i.name || '', match: !!i.match }
-        }))
-      })
+      body: JSON.stringify({ items: items.map(toPayload) })
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.url) throw new Error(data.message || data.error || 'Could not start checkout.');
     window.location.href = data.url;
   } catch (e) {
-    if (err) {
-      err.textContent = e.message === 'Failed to fetch'
+    if (errEl) {
+      errEl.textContent = e.message === 'Failed to fetch'
         ? 'Checkout needs the live site — it can’t run from a local file.'
         : e.message;
-      err.style.display = 'block';
+      errEl.style.display = 'block';
     }
     if (btn) { btn.disabled = false; btn.textContent = label; }
     checkingOut = false;
   }
 }
+
+const startCheckout = btn => postCheckout(CART, btn, document.getElementById('cartErr'));
+const buyNow = (item, btn, errEl) => postCheckout([item], btn, errEl);
 
 /* ================================================================
    CHROME
@@ -156,6 +162,31 @@ function mountShopDropdown(){
     Object.entries(VIBES).map(([k,v]) =>
       `<li><a href="${BASE}index.html?vibe=${k}#catalog"><span class="dot" style="background:${v.color}"></span>${v.name}</a></li>`).join('') +
     `<li><a href="${BASE}catan/"><span class="dot" style="background:#19395e"></span>Catan Artisan</a></li>`;
+
+  /* Desktop opens this on :hover via CSS. Touch devices never fire :hover,
+     so the button also toggles an .open class — that is the only way the
+     menu is reachable on a phone. */
+  const wrap = host.parentElement;
+  const btn  = wrap && wrap.querySelector('.nlink');
+  if (!btn) return;
+
+  const close = () => { host.classList.remove('open'); btn.setAttribute('aria-expanded','false'); };
+  const open  = () => {
+    /* The mobile rule pins the menu below the nav strip; give it the real
+       offset so it lands correctly whether or not the drop bar is dismissed. */
+    const nav = document.querySelector('.nav-strip');
+    if (nav) host.style.setProperty('--nav-bottom', Math.round(nav.getBoundingClientRect().bottom) + 'px');
+    host.classList.add('open'); btn.setAttribute('aria-expanded','true');
+  };
+
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    host.classList.contains('open') ? close() : open();
+  });
+  host.addEventListener('click', e => { if (e.target.closest('a')) close(); });
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  addEventListener('resize', close);
 }
 
 /* ---------- cart drawer ---------- */
@@ -284,7 +315,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 else boot();
 
 global.RP = { BASE, VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
-              unitsPaid, freeUnits, tierLabel, money, unitPrice,
+              unitsPaid, freeUnits, tierLabel, betterDeal, money, unitPrice,
               addToCart, renderCart, openCart, closeCart, cardHTML, FREE_SHIP,
-              startCheckout, get cart(){ return CART; } };
+              startCheckout, buyNow, get cart(){ return CART; } };
 })(window);
