@@ -322,14 +322,31 @@ inline the moment it arrives — that email is what unblocks printing.
 
 ## Testing the webhook
 
-Stripe's Dashboard **Send test webhook** button posts a *synthetic* event whose
-session id does not exist in your account. `api/webhook.js` therefore falls back
-to the event's own payload when the re-fetch 404s — the signature check has
-already proved the event came from Stripe. Without that fallback the button
-would look broken even on a correct setup.
+**Stripe removed "Send test webhook" from LIVE-mode endpoints** — the button
+only exists on test-mode ones. So use the bundled script instead:
 
-A real (or test-mode) order is still the definitive test, because only that
-exercises the metadata your print list is built from.
+```
+node scripts/send-test-webhook.js whsec_YOUR_SECRET
+node scripts/send-test-webhook.js whsec_YOUR_SECRET --match
+```
+
+It builds a realistic cat order, signs it with the endpoint's signing secret
+using Stripe's own scheme (HMAC-SHA256 over `<timestamp>.<raw body>`), and
+POSTs it. `api/webhook.js` cannot tell it apart from a real Stripe delivery,
+which is the point. No money moves and no Stripe CLI is needed.
+
+Verified locally against a server implementing Stripe's documented verification
+(timing-safe compare, 5-minute tolerance): a correct secret returns 200 and
+sends both emails; a wrong secret returns 400 `Invalid signature`.
+
+The script also explains each failure status — 400 means the secret does not
+match, 500 means `STRIPE_WEBHOOK_SECRET` is unset in Vercel, 404 means the
+function did not deploy.
+
+Note `api/webhook.js` falls back to the event's own payload when the session
+re-fetch 404s. Synthetic events reference sessions that do not exist, and the
+signature check has already proved the event is genuine, so dropping it would
+make a correct setup look broken.
 
 ## Still to do
 
