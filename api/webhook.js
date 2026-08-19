@@ -153,7 +153,11 @@ function customerEmail(session, md) {
       ${needsPhoto ? `<div style="background:#fdeaf2;border:2px dashed #ff3d9a;border-radius:10px;padding:14px;margin-bottom:18px">
         <strong style="color:#c62b6d">We need a photo of your cat</strong>
         <p style="margin:6px 0 0;font-size:14px">You chose <strong>Exact pattern match</strong>.
-        Just reply to this email with one clear, well-lit photo — that's all we need.
+        One clear, well-lit photo is all we need.</p>
+        <p style="margin:10px 0 0"><a href="https://realizedprints.com/order-complete?session_id=${encodeURIComponent(session.id)}"
+           style="display:inline-block;background:#ff3d9a;color:#fff;text-decoration:none;
+                  padding:11px 20px;border-radius:999px;font-weight:700">Upload your photo</a></p>
+        <p style="margin:10px 0 0;font-size:13px;color:#777">Or just reply to this email with it attached.
         If we haven't heard in <strong>7 days</strong> we'll print the preset colour you picked so
         your order isn't stuck, and refund the match fee.</p></div>` : ''}
 
@@ -200,8 +204,19 @@ module.exports = async (req, res) => {
     }
 
     try {
-        /* Re-fetch so the address and totals are the authoritative ones. */
-        const session = await stripe.checkout.sessions.retrieve(event.data.object.id);
+        /* Re-fetch so the address and totals are the authoritative ones.
+           Stripe's Dashboard "Send test webhook" button posts a SYNTHETIC event
+           whose session id does not exist, so the retrieve 404s. The signature
+           was already verified above, which is what proves the event really came
+           from Stripe — so fall back to the event's own payload rather than
+           dropping the notification and leaving the test looking broken. */
+        let session = event.data.object;
+        try {
+            session = await stripe.checkout.sessions.retrieve(session.id);
+        } catch (e) {
+            console.warn('webhook: could not re-fetch', session.id,
+                '— using the event payload instead (normal for Dashboard test events):', e && e.message);
+        }
         const md = session.metadata || {};
         const mail = md.shop === 'cats' ? catOrderEmail(session, md) : catanOrderEmail(session, md);
 
