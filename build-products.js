@@ -940,10 +940,18 @@ ${chromeTop(b)}
 
       <div class="pdp-gift" id="ocPhoto" style="display:none">
         📸 We need a photo of your cat
-        <span>You chose <strong>Exact pattern match</strong>. Reply to your confirmation email with
-        one clear, well-lit photo, or send it to <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>
-        quoting your order number below. If we haven't got a photo within 7 days we'll print the
-        preset colour you picked and refund the match fee.</span>
+        <span>You chose <strong>Exact pattern match</strong>. One clear, well-lit photo is all we
+        need. If we haven't got one within 7 days we'll print the preset colour you picked so your
+        order isn't stuck, and refund the match fee.</span>
+        <div class="oc-up">
+          <label class="btn btn-pink btn-block oc-up-btn" for="ocFile">Choose a photo</label>
+          <input id="ocFile" type="file" accept="image/*" capture="environment" hidden>
+          <p class="oc-muted" id="ocUpMsg">JPG, PNG or WEBP. We resize it on your phone before sending,
+             so it works fine on mobile data.</p>
+          <img id="ocPreview" alt="" style="display:none">
+        </div>
+        <span style="margin-top:10px">Prefer email? Send it to
+          <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> quoting your order reference.</span>
       </div>
     </div>
 
@@ -971,6 +979,64 @@ try { localStorage.removeItem('rp_cart_v2'); } catch (e) {}
 const sessionId = new URLSearchParams(location.search).get('session_id');
 const itemsEl = document.getElementById('ocItems');
 document.getElementById('ocRef').textContent = sessionId ? sessionId.slice(-12).toUpperCase() : '—';
+
+/* Downscale in the browser: a 1600px JPEG is plenty to match coat colour and
+   markings, keeps every upload under Vercel's request limit, and uploads in
+   seconds on phone data instead of pushing a 9MB original. */
+function shrink(file, maxPx) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+    reader.onerror = function () { reject(new Error('Could not read that file.')); };
+    reader.onload = function () {
+      const img = new Image();
+      img.onerror = function () { reject(new Error('That does not look like an image.')); };
+      img.onload = function () {
+        const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function mountUpload() {
+  const input = document.getElementById('ocFile');
+  const msg = document.getElementById('ocUpMsg');
+  const btn = document.querySelector('.oc-up-btn');
+  const prev = document.getElementById('ocPreview');
+  if (!input) return;
+
+  input.addEventListener('change', async function () {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    btn.classList.add('is-busy');
+    btn.textContent = 'Sending…';
+    msg.textContent = 'Resizing and uploading…';
+    try {
+      const dataUrl = await shrink(file, 1600);
+      prev.src = dataUrl; prev.style.display = 'block';
+      const res = await fetch('/api/upload-photo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId: sessionId, dataUrl: dataUrl })
+      });
+      const d = await res.json().catch(function () { return {}; });
+      if (!res.ok) throw new Error(d.error || 'Upload failed.');
+      btn.textContent = 'Photo received ✓';
+      btn.classList.add('is-done');
+      msg.textContent = 'Got it — that is everything we need. Send another if you like.';
+    } catch (e) {
+      btn.classList.remove('is-busy');
+      btn.textContent = 'Try again';
+      msg.textContent = e.message + ' You can also just email the photo to us.';
+    }
+  });
+}
 
 function row(label, sub, price) {
   return '<div class="oc-item"><div><div class="oc-item-t">' + label + '</div>'
@@ -1010,7 +1076,7 @@ async function loadOrder() {
       document.getElementById('ocTotal').textContent = RP.money(d.total);
       document.getElementById('ocTotalRow').style.display = 'flex';
     }
-    if (d.needsPhoto) document.getElementById('ocPhoto').style.display = 'block';
+    if (d.needsPhoto) { document.getElementById('ocPhoto').style.display = 'block'; mountUpload(); }
     if (d.email) document.getElementById('ocLede').textContent =
       'Your order is confirmed and a receipt is on its way to ' + d.email + '.';
   } catch (e) {

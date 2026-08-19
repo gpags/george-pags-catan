@@ -247,6 +247,90 @@ excluding the current product, so the same hero items get promoted site-wide.
 numbers is a Phase 4.2 job — see the plan in the summary; it needs the Stripe
 webhook and order sheet built first.
 
+## Email — order alerts and the contact form
+
+Both go through `lib/email.js` (Resend over plain `fetch`, so there is no new
+npm dependency). It never throws: a failed send is logged, never a 500.
+
+| Route | Trigger | Goes to |
+|---|---|---|
+| `api/webhook.js` | Stripe `checkout.session.completed` | `SHOP_EMAIL` — full print worksheet |
+| `api/contact.js` | contact form POST | `SHOP_EMAIL`, Reply-To = the customer |
+
+The order email is the print worksheet: every line with colour, quantity,
+engraving text, a loud EXACT PATTERN MATCH warning, free gifts, the shipping
+address, packed weight and the customer's email. Catan orders still get a
+short alert so no sale goes unnoticed.
+
+The contact form now POSTs. It used to only open the visitor's mail client,
+which silently sent nothing for anyone without one configured — most phone
+users. The mail client is now the fallback if the endpoint is unreachable.
+There is a hidden `company` honeypot field; a filled one is accepted and
+dropped.
+
+### Setup — four env vars, none of them optional
+
+1. **Resend account** at resend.com, create an API key.
+2. In **Vercel → Settings → Environment Variables** (Production):
+   - `RESEND_API_KEY` — starts `re_`
+   - `SHOP_EMAIL` — `realizedprints@gmail.com`
+   - `EMAIL_FROM` — until the domain is verified in Resend, use
+     `Realized Prints <onboarding@resend.dev>`. That test sender can only
+     deliver to the address that owns the Resend account, which is fine for
+     order alerts but **will not deliver contact-form mail elsewhere**. Verify
+     `realizedprints.com` in Resend to lift that.
+   - `STRIPE_WEBHOOK_SECRET` — from step 3.
+3. **Stripe → Developers → Webhooks → Add endpoint**
+   - URL `https://realizedprints.com/api/webhook`
+   - Event: `checkout.session.completed` only
+   - Copy the signing secret (`whsec_…`) into `STRIPE_WEBHOOK_SECRET`
+4. Redeploy, then use Stripe's **Send test webhook** button and confirm an
+   email arrives.
+
+`api/webhook.js` sets `config.api.bodyParser = false` because Stripe signs the
+raw body — Vercel's default JSON parsing would destroy the signature. If you
+ever see "signature verification failed" in the logs with a correct secret,
+that export is the first thing to check.
+
+**Belt and braces:** Stripe Dashboard → Settings → Notifications also has a
+"Successful payments" email toggle. It has no order detail, but it costs
+nothing and covers you if the webhook is ever misconfigured.
+
+## Pattern-match photo intake
+
+| Piece | What it does |
+|---|---|
+| `api/upload-photo.js` | validates the order, stores the file in Vercel Blob, emails you the link |
+| `order-complete.html` | upload button, shown only when the order needs a photo |
+| customer email | "Upload your photo" button linking back to the same page |
+
+The browser **downscales to 1600px JPEG before uploading**. That keeps every
+request far under Vercel's 4.5MB limit, uploads in seconds on phone data, and
+1600px is more than enough to match coat colour and markings.
+
+The endpoint is not an open file host. Before storing anything it retrieves the
+Stripe session and requires it to exist, be `paid`, be a cat-shop order, and
+have `needs_photo: true`. Files land at `match-photos/<session_id>/…` so a photo
+can never be orphaned from its order, and the shop gets an email with the image
+inline the moment it arrives — that email is what unblocks printing.
+
+### Setup
+
+1. **Vercel → Storage → Create → Blob**, connect it to this project.
+   `BLOB_READ_WRITE_TOKEN` is injected automatically — nothing to copy.
+2. Redeploy. `@vercel/blob` is in `package.json` and installs on build.
+
+## Testing the webhook
+
+Stripe's Dashboard **Send test webhook** button posts a *synthetic* event whose
+session id does not exist in your account. `api/webhook.js` therefore falls back
+to the event's own payload when the re-fetch 404s — the signature check has
+already proved the event came from Stripe. Without that fallback the button
+would look broken even on a correct setup.
+
+A real (or test-mode) order is still the definitive test, because only that
+exercises the metadata your print list is built from.
+
 ## Still to do
 
 - **Photography.** Every image is a MakerWorld placeholder. The gallery thumbnails on
