@@ -196,12 +196,12 @@
 <script src="../assets/catalog.js"></script>
 <script src="../assets/rp.js"></script>
 <script>
-/* Built against catalog 8pkxbq. If the browser loaded a different
+/* Built against catalog ogx59r. If the browser loaded a different
    catalog than this page was generated from, say so instead of silently
    half-working — a stale page used to freeze the price and bundle buttons
    while the quantity stepper kept moving. */
-if (RP.BUILD_ID !== "8pkxbq") {
-  console.error('Realized Prints: this page was built from catalog 8pkxbq '
+if (RP.BUILD_ID !== "ogx59r") {
+  console.error('Realized Prints: this page was built from catalog ogx59r '
     + 'but assets/catalog.js is ' + RP.BUILD_ID + '. Run: node build-products.js');
   /* The warning must never be the thing that breaks the page. */
   try {
@@ -212,7 +212,7 @@ if (RP.BUILD_ID !== "8pkxbq") {
   } catch (e) { /* console.error above is enough */ }
 }
 const PROD = RP.BY_HANDLE["chibi-sitting-cat"];
-const REL_IDS = [7,19,20,1,16];
+const REL_IDS = [21,7,19,20,1];
 /* Only the colors this product actually ships in. */
 const COLORS = RP.COLORS.filter(c => PROD.colorsAvailable.indexOf(c[0]) !== -1);
 let color = COLORS[0], qty = 1;
