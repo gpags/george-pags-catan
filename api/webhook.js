@@ -124,6 +124,58 @@ function catanOrderEmail(session, md) {
     };
 }
 
+/* Stripe's receipt proves payment. It does not say what happens next, and it
+   does not ask for the pattern-match photo — which is the one thing an order
+   can stall on. This does both. */
+function customerEmail(session, md) {
+    let items = [];
+    try { items = JSON.parse(joinChunks(md, 'items') || '[]'); } catch (_) { }
+
+    const lines = items.map(i => {
+        const p = BY_HANDLE[i.handle];
+        const extra = [];
+        if (i.qty > 1) extra.push('qty ' + i.qty);
+        if (i.name) extra.push('engraved “' + esc(i.name) + '”');
+        if (i.match) extra.push('exact pattern match');
+        return `<li style="margin-bottom:6px">${i.gift ? '🎁 ' : ''}<strong>${esc(p ? p.t : i.handle)}</strong>
+                — ${esc(COLOR_LABEL[i.color] || i.color)}${extra.length ? ' · ' + extra.join(' · ') : ''}
+                ${i.gift ? '<em>(free gift)</em>' : ''}</li>`;
+    }).join('');
+
+    const needsPhoto = md.needs_photo === 'true';
+
+    const html = `
+    <div style="font-family:system-ui,sans-serif;max-width:600px;color:#1a1440">
+      <h2 style="margin:0 0 6px">Thank you — your cats are queued 🐾</h2>
+      <p style="margin:0 0 18px;color:#555">We're a husband-and-wife print shop, so your order
+      comes off our own printers. Here's what happens next.</p>
+
+      ${needsPhoto ? `<div style="background:#fdeaf2;border:2px dashed #ff3d9a;border-radius:10px;padding:14px;margin-bottom:18px">
+        <strong style="color:#c62b6d">We need a photo of your cat</strong>
+        <p style="margin:6px 0 0;font-size:14px">You chose <strong>Exact pattern match</strong>.
+        Just reply to this email with one clear, well-lit photo — that's all we need.
+        If we haven't heard in <strong>7 days</strong> we'll print the preset colour you picked so
+        your order isn't stuck, and refund the match fee.</p></div>` : ''}
+
+      <h3 style="margin:0 0 6px;font-size:16px">Your order</h3>
+      <ul style="margin:0 0 18px;padding-left:18px;font-size:15px">${lines || '<li>See your receipt for details.</li>'}</ul>
+
+      <h3 style="margin:0 0 6px;font-size:16px">What happens next</h3>
+      <ol style="margin:0 0 18px;padding-left:18px;font-size:15px;line-height:1.7">
+        <li>We print and hand-finish your order — <strong>5–10 business days</strong>${needsPhoto ? ', starting when your photo arrives' : ''}.</li>
+        <li>You get a tracking email as soon as the label is made.</li>
+        <li>Anything at all — just reply to this email. It comes straight to the two of us.</li>
+      </ol>
+
+      <p style="font-size:13px;color:#777;margin:0">
+        Order reference <strong>${esc(String(session.id).slice(-12).toUpperCase())}</strong><br>
+        Made to order in the USA · returns and shipping terms at realizedprints.com/pages/policies
+      </p>
+    </div>`;
+
+    return { subject: 'Your Realized Prints order is confirmed 🐾', html };
+}
+
 module.exports = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -160,6 +212,17 @@ module.exports = async (req, res) => {
             replyTo: (session.customer_details || {}).email || undefined,
         });
         if (!result.sent) console.error('webhook: order email not sent —', result.reason, session.id);
+
+        /* Then the customer's own confirmation. Cat shop only — Catan has its
+           own flow and its own copy. */
+        const buyer = (session.customer_details || {}).email;
+        if (md.shop === 'cats' && buyer) {
+            const c = customerEmail(session, md);
+            const r2 = await sendEmail({
+                to: buyer, subject: c.subject, html: c.html, replyTo: SHOP_EMAIL,
+            });
+            if (!r2.sent) console.error('webhook: customer email not sent —', r2.reason, session.id);
+        }
     } catch (err) {
         /* Never 500 here: the payment already succeeded, and a non-200 makes
            Stripe retry for days over what is only a notification. */
