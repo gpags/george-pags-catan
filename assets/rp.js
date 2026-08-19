@@ -283,10 +283,14 @@ function cardHTML(p){
   const dots = COLORS.filter(([k]) => p.colorsAvailable.indexOf(k) !== -1)
                      .slice(0,5).map(([,,cls]) => `<span class="cdot ${cls}"></span>`).join('');
   const badge = p.badge==='new'  ? '<span class="cbadge b-new">New</span>'
-              : p.badge==='best' ? '<span class="cbadge b-best">Bestseller</span>'
-              : p.badge==='bogo' ? '<span class="cbadge b-bogo">BOGO free</span>' : '';
+              : p.badge==='best' ? '<span class="cbadge b-best">Bestseller</span>' : '';
+  /* Store exclusives get a second chip. It drops below the primary badge when
+     there is one, otherwise it takes the top slot itself. */
+  const excl = p.exclusive
+    ? '<span class="cbadge b-excl' + (badge ? ' b-excl-2' : '') + '">Exclusive</span>'
+    : '';
   return `<a class="card" href="${BASE}products/${p.h}.html">
-    <div class="card-media">${badge}
+    <div class="card-media">${badge}${excl}
       <img loading="lazy" src="${p.imgUrl}" alt="${p.t}">
       ${p.stock > 0 ? '' : '<span class="c-oos">Sold out</span>'}
     </div>

@@ -188,6 +188,7 @@ h1,h2,h3,h4{font-family:'Fredoka','Nunito',sans-serif;font-weight:600;line-heigh
 .cbadge{position:absolute;top:10px;left:10px;font-size:10px;font-weight:800;letter-spacing:.07em;
   text-transform:uppercase;padding:5px 10px;border-radius:999px;color:#fff}
 .b-new{background:var(--mint)} .b-best{background:var(--pink)} .b-bogo{background:var(--grape)}
+.b-excl{background:#0f9b8e} .b-excl-2{top:38px}
 .c-oos{position:absolute;inset:0;background:rgba(255,255,255,.72);display:grid;place-items:center;
   font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:var(--muted)}
 .card h3{font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;color:var(--tangerine);line-height:1.3}
