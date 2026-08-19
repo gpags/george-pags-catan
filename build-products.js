@@ -45,6 +45,16 @@ const imgUrl = p => p.imgUrl;   // derived in assets/catalog.js
 /* ================================================================
    SHARED CHROME  (b = path back to site root, e.g. '../')
    ================================================================ */
+/* Real accounts only — a dead href="#" next to "Follow us @realizedprints"
+   reads as an abandoned shop. Add Facebook back here if an account is made. */
+const SOCIALS = [
+  ['ig', 'Instagram', 'https://instagram.com/realizedprints'],
+  ['tt', 'TikTok',    'https://tiktok.com/@realizedprints'],
+  ['yt', 'YouTube',   'https://youtube.com/@realizedprints'],
+];
+const socLinks = cls => SOCIALS.map(([k, label, url]) =>
+  `<a class="${cls}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${label}">${SOC_SVG[k]}</a>`).join('');
+
 const SOC_SVG = {
   ig:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg>',
   tt:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg>',
@@ -87,21 +97,13 @@ const chromeTop = b => `
       <a class="ibtn" href="${b}index.html#catalog" aria-label="Search">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
       </a>
-      <div class="soc">
-        <a class="ibtn" href="#" aria-label="Instagram">${SOC_SVG.ig}</a>
-        <a class="ibtn" href="#" aria-label="TikTok">${SOC_SVG.tt}</a>
-        <a class="ibtn" href="#" aria-label="Facebook">${SOC_SVG.fb}</a>
-        <a class="ibtn" href="#" aria-label="YouTube">${SOC_SVG.yt}</a>
-      </div>
+      <div class="soc">${socLinks('ibtn')}</div>
     </div>
     <a class="brand" href="${b}index.html">
       <span class="brand-name">Realized Prints</span>
       <span class="brand-sub">Cats, printed to order</span>
     </a>
     <div class="head-right">
-      <a class="ibtn" href="#" aria-label="Account">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-      </a>
       <button class="ibtn" id="cartBtn" aria-label="Open cart">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 7h12l-1.2 12H7.2z"/><path d="M9 7a3 3 0 016 0"/></svg>
         <span class="cart-pill" id="cartPill">0</span>
@@ -150,11 +152,7 @@ const footer = b => `
       <div>
         <div class="foot-brand">Realized Prints</div>
         <p class="foot-note">Husband &amp; wife, printed in the USA. Made to order in 5–10 business days.</p>
-        <div class="foot-soc">
-          <a href="#" aria-label="Instagram">${SOC_SVG.ig}</a>
-          <a href="#" aria-label="TikTok">${SOC_SVG.tt}</a>
-          <a href="#" aria-label="Facebook">${SOC_SVG.fb}</a>
-        </div>
+        <div class="foot-soc">${socLinks('')}</div>
       </div>
       <div><h4>Shop</h4><ul>
         <li><a href="${b}index.html#catalog">All cats</a></li>
@@ -170,13 +168,14 @@ const footer = b => `
         <li><a href="${b}pages/policies.html#shipping">Shipping</a></li>
         <li><a href="${b}pages/policies.html#returns">Returns</a></li>
         <li><a href="${b}pages/faq.html">FAQ</a></li>
+        <li><a href="${b}pages/terms.html">Terms</a></li>
         <li><a href="${b}pages/privacy.html">Privacy</a></li>
         <li><a href="${b}pages/contact.html">Contact</a></li>
       </ul></div>
     </div>
     <div class="foot-b">
       <span>© 2026 Realized Prints · Husband &amp; wife, printed in the USA.</span>
-      <span>Product imagery is placeholder.</span>
+      ${CATALOG.ALL_PHOTOS_REAL() ? '' : '<span>Product imagery is placeholder.</span>'}
     </div>
   </div>
 </footer>
@@ -215,7 +214,7 @@ ${chromeTop(b)}
   <div class="pdp">
     <div class="pdp-gal">
       <div class="pdp-main">
-        <span class="stage-ph">Placeholder</span>
+        ${p.photoReal ? '' : '<span class="stage-ph">Placeholder</span>'}
         <img id="galMain" src="${imgUrl(p)}" alt="${esc(p.t)}">
       </div>
       <div class="pdp-thumbs" id="galThumbs"></div>
@@ -471,9 +470,10 @@ your order before it ships. Busy drop weeks can push this slightly longer; if it
 
 <h3>Carriers</h3>
 <ul>
-  <li><strong>United States</strong> — USPS by default.</li>
-  <li><strong>International</strong> — DHL eCommerce by default. Duties and import taxes are the
-      buyer's responsibility and are not included at checkout.</li>
+  <li><strong>United States only, for now.</strong> USPS Ground Advantage on every order.
+      Checkout only accepts U.S. shipping addresses.</li>
+  <li><strong>International</strong> — not yet. We'd rather not take your money and then discover
+      the customs paperwork makes a $15 keychain cost $40 to deliver. It's on the list.</li>
 </ul>
 
 <h3>Tracking</h3>
@@ -603,9 +603,9 @@ const FAQ = [
     ['My tracking number hasn\'t updated. Is something wrong?',
      '<p>Almost certainly not. We email tracking when the label is created, which is often a day or two before the carrier scans the parcel. If there\'s no movement after 5 business days, message us and we\'ll chase it.</p>'],
     ['Do you ship internationally?',
-     '<p>Yes, via DHL eCommerce. Duties and import taxes are charged by your country and are not included at checkout.</p>'],
+     '<p>Not yet — U.S. addresses only. We would rather not take your money and then find that customs paperwork and duties make a $15 keychain cost $40 to deliver. It is on the list once we have the volume to do it properly.</p>'],
     ['When is shipping free?',
-     '<p>U.S. orders over $65 ship free via USPS Ground Advantage. The cart shows how far you are from it.</p>'],
+     '<p>Orders over $65 ship free via USPS Ground Advantage. Below that, shipping is calculated from the packed weight of your order — a single keychain costs a lot less to post than three big figurines, and you only pay what it actually weighs. The cart shows how far you are from free shipping.</p>'],
     ['Can I change or cancel my order?',
      '<p>If it hasn\'t started printing — usually within about 24 hours — yes. After that the filament is committed. Message us quickly and we\'ll try.</p>'],
     ['What is the inventory drop?',
@@ -724,32 +724,126 @@ const contactBody = `
 </div>
 `;
 
+/* ---------- TERMS OF SERVICE ---------- */
+const tosBody = `
+<p>These terms cover buying from ${BIZ} ("we", "us"). Placing an order means you accept them.
+We have tried to write them in plain English rather than defensive legalese — if something here
+seems unfair, <a href="contact.html">tell us</a>.</p>
+
+<h2 id="who">1. Who you're buying from</h2>
+<p>${BIZ}, ${ADDR}. A husband-and-wife print shop, not a warehouse. Contact:
+<a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
+
+<h2 id="orders">2. Orders and acceptance</h2>
+<ul>
+  <li>Your order is an <strong>offer to buy</strong>. It's accepted when we email your confirmation.</li>
+  <li>We may decline or cancel an order and refund you in full — most often because something sold
+      out between your click and our queue, or an address looks undeliverable.</li>
+  <li>We ship to <strong>United States addresses only</strong> at present.</li>
+  <li>Everything is <strong>made to order</strong>. Nothing sits on a shelf.</li>
+</ul>
+
+<h2 id="pricing">3. Prices and payment</h2>
+<ul>
+  <li>Prices are in <strong>US dollars</strong> and exclude sales tax, which is calculated at checkout.</li>
+  <li>Payment is handled by <strong>Stripe</strong>. We never see or store your card number.</li>
+  <li>Bundle prices are shown on each product page and applied automatically. If a quantity falls
+      between two bundles you are charged whichever is cheaper.</li>
+  <li>Every price is recalculated on our server at checkout. If a price is listed in error we will
+      tell you before charging you, and you can cancel.</li>
+  <li>Discount codes are not combinable with bundle pricing.</li>
+</ul>
+
+<h2 id="ip">4. Photos and personalisation you send us</h2>
+<div class="callout warn"><strong>This section matters — please read it.</strong></div>
+<ul>
+  <li>You keep ownership of any photo you send for an exact pattern match.</li>
+  <li>You grant us a limited licence to use that photo <strong>solely to make your order</strong>.</li>
+  <li>We will <strong>never publish your photo, or a picture of your finished order, without asking
+      you first</strong>. "No" is a completely fine answer.</li>
+  <li>You confirm you have the right to send us the photo and that it doesn't infringe anyone else's
+      rights.</li>
+  <li>We may decline any personalisation request — including engraved text — that is unlawful,
+      hateful, or infringes someone's trademark or copyright. We'll refund you if we do.</li>
+  <li>Engraved names are printed <strong>exactly as you type them</strong>. Check your spelling.</li>
+</ul>
+
+<h2 id="delivery">5. Making and delivery</h2>
+<ul>
+  <li>Production is <strong>5–10 business days</strong>, plus carrier transit. An exact pattern
+      match adds roughly 3 days, counted from when your photo arrives.</li>
+  <li>Risk passes to you on delivery. If it arrives damaged, that's covered under our
+      <a href="policies.html#returns">returns policy</a>.</li>
+  <li>Delivery estimates are estimates. Carriers have bad weeks.</li>
+</ul>
+
+<h2 id="returns-tos">6. Returns</h2>
+<p>Because everything is made to order, <strong>all sales are final</strong> except for damage,
+defects, or our mistake. The full detail, including how to claim and how long it takes, is on the
+<a href="policies.html#returns">policies page</a> and forms part of these terms.</p>
+
+<h2 id="product">7. What you're actually buying</h2>
+<ul>
+  <li>These are <strong>decorative 3D-printed PLA objects</strong>. They are not toys, not pet toys,
+      and not food safe.</li>
+  <li>Colour, finish and layer texture vary slightly between batches. That's the process, not a defect.</li>
+  <li>Read the <a href="policies.html#safety">safety section</a> before giving one to a child or
+      leaving one with an animal.</li>
+</ul>
+
+<h2 id="liability">8. Liability</h2>
+<p>We stand behind our work, and nothing here limits liability for death or personal injury caused
+by our negligence, for fraud, or anything else that cannot lawfully be limited.</p>
+<p>Beyond that, our total liability for any order is limited to <strong>what you paid for that
+order</strong>. We are not liable for indirect or consequential losses. The products are supplied
+for decorative use, and you accept responsibility for using them sensibly — see the safety section.</p>
+
+<h2 id="conduct">9. Using this site</h2>
+<ul>
+  <li>Don't attempt to interfere with the site, its checkout, or other customers' orders.</li>
+  <li>Site content, text and our own photography belong to us. Don't reuse them commercially
+      without asking.</li>
+</ul>
+
+<h2 id="law">10. Law</h2>
+<p>These terms are governed by the laws of the State of New Jersey, USA, and disputes go to the
+courts of New Jersey.</p>
+
+<h2 id="changes-tos">11. Changes</h2>
+<p>We may update these terms. The version that applies to your order is the one published when you
+placed it. Material changes get a new date at the top of this page.</p>
+
+<h2 id="contact-tos">12. Contact</h2>
+<p>${BIZ}<br>${ADDR}<br><a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a></p>
+`;
+
 /* ---------- PRIVACY ---------- */
 const privacyBody = `
-<div class="callout info"><strong>Note for the site owner:</strong> this replaces the old
-pre-launch privacy policy, which described only an email popup and stated that no payment details
-were collected. That is no longer accurate now the store takes orders. Have it reviewed before
-you publish.</div>
+<p>${BIZ} ("we", "us") collects only what we need to sell you a thing and get it to your door.
+No trackers we can't justify, no selling your data, no dark patterns.</p>
 
 <h2 id="collect">1. What we collect</h2>
-<p>${BIZ} ("we", "us") collects only what we need to sell you a thing and get it to your door.</p>
 <ul>
   <li><strong>Order information</strong> — name, email, shipping and billing address, phone number,
       and what you ordered.</li>
-  <li><strong>Payment information</strong> — handled entirely by our payment processor. Card numbers
-      never reach our servers and we never see them.</li>
-  <li><strong>Photos you send us</strong> for an exact pattern match, and any pet name you ask us to engrave.</li>
+  <li><strong>Payment information</strong> — handled entirely by Stripe. Card numbers never reach
+      our servers and we never see them.</li>
+  <li><strong>Photos you send us</strong> for an exact pattern match, and any pet name you ask us
+      to engrave.</li>
+  <li><strong>Messages</strong> you send through the contact form — your name, email, and what you wrote.</li>
+  <li><strong>Your cart</strong>, stored in your own browser. It never leaves your device until you
+      check out, and it contains no payment details.</li>
   <li><strong>Marketing email address</strong>, if you opt in.</li>
-  <li><strong>Basic site analytics</strong> — pages viewed, rough location from IP, device type, in aggregate.</li>
 </ul>
 
 <h2 id="use">2. How we use it</h2>
 <ul>
   <li>To make, pack, and ship your order, and to email you about it.</li>
   <li>To match filament to your cat, when you've asked us to.</li>
+  <li>To answer your messages.</li>
   <li>To handle damage claims, replacements, and refunds.</li>
-  <li>To send marketing email — only if you opted in, and every one has a one-click unsubscribe.</li>
-  <li>To understand what's selling and improve the shop.</li>
+  <li>To meet tax and accounting obligations.</li>
+  <li>To send marketing email — only if you opted in, with one-click unsubscribe on every one.</li>
 </ul>
 <p>We do not sell your personal information, and we never have.</p>
 
@@ -759,19 +853,20 @@ you publish.</div>
   <li>Photos you send are used <strong>only</strong> to colour-match your order.</li>
   <li>We will <strong>never post your photo, or a picture of your finished order, publicly without
       asking you first</strong>. If we'd love to share one, we'll ask, and "no" is a completely fine answer.</li>
-  <li>We delete match photos within <strong>90 days</strong> of your order shipping unless you've told
-      us we can keep using one.</li>
+  <li>We delete match photos within <strong>90 days</strong> of your order shipping unless you've
+      told us we can keep using one.</li>
   <li>Ask us to delete a photo sooner and we'll do it.</li>
 </ul>
 
 <h2 id="share">4. Who we share it with</h2>
 <p>Only the services needed to run the shop, and only what they need:</p>
-<ul>
-  <li><strong>Payment processing</strong> — to take payment and handle refunds.</li>
-  <li><strong>Shipping carriers</strong> (USPS, DHL) — name and delivery address.</li>
-  <li><strong>Email provider</strong> — to send order and, if you opted in, marketing email.</li>
-  <li><strong>Hosting and analytics</strong> — to serve the site.</li>
-</ul>
+<table>
+  <tr><th>Service</th><th>What it gets</th><th>Why</th></tr>
+  <tr><td>Stripe</td><td>name, email, address, phone, order contents</td><td>takes payment, calculates sales tax, handles refunds</td></tr>
+  <tr><td>Resend</td><td>your email address and order details</td><td>sends your confirmation and our order alerts</td></tr>
+  <tr><td>Vercel</td><td>standard request logs, IP address</td><td>hosts and serves the site</td></tr>
+  <tr><td>USPS</td><td>name and delivery address</td><td>delivers your parcel</td></tr>
+</table>
 <p>Each is contractually required to protect your data and may not use it for their own purposes.
 We may also disclose information if the law requires it.</p>
 
@@ -781,19 +876,21 @@ We may also disclose information if the law requires it.</p>
   <li><strong>Access or delete</strong> — email us and we'll respond within 45 days.</li>
   <li><strong>Correct</strong> — tell us and we'll fix it.</li>
   <li><strong>Do not sell</strong> — nothing to opt out of; we don't sell data.</li>
-  <li><strong>California and New Jersey residents</strong> have additional rights under CCPA/CPRA and
-      the NJDPA. Contact us to exercise them.</li>
+  <li><strong>California and New Jersey residents</strong> have additional rights under CCPA/CPRA
+      and the NJDPA. Contact us to exercise them, and we won't treat you differently for asking.</li>
 </ul>
 <p>We keep order records as long as tax and accounting rules require, even if you unsubscribe.</p>
 
-<h2 id="cookies">6. Cookies</h2>
-<p>We use the minimum: one to remember your cart between pages, and basic analytics to see which
-products people look at. Blocking cookies in your browser will empty your cart on navigation but
-won't otherwise break the site.</p>
+<h2 id="cookies">6. Cookies and tracking</h2>
+<p>We use the minimum. Your cart is kept in your browser's local storage so it survives moving
+between pages — that's a convenience feature, not tracking, and it never leaves your device until
+checkout. Stripe sets its own cookies during payment to prevent fraud. Blocking storage in your
+browser will empty your cart on navigation but won't otherwise break the site.</p>
 
 <h2 id="security">7. Security</h2>
-<p>The site runs over HTTPS and payment is handled by a PCI-compliant processor. No system is
-perfectly secure, and we won't pretend otherwise — but we hold very little sensitive data by design.</p>
+<p>The site runs over HTTPS and payment is handled by a PCI-compliant processor. Order totals are
+recalculated on our server rather than trusted from your browser. No system is perfectly secure and
+we won't pretend otherwise — but we hold very little sensitive data by design.</p>
 
 <h2 id="children">8. Children</h2>
 <p>This shop isn't directed at children under 13 and we don't knowingly collect their data. If you
@@ -950,12 +1047,22 @@ const PAGES = [
    heroTitle:'Contact us', heroLede:'Two people, one spare room, two printers. Your message comes straight to us.',
    updated:null, jump:[], body:contactBody, wide:true},
 
+  {file:'terms.html', title:'Terms of Service — Realized Prints',
+   desc:'The terms you agree to when you buy from Realized Prints — orders, pricing, photos you send us, delivery, returns and liability.',
+   heroTitle:'Terms of service', heroLede:'What you agree to when you buy from us. Plain English, no fine-print games.',
+   updated:UPDATED,
+   jump:[['who','Who you’re buying from'],['orders','Orders'],['pricing','Prices &amp; payment'],
+         ['ip','Photos you send us'],['delivery','Making &amp; delivery'],['returns-tos','Returns'],
+         ['product','What you’re buying'],['liability','Liability'],['conduct','Using this site'],
+         ['law','Law'],['changes-tos','Changes'],['contact-tos','Contact']],
+   body:tosBody},
+
   {file:'privacy.html', title:'Privacy Policy — Realized Prints',
    desc:'How Realized Prints collects, uses and protects your information, including photos sent for pattern matching.',
    heroTitle:'Privacy policy', heroLede:'What we collect, why, and what we do with photos of your cat.',
    updated:UPDATED,
    jump:[['collect','What we collect'],['use','How we use it'],['photos','Photos of your pet'],
-         ['share','Who we share with'],['rights','Your rights'],['cookies','Cookies'],
+         ['share','Who we share with'],['rights','Your rights'],['cookies','Cookies &amp; tracking'],
          ['security','Security'],['children','Children'],['changes','Changes'],['contact-privacy','Contact']],
    body:privacyBody}
 ];
