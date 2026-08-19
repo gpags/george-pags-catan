@@ -157,7 +157,7 @@ function mountCountdown(){
 function mountMarquee(){
   const track = document.getElementById('mqTrack'); if (!track) return;
   const items = [
-    ['♥','Follow us @realizedprints'], ['✈','Now shipping worldwide'],
+    ['♥','Follow us @realizedprints'], ['✈','Shipping across the USA'],
     ['♥','Current fulfillment: 5–10 business days'], ['★','Free US shipping over $65'],
     ['♥','Husband & wife, printed in the USA'], ['🎁','Bundle & save on selected cats'],
     ['★','Nine core animal colors on every figure'], ['♥','Exact pattern match available']
