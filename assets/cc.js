@@ -27,7 +27,7 @@ CC.PRICE = {
   template: 59,
   /* second unit is 40% off */
   secondOff: 0.40,
-  custom: 279,
+  custom: 349,
   /* refills sold as packs; subscribing takes another 10% off */
   refill: {
     1: { price: 10, label: 'One insert',        note: 'A single replacement' },
