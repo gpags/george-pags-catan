@@ -55,7 +55,7 @@ section{padding:60px 0}
 .paws-ink::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'><g fill='%231a1440' fill-opacity='0.04'><g transform='translate(46,52) rotate(-14)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(196,178) rotate(18)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(212,54) rotate(-8)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g><g transform='translate(66,198) rotate(12)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g></g></svg>")}
 
 /* ================================================================
-   GLOW SURFACES — coloured stroke plus an emissive halo, matched to
+   GLOW SURFACES — colored stroke plus an emissive halo, matched to
    whichever section the element sits in.
    ================================================================ */
 .glow{border:3px solid var(--pink-300);
@@ -421,6 +421,32 @@ section{padding:60px 0}
 .mstep{background:#fff;border:3px solid var(--candy-200);border-radius:var(--r);padding:16px;
   box-shadow:0 0 0 1px rgba(47,143,204,.07), 0 8px 24px -14px rgba(47,143,204,.45);
   display:flex;flex-direction:column;gap:8px;position:relative;transition:border-color .18s,transform .18s,box-shadow .18s}
+/* every card sits at a slightly different angle so the trail reads as
+   hand-drawn rather than as a grid of boxes */
+.map .mstep:nth-child(3n+1){transform:rotate(-.7deg)}
+.map .mstep:nth-child(3n+2){transform:rotate(.5deg)}
+.map .mstep:nth-child(3n+3){transform:rotate(-.35deg)}
+.map .mstep:hover{transform:rotate(0deg) translateY(-4px)}
+
+/* ---- paw-print trail linking one card to the next ---- */
+.trail{position:absolute;display:flex;align-items:center;gap:7px;pointer-events:none;z-index:3}
+.trail i{width:15px;height:15px;display:block;opacity:.85;
+  background-repeat:no-repeat;background-size:contain;background-position:center;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-26 -30 52 56'><g fill='%235fb4e8'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g></svg>")}
+.trail i:nth-child(1){opacity:.45}
+.trail i:nth-child(2){opacity:.68}
+
+/* rows 1 and 3 walk right; the trail sits in the gap to the right */
+.map .mstep:nth-child(1) .trail,.map .mstep:nth-child(2) .trail,
+.map .mstep:nth-child(7) .trail,.map .mstep:nth-child(8) .trail{
+  right:-46px;top:50%;transform:translateY(-50%) rotate(90deg)}
+/* row 2 walks left; trail sits in the gap to the left */
+.map .mstep:nth-child(4) .trail,.map .mstep:nth-child(5) .trail{
+  left:-46px;top:50%;transform:translateY(-50%) rotate(-90deg)}
+/* end of a row: the trail turns downward */
+.map .mstep:nth-child(3) .trail,.map .mstep:nth-child(6) .trail{
+  bottom:-44px;left:50%;transform:translateX(-50%) rotate(180deg);flex-direction:column}
+@media(max-width:900px){.trail{display:none}}
 .mstep:hover{border-color:var(--candy);transform:translateY(-3px);
   box-shadow:0 0 0 1px rgba(47,143,204,.24), 0 0 26px -4px rgba(47,143,204,.4), 0 16px 40px -18px rgba(47,143,204,.55)}
 .mstep .mhead{display:flex;align-items:center;gap:11px}
@@ -457,17 +483,16 @@ section{padding:60px 0}
 /* ================================================================
    PARTNER
    ================================================================ */
-.ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
-@media(max-width:760px){.ptabs{grid-template-columns:1fr 1fr}}
-.ptab{padding:18px 12px;border-radius:var(--r);background:#fff;border:3px solid var(--candy-200);
-  font-family:'Fredoka',sans-serif;font-weight:600;font-size:16.5px;color:var(--ink-2);
-  display:flex;flex-direction:column;align-items:center;gap:8px;line-height:1.15;
-  box-shadow:0 0 0 1px rgba(47,143,204,.07), 0 8px 24px -14px rgba(47,143,204,.45);
-  transition:border-color .18s,box-shadow .18s,transform .18s,color .18s}
-.ptab .ic{font-size:29px;line-height:1}
-.ptab:hover{transform:translateY(-3px);border-color:var(--candy)}
-.ptab[aria-pressed="true"]{border-color:var(--candy);color:var(--candy-900);
-  box-shadow:0 0 0 1px rgba(47,143,204,.3), 0 0 26px -4px rgba(47,143,204,.45), 0 16px 40px -18px rgba(47,143,204,.6)}
+.ptabs{display:inline-flex;background:var(--paper-2);border:2.5px solid var(--line);
+  border-radius:999px;padding:5px;gap:5px;flex-wrap:wrap;margin-top:22px}
+.ptab{padding:12px 24px;border-radius:999px;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:16px;color:var(--muted);transition:background .18s,color .18s,box-shadow .18s}
+.ptab:hover{color:var(--ink)}
+.ptab[aria-pressed="true"]{background:var(--candy);color:#fff;box-shadow:0 3px 0 0 var(--candy-600)}
+@media(max-width:640px){
+  .ptabs{display:grid;grid-template-columns:1fr 1fr;border-radius:var(--r);width:100%}
+  .ptab{padding:13px 10px;font-size:15px}
+}
 /* the three dream outcomes for whichever audience is selected */
 .wins{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
 @media(max-width:860px){.wins{grid-template-columns:1fr}}
@@ -589,3 +614,23 @@ footer{background:var(--ink);color:rgba(255,255,255,.68);padding:46px 0 28px;fon
 .keyrow h3{font-size:26px;margin-bottom:8px}
 .keyrow p{font-size:15px;color:var(--muted)}
 .keyrow .pricetag{font-family:'Fredoka',sans-serif;font-size:26px;color:var(--pink-600);display:block;margin-top:12px}
+
+/* ---------------- simplified-copy helpers ---------------- */
+ul.tight{list-style:none;display:grid;gap:8px;margin-top:10px}
+ul.tight li{position:relative;padding-left:20px;font-size:15px;color:var(--muted);line-height:1.45}
+ul.tight li::before{content:'';position:absolute;left:0;top:.55em;width:7px;height:7px;
+  border-radius:50%;background:var(--pink-300)}
+ul.tight li b{color:var(--ink)}
+
+.fineprint{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.45}
+
+.likeness-note{font-size:14.5px;color:var(--muted);margin-top:18px;line-height:1.5;
+  background:var(--pink-50);border:2px dashed var(--pink-300);border-radius:var(--r);padding:14px 16px}
+.likeness-note b{color:var(--ink)}
+
+/* the refill/keychain feature rows carry drawn art as well as photos */
+.keyrow .art{border-radius:var(--r);aspect-ratio:4/3;border:2px solid var(--pink-100);background:#fff}
+.keyrow .art svg{width:100%;height:auto}
+.keyrow+.keyrow{margin-top:18px}
+.keyrow .plist{gap:9px}
+.keyrow .plist li{font-size:14.5px}

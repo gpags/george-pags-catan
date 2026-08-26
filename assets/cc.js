@@ -5,7 +5,7 @@
    cc-refills.html, cc-partner.html.
 
      CC.PRICE      all prices (see note below)
-     CC.WAYS       Storybook Cottage colourways
+     CC.WAYS       Storybook Cottage colorways
      CC.cottage()  parametric SVG stand-in for product photography
      CC.photo()    <img> with automatic SVG fallback — drop a real
                    photo into images/ and it takes over on its own
@@ -48,7 +48,7 @@ CC.money = function (n) {
   return '$' + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
 };
 
-/* ---------------- colourways ---------------- */
+/* ---------------- colorways ---------------- */
 CC.WAYS = {
   cream:   { name:'Cottage Cream', body:'#f2e6d2', bodyDark:'#ddcbb2', timber:'#8a6a4d', timberDark:'#6d5039',
              sign:'#93a883', signInk:'#6b4f3a', plinth:'#e8d9c0', swatch:'#f2e6d2' },
@@ -175,6 +175,35 @@ CC.cottage = function (wayKey) {
   return o + '</svg>';
 };
 
+
+/* A stack of corrugated refill pads. Same fallback contract as
+   CC.cottage: a real photo at images/cc-refill-inserts.jpg wins. */
+CC.insert = function () {
+  var o = '<svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Replacement corrugated cardboard inserts">';
+  o += '<ellipse cx="280" cy="340" rx="200" ry="20" fill="#1a1440" opacity=".10"/>';
+  function pad(ox, oy, w, h, face, edge, line) {
+    var g = '<g transform="translate(' + ox + ',' + oy + ')">';
+    g += '<path d="M0 0 L' + w + ' 0 L' + (w + 70) + ' -40 L70 -40 Z" fill="' + face + '"/>';
+    g += '<path d="M0 0 L' + w + ' 0 L' + w + ' ' + h + ' L0 ' + h + ' Z" fill="' + edge + '"/>';
+    for (var i = 0; i <= 26; i++) {
+      var t = i / 26;
+      g += '<line x1="' + (t * w).toFixed(1) + '" y1="0" x2="' + (70 + t * w).toFixed(1) +
+           '" y2="-40" stroke="' + line + '" stroke-width="2.4" opacity=".85"/>';
+    }
+    for (var j = 0; j <= 22; j++) {
+      var u = j / 22;
+      g += '<path d="M' + (u * w).toFixed(1) + ' ' + (h * 0.25) + ' q3 ' + (h * 0.25) + ' 0 ' + (h * 0.5) +
+           '" fill="none" stroke="' + line + '" stroke-width="1.8" opacity=".55"/>';
+    }
+    return g + '</g>';
+  }
+  o += pad(60, 300, 300, 20, '#c99a5f', '#a87a45', '#b8894f');
+  o += pad(90, 268, 300, 20, '#cfa268', '#b0824c', '#bf9057');
+  o += pad(122, 236, 300, 20, '#d6ab73', '#b98b53', '#c69a60');
+  o += '</svg>';
+  return o;
+};
+
 /* ================================================================
    PHOTO WITH FALLBACK
 
@@ -186,7 +215,7 @@ CC.cottage = function (wayKey) {
    change. See images/CC-IMAGE-LIST.md for the filenames.
    ================================================================ */
 CC.paintArt = function (scope) {
-  var nodes = (scope || document).querySelectorAll('[data-photo],[data-cottage]');
+  var nodes = (scope || document).querySelectorAll('[data-photo],[data-cottage],[data-insert]');
   Array.prototype.forEach.call(nodes, function (el) {
     if (el.getAttribute('data-painted') === '1') return;
     el.setAttribute('data-painted', '1');
@@ -206,6 +235,8 @@ CC.paintArt = function (scope) {
         el.classList.add('ph');
         el.innerHTML = '<span class="swap">' + esc(note) +
           (src ? '<code>' + esc(src) + '</code>' : '') + '</span>';
+      } else if (el.hasAttribute('data-insert')) {
+        el.innerHTML = CC.insert() + chip;
       } else {
         el.innerHTML = CC.cottage(way) + chip;
       }
