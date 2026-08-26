@@ -1,0 +1,202 @@
+<!-- cc-template.html — CatCustoms product page (Storybook Cottage).
+     Colourway picker, name field, quantity, refill + keychain upsells.
+     Photo upload is post-purchase by design — see the trust block.
+     Styles: assets/cc.css · Behaviour: assets/cc.js (CC.initPDP) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storybook Cottage — CatCustoms</title>
+<meta name="description" content="A cat scratcher with your cat sculpted and painted into it. Four colourways, their name on the front, replaceable cardboard insert. $99.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="assets/cc.css" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="wrap hd">
+    <a class="brand" href="catcustoms.html">Cat<span>Customs</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="catcustoms.html#templates" aria-current="page">Templates</a>
+      <a href="cc-custom.html">1-of-1</a>
+      <a href="cc-refills.html">Refills</a>
+      <a href="cc-partner.html">For sitters</a>
+      <a href="catcustoms.html#faq">FAQ</a>
+    </nav>
+    <div class="hd-r">
+      <button class="cartbtn" data-cart-open aria-label="Open cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6h15l-1.6 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 2H2"/></svg>
+        <span class="cnt" data-cart-count hidden></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap crumb"><a href="catcustoms.html">Home</a> · <a href="catcustoms.html#templates">Templates</a> · Storybook Cottage</div>
+
+<div class="wrap pdp" data-pdp>
+
+  <!-- ---------- MEDIA ---------- -->
+  <div class="pdp-media">
+    <div class="art" data-pdp-art data-cottage="cream" data-name=""></div>
+    <div class="thumbs">
+      <button class="thumb" data-pdp-thumb="cream"   aria-pressed="true"  aria-label="Cottage Cream"><span class="art" data-cottage="cream" data-nonote></span></button>
+      <button class="thumb" data-pdp-thumb="butter"  aria-pressed="false" aria-label="Buttercup"><span class="art" data-cottage="butter" data-nonote></span></button>
+      <button class="thumb" data-pdp-thumb="blossom" aria-pressed="false" aria-label="Blossom"><span class="art" data-cottage="blossom" data-nonote></span></button>
+      <button class="thumb" data-pdp-thumb="lilac"   aria-pressed="false" aria-label="Lilac Sky"><span class="art" data-cottage="lilac" data-nonote></span></button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:14px">
+      Artwork above is an illustration of the piece. Photography of the finished product is being shot now.
+    </p>
+  </div>
+
+  <!-- ---------- OPTIONS ---------- -->
+  <div>
+    <span class="tagline">Template · ships in 5–10 business days</span>
+    <h1 style="margin-top:16px">Storybook Cottage</h1>
+    <div class="price-row">
+      <span class="price">$99</span>
+      <span class="price-note">Frame, figurines, nameplate and first insert</span>
+    </div>
+    <p style="color:var(--muted);font-size:16px;max-width:52ch">
+      Half-timbered beams, window boxes and climbing flowers. Your cats sit in the arched
+      windows with their name on the sign between them — each one sculpted and hand-painted
+      to the photo you send us.
+    </p>
+
+    <!-- colourway -->
+    <div class="optblock">
+      <div class="lbl"><span>Colourway</span><span class="val" data-way-label>Cottage Cream</span></div>
+      <div class="way-row">
+        <span class="way-pick" data-on="1"><button class="way lg" data-pdp-way="cream"   aria-pressed="true"  style="background:#f2e6d2" aria-label="Cottage Cream"></button><span class="nm">Cream</span></span>
+        <span class="way-pick" data-on="0"><button class="way lg" data-pdp-way="butter"  aria-pressed="false" style="background:#f6d84e" aria-label="Buttercup"></button><span class="nm">Buttercup</span></span>
+        <span class="way-pick" data-on="0"><button class="way lg" data-pdp-way="blossom" aria-pressed="false" style="background:#f2a9bb" aria-label="Blossom"></button><span class="nm">Blossom</span></span>
+        <span class="way-pick" data-on="0"><button class="way lg" data-pdp-way="lilac"   aria-pressed="false" style="background:#c3b1e1" aria-label="Lilac Sky"></button><span class="nm">Lilac Sky</span></span>
+      </div>
+    </div>
+
+    <!-- name -->
+    <div class="optblock">
+      <div class="lbl"><span>Name on the sign</span><span class="count" data-name-count>0/18</span></div>
+      <label class="field">
+        <input type="text" data-pdp-name maxlength="18" placeholder="Luna &amp; Ruska" autocomplete="off">
+        <span class="hint">Type to see it on the piece. Leave it blank and we'll ask you later — nothing is printed until you've confirmed the spelling.</span>
+      </label>
+    </div>
+
+    <!-- quantity -->
+    <div class="optblock">
+      <div class="lbl"><span>How many</span></div>
+      <div class="qty">
+        <button data-qty="-1" aria-label="One fewer">−</button>
+        <span class="n" data-qty-n>1</span>
+        <button data-qty="1" aria-label="One more">+</button>
+      </div>
+    </div>
+
+    <!-- upsells -->
+    <div class="optblock">
+      <div class="lbl"><span>Add to your order</span></div>
+
+      <div class="addrow" data-add="refill" data-on="0">
+        <span class="tick"></span>
+        <span class="t"><b>Two spare inserts <span class="save">Save $7</span></b>
+          <span>The cardboard is the part that wears out. Two on the shelf means you never wait for one.</span></span>
+        <span class="pr">$17</span>
+      </div>
+
+      <div class="addrow" data-add="key" data-keys="1" data-on="0">
+        <span class="tick"></span>
+        <span class="t"><b>A keychain of your cat</b>
+          <span>The same figurine we sculpt for the scratcher, pocket-sized.</span></span>
+        <span class="pr">$4</span>
+      </div>
+
+      <div class="addrow" data-add="key" data-keys="2" data-on="0">
+        <span class="tick"></span>
+        <span class="t"><b>Two keychains <span class="save">Save $2</span></b>
+          <span>One for you, one for whoever else claims to be their favourite.</span></span>
+        <span class="pr">$6</span>
+      </div>
+    </div>
+
+    <!-- buy -->
+    <div class="buybox">
+      <div class="tot"><span class="l">Total</span><span class="v" data-pdp-total>$99</span></div>
+      <button class="btn btn-pink btn-block btn-lg" data-pdp-add>Add to cart</button>
+      <a class="btn btn-ghost btn-block" href="cc-custom.html">Or commission a 1-of-1 instead</a>
+
+      <div class="trust">
+        <div><span>📮</span><span><b>Send your photo after you pay.</b> Nothing to upload now — we email you a link, and you send a clear picture of your cat whenever you've got a good one.</span></div>
+        <div><span>🎨</span><span><b>Sculpted, not scanned.</b> The style keeps the markings, the colouring and the shape of the face, and lets the rest go. A likeness, not a copy.</span></div>
+        <div><span>♻️</span><span><b>Refills are $12.</b> The insert lifts out and a new one drops in. The frame, figurines and nameplate never move.</span></div>
+        <div><span>🇺🇸</span><span><b>Made by two people.</b> Printed, finished and hand-painted in the USA by a father and a son.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ---------- likeness + FAQ ---------- -->
+<section class="band-soft" style="margin-top:40px">
+  <div class="wrap wrap-n">
+    <div class="sec-head"><h2 class="sec-title">Before you order</h2></div>
+    <div class="faq">
+      <details open>
+        <summary>Will it look exactly like my cat?</summary>
+        <p>No — and that's deliberate. Your cat is sculpted and hand-painted, not scanned. The style keeps what makes them recognisable — the markings, the colouring, the shape of the face — and lets the rest go. It's a portrait the way a good tattoo is a portrait. Not a copy. A likeness.</p>
+      </details>
+      <details>
+        <summary>When do I send my photo?</summary>
+        <p>After you order. We email you a link the moment your payment clears. Send a clear, well-lit picture — asleep on a blanket is perfect — plus the name you'd like on the sign.</p>
+      </details>
+      <details>
+        <summary>Can I have two cats on it?</summary>
+        <p>Yes. The Cottage has two windows and comes with two figurines as standard, so a pair is the normal case rather than an extra. One cat is fine too — we'll talk to you about what goes in the second window.</p>
+      </details>
+      <details>
+        <summary>How long does it take?</summary>
+        <p><strong>5&ndash;10 business days</strong> to make, plus transit. Nothing is made before you order. The clock starts when your photo arrives, not when you pay — so the sooner you send it, the sooner it ships.</p>
+      </details>
+      <details>
+        <summary>What if it gets destroyed?</summary>
+        <p>The cardboard is <em>supposed</em> to get destroyed; that's the part doing the work, and it costs $12 to undo. The frame, the figurines and the nameplate all sit outside the wear surface.</p>
+        <p>If it arrives damaged, tell us within <strong>7 days</strong> and we'll replace it. If a part fails from a material defect within <strong>30 days</strong>, that's covered too.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div style="max-width:290px">
+        <div class="brand" style="color:#fff">Cat<span style="color:var(--yellow)">Customs</span></div>
+        <p style="margin-top:12px;font-size:14.5px">Cat scratchers with your cat on them. Made by a father and a son.</p>
+      </div>
+      <div><h4>Shop</h4><ul><li><a href="catcustoms.html#templates">Templates</a></li><li><a href="cc-custom.html">Custom Made</a></li><li><a href="cc-refills.html">Refill inserts</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="catcustoms.html#faq">FAQ</a></li><li><a href="pages/policies.html">Shipping &amp; returns</a></li><li><a href="pages/contact.html">Contact</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="pages/terms.html">Terms</a></li><li><a href="pages/privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="ft-b"><span>&copy; 2026 CatCustoms — a Realized Prints brand.</span><span>Product imagery is illustration.</span></div>
+  </div>
+</footer>
+
+<!-- cart drawer -->
+<div class="scrim" data-cart-close></div>
+<aside class="drawer" aria-label="Cart">
+  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">×</button></div>
+  <div class="dr-b" data-cart-body></div>
+  <div class="dr-f">
+    <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
+    <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
+    <div class="stub">⚠ Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
+  </div>
+</aside>
+<div class="toast"></div>
+
+<script src="assets/cc.js"></script>
+</body>
+</html>

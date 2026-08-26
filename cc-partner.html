@@ -1,0 +1,169 @@
+<!-- cc-partner.html — CatCustoms cat-sitter partner programme.
+     Deliberately a FREE-GIFT offer, not a percentage coupon: at $99
+     with a $10 build and ~$13 postage, 50% off plus a commission sells
+     below cost, and allow_promotion_codes in api/checkout.js has no
+     server-side stacking guard. See CATCUSTOMS-COPY.md §16.
+     Form uses mailto until a CatCustoms endpoint exists. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become a partner — CatCustoms</title>
+<meta name="description" content="Cat sitters: give your clients a free keychain and a free set of refills with their first scratcher, and earn a commission on every one.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="assets/cc.css" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="wrap hd">
+    <a class="brand" href="catcustoms.html">Cat<span>Customs</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="catcustoms.html#templates">Templates</a>
+      <a href="cc-custom.html">1-of-1</a>
+      <a href="cc-refills.html">Refills</a>
+      <a href="cc-partner.html" aria-current="page">For sitters</a>
+      <a href="catcustoms.html#faq">FAQ</a>
+    </nav>
+    <div class="hd-r">
+      <a class="btn btn-pink btn-sm" href="#apply">Become a partner</a>
+      <button class="cartbtn" data-cart-open aria-label="Open cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6h15l-1.6 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 2H2"/></svg>
+        <span class="cnt" data-cart-count hidden></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap crumb"><a href="catcustoms.html">Home</a> · For cat sitters</div>
+
+<section style="padding-top:34px">
+  <div class="wrap wrap-n">
+    <div class="sec-head" style="max-width:66ch">
+      <span class="tagline mint">Partner programme</span>
+      <h1 class="sec-title" style="margin-top:16px">You're in more homes in a week than we'll be in all year.</h1>
+      <p class="sec-sub">And you already know which of those cats has ruined a sofa arm, which owner has a photo of them on their phone lock screen, and which one would frame it if they could. That's the whole pitch.</p>
+    </div>
+
+    <div class="hiw">
+      <div class="step"><div class="num">1</div><h4>You get a link</h4><p>Your own, with your name on it. Text it, put it on your booking page, or hand over a card — however you already talk to your clients.</p></div>
+      <div class="step"><div class="num">2</div><h4>They get something free</h4><p>A keychain of their cat and a free set of two refill inserts with their first scratcher. Yours to give. No code to explain, nothing that expires.</p></div>
+      <div class="step"><div class="num">3</div><h4>You get paid</h4><p>A commission on every order that comes through your link, on templates and 1-of-1s alike.</p></div>
+    </div>
+
+    <div class="note-strip" style="margin-top:30px">
+      <span style="font-size:26px;line-height:1">🎁</span>
+      <span><b>Why a gift and not a discount?</b> A percentage off is forgettable and it makes the piece look cheap. A free keychain with their own cat's face on it costs us a couple of dollars, reads as worth thirty, and is the thing they show people. Your clients get more, and the piece keeps its value.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- forwardable ---------- -->
+<section class="band-soft">
+  <div class="wrap sitter">
+    <div>
+      <h2 class="sec-title">Something you can just forward.</h2>
+      <p class="sec-sub">Copy it, change the cat's name, send it. You don't have to explain what we are or how it works — the page does that.</p>
+      <a class="btn btn-pink" href="#apply" style="margin-top:24px">Become a partner</a>
+    </div>
+    <div class="fwd">
+      <span class="tag">Paste this to a client</span>
+      Thought of Luna when I saw these — they're cat scratchers with your actual cat sculpted and hand-painted into the design, name on the front. Cardboard insert you swap out when it's wrecked, so the nice part lasts. I've got a partner thing with them, so if you use my link you get a free keychain of her and a free set of refills. Here you go: <span style="color:var(--pink);font-style:normal;font-weight:800">[your link]</span>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- apply ---------- -->
+<section id="apply">
+  <div class="wrap wrap-n">
+    <div class="sec-head">
+      <h2 class="sec-title">Tell us who you sit for.</h2>
+      <p class="sec-sub">We're setting these up one at a time so we can actually talk to you. Expect a reply in 1&ndash;2 business days.</p>
+    </div>
+
+    <form class="form" data-mailto="gpags987@gmail.com" data-subject="CatCustoms — partner application">
+      <div class="two">
+        <label><span class="lb">Your name</span><input name="yourname" data-label="Name" type="text" required placeholder="Alex Rivera"></label>
+        <label><span class="lb">Email</span><input name="email" data-label="Email" type="email" required placeholder="you@example.com"></label>
+      </div>
+      <div class="two">
+        <label><span class="lb">Business name</span><input name="business" data-label="Business" type="text" placeholder="Rivera Cat Care"></label>
+        <label><span class="lb">Where you sit</span><input name="area" data-label="Area" type="text" placeholder="City / area you cover"></label>
+      </div>
+      <div class="two">
+        <label><span class="lb">Roughly how many clients?</span>
+          <select name="clients" data-label="Client count"><option>Under 10</option><option selected>10–30</option><option>30–75</option><option>75+</option></select>
+        </label>
+        <label><span class="lb">Website or social (optional)</span><input name="link" data-label="Link" type="text" placeholder="instagram.com/..."></label>
+      </div>
+      <label><span class="lb">Anything else?</span>
+        <textarea name="notes" data-label="Notes" placeholder="How you'd want to hand this to clients, questions about the commission, whatever's on your mind."></textarea>
+      </label>
+
+      <button class="btn btn-pink btn-lg" type="submit">Apply to partner</button>
+      <p class="hint">This opens your email app with the details filled in — nothing is sent until you press send there.</p>
+
+      <div class="okmsg">
+        <b>Your email app should have opened.</b>
+        If it didn't, write to <strong>gpags987@gmail.com</strong> with your business name and the area you cover.
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="band-soft">
+  <div class="wrap wrap-n">
+    <div class="faq">
+      <details open>
+        <summary>What's the commission?</summary>
+        <p>We'll agree it with you when we set your link up, and it's the same on a $99 template as it is on a $349 commission. We'd rather talk about it directly than post a number that turns out to be wrong for how you actually work.</p>
+      </details>
+      <details>
+        <summary>Do I have to buy anything or hold stock?</summary>
+        <p>No. There's nothing to buy in, nothing to store and nothing to ship. Your clients order from us and we make and send the piece.</p>
+      </details>
+      <details>
+        <summary>Can I give the gift to more than one client?</summary>
+        <p>Yes — it applies to every client's first scratcher, not to the first client who uses your link. It's a welcome gift, not a one-off coupon.</p>
+      </details>
+      <details>
+        <summary>What if my client's cat has passed away?</summary>
+        <p>We don't take memorial commissions at the moment. It deserves more care than we can currently promise while we're two people learning how long everything takes, and we'd rather say so than handle it badly.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div style="max-width:290px">
+        <div class="brand" style="color:#fff">Cat<span style="color:var(--yellow)">Customs</span></div>
+        <p style="margin-top:12px;font-size:14.5px">Cat scratchers with your cat on them. Made by a father and a son.</p>
+      </div>
+      <div><h4>Shop</h4><ul><li><a href="catcustoms.html#templates">Templates</a></li><li><a href="cc-custom.html">Custom Made</a></li><li><a href="cc-refills.html">Refill inserts</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="catcustoms.html#faq">FAQ</a></li><li><a href="pages/policies.html">Shipping &amp; returns</a></li><li><a href="pages/contact.html">Contact</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="pages/terms.html">Terms</a></li><li><a href="pages/privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="ft-b"><span>&copy; 2026 CatCustoms — a Realized Prints brand.</span><span>Product imagery is illustration.</span></div>
+  </div>
+</footer>
+
+<div class="scrim" data-cart-close></div>
+<aside class="drawer" aria-label="Cart">
+  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">×</button></div>
+  <div class="dr-b" data-cart-body></div>
+  <div class="dr-f">
+    <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
+    <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
+    <div class="stub">⚠ Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
+  </div>
+</aside>
+<div class="toast"></div>
+
+<script src="assets/cc.js"></script>
+</body>
+</html>
