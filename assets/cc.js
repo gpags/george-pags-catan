@@ -8,7 +8,7 @@
      CC.WAYS       Storybook Cottage colourways
      CC.cottage()  parametric SVG stand-in for product photography
      CC.photo()    <img> with automatic SVG fallback — drop a real
-                   photo into Images/ and it takes over on its own
+                   photo into images/ and it takes over on its own
      CC.cart       localStorage cart + slide-over drawer
      CC.mountChrome() countdown + trust marquee, same as rp.js
 
@@ -178,12 +178,12 @@ CC.cottage = function (wayKey) {
 /* ================================================================
    PHOTO WITH FALLBACK
 
-   <div class="art" data-photo="Images/cc-cottage-cream.jpg" data-way="cream">
+   <div class="art" data-photo="images/cc-cottage-cream.jpg" data-way="cream">
 
    Renders an <img>. If the file isn't there yet the SVG stand-in takes
    over automatically — so the moment a real photo is saved into
-   Images/ under that name, the page starts using it with no code
-   change. See Images/CC-IMAGE-LIST.md for the filenames.
+   images/ under that name, the page starts using it with no code
+   change. See images/CC-IMAGE-LIST.md for the filenames.
    ================================================================ */
 CC.paintArt = function (scope) {
   var nodes = (scope || document).querySelectorAll('[data-photo],[data-cottage]');
@@ -213,12 +213,14 @@ CC.paintArt = function (scope) {
 
     if (!src) { fallback(); return; }
 
-    /* Vercel serves from a case-sensitive filesystem; a local Windows box
-       does not. If Images/foo.jpg misses, try images/foo.jpg (and the
-       reverse) before giving up, so a wrong-case upload still renders. */
+    /* The whole site uses lowercase images/ — Catan alone has 89 such
+       references, and the capital Images/ folder is deleted Catan-era
+       legacy. Vercel's filesystem is case-sensitive, so if a file were
+       ever uploaded to the capital folder by mistake we retry there
+       before giving up. Lowercase is the convention; keep it. */
     function flipDir(u) {
-      if (u.indexOf('Images/') === 0) return 'images/' + u.slice(7);
       if (u.indexOf('images/') === 0) return 'Images/' + u.slice(7);
+      if (u.indexOf('Images/') === 0) return 'images/' + u.slice(7);
       return null;
     }
 
@@ -465,7 +467,7 @@ CC.initPDP = function () {
   function swapPhoto(el, way) {
     if (!el) return;
     el.setAttribute('data-way', way);
-    el.setAttribute('data-photo', 'Images/cc-cottage-' + way + '.jpg');
+    el.setAttribute('data-photo', 'images/cc-cottage-' + way + '.jpg');
     el.removeAttribute('data-painted');
     el.removeAttribute('data-real');
     el.classList.remove('ph');
