@@ -1,14 +1,10 @@
-<!-- cc-refills.html — CatCustoms refill inserts.
-     1 / 2 / 4 selector wired by CC.initRefills in assets/cc.js.
-     The four-pack is a SINGLE charge, not a subscription — it works
-     with api/checkout.js `mode: 'payment'` as it stands today. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Refill inserts — CatCustoms</title>
-<meta name="description" content="Replacement corrugated inserts for a CatCustoms scratcher. $12 for one, $17 for two, $44 for four kept on hand.">
+<title>Refill inserts &mdash; CatCustoms</title>
+<meta name="description" content="Replacement corrugated inserts for a CatCustoms scratcher. $10 for one, $25 for three, $40 for six, and 10% off on a subscription.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -16,94 +12,124 @@
 </head>
 <body>
 
-<header>
-  <div class="wrap hd">
-    <a class="brand" href="catcustoms.html">Cat<span>Customs</span></a>
-    <nav class="nav" aria-label="Main">
-      <a href="catcustoms.html#templates">Templates</a>
-      <a href="cc-custom.html">1-of-1</a>
-      <a href="cc-refills.html" aria-current="page">Refills</a>
-      <a href="cc-partner.html">For sitters</a>
-      <a href="catcustoms.html#faq">FAQ</a>
-    </nav>
-    <div class="hd-r">
-      <button class="cartbtn" data-cart-open aria-label="Open cart">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6h15l-1.6 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 2H2"/></svg>
-        <span class="cnt" data-cart-count hidden></span>
+<div class="drop-bar" id="dropBar">
+  <div class="drop-in">
+    <span class="drop-label">Next Inventory Drop</span>
+    <div class="cd" id="cd" aria-live="polite"></div>
+    <span class="drop-when" id="dropWhen">&mdash;</span>
+  </div>
+  <button class="drop-x" id="dropX" aria-label="Dismiss">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<div class="marquee" aria-label="Store highlights"><div class="mq-track" id="mqTrack"></div></div>
+
+<header class="head-main">
+  <div class="wrap head-row">
+    <div class="head-left">
+      <button class="burger" data-burger aria-expanded="false" aria-label="Menu">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="soc">
+        <a class="ibtn" href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a class="ibtn" href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+        <a class="ibtn" href="https://youtube.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a>
+      </div>
+    </div>
+    <a class="brand" href="catcustoms.html">
+      <span class="brand-name">CatCustoms</span>
+      <span class="brand-sub">by Realized Prints</span>
+    </a>
+    <div class="head-right">
+      <button class="ibtn" data-cart-open aria-label="Open cart">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 7h12l-1.2 12H7.2z"/><path d="M9 7a3 3 0 016 0"/></svg>
+        <span class="cart-pill" data-cart-count>0</span>
       </button>
     </div>
   </div>
 </header>
 
-<div class="wrap crumb"><a href="catcustoms.html">Home</a> · Refill inserts</div>
+<nav class="nav-strip" aria-label="Main">
+  <div class="wrap nav-in">
+    <a class="nlink" href="pages/contact.html">Contact Us</a>
+    <a class="nlink" href="catcustoms.html#templates" aria-current="page">Templates</a>
+    <a class="nlink" href="cc-custom.html">1-of-1</a>
+    <a class="nlink" href="cc-partner.html">Affiliates</a>
+    <a class="nlink" href="catcustoms.html#faq">FAQ</a>
+  </div>
+</nav>
 
-<section style="padding-top:34px">
+<div class="wrap crumb"><a href="catcustoms.html">Home</a> &middot; Refill inserts</div>
+
+<section class="band-blue" style="padding-top:30px">
   <div class="wrap wrap-n">
     <div class="sec-head" style="max-width:66ch">
-      <span class="tagline">Fits every design</span>
-      <h1 class="sec-title" style="margin-top:16px">When the cardboard's had it, the cardboard's the only thing you replace.</h1>
-      <p class="sec-sub">One size fits every CatCustoms scratcher. The old insert lifts out, a new one drops in — nothing is glued and nothing needs tools. The frame, the figurines and the nameplate never move.</p>
+      <span class="tagline blue">Never think about it again</span>
+      <h1 class="sec-title" style="margin-top:14px">Most cat scratchers need replacement every 2 months.</h1>
+      <p class="sec-sub">Yours doesn&rsquo;t &mdash; only the cardboard does. Set up a refill plan and the next insert turns up before your cat has finished the one they&rsquo;re on. Cancel or skip whenever you like.</p>
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-bottom:4px">
+      <div class="modes" role="group" aria-label="Delivery">
+        <button class="mode" data-mode="sub" aria-pressed="true">Subscribe <span class="pct">SAVE 10%</span></button>
+        <button class="mode" data-mode="once" aria-pressed="false">One time</button>
+      </div>
     </div>
 
     <div class="tiles">
       <button class="tile" data-refill="1" aria-pressed="false">
-        <div class="n">$12</div>
+        <div class="n"><span data-tile-price>$9</span><span class="was" data-tile-was>$10</span></div>
         <div class="l">One insert</div>
-        <div class="d">Order it when yours looks finished.</div>
+        <div class="d">About two months of use. Good for trying it out.</div>
       </button>
-      <button class="tile" data-refill="2" aria-pressed="true">
-        <span class="flag">Most ordered</span>
-        <div class="n">$17</div>
-        <div class="l">Two inserts</div>
-        <div class="each">$8.50 each — save $7</div>
-        <div class="d">One in, one in the cupboard. Never wait for the post.</div>
+      <button class="tile" data-refill="3" aria-pressed="true">
+        <span class="flag">Most popular</span>
+        <div class="n"><span data-tile-price>$22.50</span><span class="was" data-tile-was>$25</span></div>
+        <div class="l">Three &middot; half a year</div>
+        <div class="d">Six months of scratching, delivered as you need them.</div>
       </button>
-      <button class="tile" data-refill="4" aria-pressed="false">
-        <div class="n">$44</div>
-        <div class="l">Four · a year on hand</div>
-        <div class="each">$11 each</div>
-        <div class="d">Paid once, held here, posted whenever you say the word.</div>
+      <button class="tile" data-refill="6" aria-pressed="false">
+        <div class="n"><span data-tile-price>$36</span><span class="was" data-tile-was>$40</span></div>
+        <div class="l">Six &middot; a full year</div>
+        <div class="d">A year sorted in one go, at the lowest price per insert.</div>
       </button>
     </div>
 
-    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:30px">
-      <button class="btn btn-pink btn-lg" data-refill-add>Order 2 inserts — $17</button>
-      <span style="font-size:14.5px;color:var(--muted)">Selected: <strong data-refill-label>2 inserts — $17</strong></span>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:26px">
+      <button class="btn btn-pink btn-lg" data-refill-add>Subscribe &mdash; $22.50</button>
+      <span style="font-size:14.5px;color:var(--muted)">Selected: <strong data-refill-label>Three &middot; half a year</strong></span>
     </div>
 
-    <div class="note-strip" style="margin-top:30px">
-      <span style="font-size:26px;line-height:1">📦</span>
-      <span><b>The four-pack is not a subscription.</b> It's one payment for four inserts that we hold here and post when you ask. Nothing recurs, nothing renews, and there's nothing to cancel — because a stack of cardboard you didn't need is a worse outcome than an empty cupboard.</span>
-    </div>
-  </div>
-</section>
-
-<section class="band-soft">
-  <div class="wrap wrap-n">
-    <div class="sec-head"><h2 class="sec-title">How often will I need one?</h2></div>
-    <div class="hiw">
-      <div class="step"><div class="num">?</div><h4>Honestly — we don't know yet</h4><p>In theory an insert lasts three or four weeks of hard use. In practice most cats go a good deal longer, and some barely touch it.</p></div>
-      <div class="step"><div class="num">✎</div><h4>So we're not guessing at you</h4><p>Rather than put you on a schedule that ships cardboard you don't need, we sell them one at a time and let your cat set the pace.</p></div>
-      <div class="step"><div class="num">→</div><h4>Once there's real data</h4><p>When enough people have reordered we'll know the actual interval, and we'll offer a proper standing order built on that number instead of a guess.</p></div>
+    <div class="note-strip mint" style="margin-top:26px">
+      <span style="font-size:25px;line-height:1">&#128257;</span>
+      <span><b>Skip or cancel whenever.</b> Cats do not read schedules. If yours has barely touched the last one, skip the delivery &mdash; we would rather you had an empty cupboard than a stack of cardboard you never opened.</span>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap wrap-n">
+    <div class="sec-head"><h2 class="sec-title">How often will I actually need one?</h2></div>
+    <div class="hiw">
+      <div class="step"><div class="num">2</div><h4>Every two months, roughly</h4><p>That&rsquo;s the number we plan around, and it&rsquo;s what most scratchers of this size need under normal use.</p></div>
+      <div class="step blue"><div class="num">?</div><h4>But cats vary enormously</h4><p>Some go through one in a month. Some barely touch it. Yours will settle into its own rhythm within the first couple of inserts.</p></div>
+      <div class="step mint"><div class="num">&#8594;</div><h4>So the plan bends</h4><p>Skip a delivery, bring one forward, or cancel outright. The schedule exists to save you thinking about it, not to lock you in.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band-soft">
+  <div class="wrap wrap-n">
     <div class="faq">
-      <details open>
-        <summary>Do inserts fit every design?</summary>
-        <p>Yes. Every CatCustoms frame — every template and every 1-of-1 — takes the same insert, on purpose. One spare works with whatever you own now and whatever you buy later.</p>
-      </details>
-      <details>
-        <summary>How do I know when to replace it?</summary>
-        <p>When your cat stops using it, or when the corrugation has been shredded down past the surface and the flutes are collapsing. There's no harm in running one right down — the frame underneath isn't part of the wear surface.</p>
-      </details>
-      <details>
-        <summary>Can I recycle the old one?</summary>
-        <p>It's corrugated cardboard, so yes — flatten it and put it in with your paper recycling. Shake the loose bits out first unless you enjoy sweeping.</p>
-      </details>
+      <details open><summary>Do inserts fit every design?</summary>
+        <p>Yes. Every CatCustoms frame &mdash; every template and every 1-of-1 &mdash; takes the same insert, on purpose. One spare works with whatever you own now and whatever you buy later.</p></details>
+      <details><summary>How do I know when to replace it?</summary>
+        <p>When your cat stops using it, or when the corrugation has been shredded past the surface and the flutes are collapsing. There&rsquo;s no harm in running one right down &mdash; the frame underneath isn&rsquo;t part of the wear surface.</p></details>
+      <details><summary>Can I skip a delivery?</summary>
+        <p>Yes, any time, and it doesn&rsquo;t cost you the discount. Skipping pushes the next one back rather than cancelling it.</p></details>
+      <details><summary>Can I recycle the old one?</summary>
+        <p>It&rsquo;s corrugated cardboard, so yes &mdash; flatten it and put it in with your paper recycling. Shake the loose bits out first unless you enjoy sweeping.</p></details>
     </div>
   </div>
 </section>
@@ -111,26 +137,38 @@
 <footer>
   <div class="wrap">
     <div class="ft">
-      <div style="max-width:290px">
-        <div class="brand" style="color:#fff">Cat<span style="color:var(--yellow)">Customs</span></div>
-        <p style="margin-top:12px;font-size:14.5px">Cat scratchers with your cat on them. Made by a father and a son.</p>
+      <div style="max-width:280px">
+        <div class="brand-name" style="font-size:25px">CatCustoms</div>
+        <p style="margin-top:10px;font-size:14px">Cat scratchers with your cat designed into them. A husband-and-wife shop, made in the USA.</p>
       </div>
-      <div><h4>Shop</h4><ul><li><a href="catcustoms.html#templates">Templates</a></li><li><a href="cc-custom.html">Custom Made</a></li><li><a href="cc-refills.html">Refill inserts</a></li></ul></div>
-      <div><h4>Help</h4><ul><li><a href="catcustoms.html#faq">FAQ</a></li><li><a href="pages/policies.html">Shipping &amp; returns</a></li><li><a href="pages/contact.html">Contact</a></li></ul></div>
-      <div><h4>Legal</h4><ul><li><a href="pages/terms.html">Terms</a></li><li><a href="pages/privacy.html">Privacy</a></li></ul></div>
+      <div><h4>Shop</h4><ul>
+        <li><a href="catcustoms.html#templates">Templates</a></li>
+        <li><a href="cc-custom.html">1-of-1 Commissions</a></li>
+        <li><a href="cc-refills.html">Refill inserts</a></li>
+      </ul></div>
+      <div><h4>Help</h4><ul>
+        <li><a href="catcustoms.html#faq">FAQ</a></li>
+        <li><a href="pages/policies.html">Shipping &amp; returns</a></li>
+        <li><a href="pages/contact.html">Contact us</a></li>
+        <li><a href="cc-partner.html">Affiliates &amp; partners</a></li>
+      </ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="pages/terms.html">Terms</a></li>
+        <li><a href="pages/privacy.html">Privacy</a></li>
+      </ul></div>
     </div>
-    <div class="ft-b"><span>&copy; 2026 CatCustoms — a Realized Prints brand.</span><span>Product imagery is illustration.</span></div>
+    <div class="ft-b"><span>&copy; 2026 CatCustoms &mdash; a Realized Prints brand.</span><span>Product imagery is illustration until photography is shot.</span></div>
   </div>
 </footer>
 
 <div class="scrim" data-cart-close></div>
 <aside class="drawer" aria-label="Cart">
-  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">×</button></div>
+  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">&times;</button></div>
   <div class="dr-b" data-cart-body></div>
   <div class="dr-f">
     <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
     <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
-    <div class="stub">⚠ Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
+    <div class="stub">&#9888; Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
   </div>
 </aside>
 <div class="toast"></div>

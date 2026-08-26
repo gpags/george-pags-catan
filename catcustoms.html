@@ -1,15 +1,10 @@
-<!-- catcustoms.html — CatCustoms landing page. REVIEW BUILD, not yet index.html.
-     Above the fold is a fork: Choose a Template / Custom Made. Nothing else.
-     Styles: assets/cc.css · Behaviour + artwork: assets/cc.js
-     Product art is parametric SVG (CC.cottage) until photography exists —
-     see Images/CC-IMAGE-LIST.md. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CatCustoms — a scratcher with your cat on it</title>
-<meta name="description" content="3D-printed cat scratchers with your own cat sculpted and hand-painted into the design. Choose a template, or commission a one-of-one. Replaceable cardboard insert.">
+<title>CatCustoms &mdash; an art piece for your cat and home</title>
+<meta name="description" content="Cat scratchers with your cat designed into them and their name on the front. Templates from $59, or commission a one-of-one.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -17,269 +12,226 @@
 </head>
 <body>
 
-<header>
-  <div class="wrap hd">
-    <a class="brand" href="catcustoms.html">Cat<span>Customs</span></a>
-    <nav class="nav" aria-label="Main">
-      <a href="#templates">Templates</a>
-      <a href="cc-custom.html">1-of-1</a>
-      <a href="cc-refills.html">Refills</a>
-      <a href="cc-partner.html">For sitters</a>
-      <a href="#faq">FAQ</a>
-    </nav>
-    <div class="hd-r">
-      <a class="btn btn-pink btn-sm" href="cc-template.html">Choose a template</a>
-      <button class="cartbtn" data-cart-open aria-label="Open cart">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6h15l-1.6 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 2H2"/></svg>
-        <span class="cnt" data-cart-count hidden></span>
+<div class="drop-bar" id="dropBar">
+  <div class="drop-in">
+    <span class="drop-label">Next Inventory Drop</span>
+    <div class="cd" id="cd" aria-live="polite"></div>
+    <span class="drop-when" id="dropWhen">&mdash;</span>
+  </div>
+  <button class="drop-x" id="dropX" aria-label="Dismiss">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<div class="marquee" aria-label="Store highlights"><div class="mq-track" id="mqTrack"></div></div>
+
+<header class="head-main">
+  <div class="wrap head-row">
+    <div class="head-left">
+      <button class="burger" data-burger aria-expanded="false" aria-label="Menu">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="soc">
+        <a class="ibtn" href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a class="ibtn" href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+        <a class="ibtn" href="https://youtube.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a>
+      </div>
+    </div>
+    <a class="brand" href="catcustoms.html">
+      <span class="brand-name">CatCustoms</span>
+      <span class="brand-sub">by Realized Prints</span>
+    </a>
+    <div class="head-right">
+      <button class="ibtn" data-cart-open aria-label="Open cart">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 7h12l-1.2 12H7.2z"/><path d="M9 7a3 3 0 016 0"/></svg>
+        <span class="cart-pill" data-cart-count>0</span>
       </button>
     </div>
   </div>
 </header>
 
-<!-- ============ ABOVE THE FOLD — THE FORK ============ -->
+<nav class="nav-strip" aria-label="Main">
+  <div class="wrap nav-in">
+    <a class="nlink" href="pages/contact.html">Contact Us</a>
+    <a class="nlink" href="catcustoms.html#templates" aria-current="page">Templates</a>
+    <a class="nlink" href="cc-custom.html">1-of-1</a>
+    <a class="nlink" href="cc-partner.html">Affiliates</a>
+    <a class="nlink" href="catcustoms.html#faq">FAQ</a>
+  </div>
+</nav>
+
 <section class="atf" id="top">
   <div class="wrap atf-in">
-    <span class="tagline">🐾 Father &amp; Son · Printed &amp; Painted in the USA</span>
-    <h1>A scratcher with <em>your cat</em> on it.</h1>
-    <p class="atf-lede">Your cat, sculpted and hand-painted into the design, with their name on the front. The cardboard insert is replaceable. Everything else stays.</p>
+    <span class="tagline">&#128062; Husband &amp; Wife &middot; Made in the USA</span>
+    <h1>An Art Piece for Your <em>Cat</em> and Home</h1>
+    <p class="atf-lede">Your cat, designed into the cat scratcher, with their name on the front.</p>
 
     <div class="doors">
-
       <a class="door" href="cc-template.html">
         <span class="ribbon">Most people start here</span>
-        <div class="art" data-cottage="butter" data-name="Luna &amp; Ruska" data-nonote></div>
+        <div class="art" data-photo="Images/cc-parts-exploded.jpg" data-way="cream" data-alt="Storybook Cottage scratcher with its cat figures and nameplate"></div>
         <div class="door-b">
           <h2>Choose a Template</h2>
-          <p>Pick a design, pick a colourway, and send us a photo of your cat after you order. We sculpt and paint them into it.</p>
-          <div class="meta">
-            <span class="pricetag">$99 <small>EACH</small></span><span>·</span><span>5–10 business days</span>
-          </div>
-          <span class="btn btn-pink btn-block" style="margin-top:10px">See the designs</span>
+          <p>Pick a design and a colourway, then send a photo of your cat after you order.</p>
+          <div class="meta"><span class="pricetag">$59 <small>EACH</small></span><span>&middot;</span><span>5&ndash;10 business days</span></div>
+          <span class="btn btn-pink btn-block btn-sm">See the designs</span>
         </div>
       </a>
 
       <a class="door" href="cc-custom.html">
-        <span class="ribbon lav">3 a month</span>
-        <div class="frame">
-          <img src="Images/cc-parts-cats.jpg" alt="Hand-painted cat figurines and a blank nameplate — the personalised parts of a CatCustoms scratcher">
-        </div>
+        <span class="ribbon mint">3 a month</span>
+        <div class="frame"><img src="Images/cc-parts-cats.jpg" alt="Painted cat figures and a blank nameplate"></div>
         <div class="door-b">
           <h2>Custom Made</h2>
-          <p>A design that has never existed and won't again — built around your cat, your home, your idea. You approve every stage, from the first concept to the box going out.</p>
-          <div class="meta">
-            <span class="pricetag">$349 <small>FLAT</small></span><span>·</span><span>Made with you, not for you</span>
-          </div>
-          <span class="btn btn-ghost btn-block" style="margin-top:10px">See how a 1-of-1 is made</span>
+          <p>A design that has never existed, built around your cat. You approve all nine stages.</p>
+          <div class="meta"><span class="pricetag">$279 <small>FLAT</small></span><span>&middot;</span><span>Made with you</span></div>
+          <span class="btn btn-ghost btn-block btn-sm">See how it&rsquo;s made</span>
         </div>
       </a>
-
     </div>
   </div>
 </section>
 
-<!-- ============ THE TEMPLATE + COLOURWAYS ============ -->
 <section id="templates">
   <div class="wrap">
     <div class="sec-head">
-      <h2 class="sec-title">Storybook Cottage</h2>
-      <p class="sec-sub">Our launch design, in four colourways. Half-timbered beams, window boxes and climbing flowers — your cats in the arched windows, their name on the sign between them.</p>
+      <h2 class="sec-title">Choose a Template</h2>
+      <p class="sec-sub">Five designs. Your cat gets designed into whichever one you pick, with their name on the front. Colourways are chosen on the product page.</p>
     </div>
-
     <div class="tpl-grid">
       <article class="tpl">
-        <div class="art" data-cottage="cream" data-name="Luna &amp; Ruska" data-nonote></div>
+        <div class="art" data-photo="Images/cc-parts-exploded.jpg" data-way="cream" data-alt="Storybook Cottage cat scratcher"></div>
         <div class="tpl-b">
-          <h3>Cottage Cream</h3>
-          <p>Warm cream walls with cocoa beams. The one that disappears into a room you've already decorated.</p>
-          <div class="tpl-f"><span class="p">$99</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
+          <h3>Storybook Cottage</h3>
+          <p>Half-timbered beams, window boxes and climbing flowers. Four colourways, and the design the range started from.</p>
+          <div class="tpl-f"><span class="p">$59</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
         </div>
       </article>
-
       <article class="tpl">
-        <div class="art" data-cottage="butter" data-name="Luna &amp; Ruska" data-nonote></div>
+        <div class="art" data-photo="Images/cc-meadow-render.jpg" data-way="cream" data-alt="Sleepy Meadow cat scratcher"></div>
         <div class="tpl-b">
-          <h3>Buttercup</h3>
-          <p>Bright yellow against charcoal timbers. The boldest of the four — it does not hide behind the sofa.</p>
-          <div class="tpl-f"><span class="p">$99</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
+          <h3>Sleepy Meadow</h3>
+          <p>Rolling hills, low clouds and a small sun over the end panel. The quietest design in the range.</p>
+          <div class="tpl-f"><span class="p">$59</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
         </div>
       </article>
-
-      <article class="tpl">
-        <div class="art" data-cottage="blossom" data-name="Luna &amp; Ruska" data-nonote></div>
+      <article class="tpl soon">
+        <div class="art" data-photo="Images/cc-tpl-bamboo.jpg" data-way="butter" data-alt="Bamboo Grove cat scratcher"></div>
         <div class="tpl-b">
-          <h3>Blossom</h3>
-          <p>Dusty pink with sage green beams. Softest of the four, and the one people pick when it has to match the sofa.</p>
-          <div class="tpl-f"><span class="p">$99</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
+          <h3>Bamboo Grove</h3>
+          <p>Bamboo columns, deep arches and a hanging sign. Suits a room with plants in it.</p>
+          <div class="tpl-f"><span class="p" style="color:var(--muted)">$59</span><span class="soon-tag">Coming soon</span></div>
         </div>
       </article>
-
-      <article class="tpl">
-        <div class="art" data-cottage="lilac" data-name="Luna &amp; Ruska" data-nonote></div>
+      <article class="tpl soon">
+        <div class="art" data-photo="Images/cc-tpl-castle.jpg" data-way="lilac" data-alt="Castle Kitties cat scratcher"></div>
         <div class="tpl-b">
-          <h3>Lilac Sky</h3>
-          <p>Lavender walls, pale blue trim. The quietest colourway and the one that photographs best.</p>
-          <div class="tpl-f"><span class="p">$99</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
+          <h3>Castle Kitties</h3>
+          <p>Turrets, stonework and a battlement top edge. The boldest silhouette of the set.</p>
+          <div class="tpl-f"><span class="p" style="color:var(--muted)">$59</span><span class="soon-tag">Coming soon</span></div>
         </div>
       </article>
-    </div>
-
-    <p style="font-size:13px;color:var(--muted);margin-top:18px">
-      Artwork above is an illustration of the piece. Photography of the finished product is being shot now.
-      More designs — Bamboo Grove, Castle Kitties, Bloom Kitty — follow the Cottage.
-    </p>
-
-    <!-- how it works -->
-    <div style="margin-top:52px">
-      <h3 style="font-size:26px;margin-bottom:6px">How a template order works</h3>
-      <p class="sec-sub" style="margin-bottom:20px">Three things to do. Only two of them happen before you pay.</p>
-      <div class="hiw">
-        <div class="step"><div class="num">1</div><h4>Pick your colourway</h4><p>Four to choose from. We print and hand-finish in the one you pick, so the piece arrives in the colours you actually chose.</p></div>
-        <div class="step"><div class="num">2</div><h4>Type their name</h4><p>It appears on the sign as you type, so you can see it before you commit. Nothing is printed until you've confirmed the spelling.</p></div>
-        <div class="step"><div class="num">3</div><h4>Send a photo — after checkout</h4><p>Nothing to upload before you pay. Order first, then send a clear photo of your cat whenever you've got a good one.</p></div>
-      </div>
-      <div class="note-strip">
-        <span style="font-size:26px;line-height:1">📮</span>
-        <span><b>Why after?</b> Because a photo upload is the single most common place a cat-shaped order gets abandoned. Buy it in thirty seconds, send the picture when you've got a good one — we'll email you the link and wait.</span>
-      </div>
+      <article class="tpl soon">
+        <div class="art" data-photo="Images/cc-tpl-bloom.jpg" data-way="blossom" data-alt="Bloom Kitty cat scratcher"></div>
+        <div class="tpl-b">
+          <h3>Bloom Kitty</h3>
+          <p>Trellis, vines and a scalloped rim. Softest of the range &mdash; the one that matches the sofa.</p>
+          <div class="tpl-f"><span class="p" style="color:var(--muted)">$59</span><span class="soon-tag">Coming soon</span></div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- ============ WHAT MAKES IT YOURS ============ -->
 <section class="band-soft">
   <div class="wrap parts">
-    <div class="frame">
-      <img src="Images/cc-parts-cats.jpg" alt="Two hand-painted cat figurines on flower-box mounts, beside a blank nameplate">
-    </div>
+    <div class="frame"><img src="Images/cc-parts-cats.jpg" alt="Two painted cat figures on flower-box mounts, beside a blank nameplate"></div>
     <div>
       <span class="tagline">The personalised parts</span>
-      <h2 class="sec-title" style="margin-top:16px">The frame is the design. Your cat is the part we make.</h2>
-      <p class="sec-sub">Every scratcher is a printed frame plus three pieces made specifically for your order.</p>
+      <h2 class="sec-title" style="margin-top:14px">The frame is the design. Your cat is the part we make.</h2>
+      <p class="sec-sub">Every scratcher is a printed frame plus three pieces made for your order.</p>
       <ul class="plist">
-        <li><span class="pin">1</span><span><b>A figurine of each cat.</b> Sculpted to your photo, hand-painted to their colouring and markings, then set into the windows.</span></li>
-        <li><span class="pin">2</span><span><b>A nameplate.</b> Their name, raised and painted, on the front of the piece — not a sticker, not an engraving.</span></li>
-        <li><span class="pin">3</span><span><b>A corrugated insert.</b> The bit your cat actually destroys. It lifts out and a fresh one drops in for $12.</span></li>
+        <li><span class="pin">1</span><span><b>A figure of each cat.</b> Modelled from your photo, painted to their colouring, then set into the windows.</span></li>
+        <li><span class="pin">2</span><span><b>A nameplate.</b> Their name, raised and painted on the front &mdash; not a sticker, not an engraving.</span></li>
+        <li><span class="pin">3</span><span><b>A corrugated insert.</b> The bit your cat actually destroys. It lifts out and a fresh one drops in.</span></li>
       </ul>
-      <p style="font-size:15px;color:var(--muted);margin-top:20px;border-left:4px solid var(--pink-300);padding-left:16px">
-        <b style="color:var(--ink)">On likeness:</b> your cat is sculpted, not scanned. The style keeps what makes them recognisable — the markings, the colouring, the face — and lets the rest go. It's a portrait the way a good tattoo is a portrait. Not a copy. A likeness.
+      <p style="font-size:14.5px;color:var(--muted);margin-top:18px;border-left:4px solid var(--pink-300);padding-left:15px">
+        <b style="color:var(--ink)">On likeness:</b> Your cat is <b>modelled, not scanned</b>. We build the 3D model with AI from your photo, then rework it by hand in Blender until it looks right. The design is simplified on purpose so it matches the art style of the piece &mdash; it won&rsquo;t carry every marking, and it isn&rsquo;t meant to. A likeness, not a replica.
       </p>
     </div>
   </div>
 </section>
 
-<!-- ============ 1-OF-1 TEASER ============ -->
-<section class="band-ink">
+<section class="band-oneof">
   <div class="wrap oneof">
     <div>
-      <span class="tagline gold">Custom Made · 1-of-1</span>
-      <h2 class="sec-title" style="margin-top:16px">You will know exactly where your scratcher is, the entire time.</h2>
-      <p class="sec-sub" style="font-size:17px">Most custom orders go quiet the second you pay. This one doesn't. Nine stages — concepts, final approval, the 3D model, the print, the paint, the box — and you hear from us at every one.</p>
-      <div class="pricebox"><span class="n">$349</span><span class="t">Flat<br>All in</span></div>
+      <span class="tagline blue">Custom Made &middot; 1-of-1</span>
+      <h2 class="sec-title" style="margin-top:14px">You will know exactly where your scratcher is, the entire time.</h2>
+      <p class="sec-sub" style="font-size:16.5px">Most custom orders go quiet the second you pay. This one doesn&rsquo;t. Nine stages &mdash; concepts, final approval, the 3D model, the print, the paint, the box &mdash; and you hear from us at every one.</p>
+      <div class="pricebox"><span class="n">$279</span><span class="t">Flat<br>All in</span></div>
       <div class="slots">
         <span class="pip"></span><span class="pip"></span><span class="pip off"></span>
-        <span><b style="color:#fff">2 of 3 slots left this month.</b> A working week goes into one, and there are two of us.</span>
+        <span><b>2 of 3 slots left this month.</b> A working week goes into one, and there are two of us.</span>
       </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
         <a class="btn btn-pink" href="cc-custom.html">Start a 1-of-1</a>
-        <a class="btn" href="cc-custom.html#journey" style="background:transparent;color:#fff;border:2.5px solid rgba(255,255,255,.35)">See the nine stages</a>
+        <a class="btn btn-ghost" href="cc-custom.html#journey">See the nine stages</a>
       </div>
     </div>
-    <div class="frame" style="border-radius:var(--r-lg);aspect-ratio:4/3;border:4px solid rgba(255,255,255,.12)">
-      <img src="Images/cc-parts-exploded.jpg" alt="A cottage scratcher shown with its separately printed cat figurines and nameplate">
-    </div>
+    <div class="frame"><img src="Images/cc-parts-exploded.jpg" alt="A cottage scratcher shown with its separately printed cat figures and nameplate"></div>
   </div>
 </section>
 
-<!-- ============ REFILLS ============ -->
-<section id="refills">
+<section>
   <div class="wrap wrap-n">
     <div class="sec-head">
       <h2 class="sec-title">Refill inserts</h2>
-      <p class="sec-sub">When the cardboard's had it, the cardboard's the only thing you replace. Inserts wear at whatever rate your cat decides — some go in a month, most go a good deal longer. So order one when yours looks finished.</p>
+      <p class="sec-sub">Most cat scratchers need replacement every 2 months. The cardboard is the only part that wears out &mdash; it lifts out, a fresh one drops in, and the frame, figures and nameplate never move.</p>
     </div>
-    <div class="tiles">
-      <button class="tile" data-refill="1" aria-pressed="false">
-        <div class="n">$12</div><div class="l">One insert</div>
-        <div class="d">Order it when yours looks finished.</div>
-      </button>
-      <button class="tile" data-refill="2" aria-pressed="true">
-        <span class="flag">Most ordered</span>
-        <div class="n">$17</div><div class="l">Two inserts</div>
-        <div class="each">$8.50 each — save $7</div>
-        <div class="d">One in, one in the cupboard.</div>
-      </button>
-      <button class="tile" data-refill="4" aria-pressed="false">
-        <div class="n">$44</div><div class="l">Four · a year on hand</div>
-        <div class="each">$11 each</div>
-        <div class="d">Paid once, held here, posted whenever you say.</div>
-      </button>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <a class="btn btn-pink btn-lg" href="cc-refills.html">Set up refills &mdash; from $9</a>
+      <span style="font-size:14.5px;color:var(--muted)">Subscribe and save 10%, or order a pack any time.</span>
     </div>
-    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:26px">
-      <button class="btn btn-pink btn-lg" data-refill-add>Order 2 inserts — $17</button>
-      <a class="btn btn-ghost" href="cc-refills.html">More about refills</a>
-      <span style="font-size:14.5px;color:var(--muted)">Selected: <strong data-refill-label>2 inserts — $17</strong></span>
-    </div>
-
     <div class="addon">
-      <div class="k">Take them with you — $4, or $6 for two.</div>
-      <div class="v">A keychain of the same figurine we sculpt for your scratcher. We've already made your cat, so this costs almost nothing to add. Offered at checkout, after a scratcher.</div>
+      <div class="k">Take them with you &mdash; $4, or $6 for two.</div>
+      <div class="v">A keychain of the same design we make for your scratcher. We&rsquo;ve already modelled your cat, so this costs almost nothing to add. Offered at checkout, after a scratcher.</div>
     </div>
   </div>
 </section>
 
-<!-- ============ FAQ ============ -->
 <section class="band-soft" id="faq">
   <div class="wrap wrap-n">
     <div class="sec-head"><h2 class="sec-title">Before you order</h2><p class="sec-sub">The things people actually ask.</p></div>
     <div class="faq">
-      <details open>
-        <summary>Will it look exactly like my cat?</summary>
-        <p>No — and that's deliberate. Your cat is sculpted and hand-painted, not scanned. The style keeps what makes them recognisable — the markings, the colouring, the shape of the face — and lets the rest go. It's a portrait the way a good tattoo is a portrait. Not a copy. A likeness.</p>
-      </details>
-      <details>
-        <summary>When do I send my photo?</summary>
-        <p>After you order. There's nothing to upload before you pay — we email you a link, and you send a clear photo of your cat plus the name you'd like on the sign whenever you've got a good one.</p>
-      </details>
-      <details>
-        <summary>How long does it take?</summary>
-        <p>A template is <strong>5&ndash;10 business days</strong> to make, plus transit. Nothing is made before you order.</p>
-        <p>A 1-of-1 takes longer, because roughly a working week goes into one and only three are taken each month. You'll get a real date when you order, not an estimate we quietly extend.</p>
-      </details>
-      <details>
-        <summary>What if I don't like the concepts?</summary>
-        <p>Then they aren't finished. Concepts exist so you can say no to them — that's the entire job of a concept. Nothing gets modelled, printed or painted off a design you merely tolerated.</p>
-      </details>
-      <details>
-        <summary>What if my cat ignores it?</summary>
-        <p>Cats have opinions about placement more than they have opinions about scratchers. Put it where they already scratch — beside the sofa arm, across a doorway they use, next to where they sleep — rather than where you'd prefer it lived.</p>
-        <p>Because every piece is made for one specific cat, we can't resell it, so it isn't returnable for a change of mind. Message us anyway if it isn't working; we've usually got a suggestion.</p>
-      </details>
-      <details>
-        <summary>How do refills work?</summary>
-        <p>The insert lifts out and a new one drops in. Nothing is glued, nothing needs tools, and the frame, figurines and nameplate are untouched by the swap. $12 for one, $17 for two, $44 for four kept on hand.</p>
-      </details>
-      <details>
-        <summary>What if it gets destroyed?</summary>
-        <p>The cardboard is <em>supposed</em> to get destroyed; that's the part doing the work, and it costs $12 to undo. The frame, the figurines and the nameplate all sit outside the wear surface.</p>
-        <p>If it arrives damaged, tell us within <strong>7 days</strong> and we'll replace it. If a part fails from a material defect within <strong>30 days</strong>, that's covered too. A dropped corner isn't — but message us, because a single part is usually quick to reprint.</p>
-      </details>
+      <details open><summary>Will it look exactly like my cat?</summary><p>Not exactly, no &mdash; and that&rsquo;s the honest answer. We build the 3D model with AI from the photo you send, then rework it by hand in Blender until it looks right. The design gets simplified on purpose so it matches the art style of the piece: chunky shapes, clean lines, no fur detail.</p><p>What you get is a likeness, not a replica. The colouring and the markings people recognise your cat by come through. The fine detail deliberately doesn&rsquo;t.</p></details>
+      <details><summary>When do I send my photo?</summary>
+        <p>After you order. There&rsquo;s nothing to upload before you pay &mdash; we email you a link, and you send a clear photo of your cat plus the name for the front whenever you&rsquo;ve got a good one.</p></details>
+      <details><summary>How long does it take?</summary>
+        <p>A template is <strong>5&ndash;10 business days</strong> to make, plus transit. Nothing is made before you order, and the clock starts when your photo arrives.</p>
+        <p>A 1-of-1 takes longer, because roughly a working week goes into one and only three are taken each month.</p></details>
+      <details><summary>What if my cat ignores it?</summary>
+        <p>Cats have opinions about placement more than they have opinions about scratchers. Put it where they already scratch &mdash; beside the sofa arm, across a doorway they use, next to where they sleep.</p>
+        <p>Because every piece is made for one specific cat, we can&rsquo;t resell it, so it isn&rsquo;t returnable for a change of mind. Message us anyway if it isn&rsquo;t working; we&rsquo;ve usually got a suggestion.</p></details>
+      <details><summary>How do refills work?</summary>
+        <p>The insert lifts out and a new one drops in &mdash; nothing is glued and nothing needs tools. Most cats go through one about every two months. $10 for one, $25 for three, $40 for six, and 10% off any of those on a subscription.</p></details>
+      <details><summary>What if it gets destroyed?</summary>
+        <p>The cardboard is <em>supposed</em> to get destroyed; that&rsquo;s the part doing the work. The frame, the figures and the nameplate all sit outside the wear surface.</p>
+        <p>If it arrives damaged, tell us within <strong>7 days</strong> and we&rsquo;ll replace it. If a part fails from a material defect within <strong>30 days</strong>, that&rsquo;s covered too.</p></details>
     </div>
   </div>
 </section>
 
-<!-- ============ SITTERS ============ -->
-<section>
+<section class="band-mint">
   <div class="wrap sitter">
     <div>
-      <span class="tagline mint">For cat sitters</span>
-      <h2 class="sec-title" style="margin-top:16px">You're in more homes in a week than we'll be in all year.</h2>
-      <p class="sec-sub">And you already know which of those cats has ruined a sofa arm. Pass your clients a free keychain and a free set of refill inserts with their first scratcher — yours to give, no code to explain, nothing that expires. You earn a commission on every one.</p>
-      <a class="btn btn-pink" style="margin-top:24px" href="cc-partner.html">Become a partner</a>
+      <span class="tagline mint">Affiliates &amp; partners</span>
+      <h2 class="sec-title" style="margin-top:14px">Vets, shelters, pet stores and sitters.</h2>
+      <p class="sec-sub">If you are already in the room when somebody is thinking about their cat, we would rather work with you than buy ads. Businesses get a package they can sell at their own checkout and we fulfil it. Sitters get keychains and client discounts as a value-add.</p>
+      <a class="btn btn-mint" style="margin-top:20px" href="cc-partner.html">See the partner packages</a>
     </div>
     <div class="fwd">
-      <span class="tag">Something a sitter can forward</span>
-      Thought of Luna when I saw these — they're cat scratchers with your actual cat sculpted and painted into the design, name on the front. Cardboard insert you swap out when it's wrecked. I've got a partner thing with them, so if you use my link you get a free keychain of her and a free set of refills. Here you go: <span style="color:var(--pink);font-style:normal;font-weight:800">[link]</span>
+      <span class="tag">Something a partner can forward</span>
+      Thought of Luna when I saw these &mdash; cat scratchers with your actual cat designed into them, name on the front. Cardboard insert you swap out when it&rsquo;s wrecked, so the nice part lasts. I work with them, so you get a keychain of her free with your first one. Here you go: <span style="color:var(--pink);font-style:normal;font-weight:800">[link]</span>
     </div>
   </div>
 </section>
@@ -287,26 +239,38 @@
 <footer>
   <div class="wrap">
     <div class="ft">
-      <div style="max-width:290px">
-        <div class="brand" style="color:#fff">Cat<span style="color:var(--yellow)">Customs</span></div>
-        <p style="margin-top:12px;font-size:14.5px">Cat scratchers with your cat on them. Made by a father and a son.</p>
+      <div style="max-width:280px">
+        <div class="brand-name" style="font-size:25px">CatCustoms</div>
+        <p style="margin-top:10px;font-size:14px">Cat scratchers with your cat designed into them. A husband-and-wife shop, made in the USA.</p>
       </div>
-      <div><h4>Shop</h4><ul><li><a href="cc-template.html">Storybook Cottage</a></li><li><a href="cc-custom.html">Custom Made</a></li><li><a href="cc-refills.html">Refill inserts</a></li></ul></div>
-      <div><h4>Help</h4><ul><li><a href="#faq">FAQ</a></li><li><a href="pages/policies.html">Shipping &amp; returns</a></li><li><a href="pages/contact.html">Contact</a></li><li><a href="cc-partner.html">For cat sitters</a></li></ul></div>
-      <div><h4>Legal</h4><ul><li><a href="pages/terms.html">Terms</a></li><li><a href="pages/privacy.html">Privacy</a></li></ul></div>
+      <div><h4>Shop</h4><ul>
+        <li><a href="catcustoms.html#templates">Templates</a></li>
+        <li><a href="cc-custom.html">1-of-1 Commissions</a></li>
+        <li><a href="cc-refills.html">Refill inserts</a></li>
+      </ul></div>
+      <div><h4>Help</h4><ul>
+        <li><a href="catcustoms.html#faq">FAQ</a></li>
+        <li><a href="pages/policies.html">Shipping &amp; returns</a></li>
+        <li><a href="pages/contact.html">Contact us</a></li>
+        <li><a href="cc-partner.html">Affiliates &amp; partners</a></li>
+      </ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="pages/terms.html">Terms</a></li>
+        <li><a href="pages/privacy.html">Privacy</a></li>
+      </ul></div>
     </div>
-    <div class="ft-b"><span>&copy; 2026 CatCustoms — a Realized Prints brand.</span><span>Product imagery is illustration.</span></div>
+    <div class="ft-b"><span>&copy; 2026 CatCustoms &mdash; a Realized Prints brand.</span><span>Product imagery is illustration until photography is shot.</span></div>
   </div>
 </footer>
 
 <div class="scrim" data-cart-close></div>
 <aside class="drawer" aria-label="Cart">
-  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">×</button></div>
+  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">&times;</button></div>
   <div class="dr-b" data-cart-body></div>
   <div class="dr-f">
     <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
     <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
-    <div class="stub">⚠ Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
+    <div class="stub">&#9888; Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
   </div>
 </aside>
 <div class="toast"></div>
