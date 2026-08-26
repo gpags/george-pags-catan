@@ -14,7 +14,10 @@
 const Stripe = require('stripe');
 const CATALOG = require('../assets/catalog.js');
 
-const { BY_HANDLE, ADDONS, COLOR_LABEL, FREE_SHIP, priceFor, savingAt, giftsFor } = CATALOG;
+const {
+    BY_HANDLE, ADDONS, COLOR_LABEL, FREE_SHIP, priceFor, savingAt, giftsFor,
+    SECOND_UNIT_OFF, secondUnitDiscount, orderProblem, needsPhoto,
+} = CATALOG;
 
 /* Explicit list, deliberately NOT Stripe's dynamic payment methods. Dynamic
    keeps re-adding buy-now-pay-later options (Klarna, Affirm, Afterpay) as
@@ -93,21 +96,58 @@ function priceLine(raw) {
 
     const addons = raw.addons && typeof raw.addons === 'object' ? raw.addons : {};
     const name = cleanName(addons.name);
-    const match = addons.match === true || addons.match === 'true';
 
     /* Bundle price comes from the catalog's explicit ladder. Add-ons are
-       charged on every unit — engraving three cats is three engravings. */
-    const addonsPerUnit = (name ? ADDONS.name.price : 0) + (match ? ADDONS.match.price : 0);
+       charged on every unit — the nameplate is ADDONS.name at price 0, so
+       this is currently always zero and is kept so a future paid add-on
+       still prices correctly. */
+    const addonsPerUnit = name ? ADDONS.name.price : 0;
     const bundleCents = Math.round(priceFor(product, qty) * 100);
     const addonCents = Math.round(addonsPerUnit * 100) * qty;
     const savedCents = Math.round(savingAt(product, qty) * 100);
 
     return {
-        product, qty, color, name, match,
+        product, qty, color, name,
         savedCents,
         unitCents: Math.round((bundleCents + addonCents) / qty),
         amountCents: bundleCents + addonCents,
     };
+}
+
+/* ================================================================
+   Apply the order-level 40%-off-the-second-scratcher discount.
+
+   Stripe will not take a negative line item, and creating a coupon on
+   the fly is an extra API call that can fail after the cart has already
+   been priced. So the discount is subtracted from the scratcher lines
+   themselves, split across them in proportion to how many scratcher
+   units each line holds.
+
+   The remainder from the split lands on the last scratcher line, so the
+   cents always add up to exactly what catalog.js said they would.
+   ================================================================ */
+function applySecondUnitDiscount(lines) {
+    const offCents = Math.round(
+        secondUnitDiscount(lines.map(l => ({ handle: l.product.h, qty: l.qty }))) * 100
+    );
+    if (offCents <= 0) return 0;
+
+    const scratchers = lines.filter(l => l.product.v === 'scratcher');
+    const totalUnits = scratchers.reduce((n, l) => n + l.qty, 0);
+    if (!totalUnits) return 0;
+
+    let handed = 0;
+    scratchers.forEach((l, i) => {
+        const share = i === scratchers.length - 1
+            ? offCents - handed
+            : Math.floor(offCents * l.qty / totalUnits);
+        handed += share;
+        l.discountCents = share;
+        l.amountCents -= share;
+        l.savedCents += share;
+        l.unitCents = Math.round(l.amountCents / l.qty);
+    });
+    return offCents;
 }
 
 /* Stripe metadata values cap at 500 chars — split the order payload across
@@ -145,6 +185,16 @@ module.exports = async (req, res) => {
             return res.status(400).json({ error: 'INVALID_CART', message: e.message });
         }
 
+        /* Cart-shape rules the catalog owns — currently "a keychain only
+           ships with a scratcher". Checked in the drawer too, but that check
+           runs in localStorage-land and is editable in devtools. */
+        const problem = orderProblem(items.map(i => ({ handle: i.handle, qty: Number(i.qty) })));
+        if (problem) {
+            return res.status(400).json({ error: 'INVALID_CART', message: problem });
+        }
+
+        const discountCents = applySecondUnitDiscount(lines);
+
         const subtotalCents = lines.reduce((s, l) => s + l.amountCents, 0);
         if (subtotalCents <= 0) {
             return res.status(400).json({ error: 'Your cart total came to nothing — please try again.' });
@@ -162,9 +212,9 @@ module.exports = async (req, res) => {
             const colorLabel = COLOR_LABEL[l.color] || l.color;
             const bits = [`Qty ${l.qty}`];
             bits.push(`$${(l.unitCents / 100).toFixed(2)} each`);
-            if (l.savedCents) bits.push(`bundle saving $${(l.savedCents / 100).toFixed(2)}`);
-            if (l.name) bits.push(`Engraved “${l.name}”`);
-            if (l.match) bits.push('Exact pattern match — photo to follow');
+            if (l.savedCents) bits.push(`saving $${(l.savedCents / 100).toFixed(2)}`);
+            if (l.discountCents) bits.push(`${Math.round(SECOND_UNIT_OFF * 100)}% off the second`);
+            if (l.name) bits.push(`Nameplate “${l.name}”`);
 
             return {
                 quantity: 1,   // the whole line is one priced unit; bundle maths is already applied
@@ -183,7 +233,6 @@ module.exports = async (req, res) => {
                             qty: String(l.qty),
                             saved: (l.savedCents / 100).toFixed(2),
                             name: l.name,
-                            match: String(l.match),
                         },
                     },
                     tax_behavior: 'exclusive',
@@ -207,7 +256,7 @@ module.exports = async (req, res) => {
                         description: `Free on orders over $${g.minSpend}`,
                         metadata: {
                             handle: gp.h, sku: gp.sku, color: g.color,
-                            qty: '1', free: '1', gift: 'true', name: '', match: 'false'
+                            qty: '1', free: '1', gift: 'true', name: ''
                         },
                     },
                     tax_behavior: 'exclusive',
@@ -220,7 +269,13 @@ module.exports = async (req, res) => {
             shop: 'cats',
             item_count: String(lines.reduce((n, l) => n + l.qty, 0)),
             subtotal_usd: (subtotalCents / 100).toFixed(2),
-            needs_photo: String(lines.some(l => l.match)),
+            second_unit_off_usd: (discountCents / 100).toFixed(2),
+            /* Every scratcher and every keychain is drawn from a photo of the
+               customer's cat, so almost every order needs one. api/upload-photo.js
+               refuses an upload unless this is 'true' — it used to be set from the
+               deleted "exact pattern match" add-on, which would have silently
+               switched the whole photo flow off. */
+            needs_photo: String(needsPhoto(lines.map(l => ({ handle: l.product.h, qty: l.qty })))),
             gifts: gifts.map(g => g.handle).join(',') || 'none',
             /* Packed weight, so a label can be bought without re-weighing. */
             packed_oz: String(ship.oz),
@@ -232,14 +287,13 @@ module.exports = async (req, res) => {
                 color: l.color,
                 qty: l.qty,
                 name: l.name,
-                match: l.match,
             })).concat(gifts.map(g => ({
-                handle: g.handle, color: g.color, qty: 1, name: '', match: false, gift: true
+                handle: g.handle, color: g.color, qty: 1, name: '', gift: true
             })))
         ));
         chunkInto(metadata, 'summary', lines.map(l =>
             `${l.qty}× ${l.product.t} (${COLOR_LABEL[l.color] || l.color})` +
-            (l.name ? ` “${l.name}”` : '') + (l.match ? ' +match' : '')
+            (l.name ? ` “${l.name}”` : '')
         ).join(' | '));
 
         const session = await stripe.checkout.sessions.create({

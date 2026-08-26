@@ -9,13 +9,18 @@ const { sendEmail, esc, SHOP_EMAIL } = require('../lib/email.js');
 
 const MAX = { name: 100, email: 200, order: 60, topic: 80, message: 4000 };
 
+/* Anything not on this list is filed as "Something else" rather than
+   rejected, so a stale form can never lose a customer's message.
+   The <select> in build-products.js contactBody must stay in step, and so
+   must the hidden topic field on the cc-custom and cc-partner forms. */
 const TOPICS = [
     'Where is my order',
     'Damaged or faulty item',
     'Change or cancel an order',
-    'Exact pattern match / sending a photo',
-    'Custom or bulk request',
-    'Wholesale & stockists',
+    'Sending a photo of my cat',
+    'Refill pads',
+    'Cattoo enquiry',
+    'Partner application',
     'Something else',
 ];
 
