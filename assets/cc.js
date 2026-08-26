@@ -189,25 +189,57 @@ CC.paintArt = function (scope) {
   var nodes = (scope || document).querySelectorAll('[data-photo],[data-cottage]');
   Array.prototype.forEach.call(nodes, function (el) {
     if (el.getAttribute('data-painted') === '1') return;
-    var src = el.getAttribute('data-photo');
-    var way = el.getAttribute('data-way') || el.getAttribute('data-cottage') || 'cream';
-    var alt = el.getAttribute('data-alt') || (CC.WAYS[way] ? CC.WAYS[way].name + ' cat scratcher' : 'CatCustoms cat scratcher');
-    var note = el.hasAttribute('data-nonote') ? '' : '<span class="artnote" data-note>ILLUSTRATION</span>';
+    el.setAttribute('data-painted', '1');
 
-    function drawSvg() {
-      el.innerHTML = CC.cottage(way) + note;
+    var src  = el.getAttribute('data-photo');
+    var way  = el.getAttribute('data-way') || el.getAttribute('data-cottage') || 'cream';
+    var note = el.getAttribute('data-note');          /* placeholder caption, if any */
+    var alt  = el.getAttribute('data-alt') ||
+               (CC.WAYS[way] ? CC.WAYS[way].name + ' cat scratcher' : 'CatCustoms cat scratcher');
+    var chip = el.hasAttribute('data-nonote') ? '' : '<span class="artnote">ILLUSTRATION</span>';
+
+    /* What to draw when no photograph can be found. Slots that name a
+       placeholder caption (the journey) get the caption; product slots
+       get the drawn cottage. */
+    function fallback() {
+      if (note) {
+        el.classList.add('ph');
+        el.innerHTML = '<span class="swap">' + esc(note) +
+          (src ? '<code>' + esc(src) + '</code>' : '') + '</span>';
+      } else {
+        el.innerHTML = CC.cottage(way) + chip;
+      }
     }
-    if (!src) { drawSvg(); el.setAttribute('data-painted','1'); return; }
 
-    var img = new Image();
-    img.onload = function () {
-      el.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(alt) + '">';
-      el.setAttribute('data-real','1');
-    };
-    img.onerror = drawSvg;
-    img.src = src;
-    drawSvg();                     /* show something immediately */
-    el.setAttribute('data-painted','1');
+    if (!src) { fallback(); return; }
+
+    /* Vercel serves from a case-sensitive filesystem; a local Windows box
+       does not. If Images/foo.jpg misses, try images/foo.jpg (and the
+       reverse) before giving up, so a wrong-case upload still renders. */
+    function flipDir(u) {
+      if (u.indexOf('Images/') === 0) return 'images/' + u.slice(7);
+      if (u.indexOf('images/') === 0) return 'Images/' + u.slice(7);
+      return null;
+    }
+
+    function show(url) {
+      el.classList.remove('ph');
+      el.innerHTML = '<img src="' + esc(url) + '" alt="' + esc(alt) + '" loading="lazy">';
+      el.setAttribute('data-real', '1');
+    }
+
+    function tryLoad(url, onFail) {
+      var img = new Image();
+      img.onload = function () { show(url); };
+      img.onerror = onFail;
+      img.src = url;
+    }
+
+    fallback();                                   /* draw something immediately */
+    tryLoad(src, function () {
+      var alt2 = flipDir(src);
+      if (alt2) tryLoad(alt2, fallback); else fallback();
+    });
   });
 };
 
@@ -436,6 +468,7 @@ CC.initPDP = function () {
     el.setAttribute('data-photo', 'Images/cc-cottage-' + way + '.jpg');
     el.removeAttribute('data-painted');
     el.removeAttribute('data-real');
+    el.classList.remove('ph');
     CC.paintArt(el.parentNode);
   }
 
