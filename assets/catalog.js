@@ -1,31 +1,27 @@
 /* ================================================================
-   Realized Prints — SHARED CATALOG
-   The single source of truth for products, colors, add-ons and
-   bundle pricing. Read by all three consumers so they can never
-   disagree about a price:
+   CatCustoms — SHARED CATALOG
+   The single source of truth for products, prices, colorways,
+   add-ons and bundle pricing. Read by all four consumers so they
+   can never disagree about a price:
 
      assets/rp.js        (browser)  -> window.RP_CATALOG
+     assets/cc.js        (browser)  -> window.RP_CATALOG
      build-products.js   (node)     -> require('./assets/catalog.js')
      api/checkout.js     (node)     -> require('../assets/catalog.js')
 
-   If you change a price here, the storefront, the generated product
-   pages and the Stripe line items all move together. Nothing else
-   in the repo may hardcode a price.
+   If you change a price here, the storefront, the generated pages
+   and the Stripe line items all move together. Nothing else in the
+   repo may hardcode a price.
 
    ----------------------------------------------------------------
-   PLACEHOLDERS — every field after the "TODO" marker on each
-   product line is a GUESS and must be replaced before launch.
-   Grep the file for TODO to find all 18 of them.
+   THINGS STILL MARKED TODO — grep for TODO.
 
-     weightOz   packed shipping weight — needed for Phase 3 postage
-                bands. Weigh one packed unit on a kitchen scale.
-     boxClass   which mailer/box it ships in. Names are arbitrary;
-                they only need to match the Phase 3 band table.
-     stock      real unit count. 0 renders "Sold out" everywhere.
-
-   `colorsAvailable` is currently ALL9 on every product, which is
-   also a placeholder — trim each one to the colors you actually
-   stock filament for.
+     weightOz   packed shipping weight. Every value below is a GUESS.
+                Weigh one packed unit on a kitchen scale before going
+                live: api/checkout.js picks the postage band from it,
+                and a wrong number loses real money on every order.
+     FREE_SHIP  threshold is provisional — see the note on it.
+     GIFTS      deliberately empty for v1 — see the note on it.
    ================================================================ */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -33,78 +29,105 @@
 })(typeof self !== 'undefined' ? self : this, function () {
 'use strict';
 
-const IMG = 'https://makerworld.bblmw.com/makerworld/model/';
-const im = p => IMG + p + '?x-oss-process=image/resize,w_900/format,webp';
-
-/* ---------- vibes (base figure / 3D style) ---------- */
+/* ---------- design families ----------
+   `v` groups products. The validator throws on an unknown one, and
+   api/checkout.js uses `v === 'scratcher'` to decide what the
+   40%-off-the-second rule applies to, and `v === 'keychain'` to
+   enforce the scratcher-required rule. Renaming a key here means
+   changing both places. */
 const VIBES = {
-  chonky:  {name:'Chonky',   color:'#ff8a3d', blurb:'Round, heavy, and extremely pleased with themselves. Pick a vibe, then pick your cat’s colors.'},
-  chibi:   {name:'Chibi',    color:'#ff3d9a', blurb:'Big heads, tiny paws, smooth surfaces. The cutest thing we print.'},
-  flexi:   {name:'Flexi',    color:'#2f6bff', blurb:'Print-in-place articulated spines. They wiggle straight off the plate.'},
-  lowpoly: {name:'Low Poly', color:'#3ddc97', blurb:'Faceted, geometric, grown-up. The one your partner will actually allow on the shelf.'},
-  knitted: {name:'Knitted',  color:'#a855f7', blurb:'Printed knit texture that reads handmade. Cosy without the yarn.'},
-  functional:{name:'For Your Cat', color:'#14b8a6', blurb:'Store exclusives we designed ourselves. Built for the cat, not the shelf.'}
+  scratcher: {name:'Cat scratchers', color:'#c9533f', blurb:'A frame that lasts, a pad that does not, and your cat drawn into the design.'},
+  refill:    {name:'Refill pads',    color:'#bb8b52', blurb:'The only part that wears out. Lifts out, drops in, fits every design.'},
+  keychain:  {name:'Keychains',      color:'#7d9b6a', blurb:'The same cat we drew for your scratcher, pocket-sized. Add one at checkout.'}
 };
 
-/* ---------- nine core animal colors ---------- */
+/* ---------- colorways ----------
+   These MUST stay in step with CC.WAYS in assets/cc.js — the keys
+   are the same and the labels are shown to the customer on the
+   Stripe receipt and in the order email.
+
+   'meadow' and 'natural' are single-finish products that still need
+   a color key, because api/checkout.js validates every line against
+   colorsAvailable. */
 const COLORS = [
-  ['orange','Orange tabby','co-orange'], ['tuxedo','Tuxedo','co-tuxedo'], ['calico','Calico','co-calico'],
-  ['grey','Grey tabby','co-grey'],       ['brown','Brown tabby','co-brown'], ['tortie','Tortoiseshell','co-tortie'],
-  ['siamese','Siamese','co-siamese'],    ['black','Black','co-black'],     ['white','White','co-white']
+  ['cream',   'Cottage Cream', 'co-cream'],
+  ['butter',  'Buttercup',     'co-butter'],
+  ['blossom', 'Blossom',       'co-blossom'],
+  ['lilac',   'Lilac Sky',     'co-lilac'],
+  ['meadow',  'Meadow Green',  'co-meadow'],
+  ['natural', 'Natural kraft', 'co-natural']
 ];
 const COLOR_KEYS  = COLORS.map(c => c[0]);
 const COLOR_LABEL = COLORS.reduce((m,[k,label]) => (m[k] = label, m), {});
 
-/* Placeholder for colorsAvailable. Frozen so a stray mutation can't
-   silently rewrite every product's color list at once. */
-const ALL9 = Object.freeze(COLOR_KEYS.slice());
+/* The four Storybook Cottage colorways, in the order the picker shows
+   them. Frozen so a stray mutation can't rewrite the list at once. */
+const COTTAGE = Object.freeze(['cream','butter','blossom','lilac']);
 
-/* Functional items ship in furniture colours, not animal coats. */
-const FURNITURE = Object.freeze(['black','white','grey']);
+/* ================================================================
+   ADD-ONS
 
-const ADDONS = { name:{label:'Put a name on it', price:5}, match:{label:'Exact pattern match', price:12} };
+   The $12 'Exact pattern match' add-on is GONE. The business does not
+   offer an exact match — the illustration style drops detail by
+   design, and every page says so. Removing it is not cosmetic:
+   api/checkout.js used to set metadata.needs_photo from it, and
+   api/upload-photo.js refuses an upload unless needs_photo is true.
+   needs_photo is now derived from whether the order contains anything
+   personalised, so the photo flow survives the add-on being deleted.
 
-const FREE_SHIP = 65;
+   The nameplate is INCLUDED in the price of a scratcher — every
+   CatCustoms page promises the cat's name on the front. It stays in
+   ADDONS at price 0 so the name still travels to Stripe metadata and
+   into the order email, but it is never charged for.
+   ================================================================ */
+const ADDONS = { name:{label:'Name on the nameplate', price:0} };
+
+/* ================================================================
+   FREE SHIPPING
+
+   TODO — PROVISIONAL. A scratcher is a wood/composite frame, not a
+   figurine: it is the heaviest thing this shop posts. At $59 a
+   threshold of $65 would make almost every order ship free on a
+   multi-pound parcel, which loses money on each one.
+
+   94 is set so a single scratcher pays postage and a two-scratcher
+   order ($94.40 with the second-unit discount) ships free. Confirm
+   against a real Pirate Ship quote for a packed TWO-frame parcel
+   before launch, and keep the marquee line in assets/cc.js in step
+   with whatever number ends up here.
+   ================================================================ */
+const FREE_SHIP = 94;
 
 /* ================================================================
    PHOTOGRAPHY
 
-   Every image today is a hotlinked MakerWorld render of someone
-   else's model. Per CAT-SHOP-REFERENCES.md: the models are mostly
-   Creative Commons (often NON-COMMERCIAL), and using a designer's
-   renders is a separate permission from printing their model.
+   photoReal is true only where images/ holds a genuine photograph of
+   the real product. The sitewide "product imagery is illustration"
+   footer line disappears by itself once all of them are true.
 
-   So a product only stops showing the "Placeholder" badge once
-   `photoReal: true` is set on it — flip that per product as you
-   shoot your own. The sitewide "Product imagery is placeholder"
-   footer line disappears by itself when all 18 are done.
-
-   Do not set photoReal until the image is genuinely your photo.
+   Still outstanding: a photo of the Sleepy Meadow frame (currently a
+   render) and images/cc-refill-inserts.jpg (currently the drawn
+   stand-in in CC.insert).
    ================================================================ */
 const ALL_PHOTOS_REAL = () => PRODUCTS.every(p => p.photoReal);
 
 /* ================================================================
-   FREE GIFT LADDER  (replaces the old quantity discounts)
+   FREE GIFT LADDER — deliberately EMPTY for v1.
 
-   Alex Hormozi, Money Models, Method 4 "Buy X Get Y Free":
-     "The Free Things can Be Different from the Paid Thing...
-      instead of Buy 1 shirt get 1 free, you can do buy 1 shirt
-      get Socks Free"
-     "More Free Cheaper Things can work better than Fewer Free
-      Expensive Things"
+   The obvious move is a free keychain over $X. Don't: the keychain is
+   a paid $4 upsell on the product page, and giving it away on every
+   $59 order removes that revenue line before it has ever run.
 
-   So the reward for spending more is a free SMALL item, not a
-   discount on the thing they came for. A keychain adds ~$10 of
-   perceived value for ~$1.50 of filament, where the old
-   "3 for the price of 1" ladder gave away 67% of revenue.
+   The place a gift ladder does earn its keep is the partner channel —
+   see SCRATCHER-LINE-HANDOFF.md §4.4. A free keychain or refill pack
+   for a sitter's client costs a couple of dollars, reads as worth ten,
+   and cannot stack its way into a loss the way a 50% code can.
 
-   PROVISIONAL — thresholds are a pricing decision. Change the
-   numbers here and the product pages, cart and Stripe all follow.
+   To switch it on later, add { minSpend, handle, color } rows. Note
+   that giftsFor() cannot see which colorway the cart holds, so a gift
+   row has to name one fixed color.
    ================================================================ */
-const GIFTS = [
-  { minSpend: 25, handle: 'cat-paw-keychain', color: 'orange' },
-  { minSpend: 45, handle: 'cat-clicker',      color: 'black'  }
-];
+const GIFTS = [];
 
 /* Which gifts a given subtotal (in dollars) has earned. Anything out
    of stock is skipped rather than promised and then not shipped. */
@@ -119,62 +142,98 @@ function nextGift(subtotal) {
   return GIFTS.find(g => subtotal < g.minSpend && (BY_HANDLE[g.handle] || {}).stock > 0) || null;
 }
 
-/* ---------- size classes + bundle ladders ----------
-   Bundles are EXPLICIT PRICES, not ratios. Each entry is
-   [quantity, dollars added to the base price], so a $15 Cat Clicker
-   reads 1/$15, 3/$20, 5/$25, 10/$30 and a $26 Sleepy Chonk reads
-   1/$26, 2/$31, 3/$36, 5/$41.
-
-   Edit these three rows and every product of that size follows. To
-   take one product off the pattern, give it its own `bundlePrices`
-   array of [quantity, TOTAL price] pairs below. */
+/* ---------- size classes ----------
+   Kept only because build-products.js and BUILD_ID still reference
+   the table. Every CatCustoms product declares its own bundlePrices
+   below, so nothing actually falls through to these ladders. */
 const SIZE_BUNDLES = {
-  S: [[1, 0], [3, 5], [5, 10], [10, 15]],
-  M: [[1, 0], [2, 5], [3, 10], [5,  15]],
-  L: [[1, 0], [2, 10], [3, 20]],
-  XL:[[1, 0], [2, 15]]
+  S: [[1, 0]],
+  M: [[1, 0]],
+  L: [[1, 0]],
+  XL:[[1, 0]]
 };
 
 /* ================================================================
    CATALOG
-   tiers format: [units received, units paid for]
+
+   Four handles, not eleven. A colorway is what the `color` field is
+   for, so all four Storybook Cottage colorways are ONE product — if
+   they were four handles, a customer buying a cream one and a butter
+   one would be two separate lines of qty 1 and would silently lose
+   the 40%-off-the-second discount.
+
+   Refills and keychains are one handle each with a quantity ladder,
+   which is exactly what bundlePrices exists to express: refills read
+   1/$10, 3/$25, 6/$40 and keychains read 1/$4, 2/$6.
+
+   `canonical` names the hand-designed page that already sells this
+   product. build-products.js skips generating a products/*.html for
+   any product that has one, so there is never a second, off-brand
+   product page competing with the designed one at its own URL.
+
+   `stock` is made-to-order, not shelf count — nothing is pre-built.
+   Setting one to 0 renders "Sold out" everywhere and blocks checkout,
+   which is how you close the line if you need to stop taking orders.
    ================================================================ */
 const PRODUCTS = [
-  {id:1, h:'chonk-cat',            t:'Chonk Cat',            v:'chonky',  size:'L', price:28, sales:98,  new:0, badge:'best', colorsAvailable:ALL9, img:'US8b84684e083da2/design/a10a0453f876e2aa.png',        desc:'A gloriously round cat with a face that says it has never once been told no. 95mm tall, prints solid, sits flat on any shelf.', /*TODO*/ weightOz:9, boxClass:'box-L', stock:12, photoReal:false},
-  {id:3, h:'sleepy-cat',           t:'Sleepy Cat',           v:'chonky',  size:'M', price:26, sales:84,  new:0, badge:'', colorsAvailable:ALL9, img:'US423f6abd75703/design/76fc93bdb5a4970c.jpeg',        desc:'Curled, paws tucked, fully asleep. The one people pick up and refuse to put down.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:20,h:'cat-clicker',          t:'Cat Clicker',          v:'chonky',  size:'S', price:15, sales:102, new:0, badge:'best', colorsAvailable:ALL9, img:'US13c90689edb9dd/design/7c22f4c81f77549b.png',        desc:'Press the belly. That is the whole product, and it is extremely hard to stop doing.', /*TODO*/ weightOz:2, boxClass:'poly-S', stock:40, photoReal:false},
-  {id:4, h:'chibi-sitting-cat',    t:'Chibi Sitting Cat',    v:'chibi',   size:'M', price:22, sales:91,  new:0, badge:'', colorsAvailable:ALL9, img:'USd27d295167c1da/design/2025-07-23_5d4511eb5ffbd8.png', desc:'Big head, tiny paws, tail wrapped round the side. 70mm — the easiest one to start a shelf with.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:5, h:'yawning-chibi-cat',    t:'Yawning Chibi Cat',    v:'chibi',   size:'M', price:22, sales:77,  new:0, badge:'', colorsAvailable:ALL9, img:'USa8052536c37dcd/design/2025-09-10_b13d6265afd3c.png',  desc:'Caught mid-yawn with its jaw wide open. Reads instantly from across a room.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:6, h:'stretching-chibi-cat', t:'Stretching Chibi Cat', v:'chibi',   size:'M', price:26, sales:62,  new:0, badge:'', colorsAvailable:ALL9, img:'USbfedd9c3c494fc/design/2025-09-05_ab666ee339217.png',  desc:'Front paws forward, back arched. A long, low silhouette that suits a shelf edge.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:16,h:'monitor-buddy',        t:'Monitor Buddy',        v:'chibi',   size:'M', price:18, sales:95,  new:0, badge:'', colorsAvailable:ALL9, img:'US92596077edfe56/design/bf532d11dd01e816.png',        desc:'Weighted paws hook over the top edge of a screen. Fits monitors and laptops up to 12mm.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:17,h:'cat-phone-holder',     t:'Cat Phone Holder',     v:'chibi',   size:'M', price:20, sales:58,  new:0, badge:'', colorsAvailable:ALL9, img:'US931592a14e2589/design/2025-09-07_14593a0d045d88.jpg', desc:'Two-part slot-together stand, no glue. Holds a phone upright or landscape.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:15,h:'cat-on-the-moon',      t:'Cat On The Moon',      v:'chibi',   size:'L', price:34, sales:69,  new:0, badge:'', colorsAvailable:ALL9, img:'US416f1196034dc/design/2025-07-04_0adc6d211b9ea8.jpg',  desc:'Perched on a crescent, 140mm tall. Our biggest piece and the best gift in the range.', /*TODO*/ weightOz:12,boxClass:'box-L', stock:12, photoReal:false},
-  {id:7, h:'flexi-cat-keychain',   t:'Flexi Cat Keychain',   v:'flexi',   size:'S', price:12, sales:120, new:0, badge:'', colorsAvailable:ALL9, img:'US6b941ba8302236/design/2c7d72fa7a1a4499.png',        desc:'Articulated spine, printed in one piece. Clips to a bag and wiggles the whole way there.', /*TODO*/ weightOz:2, boxClass:'poly-S', stock:40, photoReal:false},
-  {id:19,h:'cat-paw-keychain',     t:'Cat Paw Keychain',     v:'flexi',   size:'S', price:10, sales:110, new:0, badge:'', colorsAvailable:ALL9, img:'US3844e8ad64d1c5/design/2025-03-30_9b5f916808dd7.jpg', desc:'A clicky paw with a satisfying snap. Optional recess inside for an NFC tag.', /*TODO*/ weightOz:1, boxClass:'poly-S', stock:40, photoReal:false},
-  {id:11,h:'low-poly-kitten',      t:'Low Poly Kitten',      v:'lowpoly', size:'M', price:24, sales:88,  new:0, badge:'', colorsAvailable:ALL9, img:'US9ac748e1f44cbe/design/2025-06-25_8c2c08fed57e18.png', desc:'A smaller, softer take on the faceted style. Prints support-free.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:10,h:'polyart-cat',          t:'Polyart Cat',          v:'lowpoly', size:'L', price:30, sales:47,  new:0, badge:'', colorsAvailable:ALL9, img:'USee1f05ca8ad757/design/2026-01-02_74299a8008cdf8.jpeg',desc:'Faceted, geometric, deliberately not cute. Looks like sculpture in a matte finish.', /*TODO*/ weightOz:9, boxClass:'box-L', stock:12, photoReal:false},
-  {id:18,h:'cat-ring-holder',      t:'Cat Ring Holder',      v:'lowpoly', size:'S', price:17, sales:44,  new:0, badge:'', colorsAvailable:ALL9, img:'US7ea5f81d2d5672/design/0b5ed54000f4c3eb.png',        desc:'The tail is the ring post. Weighted base so it does not tip when you grab a ring.', /*TODO*/ weightOz:3, boxClass:'poly-S', stock:40, photoReal:false},
-  {id:12,h:'knitted-cat-and-heart',t:'Knitted Cat & Heart',  v:'knitted', size:'M', price:25, sales:73,  new:0, badge:'', colorsAvailable:ALL9, img:'USa0cdd547441cc5/design/1296df07d3400d57.jpg',        desc:'Printed knit texture over the whole body, holding a heart. Reads handmade, not printed.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:25, photoReal:false},
-  {id:13,h:'valentine-cats',       t:'Valentine Cats',       v:'knitted', size:'M', price:27, sales:59,  new:0, badge:'', colorsAvailable:ALL9, img:'US392726ce369e51/design/75b7f3689637e1d6.jpg',        desc:'Sold as a pair, each with a heart-tipped tail. Seasonal — back for February.', /*TODO*/ weightOz:5, boxClass:'box-M', stock:0, photoReal:false},
-  /* ---- STORE EXCLUSIVES — our own models, so the only two SKUs with a clean licence ---- */
-  {id:21,h:'cat-scratcher',        t:'Cat Scratcher',        v:'functional', size:'XL', price:34, sales:128, new:1, badge:'best', exclusive:1, colorsAvailable:FURNITURE, img:'US8b84684e083da2/design/a10a0453f876e2aa.png', desc:'Wall, corner or chair-leg mount with a replaceable scratch face. Takes the clawing your sofa is currently absorbing.', /*TODO*/ weightOz:18, boxClass:'box-XL', stock:8, photoReal:false},
-  {id:22,h:'cat-bowl-lifter',      t:'Cat Bowl Lifter',      v:'functional', size:'XL', price:30, sales:64,  new:1, badge:'', exclusive:1, colorsAvailable:FURNITURE, img:'US416f1196034dc/design/2025-07-04_0adc6d211b9ea8.jpg', desc:'Raises the bowl so your cat is not craning down to eat — easier on the neck and on digestion. Stand only; fits standard 5in bowls.', /*TODO*/ weightOz:14, boxClass:'box-XL', stock:8, photoReal:false}
+  {id:101, h:'cottage', t:'Storybook Cottage', v:'scratcher', size:'XL', price:59,
+   sales:0, new:1, badge:'best', exclusive:1,
+   colorsAvailable:COTTAGE, bundlePrices:[[1,59]],
+   canonical:'cc-template.html',
+   img:'images/cc-cottage-cream.jpg',
+   desc:'Wood beams, window boxes and flowers, in four colorways. Your cats sit in the windows and their name goes on the sign at the front. Comes with two cat figures and the first pad.',
+   /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
+
+  {id:102, h:'sleepy-meadow', t:'Sleepy Meadow', v:'scratcher', size:'XL', price:59,
+   sales:0, new:1, badge:'', exclusive:1,
+   colorsAvailable:['meadow'], bundlePrices:[[1,59]],
+   /* No canonical page yet. The landing page's "Choose" button for this
+      design currently links to cc-template.html, which is the hardcoded
+      Storybook Cottage PDP — see the Phase 2 notes. Until Meadow has its
+      own page, that button should say "Coming soon" like the other three. */
+   img:'images/cc-meadow-render.jpg',
+   desc:'Green hills, clouds and a little sun. The calm one. Your cats sit in the windows and their name goes on the front.',
+   /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:false},
+
+  {id:103, h:'refill', t:'Refill pads', v:'refill', size:'M', price:10,
+   sales:0, new:0, badge:'', exclusive:1,
+   colorsAvailable:['natural'],
+   /* 1/$10, 3/$25, 6/$40. priceFor() finds the cheapest combination, so
+      a quantity between two rungs is billed at whichever is cheaper —
+      4 pads is 3+1 = $35, 7 pads is 6+1 = $50. */
+   bundlePrices:[[1,10],[3,25],[6,40]],
+   canonical:'cc-refills.html',
+   img:'images/cc-refill-inserts.jpg',
+   desc:'The corrugated pad your cat actually shreds. Lifts out, drops in, no glue and no tools. One size fits every CatCustoms design.',
+   /*TODO*/ weightOz:6, boxClass:'box-M', stock:99, photoReal:false},
+
+  {id:104, h:'keychain', t:'Keychain of your cat', v:'keychain', size:'S', price:4,
+   sales:0, new:0, badge:'', exclusive:1,
+   /* Same four colorways as the cottage, so the keychain matches the
+      scratcher it was drawn for. */
+   colorsAvailable:COTTAGE,
+   bundlePrices:[[1,4],[2,6]],
+   canonical:'cc-template.html',
+   img:'images/keychains.jpg',
+   desc:'The same cat we drew for your scratcher, pocket-sized. Only available with a scratcher — the artwork has to exist first.',
+   /*TODO*/ weightOz:1, boxClass:'poly-S', stock:99, photoReal:true}
 ];
 
 /* Derived fields + a cheap integrity check so a bad hand-edit fails
    loudly at build/boot time instead of silently mispricing an order. */
 const BY_HANDLE = {};
 PRODUCTS.forEach(p => {
-  p.imgUrl = im(p.img);
-  p.sku = 'RP-' + String(p.id).padStart(4, '0');
+  /* Images are local files in lowercase images/ now. The old MakerWorld
+     CDN wrapper is gone with the figurine SKUs that needed it. */
+  p.imgUrl = p.img;
+  p.sku = 'CC-' + String(p.id).padStart(4, '0');
   if (BY_HANDLE[p.h]) throw new Error('catalog: duplicate handle ' + p.h);
   if (!(p.price > 0)) throw new Error('catalog: bad price on ' + p.h);
   if (!VIBES[p.v]) throw new Error('catalog: unknown vibe "' + p.v + '" on ' + p.h);
+  if (!p.colorsAvailable.length) throw new Error('catalog: no colors on ' + p.h);
   p.colorsAvailable.forEach(c => {
     if (COLOR_KEYS.indexOf(c) === -1) throw new Error('catalog: unknown color "' + c + '" on ' + p.h);
   });
-  /* Explicit price ladder for this product, from its size class. A product
-     may override by declaring its own `bundlePrices` above. */
   if (!p.bundlePrices) {
     p.bundlePrices = (SIZE_BUNDLES[p.size] || SIZE_BUNDLES.M).map(([q, add]) => [q, p.price + add]);
   }
@@ -184,9 +243,7 @@ PRODUCTS.forEach(p => {
 /* ================================================================
    BUNDLE PRICING — explicit prices, not ratios
 
-   Each product carries `bundlePrices`: [[quantity, TOTAL price], ...]
-   derived from SIZE_BUNDLES above. A $15 Cat Clicker becomes
-   [[1,15],[3,20],[5,25],[10,30]].
+   Each product carries `bundlePrices`: [[quantity, TOTAL price], ...].
 
    priceFor() finds the cheapest combination of packs (and singles)
    that covers the requested quantity. That means the customer is
@@ -220,6 +277,24 @@ function priceFor(product, qty) {
   return cost[n];
 }
 
+/* ================================================================
+   IMAGE PATHS
+
+   Product images are local files under lowercase images/ now, not
+   absolute CDN URLs. A page in products/ or pages/ sits one level
+   down, so a bare "images/foo.jpg" would resolve to
+   "products/images/foo.jpg" and 404.
+
+   Every consumer resolves through here against its own base — '' at
+   the root, '../' one level down. An absolute URL passes through
+   untouched, so a CDN-hosted image would still work.
+   ================================================================ */
+function imgSrc(product, base) {
+  const u = (product && product.imgUrl) || '';
+  if (/^(https?:)?\/\//.test(u) || u.charAt(0) === '/') return u;
+  return (base || '') + u;
+}
+
 /* What a single unit works out at, for the "$X each" line. */
 function unitPriceAt(product, qty) {
   const n = Math.max(1, Math.floor(qty) || 1);
@@ -248,22 +323,89 @@ function betterDeal(product, qty) {
 }
 
 /* ================================================================
+   THE 40%-OFF-THE-SECOND-SCRATCHER RULE
+
+   This is an ORDER-LEVEL rule, not a per-product bundle ladder, and
+   it has to be: bundle ladders are per handle, so a customer buying
+   one Storybook Cottage and one Sleepy Meadow would be two lines of
+   qty 1 and would get nothing — while the page told them the second
+   one was 40% off.
+
+   Every second scratcher in the order comes off at 40%. Four
+   scratchers means two discounted, which is the same way a bundle
+   ladder behaves and the same way "every second one" reads.
+
+   The units are sorted most-expensive-first and the discount is
+   applied to the even-indexed ones, so when two designs are ever
+   priced differently it is the cheaper of each pair that discounts —
+   never the more expensive.
+
+   `items` is [{handle, qty}, ...]. Both api/checkout.js and
+   assets/cc.js call this so the browser and Stripe cannot disagree.
+   ================================================================ */
+const SECOND_UNIT_OFF = 0.40;
+
+function secondUnitDiscount(items) {
+  const units = [];
+  (items || []).forEach(it => {
+    const p = BY_HANDLE[it && it.handle];
+    if (!p || p.v !== 'scratcher') return;
+    const n = Math.max(0, Math.floor(it.qty) || 0);
+    for (let i = 0; i < n; i++) units.push(p.price);
+  });
+  units.sort((a, b) => b - a);
+  let off = 0;
+  for (let i = 1; i < units.length; i += 2) off += units[i] * SECOND_UNIT_OFF;
+  return Math.round(off * 100) / 100;
+}
+
+/* ================================================================
+   ORDER RULES
+
+   The keychain is $4 because the cat's likeness has already been
+   drawn for the scratcher — the marginal design cost is zero. Sold on
+   its own it loses money on the first unit, because somebody still has
+   to draw a cat. So it is only ever an add-on.
+
+   The cart drawer checks this before enabling Checkout, and
+   api/checkout.js checks it again before creating a session, because
+   a cart in localStorage is editable in devtools.
+   ================================================================ */
+function orderProblem(items) {
+  const has = v => (items || []).some(it => {
+    const p = BY_HANDLE[it && it.handle];
+    return p && p.v === v && (Math.floor(it.qty) || 0) > 0;
+  });
+  if (has('keychain') && !has('scratcher')) {
+    return 'Keychains are made from the artwork we draw for your scratcher, so they only come with one.';
+  }
+  return null;
+}
+
+/* Anything that needs a photo of the customer's cat before it can be
+   made. This is what api/checkout.js stamps into metadata.needs_photo,
+   and what api/upload-photo.js checks before accepting an upload. */
+function needsPhoto(items) {
+  return (items || []).some(it => {
+    const p = BY_HANDLE[it && it.handle];
+    return p && (p.v === 'scratcher' || p.v === 'keychain');
+  });
+}
+
+/* ================================================================
    BUILD STAMP
 
    Generated pages bake this in and compare it at load. If the HTML in
-   products/ was built from a different catalog than the one the browser
-   just loaded, the page says so loudly instead of half-working.
+   products/ or pages/ was built from a different catalog than the one
+   the browser just loaded, the page says so loudly instead of
+   half-working.
 
-   That failure is not hypothetical: pages built before the pricing
-   rewrite called RP.unitsPaid(), which no longer exists. refresh() threw
-   after updating the quantity but before the price, so the stepper moved
-   and the price and bundle buttons silently froze.
-
-   Derived from the pricing-relevant data only, so it changes exactly when
-   a rebuild is actually required. */
+   Derived from the pricing-relevant data only, so it changes exactly
+   when a rebuild is actually required.
+   ================================================================ */
 function buildId() {
   const shape = JSON.stringify([
-    SIZE_BUNDLES, ADDONS, FREE_SHIP, GIFTS,
+    SIZE_BUNDLES, ADDONS, FREE_SHIP, GIFTS, SECOND_UNIT_OFF,
     PRODUCTS.map(p => [p.h, p.price, p.size, p.stock, p.bundlePrices])
   ]);
   let h = 5381;
@@ -273,8 +415,10 @@ function buildId() {
 const BUILD_ID = buildId();
 
 return {
-  VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
+  VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, COTTAGE, ADDONS, PRODUCTS, BY_HANDLE,
   SIZE_BUNDLES, FREE_SHIP, GIFTS, giftsFor, nextGift,
-  priceFor, unitPriceAt, savingAt, betterDeal, packsFor, BUILD_ID, ALL_PHOTOS_REAL
+  priceFor, unitPriceAt, savingAt, betterDeal, packsFor, imgSrc,
+  SECOND_UNIT_OFF, secondUnitDiscount, orderProblem, needsPhoto,
+  BUILD_ID, ALL_PHOTOS_REAL
 };
 });

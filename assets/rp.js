@@ -20,7 +20,8 @@ const CATALOG = global.RP_CATALOG;
 if (!CATALOG) throw new Error('rp.js: assets/catalog.js must be loaded first');
 
 const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE, FREE_SHIP,
-        priceFor, unitPriceAt, savingAt, betterDeal,
+        priceFor, unitPriceAt, savingAt, betterDeal, imgSrc,
+        SECOND_UNIT_OFF, secondUnitDiscount,
         GIFTS, giftsFor, nextGift, BUILD_ID } = CATALOG;
 
 const BASE = (document.body && document.body.dataset.base) || '';
@@ -29,9 +30,13 @@ const SHOP_EMAIL = 'realizedprints@gmail.com';   // fallback mailto target only
 
 const money = n => '$' + n.toFixed(2);
 
-/* Add-ons are per unit — engraving three cats is three engravings. */
+/* Add-ons are per unit. The nameplate is ADDONS.name at price 0 — the
+   name is included in a scratcher — so this is currently always zero and
+   is kept so a future paid add-on still prices correctly.
+   The old "exact pattern match" add-on is gone: the business does not
+   offer an exact match. See the note in assets/catalog.js. */
 function addonsPerUnit(it) {
-  return (it.name ? ADDONS.name.price : 0) + (it.match ? ADDONS.match.price : 0);
+  return it.name ? ADDONS.name.price : 0;
 }
 
 /* Unit price for display. Always read from the catalog by handle, never
@@ -45,7 +50,7 @@ function unitPrice(it) {
 
 /* ================================================================
    CART — persisted so it survives navigating between pages
-   Item shape: { h, qty, color, name, match }
+   Item shape: { h, qty, color, name }
    Everything else (title, image, price, tiers) is looked up by `h`.
    ================================================================ */
 const KEY = 'rp_cart_v2';   // v1 stored prices in the item; dropped deliberately
@@ -63,7 +68,12 @@ const lineTotal = it => {
   return priceFor(p, it.qty) + addonsPerUnit(it) * it.qty;
 };
 const cartCount = () => CART.reduce((n, i) => n + i.qty, 0);
-const cartTotal = () => CART.reduce((s, i) => s + lineTotal(i), 0);
+/* The 40%-off-the-second-scratcher rule is an ORDER-level discount, not a
+   per-product bundle ladder, so it can only be applied once the whole cart
+   is known. api/checkout.js applies the identical rule from the identical
+   catalog function, so the drawer and the Stripe total always agree. */
+const cartDiscount = () => secondUnitDiscount(CART.map(i => ({ handle: i.h, qty: i.qty })));
+const cartTotal = () => CART.reduce((s, i) => s + lineTotal(i), 0) - cartDiscount();
 
 function addToCart(item) { CART.push(item); saveCart(); renderCart(); openCart(); }
 
@@ -80,7 +90,7 @@ const toPayload = i => ({
   handle: i.h,
   color:  i.color,
   qty:    i.qty,
-  addons: { name: i.name || '', match: !!i.match }
+  addons: { name: i.name || '' }
 });
 
 /* Shared by the cart drawer and the product page's "Buy it now". */
@@ -160,7 +170,7 @@ function mountMarquee(){
     ['♥','Follow us @realizedprints'], ['✈','Shipping across the USA'],
     ['♥','Current fulfillment: 5–10 business days'], ['★','Free US shipping over $65'],
     ['♥','Husband & wife, printed in the USA'], ['🎁','Bundle & save on selected cats'],
-    ['★','Nine core animal colors on every figure'], ['♥','Exact pattern match available']
+    ['★','Replaceable cardboard pad'], ['♥','Your cat, drawn into the design']
   ];
   const group = '<div class="mq-group">' + items.map(([ic,t]) =>
     `<span class="mq-item"><span aria-hidden="true">${ic}</span>${t}</span>`).join('') + '</div>';
@@ -236,7 +246,7 @@ function renderCart(){
     (next ? `<div class="gift-bar">Add ${money(next.minSpend - total)} more and we’ll throw in a free
        <strong>${BY_HANDLE[next.handle].t}</strong></div>` : '') +
     earned.map(g => `<div class="ci ci-gift">
-        <img src="${BY_HANDLE[g.handle].imgUrl}" alt="${BY_HANDLE[g.handle].t}">
+        <img src="${imgSrc(BY_HANDLE[g.handle], BASE)}" alt="${BY_HANDLE[g.handle].t}">
         <div>
           <div class="ci-t">${BY_HANDLE[g.handle].t}</div>
           <div class="ci-m">${COLOR_LABEL[g.color] || g.color} · our gift to you</div>
@@ -246,15 +256,21 @@ function renderCart(){
       const p = BY_HANDLE[i.h];
       const saved = savingAt(p, i.qty);
       return `<div class="ci">
-        <img src="${p.imgUrl}" alt="${p.t}">
+        <img src="${imgSrc(p, BASE)}" alt="${p.t}">
         <div>
           <div class="ci-t">${p.t}</div>
-          <div class="ci-m">${COLOR_LABEL[i.color] || i.color}${i.name ? ' · “'+i.name+'”' : ''}${i.match ? ' · exact match' : ''}</div>
+          <div class="ci-m">${COLOR_LABEL[i.color] || i.color}${i.name ? ' · “'+i.name+'”' : ''}</div>
           <div class="ci-m">Qty ${i.qty}${saved ? ' · saving '+money(saved) : ''}</div>
           <div class="ci-p">${money(lineTotal(i))}</div>
           <button class="ci-rm" data-rm="${ix}">Remove</button>
         </div></div>`;
-    }).join('');
+    }).join('') +
+    (cartDiscount() > 0 ? `<div class="ci ci-gift">
+        <div>
+          <div class="ci-t">${Math.round(SECOND_UNIT_OFF * 100)}% off your second scratcher</div>
+          <div class="ci-m">Applied automatically</div>
+          <div class="ci-p">−${money(cartDiscount())}</div>
+        </div></div>` : '');
   document.getElementById('cartTotal').textContent = money(total);
   if (foot) foot.style.display = 'block';
 }
@@ -291,7 +307,7 @@ function cardHTML(p){
     : '';
   return `<a class="card" href="${BASE}products/${p.h}.html">
     <div class="card-media">${badge}${excl}
-      <img loading="lazy" src="${p.imgUrl}" alt="${p.t}">
+      <img loading="lazy" src="${imgSrc(p, BASE)}" alt="${p.t}">
       ${p.stock > 0 ? '' : '<span class="c-oos">Sold out</span>'}
     </div>
     <h3>${p.t}</h3>
@@ -371,7 +387,8 @@ function boot(){ mountCountdown(); mountMarquee(); mountShopDropdown(); mountCar
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
 
-global.RP = { BASE, BUILD_ID, VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
+global.RP = { BASE, BUILD_ID, VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE, imgSrc,
+              SECOND_UNIT_OFF, secondUnitDiscount,
               priceFor, unitPriceAt, savingAt, betterDeal, money, unitPrice,
               GIFTS, giftsFor, nextGift,
               addToCart, renderCart, openCart, closeCart, cardHTML, FREE_SHIP,
