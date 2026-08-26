@@ -24,7 +24,7 @@ const UPDATED = 'August 17, 2026';
 /* Same catalog module the storefront and api/checkout.js read, so the
    generated pages, the cart and the Stripe line items cannot drift. */
 const CATALOG = require('./assets/catalog.js');
-const { PRODUCTS, VIBES, ADDONS, GIFTS, BY_HANDLE, SIZE_BUNDLES, priceFor, savingAt, BUILD_ID } = CATALOG;
+const { PRODUCTS, VIBES, ADDONS, GIFTS, BY_HANDLE, SIZE_BUNDLES, priceFor, savingAt, imgSrc, BUILD_ID } = CATALOG;
 
 /* Every distinct bundle tier actually in use, so the policies table and
    the FAQ describe the real offer instead of a stale hardcoded list. */
@@ -40,7 +40,10 @@ const BESTSELLERS = PRODUCTS
   .sort((a, b) => b.sales - a.sales || a.id - b.id);
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const imgUrl = p => p.imgUrl;   // derived in assets/catalog.js
+/* Product images are local files under images/. Generated pages live one
+   level down, so they must resolve against their own base — see imgSrc()
+   in assets/catalog.js. */
+const imgUrl = (p, b) => imgSrc(p, b || '');
 
 /* ================================================================
    SHARED CHROME  (b = path back to site root, e.g. '../')
@@ -185,6 +188,21 @@ const footer = b => `
 /* ================================================================
    PRODUCT PAGE
    ================================================================ */
+/* The free-gift ladder is empty in v1 (see the note in assets/catalog.js), so
+   this block renders nothing at all rather than promising a gift that
+   giftsFor() will never grant. Fill GIFTS and it comes back on its own. */
+function giftBlock() {
+  const rows = GIFTS.filter(g => BY_HANDLE[g.handle]);
+  if (!rows.length) return '';
+  const line = rows
+    .map(g => `$${g.minSpend}+ for a free ${esc(BY_HANDLE[g.handle].t)}`)
+    .join(', or ');
+  return `      <div class="pdp-gift" id="pdpGift">
+        Free gift with every order over $${rows[0].minSpend}
+        <span>Spend ${line}.</span>
+      </div>`;
+}
+
 function productPage(p) {
   const v = VIBES[p.v];
   /* One shared bestseller row on every product page, ranked by `sales`, so
@@ -215,7 +233,7 @@ ${chromeTop(b)}
     <div class="pdp-gal">
       <div class="pdp-main">
         ${p.photoReal ? '' : '<span class="stage-ph">Placeholder</span>'}
-        <img id="galMain" src="${imgUrl(p)}" alt="${esc(p.t)}">
+        <img id="galMain" src="${imgUrl(p, b)}" alt="${esc(p.t)}">
       </div>
       <div class="pdp-thumbs" id="galThumbs"></div>
     </div>
@@ -239,11 +257,6 @@ ${chromeTop(b)}
         <span class="addon-p">+$${ADDONS.name.price}</span>
       </label>
       <input class="nameft" id="nameField" type="text" placeholder="Your cat's name" maxlength="18">
-      <label class="addon">
-        <input type="checkbox" id="addMatch">
-        <span><span class="addon-t">${esc(ADDONS.match.label)}</span><span class="addon-d">Send a photo after checkout — we hand-match it</span></span>
-        <span class="addon-p">+$${ADDONS.match.price}</span>
-      </label>
 ${tiers.length ? `
       <div class="opt-t">Bundle &amp; save</div>
       <div class="tiers" id="tiers">
@@ -251,10 +264,7 @@ ${tiers.map(([qty, total]) =>
 `        <button class="tier" data-q="${qty}" aria-pressed="${qty === 1}">${p.price * qty - total > 0 ? '<span class="tier-free">SAVE $' + (p.price * qty - total) + '</span>' : ''}<b>${qty} for $${total}</b><i class="tier-ea">$${(total / qty).toFixed(2)} each</i></button>`).join('\n')}
       </div>` : ''}
 
-      <div class="pdp-gift" id="pdpGift">
-        Free gift with every order over $${GIFTS[0].minSpend}
-        <span>Spend $${GIFTS[0].minSpend}+ for a free ${esc(BY_HANDLE[GIFTS[0].handle].t)}, or $${GIFTS[1].minSpend}+ to add a free ${esc(BY_HANDLE[GIFTS[1].handle].t)}.</span>
-      </div>
+${giftBlock()}
 
       <div class="qty-row">
         <div class="qty">
@@ -310,7 +320,7 @@ const REL_IDS = ${JSON.stringify(rel.map(r => r.id))};
 const COLORS = RP.COLORS.filter(c => PROD.colorsAvailable.indexOf(c[0]) !== -1);
 let color = COLORS[0], qty = 1;
 
-const THUMBS = [PROD.imgUrl, ...REL_IDS.slice(0,3).map(id => RP.PRODUCTS.find(x=>x.id===id).imgUrl)];
+const THUMBS = [RP.imgSrc(PROD, RP.BASE), ...REL_IDS.slice(0,3).map(id => RP.imgSrc(RP.PRODUCTS.find(x=>x.id===id), RP.BASE))];
 document.getElementById('galThumbs').innerHTML = THUMBS.map((src,i) =>
   '<button aria-pressed="'+(i===0)+'" data-src="'+src+'"><img src="'+src+'" alt="View '+(i+1)+'"></button>').join('');
 document.getElementById('galThumbs').addEventListener('click', e => {
@@ -333,23 +343,24 @@ document.getElementById('colorRow').addEventListener('click', e => {
 
 function unitPrice(){
   return PROD.price
-    + (document.getElementById('addName').checked ? RP.ADDONS.name.price : 0)
-    + (document.getElementById('addMatch').checked ? RP.ADDONS.match.price : 0);
+    + (document.getElementById('addName').checked ? RP.ADDONS.name.price : 0);
 }
 function itemForCart(){
   return {
     h: PROD.h, qty, color: color[0],
     name: document.getElementById('addName').checked
-      ? (document.getElementById('nameField').value.trim() || 'name TBC') : '',
-    match: document.getElementById('addMatch').checked
+      ? (document.getElementById('nameField').value.trim() || 'name TBC') : ''
   };
 }
 function refresh(){
   /* Everything is computed before anything is written, so a failure can't
      leave the quantity updated while the price stays stale. */
-  const addons = (document.getElementById('addName').checked ? RP.ADDONS.name.price : 0)
-               + (document.getElementById('addMatch').checked ? RP.ADDONS.match.price : 0);
-  const due = RP.priceFor(PROD, qty) + addons * qty;
+  const addons = (document.getElementById('addName').checked ? RP.ADDONS.name.price : 0);
+  /* Every second scratcher is 40% off. That is an order-level rule, so it is
+     not in PROD.bundlePrices — without this line the page would quote $118 for
+     two while Stripe charged $94.40. */
+  const orderOff = RP.secondUnitDiscount([{ handle: PROD.h, qty: qty }]);
+  const due = RP.priceFor(PROD, qty) + addons * qty - orderOff;
   const was = (PROD.price + addons) * qty;
   const saved = was - due;
   document.getElementById('qVal').textContent = qty;
@@ -391,7 +402,6 @@ function refresh(){
 document.getElementById('qPlus').onclick  = () => { qty++; refresh(); };
 document.getElementById('qMinus').onclick = () => { if(qty>1) qty--; refresh(); };
 document.getElementById('addName').onchange  = refresh;
-document.getElementById('addMatch').onchange = refresh;
 const tiersEl = document.getElementById('tiers');
 if (tiersEl) tiersEl.addEventListener('click', e => {
   const t = e.target.closest('.tier'); if(!t) return;
@@ -682,9 +692,10 @@ const contactBody = `
           <option>Where is my order</option>
           <option>Damaged or faulty item</option>
           <option>Change or cancel an order</option>
-          <option>Exact pattern match / sending a photo</option>
-          <option>Custom or bulk request</option>
-          <option>Wholesale &amp; stockists</option>
+          <option>Sending a photo of my cat</option>
+          <option>Refill pads</option>
+          <option>Cattoo enquiry</option>
+          <option>Partner application</option>
           <option>Something else</option>
         </select></div>
       <div class="cfield" aria-hidden="true" style="position:absolute;left:-9999px">
@@ -912,7 +923,13 @@ const OUT_G = path.join(ROOT, 'pages');
 if (!fs.existsSync(OUT_P)) fs.mkdirSync(OUT_P, { recursive: true });
 if (!fs.existsSync(OUT_G)) fs.mkdirSync(OUT_G, { recursive: true });
 
-for (const p of PRODUCTS) fs.writeFileSync(path.join(OUT_P, p.h + '.html'), productPage(p), 'utf8');
+/* A product with a hand-designed page — catalog `canonical` — does NOT get a
+   generated one. Otherwise the same SKU is live at two URLs: the designed
+   CatCustoms page the customer is sent to, and an off-brand generated twin
+   still reachable (and indexable) at /products/<handle>. The catalog stays the
+   single source of price either way; only the page is skipped. */
+const GENERATED = PRODUCTS.filter(p => !p.canonical);
+for (const p of GENERATED) fs.writeFileSync(path.join(OUT_P, p.h + '.html'), productPage(p), 'utf8');
 
 /* ================================================================
    ORDER CONFIRMATION  (root: /order-complete)
@@ -974,7 +991,7 @@ ${cartDrawer()}
 ${footer(b)}
 <script>
 /* The cart is done — the order is with Stripe now. */
-try { localStorage.removeItem('rp_cart_v2'); } catch (e) {}
+try { localStorage.removeItem('rp_cart_v2'); localStorage.removeItem('cc_cart_v2'); } catch (e) {}
 
 const sessionId = new URLSearchParams(location.search).get('session_id');
 const itemsEl = document.getElementById('ocItems');
@@ -1135,7 +1152,11 @@ const PAGES = [
 for (const pg of PAGES) fs.writeFileSync(path.join(OUT_G, pg.file), contentPage(pg), 'utf8');
 fs.writeFileSync(path.join(ROOT, 'order-complete.html'), orderCompletePage(), 'utf8');
 
-console.log('Generated ' + PRODUCTS.length + ' product pages into products/');
+console.log('Generated ' + GENERATED.length + ' product page(s) into products/'
+  + (GENERATED.length < PRODUCTS.length
+      ? '  (skipped ' + PRODUCTS.filter(p => p.canonical).map(p => p.h).join(', ')
+        + ' — they have hand-designed pages)'
+      : ''));
 console.log('Generated order-complete.html (cat shop confirmation page)');
 console.log('Generated ' + PAGES.length + ' content pages into pages/:');
 console.log(PAGES.map(p => '  /pages/' + p.file.replace('.html','')).join('\n'));
