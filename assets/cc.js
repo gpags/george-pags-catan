@@ -566,6 +566,12 @@ CC.initPartner = function () {
   if (!tabs.length) return;
   var panes = document.querySelectorAll('[data-ppane]');
   var typeField = document.querySelector('[data-partner-type]');
+  var LABEL = {
+    vet:     'Veterinary practice',
+    shelter: 'Shelter or rescue',
+    store:   'Pet store',
+    sitter:  'Independent cat sitter'
+  };
 
   function pick(kind) {
     Array.prototype.forEach.call(tabs, function (t) {
@@ -574,12 +580,14 @@ CC.initPartner = function () {
     Array.prototype.forEach.call(panes, function (p) {
       p.hidden = p.getAttribute('data-ppane') !== kind;
     });
-    if (typeField) typeField.value = kind === 'business' ? 'Business (vet / shelter / pet store)' : 'Independent cat sitter';
+    if (typeField && LABEL[kind]) typeField.value = LABEL[kind];
+    var sel = document.querySelector('select[name="kind"]');
+    if (sel && LABEL[kind]) sel.value = LABEL[kind];
   }
   Array.prototype.forEach.call(tabs, function (t) {
     t.addEventListener('click', function () { pick(t.getAttribute('data-ptab')); });
   });
-  pick('business');
+  pick(tabs[0].getAttribute('data-ptab'));
 };
 
 /* ================================================================
