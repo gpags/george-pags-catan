@@ -1,7 +1,7 @@
 /* ================================================================
    CatCustoms — shared browser JS
 
-   Used by catcustoms.html, cc-template.html, cc-custom.html,
+   Used by index.html, cc-template.html, cc-custom.html,
    cc-refills.html, cc-partner.html.
 
      CC.PRICE      all prices (see note below)
@@ -319,7 +319,7 @@ CC.mountChrome = function () {
     var items = [
       ['♥','Husband &amp; wife, made in the USA'], ['✈','Shipping across the USA'],
       ['★','Current fulfillment: 5–10 business days'], ['♥','Your cat, designed into the piece'],
-      ['🎁','Free US shipping over $65'], ['★','Replaceable cardboard insert'],
+      ['🎁','Free US shipping on two-scratcher orders'], ['★','Replaceable cardboard insert'],
       ['♥','Only 3 one-of-one commissions a month']
     ];
     var group = '<div class="mq-group">' + items.map(function (it) {
@@ -622,22 +622,117 @@ CC.initPartner = function () {
 };
 
 /* ================================================================
-   FORMS — mailto until a CatCustoms endpoint exists
+   FORMS — POST to /api/contact, which emails the shop inbox
+
+   Both forms used to open a mailto: link. That silently sent nothing
+   for anyone without a mail client configured, which is most people
+   on a phone — the enquiry looked sent and never arrived.
+
+   The endpoint expects { name, email, message, topic, company }.
+   These forms collect richer fields than that, so every extra field
+   is folded into `message` using its data-label. Keeping the API
+   contract narrow means api/contact.js needs no per-form knowledge.
+
+   `topic` must be a member of the TOPICS whitelist in api/contact.js
+   or it is filed as "Something else" — the two are kept in step by
+   hand, so change them together.
+
+   mailto is still the fallback, but only when the POST actually
+   fails, so a customer is never left with nothing.
    ================================================================ */
 CC.initForms = function () {
-  Array.prototype.forEach.call(document.querySelectorAll('form[data-mailto]'), function (f) {
-    f.addEventListener('submit', function (e) {
-      e.preventDefault();
+  Array.prototype.forEach.call(document.querySelectorAll('form[data-topic]'), function (f) {
+
+    var btn  = f.querySelector('button[type="submit"]');
+    var ok   = f.querySelector('.okmsg');
+    var fine = f.querySelector('.fineprint');
+    var busy = false;
+
+    /* Fields the endpoint takes as first-class values. Everything else
+       becomes a labelled line inside the message body. */
+    var SKIP = { yourname:1, email:1, company:1 };
+
+    function say(msg, good) {
+      if (!ok) return;
+      ok.innerHTML = msg;
+      ok.classList.add('on');
+      ok.setAttribute('data-tone', good ? 'ok' : 'bad');
+    }
+
+    function body() {
       var lines = [];
       Array.prototype.forEach.call(f.querySelectorAll('[name]'), function (el) {
-        var lbl = el.getAttribute('data-label') || el.getAttribute('name');
-        if (el.value) lines.push(lbl + ': ' + el.value);
+        if (SKIP[el.getAttribute('name')]) return;
+        var v = (el.value || '').trim();
+        if (!v) return;
+        lines.push((el.getAttribute('data-label') || el.getAttribute('name')) + ': ' + v);
       });
-      var ok = f.querySelector('.okmsg');
-      if (ok) ok.classList.add('on');
-      window.location.href = 'mailto:' + f.getAttribute('data-mailto') +
-        '?subject=' + encodeURIComponent(f.getAttribute('data-subject') || 'CatCustoms enquiry') +
-        '&body=' + encodeURIComponent(lines.join('\n\n'));
+      return lines.join('\n\n');
+    }
+
+    function mailtoFallback(p) {
+      var to = f.getAttribute('data-mailto') || 'realizedprints@gmail.com';
+      window.location.href = 'mailto:' + to +
+        '?subject=' + encodeURIComponent('[' + p.topic + '] ' + p.name) +
+        '&body=' + encodeURIComponent('From: ' + p.name + ' <' + p.email + '>\n\n' + p.message);
+    }
+
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (busy) return;
+
+      var nameEl  = f.querySelector('[name="yourname"]');
+      var emailEl = f.querySelector('[name="email"]');
+      var hp      = f.querySelector('[name="company"]');
+
+      var payload = {
+        name:    nameEl  ? nameEl.value.trim()  : '',
+        email:   emailEl ? emailEl.value.trim() : '',
+        topic:   f.getAttribute('data-topic') || 'Something else',
+        message: body(),
+        company: hp ? hp.value : ''
+      };
+
+      if (!payload.name || !payload.email || !payload.message) {
+        return say('Please fill in your name, your email, and tell us a little about your cat.', false);
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+        return say('That email address doesn’t look right.', false);
+      }
+
+      busy = true;
+      var label = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      say('Sending…', true);
+
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          if (!res.ok) throw new Error(data.message || data.error || 'send failed');
+          return data;
+        });
+      }).then(function () {
+        /* The hidden partner-type field is set by the tab picker, not by the
+           customer, so it has to survive the reset. */
+        var keep = f.querySelector('[data-partner-type]');
+        var kept = keep ? keep.value : null;
+        f.reset();
+        if (keep && kept !== null) keep.value = kept;
+
+        say('<b>Thanks — that’s with us.</b> We’ll reply to <strong>' +
+            esc(payload.email) + '</strong> within 1–2 business days.', true);
+        if (fine) fine.hidden = true;
+      }).catch(function () {
+        say('<b>That didn’t send.</b> Opening your email app instead — ' +
+            'or write to <strong>realizedprints@gmail.com</strong>.', false);
+        mailtoFallback(payload);
+      }).then(function () {
+        busy = false;
+        if (btn) { btn.disabled = false; btn.textContent = label; }
+      });
     });
   });
 };

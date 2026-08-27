@@ -168,7 +168,7 @@ function mountMarquee(){
   const track = document.getElementById('mqTrack'); if (!track) return;
   const items = [
     ['♥','Follow us @realizedprints'], ['✈','Shipping across the USA'],
-    ['♥','Current fulfillment: 5–10 business days'], ['★','Free US shipping over $65'],
+    ['♥','Current fulfillment: 5–10 business days'], ['★','Free US shipping over $' + FREE_SHIP],
     ['♥','Husband & wife, printed in the USA'], ['🎁','Bundle & save on selected cats'],
     ['★','Replaceable cardboard pad'], ['♥','Your cat, drawn into the design']
   ];

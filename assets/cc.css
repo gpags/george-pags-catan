@@ -1,6 +1,6 @@
 /* ================================================================
    CatCustoms — shared styles
-   catcustoms.html · cc-template.html · cc-custom.html
+   index.html · cc-template.html · cc-custom.html
    cc-refills.html · cc-partner.html
 
    Palette, fonts and component shapes come from assets/rp.css so this
@@ -554,6 +554,9 @@ section{padding:60px 0}
   padding:18px 20px;font-size:15px;color:var(--mint-800)}
 .okmsg b{display:block;font-family:'Fredoka',sans-serif;font-size:19px;margin-bottom:5px}
 .okmsg.on{display:block}
+/* The same block doubles as the error state, so a failed send is as visible
+   as a successful one instead of silently doing nothing. */
+.okmsg[data-tone="bad"]{background:var(--pink-50);border-color:var(--pink);color:var(--pink-600)}
 
 /* ---------------- faq ---------------- */
 .faq{max-width:860px}
