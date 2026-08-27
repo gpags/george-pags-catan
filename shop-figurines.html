@@ -1,0 +1,333 @@
+<!-- index-new.html — Realized Prints homepage (cat shop).
+     Rename to index.html to go live. Does not touch /catan, output.css or Images/. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Realized Prints — 3D printed cats in your cat's colors</title>
+<meta name="description" content="Husband-and-wife 3D print shop. Cat figurines, keychains and clickers in nine core animal colors, or send a photo for an exact pattern match.">
+<link rel="icon" href="images/RPLogo_favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="assets/rp.css" rel="stylesheet">
+</head>
+<body data-base="">
+
+<div class="drop-bar" id="dropBar">
+  <div class="drop-in">
+    <span class="drop-label">Next Inventory Drop</span>
+    <div class="cd" id="cd" aria-live="polite"></div>
+    <span class="drop-when" id="dropWhen">—</span>
+  </div>
+  <button class="drop-x" id="dropX" aria-label="Dismiss">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<div class="marquee" aria-label="Store highlights"><div class="mq-track" id="mqTrack"></div></div>
+
+<header class="head-main">
+  <div class="wrap head-row">
+    <div class="head-left">
+      <a class="ibtn" href="#catalog" aria-label="Search">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+      </a>
+      <div class="soc">
+        <a class="ibtn" href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a class="ibtn" href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+        <a class="ibtn" href="https://youtube.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a>
+      </div>
+    </div>
+    <a class="brand" href="index.html">
+      <span class="brand-name">Realized Prints</span>
+      <span class="brand-sub">Cats, printed to order</span>
+    </a>
+    <div class="head-right">
+      <button class="ibtn" id="cartBtn" aria-label="Open cart">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 7h12l-1.2 12H7.2z"/><path d="M9 7a3 3 0 016 0"/></svg>
+        <span class="cart-pill" id="cartPill">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-strip" aria-label="Main">
+  <div class="wrap nav-in">
+    <div><a class="nlink" href="pages/contact.html">Contact Us</a></div>
+    <div>
+      <button class="nlink" aria-expanded="false">Shop
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <ul class="ndrop" id="shopDrop"></ul>
+    </div>
+    <div><a class="nlink" href="pages/policies.html">Policies</a></div>
+    <div><a class="nlink" href="pages/faq.html">FAQ</a></div>
+  </div>
+</nav>
+
+<!-- ===== ABOVE THE FOLD ===== -->
+<section class="atf">
+  <div class="wrap atf-grid">
+    <div>
+      <span class="tagline">🐾 Husband &amp; Wife · Printed in the USA</span>
+      <h1>Cats in the <span class="vibe-word" id="vibeWord">chonky</span> style.</h1>
+      <p class="atf-lede" id="vibeBlurb">—</p>
+      <div class="atf-cta">
+        <a class="btn btn-pink" href="#catalog">Shop the drop</a>
+        <a class="btn btn-ghost" href="#catalog">Build a custom cat</a>
+      </div>
+      <div class="vibe-pick">
+        <div class="vp-label">Shop by vibe</div>
+        <div class="vibe-row" id="vibeRow" role="group" aria-label="Choose a vibe"></div>
+      </div>
+    </div>
+    <a class="atf-stage" id="vibeLink" href="#">
+      <span class="stage-ph">Placeholder</span>
+      <img id="vibeImg" alt="Featured cat figurine for the selected vibe" src="">
+      <span class="stage-chip" id="vibeChip">—</span>
+    </a>
+  </div>
+</section>
+
+<!-- ===== CATALOG (the homepage body) ===== -->
+<section class="cat-sec" id="catalog">
+  <div class="wrap">
+    <h2 class="cat-title" id="collections">Shop All Cats</h2>
+    <p class="cat-sub">Every figure comes in nine core animal colors. Add a name or an exact pattern match on any product page.</p>
+
+    <div class="cat-bar">
+      <div class="filters">
+        <span class="f-label">Filter:</span>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pAvail" aria-expanded="false">Availability
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pAvail">
+            <label><input type="checkbox" data-f="avail" value="in"> In stock</label>
+            <label><input type="checkbox" data-f="avail" value="out"> Out of stock</label>
+            <button class="fclear" data-clear="avail">Clear</button>
+          </div>
+        </div>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pPrice" aria-expanded="false">Price
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pPrice">
+            <label><input type="checkbox" data-f="price" value="0-15"> Under $15</label>
+            <label><input type="checkbox" data-f="price" value="15-25"> $15 – $25</label>
+            <label><input type="checkbox" data-f="price" value="25-30"> $25 – $30</label>
+            <label><input type="checkbox" data-f="price" value="30-999"> $30 and up</label>
+            <button class="fclear" data-clear="price">Clear</button>
+          </div>
+        </div>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pVibe" aria-expanded="false">Vibe
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pVibe"></div>
+        </div>
+        <div class="fdrop">
+          <button class="fbtn" data-panel="pColor" aria-expanded="false">Color
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="fpanel" id="pColor"></div>
+        </div>
+      </div>
+      <div class="sortwrap">
+        <span class="f-label">Sort by:</span>
+        <select id="sortSel" aria-label="Sort products">
+          <option value="best">Best selling</option>
+          <option value="new">Newest</option>
+          <option value="plow">Price, low to high</option>
+          <option value="phigh">Price, high to low</option>
+          <option value="az">Alphabetically, A–Z</option>
+        </select>
+        <span class="pcount" id="pCount">0 products</span>
+      </div>
+    </div>
+
+    <div class="chips-active" id="activeChips"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- ===== STORY / ABOUT (anchor kept for the Catan page back-links) ===== -->
+<section class="rowsec" id="story">
+  <div class="wrap">
+    <h2>Husband &amp; wife, two printers, one spare room</h2>
+    <p style="max-width:44rem;color:var(--ink-2);font-size:15.5px">
+      We print, finish, and pack everything ourselves in the USA. Orders take 5–10 business days
+      because each one is made after you place it — nothing sits on a shelf waiting.
+      Questions go straight to the two people who made it.
+    </p>
+  </div>
+</section>
+
+<!-- ===== CART ===== -->
+<div class="cart-ov" id="cartOv"></div>
+<aside class="cart" id="cart" aria-label="Cart">
+  <div class="cart-h">
+    <h3>Your cart</h3>
+    <button class="ibtn" id="cartClose" aria-label="Close cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-f" id="cartFoot" style="display:none">
+    <div class="cart-tot"><span>Subtotal</span><span id="cartTotal">$0</span></div>
+    <button class="pay-shop" id="expressPay">Express checkout</button>
+    <button class="btn btn-ghost btn-block" id="checkoutBtn">Check out</button>
+    <span class="pay-alt">Link · Apple Pay · Google Pay · Card</span>
+    <p class="cart-err" id="cartErr" style="display:none"></p>
+  </div>
+</aside>
+
+<footer class="foot" id="policies">
+  <div class="wrap">
+    <div class="foot-g">
+      <div>
+        <div class="foot-brand">Realized Prints</div>
+        <p class="foot-note">Husband &amp; wife, printed in the USA. Made to order in 5–10 business days.</p>
+        <div class="foot-soc">
+          <a href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/></svg></a>
+          <a href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Shop</h4><ul>
+        <li><a href="#catalog">All cats</a></li><li><a href="#catalog">New arrivals</a></li>
+        <li><a href="#catalog">Bundles</a></li><li><a href="#catalog">Custom match</a></li>
+      </ul></div>
+      <div><h4>Other lines</h4><ul>
+        <li><a href="catan/">Catan Artisan</a></li>
+        <li><a href="meowmeow.html">Meow Meow Blind Bags</a></li>
+        <li><a href="CustomFigurines.html">Custom Figurines</a></li>
+        <li><a href="cs2-knives.html">CS2 Knives</a></li>
+      </ul></div>
+      <div><h4>Help</h4><ul>
+        <li><a href="pages/policies.html#shipping">Shipping</a></li>
+        <li><a href="pages/policies.html#returns">Returns</a></li>
+        <li><a href="pages/faq.html">FAQ</a></li>
+        <li><a href="pages/terms.html">Terms</a></li>
+        <li><a href="pages/privacy.html">Privacy</a></li>
+        <li><a href="pages/contact.html">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-b">
+      <span>© 2026 Realized Prints · Husband &amp; wife, printed in the USA.</span>
+      <span>Product imagery is placeholder — see CAT-SHOP-REFERENCES.md.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/catalog.js"></script>
+<script src="assets/rp.js"></script>
+<script>
+/* ---------- vibe switcher ---------- */
+const vibeRow=document.getElementById('vibeRow'), vibeImg=document.getElementById('vibeImg'),
+      vibeWord=document.getElementById('vibeWord'), vibeChip=document.getElementById('vibeChip'),
+      vibeBlurb=document.getElementById('vibeBlurb'), vibeLink=document.getElementById('vibeLink');
+
+function setVibe(key){
+  const v=RP.VIBES[key];
+  const hero=RP.PRODUCTS.filter(p=>p.v===key).sort((a,b)=>b.sales-a.sales)[0];
+  vibeWord.textContent=v.name.toLowerCase(); vibeWord.style.color=v.color;
+  vibeBlurb.textContent=v.blurb;
+  vibeImg.src=hero.imgUrl; vibeImg.alt=hero.t+' — '+v.name+' vibe';
+  vibeChip.textContent=hero.t+' · $'+hero.price;
+  vibeLink.href='products/'+hero.h+'.html';
+  vibeRow.querySelectorAll('.vchip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.v===key)));
+}
+Object.entries(RP.VIBES).forEach(([key,v],i)=>{
+  const b=document.createElement('button');
+  b.className='vchip'; b.dataset.v=key; b.type='button';
+  b.setAttribute('aria-pressed',String(i===0));
+  b.innerHTML='<span class="vd" style="background:'+v.color+'"></span>'+v.name;
+  b.onclick=()=>setVibe(key);
+  vibeRow.appendChild(b);
+});
+
+/* ---------- catalog: filter + sort ---------- */
+const state={avail:new Set(),price:new Set(),vibe:new Set(),color:new Set(),sort:'best'};
+const grid=document.getElementById('grid'), pCount=document.getElementById('pCount');
+
+document.getElementById('pVibe').innerHTML=
+  Object.entries(RP.VIBES).map(([k,v])=>`<label><input type="checkbox" data-f="vibe" value="${k}"> ${v.name}</label>`).join('')+
+  '<button class="fclear" data-clear="vibe">Clear</button>';
+document.getElementById('pColor').innerHTML=
+  RP.COLORS.map(([k,label,cls])=>`<label><input type="checkbox" data-f="color" value="${k}"> <span class="cdot ${cls}"></span> ${label}</label>`).join('')+
+  '<button class="fclear" data-clear="color">Clear</button>';
+
+function matches(p){
+  if(state.avail.size && !state.avail.has(p.stock>0?'in':'out')) return false;
+  if(state.price.size){
+    let ok=false;
+    state.price.forEach(r=>{const[lo,hi]=r.split('-').map(Number); if(p.price>=lo&&p.price<hi) ok=true;});
+    if(!ok) return false;
+  }
+  if(state.vibe.size && !state.vibe.has(p.v)) return false;
+  /* Colors are per product now — a figure only matches if it actually
+     ships in one of the selected colors. */
+  if(state.color.size && ![...state.color].some(c=>p.colorsAvailable.indexOf(c)!==-1)) return false;
+  return true;
+}
+function sortList(l){
+  const s=state.sort;
+  return [...l].sort((a,b)=>
+    s==='plow'?a.price-b.price : s==='phigh'?b.price-a.price :
+    s==='az'?a.t.localeCompare(b.t) : s==='new'?(b.new-a.new)||(b.sales-a.sales) : b.sales-a.sales);
+}
+function renderChips(){
+  const all=[];
+  state.avail.forEach(v=>all.push(['avail',v,v==='in'?'In stock':'Out of stock']));
+  state.price.forEach(v=>{const[lo,hi]=v.split('-'); all.push(['price',v,hi==='999'?'$'+lo+'+':'$'+lo+'–$'+hi]);});
+  state.vibe.forEach(v=>all.push(['vibe',v,RP.VIBES[v].name]));
+  state.color.forEach(v=>all.push(['color',v,(RP.COLORS.find(c=>c[0]===v)||[])[1]]));
+  document.getElementById('activeChips').innerHTML=
+    all.map(([f,v,l])=>`<button class="achip" data-rm-f="${f}" data-rm-v="${v}">${l} ✕</button>`).join('');
+}
+function render(){
+  const list=sortList(RP.PRODUCTS.filter(matches));
+  grid.innerHTML=list.length ? list.map(RP.cardHTML).join('')
+    : '<div class="empty"><h3>No cats match that</h3><p>Try clearing a filter.</p></div>';
+  pCount.textContent=list.length+(list.length===1?' product':' products');
+  renderChips();
+}
+document.querySelectorAll('.fbtn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const panel=document.getElementById(btn.dataset.panel);
+    const isOpen=panel.classList.contains('open');
+    document.querySelectorAll('.fpanel').forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.fbtn').forEach(b=>b.setAttribute('aria-expanded','false'));
+    if(!isOpen){panel.classList.add('open'); btn.setAttribute('aria-expanded','true');}
+  });
+});
+document.addEventListener('click',e=>{
+  if(e.target.closest('.fpanel')||e.target.closest('.fbtn')) return;
+  document.querySelectorAll('.fpanel').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.fbtn').forEach(b=>b.setAttribute('aria-expanded','false'));
+});
+document.addEventListener('change',e=>{
+  const f=e.target.dataset&&e.target.dataset.f; if(!f) return;
+  e.target.checked?state[f].add(e.target.value):state[f].delete(e.target.value);
+  render();
+});
+document.addEventListener('click',e=>{
+  const clr=e.target.dataset&&e.target.dataset.clear;
+  if(clr){ state[clr].clear();
+    document.querySelectorAll('input[data-f="'+clr+'"]').forEach(i=>i.checked=false); render(); }
+  const rmF=e.target.dataset&&e.target.dataset.rmF;
+  if(rmF){ state[rmF].delete(e.target.dataset.rmV);
+    const inp=document.querySelector('input[data-f="'+rmF+'"][value="'+e.target.dataset.rmV+'"]');
+    if(inp) inp.checked=false; render(); }
+});
+document.getElementById('sortSel').addEventListener('change',e=>{state.sort=e.target.value; render();});
+
+/* deep link: index.html?vibe=chibi#catalog */
+const qv=new URLSearchParams(location.search).get('vibe');
+if(qv && RP.VIBES[qv]){
+  state.vibe.add(qv); setVibe(qv);
+  const inp=document.querySelector('input[data-f="vibe"][value="'+qv+'"]'); if(inp) inp.checked=true;
+} else { setVibe('chonky'); }
+render();
+</script>
+</body>
+</html>

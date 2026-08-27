@@ -97,14 +97,14 @@ const chromeTop = b => `
 <header class="head-main">
   <div class="wrap head-row">
     <div class="head-left">
-      <a class="ibtn" href="${b}index.html#catalog" aria-label="Search">
+      <a class="ibtn" href="${b}index.html#templates" aria-label="Search">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
       </a>
       <div class="soc">${socLinks('ibtn')}</div>
     </div>
     <a class="brand" href="${b}index.html">
-      <span class="brand-name">Realized Prints</span>
-      <span class="brand-sub">Cats, printed to order</span>
+      <span class="brand-name">CatCustoms</span>
+      <span class="brand-sub">by Realized Prints</span>
     </a>
     <div class="head-right">
       <button class="ibtn" id="cartBtn" aria-label="Open cart">
@@ -115,17 +115,18 @@ const chromeTop = b => `
   </div>
 </header>
 
+<!-- The same five links as the hand-designed CatCustoms pages, in the same
+     order, so the nav does not change shape when a customer crosses from
+     index.html into a generated page. The old "Shop" dropdown is gone: it was
+     built at runtime from the catalog's vibes and pointed at /products/ pages
+     that no longer exist. rp.js mountShopDropdown() no-ops without #shopDrop. -->
 <nav class="nav-strip" aria-label="Main">
   <div class="wrap nav-in">
     <div><a class="nlink" href="${b}pages/contact.html">Contact Us</a></div>
-    <div>
-      <button class="nlink" aria-expanded="false">Shop
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <ul class="ndrop" id="shopDrop"></ul>
-    </div>
-    <div><a class="nlink" href="${b}pages/policies.html">Policies</a></div>
-    <div><a class="nlink" href="${b}pages/faq.html">FAQ</a></div>
+    <div><a class="nlink" href="${b}index.html#templates">Templates</a></div>
+    <div><a class="nlink" href="${b}cc-custom.html">Cattoo</a></div>
+    <div><a class="nlink" href="${b}cc-partner.html">Affiliates</a></div>
+    <div><a class="nlink" href="${b}index.html#faq">FAQ</a></div>
   </div>
 </nav>`;
 
@@ -158,9 +159,9 @@ const footer = b => `
         <div class="foot-soc">${socLinks('')}</div>
       </div>
       <div><h4>Shop</h4><ul>
-        <li><a href="${b}index.html#catalog">All cats</a></li>
-        <li><a href="${b}index.html#catalog">New arrivals</a></li>
-        <li><a href="${b}index.html#catalog">Bundles</a></li>
+        <li><a href="${b}index.html#templates">Templates</a></li>
+        <li><a href="${b}cc-custom.html">Cattoo &mdash; 1-of-1</a></li>
+        <li><a href="${b}cc-refills.html">Refill inserts</a></li>
       </ul></div>
       <div><h4>Other lines</h4><ul>
         <li><a href="${b}catan/">Catan Artisan</a></li>
@@ -226,7 +227,7 @@ ${head(b, p.t + ' — Realized Prints', p.desc)}
 ${chromeTop(b)}
 <div class="wrap">
   <nav class="crumb" aria-label="Breadcrumb">
-    <a href="${b}index.html">Home</a> / <a href="${b}index.html?vibe=${p.v}#catalog">${esc(v.name)}</a> / ${esc(p.t)}
+    <a href="${b}index.html">Home</a> / <a href="${b}index.html#templates">${esc(v.name)}</a> / ${esc(p.t)}
   </nav>
 
   <div class="pdp">
@@ -983,7 +984,7 @@ ${chromeTop(b)}
         <span class="oc-muted">Order reference</span>
         <strong id="ocRef">—</strong>
       </div>
-      <a class="btn btn-pink btn-block" href="${b}index.html#catalog">Keep shopping</a>
+      <a class="btn btn-pink btn-block" href="${b}index.html#templates">Keep shopping</a>
     </aside>
   </div>
 </div>
