@@ -79,8 +79,19 @@ module.exports = async (req, res) => {
 
     if (!result.sent) {
         /* Tell the page so it can fall back to the mail client rather than
-           pretending a message was delivered. */
-        return res.status(502).json({ error: 'SEND_FAILED', message: 'We could not send that just now.' });
+           pretending a message was delivered.
+
+           `reason` is echoed back deliberately. It is never shown to a
+           customer — the page renders `message` — but it turns "the form is
+           broken" into a one-line diagnosis from a single curl. The values
+           are config states, not secrets: 'missing RESEND_API_KEY' or
+           'resend 403' / 'resend 422'. No key or address is ever included. */
+        console.error('contact: send failed —', result.reason);
+        return res.status(502).json({
+            error: 'SEND_FAILED',
+            message: 'We could not send that just now.',
+            reason: result.reason,
+        });
     }
     return res.status(200).json({ ok: true });
 };
