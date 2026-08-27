@@ -69,7 +69,7 @@
     <div class="doors">
       <a class="door" href="#templates">
         <span class="ribbon">Start here</span>
-        <div class="art" data-photo="images/cc-tpl-cottage.jpg" data-way="cream" data-alt="Storybook Cottage core cat scratcher"></div>
+        <div class="art" data-photo="images/cc-tpl-cottage.jpg" data-way="cream" data-alt="Cottage Kitties core cat scratcher"></div>
         <div class="door-b">
           <span class="door-eyebrow">The Core Scratcher</span>
           <h2>Choose a Template</h2>
@@ -98,46 +98,30 @@
   <div class="wrap">
     <div class="sec-head">
       <h2 class="sec-title">Choose a Template</h2>
-      <p class="sec-sub">Five designs. Your cat goes in the one you pick. Their name goes on the front.</p>
+      <p class="sec-sub">Two designs ready now, one on the way. Cottage Kitties carries your cat and their name.</p>
     </div>
     <div class="tpl-grid">
       <article class="tpl">
-        <div class="art" data-photo="images/cc-tpl-cottage.jpg" data-way="cream" data-alt="Storybook Cottage cat scratcher"></div>
+        <div class="art" data-photo="images/cc-tpl-cottage.jpg" data-way="cream" data-alt="Cottage Kitties cat scratcher"></div>
         <div class="tpl-b">
-          <h3>Storybook Cottage</h3>
-          <p>Wood beams, window boxes and flowers. Four colors.</p>
-          <div class="tpl-f"><span class="p">$59</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
+          <h3>Cottage Kitties</h3>
+          <p>Timber beams, window boxes and flowers. Your cats in the windows, their name on the sign. Four colors.</p>
+          <div class="tpl-f"><span class="p">$59</span><a class="btn btn-pink btn-sm" href="cottage-kitties.html">Choose</a></div>
         </div>
       </article>
       <article class="tpl">
-        <div class="art" data-photo="images/cc-meadow-render.jpg" data-way="cream" data-alt="Sleepy Meadow cat scratcher"></div>
+        <div class="art" data-photo="images/cc-meadow-render.jpg" data-way="sage" data-alt="Sleepy Kitty cat scratcher"></div>
         <div class="tpl-b">
-          <h3>Sleepy Meadow</h3>
-          <p>Green hills, clouds and a little sun. The calm one.</p>
-          <div class="tpl-f"><span class="p">$59</span><a class="btn btn-pink btn-sm" href="cc-template.html">Choose</a></div>
+          <h3>Sleepy Kitty</h3>
+          <p>Rolling hills, clouds and a small sun in soft sage. The calm one &mdash; no lettering.</p>
+          <div class="tpl-f"><span class="p">$59</span><a class="btn btn-pink btn-sm" href="sleepy-kitty.html">Choose</a></div>
         </div>
       </article>
       <article class="tpl soon">
-        <div class="art" data-photo="images/cc-tpl-bamboo.jpg" data-way="butter" data-alt="Bamboo Grove cat scratcher"></div>
+        <div class="art" data-photo="images/cc-tpl-bamboo.jpg" data-way="sage" data-alt="Bamboo Kitties cat scratcher"></div>
         <div class="tpl-b">
-          <h3>Bamboo Grove</h3>
+          <h3>Bamboo Kitties</h3>
           <p>Bamboo posts and deep arches. Good with plants.</p>
-          <div class="tpl-f"><span class="p" style="color:var(--muted)">$59</span><span class="soon-tag">Coming soon</span></div>
-        </div>
-      </article>
-      <article class="tpl soon">
-        <div class="art" data-photo="images/cc-tpl-castle.jpg" data-way="lilac" data-alt="Castle Kitties cat scratcher"></div>
-        <div class="tpl-b">
-          <h3>Castle Kitties</h3>
-          <p>Towers and stone walls. The boldest shape.</p>
-          <div class="tpl-f"><span class="p" style="color:var(--muted)">$59</span><span class="soon-tag">Coming soon</span></div>
-        </div>
-      </article>
-      <article class="tpl soon">
-        <div class="art" data-photo="images/cc-tpl-bloom.jpg" data-way="blossom" data-alt="Bloom Kitty cat scratcher"></div>
-        <div class="tpl-b">
-          <h3>Bloom Kitty</h3>
-          <p>Vines, flowers and a soft pink rim. The sweetest one.</p>
           <div class="tpl-f"><span class="p" style="color:var(--muted)">$59</span><span class="soon-tag">Coming soon</span></div>
         </div>
       </article>
@@ -198,7 +182,7 @@
           <li><span class="pin">&#10003;</span><span>No glue. No tools.</span></li>
           <li><span class="pin">&#10003;</span><span>One size fits every design.</span></li>
         </ul>
-        <span class="pricetag">From $9</span>
+        <span class="pricetag">From $10</span>
         <div style="margin-top:14px"><a class="btn btn-pink" href="cc-refills.html">Set up refills</a></div>
       </div>
     </div>
@@ -304,11 +288,12 @@
   <div class="dr-f">
     <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
     <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
-    <div class="stub">&#9888; Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
+    <p class="dr-err" data-cart-error hidden></p>
   </div>
 </aside>
 <div class="toast"></div>
 
+<script src="assets/catalog.js"></script>
 <script src="assets/cc.js"></script>
 </body>
 </html>

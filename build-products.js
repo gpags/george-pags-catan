@@ -992,7 +992,7 @@ ${cartDrawer()}
 ${footer(b)}
 <script>
 /* The cart is done — the order is with Stripe now. */
-try { localStorage.removeItem('rp_cart_v2'); localStorage.removeItem('cc_cart_v2'); } catch (e) {}
+try { localStorage.removeItem('rp_cart_v2'); localStorage.removeItem('cc_cart_v3'); } catch (e) {}
 
 const sessionId = new URLSearchParams(location.search).get('session_id');
 const itemsEl = document.getElementById('ocItems');

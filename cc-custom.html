@@ -245,11 +245,12 @@
   <div class="dr-f">
     <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
     <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
-    <div class="stub">&#9888; Checkout is not wired to Stripe yet. CatCustoms products still need to go into <code>assets/catalog.js</code> before <code>api/checkout.js</code> can price them.</div>
+    <p class="dr-err" data-cart-error hidden></p>
   </div>
 </aside>
 <div class="toast"></div>
 
+<script src="assets/catalog.js"></script>
 <script src="assets/cc.js"></script>
 </body>
 </html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cottage Kitties &mdash; CatCustoms</title>
+<meta name="description" content="A cat scratcher with your cat designed into it. Four colors, their name on the front, swap-out cardboard pad. $59.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="assets/cc.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="drop-bar" id="dropBar">
+  <div class="drop-in">
+    <span class="drop-label">Next Inventory Drop</span>
+    <div class="cd" id="cd" aria-live="polite"></div>
+    <span class="drop-when" id="dropWhen">&mdash;</span>
+  </div>
+  <button class="drop-x" id="dropX" aria-label="Dismiss">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<div class="marquee" aria-label="Store highlights"><div class="mq-track" id="mqTrack"></div></div>
+
+<header class="head-main">
+  <div class="wrap head-row">
+    <div class="head-left">
+      <button class="burger" data-burger aria-expanded="false" aria-label="Menu">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="soc">
+        <a class="ibtn" href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a class="ibtn" href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+        <a class="ibtn" href="https://youtube.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a>
+      </div>
+    </div>
+    <a class="brand" href="index.html">
+      <span class="brand-name">CatCustoms</span>
+      <span class="brand-sub">by Realized Prints</span>
+    </a>
+    <div class="head-right">
+      <button class="ibtn" data-cart-open aria-label="Open cart">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 7h12l-1.2 12H7.2z"/><path d="M9 7a3 3 0 016 0"/></svg>
+        <span class="cart-pill" data-cart-count>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-strip" aria-label="Main">
+  <div class="wrap nav-in">
+    <a class="nlink" href="pages/contact.html">Contact Us</a>
+    <a class="nlink" href="index.html#templates" aria-current="page">Templates</a>
+    <a class="nlink" href="cc-custom.html">Cattoo</a>
+    <a class="nlink" href="cc-partner.html">Affiliates</a>
+    <a class="nlink" href="index.html#faq">FAQ</a>
+  </div>
+</nav>
+
+<div class="wrap crumb"><a href="index.html">Home</a> &middot; <a href="index.html#templates">Templates</a> &middot; Cottage Kitties</div>
+
+<div class="wrap pdp" data-pdp="cottage-kitties">
+  <div class="pdp-media">
+    <div class="art" data-pdp-art data-photo="images/cc-cottage-cream.jpg" data-way="cream" data-alt="Cottage Kitties cat scratcher"></div>
+    <div class="thumbs">
+      <button class="thumb" data-pdp-thumb="cream" aria-pressed="true" aria-label="Cottage Cream"><span class="art" data-photo="images/cc-cottage-cream.jpg" data-way="cream" data-nonote></span></button>
+      <button class="thumb" data-pdp-thumb="butter" aria-pressed="false" aria-label="Buttercup"><span class="art" data-photo="images/cc-cottage-butter.jpg" data-way="butter" data-nonote></span></button>
+      <button class="thumb" data-pdp-thumb="blossom" aria-pressed="false" aria-label="Blossom"><span class="art" data-photo="images/cc-cottage-blossom.jpg" data-way="blossom" data-nonote></span></button>
+      <button class="thumb" data-pdp-thumb="lilac" aria-pressed="false" aria-label="Lilac Sky"><span class="art" data-photo="images/cc-cottage-lilac.jpg" data-way="lilac" data-nonote></span></button>
+    </div>
+    <p class="fineprint">Photos show real orders. Yours will have your cat and your name.</p>
+  </div>
+
+  <div>
+    <span class="tagline">Ships in 5&ndash;10 days</span>
+    <h1 style="margin-top:14px">Cottage Kitties</h1>
+    <div class="price-row">
+      <span class="price">$59</span>
+      <span class="price-note">Everything included</span>
+    </div>
+    <ul class="plist" style="margin:14px 0 0">
+      <li><span class="pin">&#10003;</span><span>Your cats in the windows, name on the front.</span></li>
+      <li><span class="pin">&#10003;</span><span>Comes with two cat figures and one pad.</span></li>
+      <li><span class="pin">&#10003;</span><span>Send your photo after you pay.</span></li>
+    </ul>
+
+    <div class="optblock">
+      <div class="lbl"><span>1. Pick a color</span><span class="val" data-way-label>Cottage Cream</span></div>
+      <div class="way-row" style="display:flex;gap:12px;flex-wrap:wrap">
+        <span class="way-pick" data-on="1"><button class="way lg" data-pdp-way="cream" aria-pressed="true" style="background:#f2e6d2" aria-label="Cottage Cream"></button><span class="nm">Cream</span></span>
+        <span class="way-pick" data-on="0"><button class="way lg" data-pdp-way="butter" aria-pressed="false" style="background:#f6d84e" aria-label="Buttercup"></button><span class="nm">Yellow</span></span>
+        <span class="way-pick" data-on="0"><button class="way lg" data-pdp-way="blossom" aria-pressed="false" style="background:#f2a9bb" aria-label="Blossom"></button><span class="nm">Pink</span></span>
+        <span class="way-pick" data-on="0"><button class="way lg" data-pdp-way="lilac" aria-pressed="false" style="background:#c3b1e1" aria-label="Lilac Sky"></button><span class="nm">Purple</span></span>
+      </div>
+    </div>
+
+    <div class="optblock">
+      <div class="lbl"><span>2. Add their name</span><span class="count" data-name-count>0/18</span></div>
+      <label class="field">
+        <input type="text" data-pdp-name maxlength="18" placeholder="Luna &amp; Ruska" autocomplete="off">
+      </label>
+      <div class="nameplate-echo">Your sign will read
+        <b data-name-echo>Luna &amp; Ruska</b>
+      </div>
+      <p class="fineprint">Leave it blank and we will ask you later.</p>
+    </div>
+
+    <div class="optblock">
+      <div class="lbl"><span>3. How many</span></div>
+      <div class="qty-row">
+        <div class="qty">
+          <button data-qty="-1" aria-label="One fewer">&minus;</button>
+          <span class="n" data-qty-n>1</span>
+          <button data-qty="1" aria-label="One more">+</button>
+        </div>
+      </div>
+      <div class="qty-note" data-qty-note data-tone="offer"></div>
+    </div>
+
+    <div class="optblock">
+      <div class="lbl"><span>Want to add anything?</span></div>
+      <div class="addrow" data-add="refill" data-on="0">
+        <span class="tick"></span>
+        <span class="t"><b>3 spare pads <span class="save">Save $5</span></b>
+          <span>About six months of scratching.</span></span>
+        <span class="pr">$25</span>
+      </div>
+      <div class="addrow" data-add="key" data-keys="1" data-on="0">
+        <span class="tick"></span>
+        <span class="t"><b>A keychain of your cat</b><span>Same design, pocket size.</span></span>
+        <span class="pr">$4</span>
+      </div>
+      <div class="addrow" data-add="key" data-keys="2" data-on="0">
+        <span class="tick"></span>
+        <span class="t"><b>Two keychains <span class="save">Save $2</span></b><span>One to keep, one to give.</span></span>
+        <span class="pr">$6</span>
+      </div>
+    </div>
+
+    <div class="buybox">
+      <div class="tot"><span class="l">Total</span><span class="v" data-pdp-total>$59</span></div>
+      <div class="saved" data-pdp-save hidden></div>
+      <button class="btn btn-pink btn-block btn-lg" data-pdp-add>Add to cart</button>
+      <div class="trust">
+        <div><span>&#128238;</span><span><b>Photo comes later.</b> Order now, send the picture when you have a good one.</span></div>
+        <div><span>&#127912;</span><span><b>Modeled, not scanned.</b> Built with AI, fixed by hand, simplified on purpose.</span></div>
+        <div><span>&#9851;</span><span><b>Pads from $10.</b> Lift the old one out, drop a new one in.</span></div>
+        <div><span>&#127482;&#127480;</span><span><b>Husband and wife.</b> Made in the USA.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="band-blue paws paws-blue">
+  <div class="wrap">
+    <div class="sec-head"><h2 class="sec-title">How it works</h2>
+      <p class="sec-sub">Three steps. Only two happen before you pay.</p></div>
+    <div class="hiw">
+      <div class="step"><div class="num">1</div><h4>Pick a color</h4><p>Four to choose from. We finish it by hand in the one you pick.</p></div>
+      <div class="step blue"><div class="num">2</div><h4>Type their name</h4><p>Up to 18 letters. You check the spelling before we build it.</p></div>
+      <div class="step mint"><div class="num">3</div><h4>Send a photo</h4><p>After you pay. We email you a link and wait for you.</p></div>
+    </div>
+    <div class="note-strip">
+      <span style="font-size:25px;line-height:1">&#128238;</span>
+      <span><b>Why does the photo come last?</b> Because uploading one is where most people give up. Buy in 30 seconds. Send the picture later.</span>
+    </div>
+  </div>
+</section>
+
+<section class="paws paws-pink">
+  <div class="wrap wrap-n">
+    <div class="sec-head"><h2 class="sec-title">Common questions</h2></div>
+    <div class="faq">
+      <details open><summary>Will it look exactly like my cat?</summary><p>Not exactly. Here is the honest answer.</p><ul class="tight"><li>We build the model with AI from your photo.</li><li>Then we fix it by hand until it looks right.</li><li>We simplify it to match the art style.</li><li>Colors and markings come through. Fine detail does not.</li></ul></details>
+      <details><summary>Can I have two cats on it?</summary>
+        <p>Yes. It comes with two cat figures as standard.</p>
+        <p>Only have one cat? That is fine. We will ask what you want in the second window.</p></details>
+      <details><summary>When do I send my photo?</summary>
+        <p>After you order. We email a link as soon as you pay.</p>
+        <p>Asleep on a blanket is a great photo. Bright light helps.</p></details>
+      <details><summary>How long does it take?</summary>
+        <p>5&ndash;10 business days to build, plus shipping. Nothing is made ahead of time.</p></details>
+      <details><summary>What if it breaks?</summary>
+        <ul class="tight">
+          <li>The cardboard is meant to get shredded.</li>
+          <li>Damaged on arrival? Tell us in 7 days. We replace it.</li>
+          <li>A part fails in 30 days? Also covered.</li>
+        </ul></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div style="max-width:280px">
+        <div class="brand-name" style="font-size:25px">CatCustoms</div>
+        <p style="margin-top:10px;font-size:14px">Cat scratchers with your cat on them. Husband and wife. Made in the USA.</p>
+      </div>
+      <div><h4>Shop</h4><ul>
+        <li><a href="index.html#templates">Templates</a></li>
+        <li><a href="cc-custom.html">Cattoo &mdash; 1-of-1</a></li>
+        <li><a href="cc-refills.html">Refill inserts</a></li>
+      </ul></div>
+      <div><h4>Help</h4><ul>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="pages/policies.html">Shipping &amp; returns</a></li>
+        <li><a href="pages/contact.html">Contact us</a></li>
+        <li><a href="cc-partner.html">Affiliates &amp; partners</a></li>
+      </ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="pages/terms.html">Terms</a></li>
+        <li><a href="pages/privacy.html">Privacy</a></li>
+      </ul></div>
+    </div>
+    <div class="ft-b"><span>&copy; 2026 CatCustoms &mdash; a Realized Prints brand.</span><span>Some product art is illustration.</span></div>
+  </div>
+</footer>
+
+<div class="scrim" data-cart-close></div>
+<aside class="drawer" aria-label="Cart">
+  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">&times;</button></div>
+  <div class="dr-b" data-cart-body></div>
+  <div class="dr-f">
+    <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
+    <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
+    <p class="dr-err" data-cart-error hidden></p>
+  </div>
+</aside>
+<div class="toast"></div>
+
+<script src="assets/catalog.js"></script>
+<script src="assets/cc.js"></script>
+</body>
+</html>
