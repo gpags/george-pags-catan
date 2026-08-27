@@ -325,7 +325,7 @@ module.exports = async (req, res) => {
             /* The cat shop has its own confirmation page. /success is Catan's and
                renders a Catan order summary. */
             success_url: `${SITE}/order-complete?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${SITE}/#catalog`,
+            cancel_url: `${SITE}/#templates`,
             allow_promotion_codes: true,
         });
 
