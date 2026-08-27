@@ -1,49 +1,37 @@
 /* ================================================================
    CatCustoms — shared browser JS
 
-   Used by index.html, cc-template.html, cc-custom.html,
+   Used by index.html, cottage-kitties.html, sleepy-kitty.html, cc-custom.html,
    cc-refills.html, cc-partner.html.
 
-     CC.PRICE      all prices (see note below)
-     CC.WAYS       Storybook Cottage colorways
+     CAT          assets/catalog.js — the only place prices live
+     CC.WAYS       Cottage Kitties colorways
      CC.cottage()  parametric SVG stand-in for product photography
      CC.photo()    <img> with automatic SVG fallback — drop a real
                    photo into images/ and it takes over on its own
      CC.cart       localStorage cart + slide-over drawer
      CC.mountChrome() countdown + trust marquee, same as rp.js
 
-   PRICES ARE DUPLICATED HERE ON PURPOSE — for now. This is a review
-   build with no Stripe wiring. When CatCustoms moves into
-   assets/catalog.js, delete CC.PRICE and read from RP_CATALOG so the
-   browser, the build script and Stripe cannot disagree about a price.
+   catalog.js MUST load before this file on every page. It owns every
+   price, the colorway keys, the 40%-off-the-second-scratcher rule and
+   the cart-shape rules, and api/checkout.js recomputes all of them
+   server-side from that same file.
    ================================================================ */
 (function (root) {
 'use strict';
 
 var CC = root.CC = {};
 
-/* ---------------- prices ---------------- */
-CC.PRICE = {
-  template: 59,
-  /* second unit is 40% off */
-  secondOff: 0.40,
-  custom: 349,
-  /* refills sold as packs; subscribing takes another 10% off */
-  refill: {
-    1: { price: 10, label: 'One insert',        note: 'A single replacement' },
-    3: { price: 25, label: 'Three · half a year', note: 'About six months of use' },
-    6: { price: 40, label: 'Six · a full year',   note: 'About twelve months of use' }
-  },
-  subDiscount: 0.10,
-  keychain: { 1: 4, 2: 6 }
-};
+/* ---------------- catalog ----------------
+   Prices used to live in CC.PRICE, duplicated from assets/catalog.js.
+   They do not any more. catalog.js is the single source of truth and
+   api/checkout.js recomputes every total from that same file, so what
+   this page shows and what Stripe charges cannot drift apart.
 
-/* what a template order costs for n units, with 40% off the second */
-CC.templateTotal = function (n) {
-  var p = CC.PRICE.template, t = 0;
-  for (var i = 0; i < n; i++) t += (i === 1) ? p * (1 - CC.PRICE.secondOff) : p;
-  return Math.round(t * 100) / 100;
-};
+   Every CatCustoms page must load assets/catalog.js BEFORE assets/cc.js. */
+var CAT = root.RP_CATALOG;
+if (!CAT) throw new Error('cc.js: assets/catalog.js must be loaded first');
+
 CC.money = function (n) {
   return '$' + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
 };
@@ -237,8 +225,14 @@ CC.paintArt = function (scope) {
           (src ? '<code>' + esc(src) + '</code>' : '') + '</span>';
       } else if (el.hasAttribute('data-insert')) {
         el.innerHTML = CC.insert() + chip;
-      } else {
+      } else if (CC.WAYS[way]) {
+        /* Only the Cottage Kitties colorways have a drawn stand-in. Every
+           other design would otherwise be represented by a picture of a
+           cottage, which is worse than an honest empty frame. */
         el.innerHTML = CC.cottage(way) + chip;
+      } else {
+        el.classList.add('ph');
+        el.innerHTML = '<span class="swap">' + esc(alt) + '</span>';
       }
     }
 
@@ -340,43 +334,178 @@ CC.mountChrome = function () {
 /* ================================================================
    CART
    ================================================================ */
-var KEY = 'cc_cart_v2';
+/* v2 stored a price inside each item. v3 stores only what identifies the
+   line — handle, colorway, quantity, nameplate text — and looks the price up
+   from the catalog on every render. An edited localStorage can therefore
+   change what you see, but never what you are charged: api/checkout.js
+   re-derives every cent from the same catalog and ignores the rest. */
+var KEY = 'cc_cart_v3';
+
+function cartRead() {
+  var raw = [];
+  try { raw = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { raw = []; }
+  /* Drop anything that is no longer a real product. A renamed or retired
+     handle would otherwise sit in the cart and fail at checkout with a
+     message the customer cannot act on. */
+  return raw.filter(function (i) {
+    var p = i && CAT.BY_HANDLE[i.h];
+    return !!p && i.qty > 0 && p.colorsAvailable.indexOf(i.color) !== -1;
+  });
+}
+
+/* The exact payload api/checkout.js expects. No money is sent. */
+function cartPayload(items) {
+  return (items || cartRead()).map(function (i) {
+    return { handle: i.h, qty: i.qty, color: i.color, addons: { name: i.name || '' } };
+  });
+}
 
 CC.cart = {
-  read: function () { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } },
-  write: function (items) { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {} CC.cart.render(); },
-  add: function (item) {
-    var items = CC.cart.read(); items.push(item); CC.cart.write(items);
-    CC.toast(item.title + ' added'); CC.drawer(true);
+  read: cartRead,
+  payload: cartPayload,
+
+  write: function (items) {
+    try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {}
+    CC.cart.render();
   },
-  remove: function (i) { var items = CC.cart.read(); items.splice(i,1); CC.cart.write(items); },
-  total: function () { return CC.cart.read().reduce(function (n, it) { return n + it.price; }, 0); },
-  count: function () { return CC.cart.read().reduce(function (n, it) { return n + (it.qty || 1); }, 0); },
+
+  /* Same product, colorway and nameplate collapses into one line with a
+     bigger quantity, so the bundle ladder and the second-unit discount
+     both see the real quantity instead of two lines of one. */
+  add: function (item) {
+    var items = cartRead(), i, hit = null;
+    for (i = 0; i < items.length; i++) {
+      if (items[i].h === item.h && items[i].color === item.color &&
+          (items[i].name || '') === (item.name || '')) { hit = items[i]; break; }
+    }
+    if (hit) hit.qty += (item.qty || 1);
+    else items.push({ h: item.h, qty: item.qty || 1, color: item.color, name: item.name || '' });
+    CC.cart.write(items);
+    CC.toast(((CAT.BY_HANDLE[item.h] || {}).t || 'Item') + ' added');
+    CC.drawer(true);
+  },
+
+  remove: function (ix) { var items = cartRead(); items.splice(ix, 1); CC.cart.write(items); },
+
+  lineTotal: function (it) {
+    var p = CAT.BY_HANDLE[it.h];
+    if (!p) return 0;
+    return CAT.priceFor(p, it.qty) + (it.name ? CAT.ADDONS.name.price : 0) * it.qty;
+  },
+
+  /* Order-level, so it can only be resolved once the whole cart is known.
+     api/checkout.js applies the identical catalog function. */
+  discount: function () { return CAT.secondUnitDiscount(cartPayload()); },
+
+  total: function () {
+    var items = cartRead(), sum = 0, i;
+    for (i = 0; i < items.length; i++) sum += CC.cart.lineTotal(items[i]);
+    return Math.max(0, Math.round((sum - CC.cart.discount()) * 100) / 100);
+  },
+
+  count: function () {
+    return cartRead().reduce(function (n, it) { return n + (it.qty || 1); }, 0);
+  },
+
+  /* Cart-shape rules the catalog owns, e.g. "a keychain only ships with a
+     scratcher". Checked again server-side, because this one runs in
+     localStorage-land and is editable in devtools. */
+  problem: function () { return CAT.orderProblem(cartPayload()); },
+
   render: function () {
-    var items = CC.cart.read();
+    var items = cartRead();
+
     Array.prototype.forEach.call(document.querySelectorAll('[data-cart-count]'), function (cnt) {
       cnt.textContent = CC.cart.count() || '0';
     });
+
     var body = document.querySelector('[data-cart-body]');
-    if (!body) return;
-    if (!items.length) {
-      body.innerHTML = '<div class="dr-empty">Nothing in here yet.<br>Pick a template to get started.</div>';
-    } else {
-      body.innerHTML = items.map(function (it, i) {
-        var art = it.way
-          ? '<div class="ci-art"><div class="art" data-cottage="' + it.way + '" data-nonote></div></div>'
-          : '<div class="ci-art ci-icon">' + (it.icon || '📦') + '</div>';
-        return '<div class="ci">' + art + '<div class="ci-t"><b>' + esc(it.title) + '</b><span>' + esc(it.sub || '') + '</span>' +
-          '<button class="ci-rm" data-rm="' + i + '">Remove</button></div>' +
-          '<div class="ci-p">' + CC.money(it.price) + '</div></div>';
-      }).join('');
-      CC.paintArt(body);
+    if (body) {
+      if (!items.length) {
+        body.innerHTML = '<div class="dr-empty">Nothing in here yet.<br>Pick a design to get started.</div>';
+      } else {
+        body.innerHTML = items.map(function (it, i) {
+          var p = CAT.BY_HANDLE[it.h];
+          var bits = [CAT.COLOR_LABEL[it.color] || it.color];
+          if (it.qty > 1) bits.push('qty ' + it.qty);
+          if (it.name) bits.push('\u201C' + it.name + '\u201D');
+          return '<div class="ci">' +
+            '<div class="ci-art"><div class="art" data-photo="' + esc(CAT.colorImg(p, it.color)) +
+              '" data-way="' + esc(it.color) + '" data-alt="' + esc(p.t) + '" data-nonote></div></div>' +
+            '<div class="ci-t"><b>' + esc(p.t) + '</b><span>' + esc(bits.join(' \u00B7 ')) + '</span>' +
+            '<button class="ci-rm" data-rm="' + i + '">Remove</button></div>' +
+            '<div class="ci-p">' + CC.money(CC.cart.lineTotal(it)) + '</div></div>';
+        }).join('');
+
+        var off = CC.cart.discount();
+        if (off > 0) {
+          body.innerHTML += '<div class="ci ci-off"><div class="ci-t">' +
+            '<b>' + Math.round(CAT.SECOND_UNIT_OFF * 100) + '% off your second scratcher</b>' +
+            '<span>Applied automatically</span></div>' +
+            '<div class="ci-p">\u2212' + CC.money(off) + '</div></div>';
+        }
+        CC.paintArt(body);
+      }
     }
+
     var tot = document.querySelector('[data-cart-total]');
     if (tot) tot.textContent = CC.money(CC.cart.total());
+
+    /* A cart that breaks a rule must not reach Stripe only to bounce back. */
+    var problem = items.length ? CC.cart.problem() : null;
+    CC.cartError(problem || '');
+
     var co = document.querySelector('[data-checkout]');
-    if (co) co.setAttribute('aria-disabled', items.length ? 'false' : 'true');
+    if (co) co.setAttribute('aria-disabled', (items.length && !problem) ? 'false' : 'true');
   }
+};
+
+/* One place to show a checkout-blocking message, in the drawer footer. */
+CC.cartError = function (msg) {
+  var el = document.querySelector('[data-cart-error]');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.hidden = !msg;
+};
+
+/* ================================================================
+   CHECKOUT — hands the cart to Stripe Hosted Checkout.
+
+   Only handle / colorway / quantity / nameplate are sent. The server
+   recomputes every price from assets/catalog.js and ignores anything the
+   client says about money.
+   ================================================================ */
+var checkingOut = false;
+
+CC.checkout = function (btn) {
+  var items = CC.cart.read();
+  if (checkingOut || !items.length) return;
+
+  var problem = CC.cart.problem();
+  if (problem) { CC.cartError(problem); return; }
+
+  checkingOut = true;
+  var label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Redirecting\u2026'; }
+  CC.cartError('');
+
+  fetch('/api/checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items: CC.cart.payload(items) })
+  }).then(function (res) {
+    return res.json().catch(function () { return {}; }).then(function (d) {
+      if (!res.ok) throw new Error(d.message || d.error || 'Could not start checkout.');
+      return d;
+    });
+  }).then(function (d) {
+    if (!d.url) throw new Error('Could not start checkout.');
+    window.location.href = d.url;     /* leaving the page, so stay disabled */
+  }).catch(function (err) {
+    CC.cartError(err.message || 'Could not start checkout. Please try again.');
+    checkingOut = false;
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  });
 };
 
 CC.drawer = function (open) {
@@ -409,7 +538,7 @@ CC.mount = function () {
     if (co) {
       e.preventDefault();
       if (co.getAttribute('aria-disabled') === 'true') return;
-      CC.toast('Checkout is not wired to Stripe yet — see the note below');
+      CC.checkout(co);
     }
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') CC.drawer(false); });
@@ -421,47 +550,52 @@ CC.mount = function () {
 CC.initRefills = function () {
   var tiles = document.querySelectorAll('[data-refill]');
   if (!tiles.length) return;
-  var modes = document.querySelectorAll('[data-mode]');
-  var btn   = document.querySelector('[data-refill-add]');
-  var sum   = document.querySelector('[data-refill-label]');
-  var pick = 3, sub = true;
 
-  function priceFor(n, isSub) {
-    var base = CC.PRICE.refill[n].price;
-    return isSub ? Math.round(base * (1 - CC.PRICE.subDiscount) * 100) / 100 : base;
-  }
+  var btn = document.querySelector('[data-refill-add]');
+  var sum = document.querySelector('[data-refill-label]');
+  var product = CAT.BY_HANDLE.refill;
+  var pick = 3;
+
+  /* Pack labels are copy, not pricing. Every price on this page comes from
+     the catalog ladder so the tiles, the button and Stripe cannot disagree. */
+  var LABEL = {
+    1: 'One pad',
+    3: 'Three pads \u00B7 half a year',
+    6: 'Six pads \u00B7 a full year'
+  };
 
   function paint() {
     Array.prototype.forEach.call(tiles, function (el) {
       var n = +el.getAttribute('data-refill');
       el.setAttribute('aria-pressed', String(n === pick));
       var pn = el.querySelector('[data-tile-price]');
-      if (pn) pn.textContent = CC.money(priceFor(n, sub));
+      if (pn) pn.textContent = CC.money(CAT.priceFor(product, n));
+
+      /* The struck-through "was" price is what n pads cost bought one at a
+         time. On the single pad there is no saving, so nothing is shown. */
       var was = el.querySelector('[data-tile-was]');
-      if (was) { was.textContent = CC.money(CC.PRICE.refill[n].price); was.hidden = !sub; }
+      if (was) {
+        var full = product.price * n;
+        var save = full - CAT.priceFor(product, n);
+        was.textContent = CC.money(full);
+        was.hidden = save <= 0;
+      }
     });
-    Array.prototype.forEach.call(modes, function (m) {
-      m.setAttribute('aria-pressed', String((m.getAttribute('data-mode') === 'sub') === sub));
-    });
-    var p = priceFor(pick, sub);
-    if (sum) sum.textContent = CC.PRICE.refill[pick].label + ' — ' + CC.money(p) + (sub ? ', delivered automatically' : ', one time');
-    if (btn) btn.textContent = (sub ? 'Subscribe — ' : 'Order — ') + CC.money(p);
+
+    var p = CAT.priceFor(product, pick);
+    if (sum) sum.textContent = LABEL[pick] + ' \u2014 ' + CC.money(p);
+    if (btn) btn.textContent = 'Add to cart \u2014 ' + CC.money(p);
   }
 
   Array.prototype.forEach.call(tiles, function (el) {
     el.addEventListener('click', function () { pick = +el.getAttribute('data-refill'); paint(); });
   });
-  Array.prototype.forEach.call(modes, function (m) {
-    m.addEventListener('click', function () { sub = m.getAttribute('data-mode') === 'sub'; paint(); });
-  });
+
   if (btn) btn.addEventListener('click', function (e) {
     e.preventDefault();
-    CC.cart.add({
-      title: CC.PRICE.refill[pick].label,
-      sub: (sub ? 'Subscription · 10% off' : 'One-time order') + ' · fits every design',
-      price: priceFor(pick, sub), qty: 1, icon: sub ? '🔁' : '📦'
-    });
+    CC.cart.add({ h: 'refill', qty: pick, color: 'natural' });
   });
+
   paint();
 };
 
@@ -469,36 +603,65 @@ CC.initRefills = function () {
    PRODUCT PAGE
    ================================================================ */
 CC.initPDP = function () {
-  var root = document.querySelector('[data-pdp]');
-  if (!root) return;
+  var root_ = document.querySelector('[data-pdp]');
+  if (!root_) return;
 
-  var state = { way: 'cream', name: '', qty: 1, refill: false, keys: 0 };
-  var stage    = root.querySelector('[data-pdp-art]');
-  var thumbs   = root.querySelectorAll('[data-pdp-thumb]');
-  var picks    = root.querySelectorAll('[data-pdp-way]');
-  var wayLabel = root.querySelector('[data-way-label]');
-  var nameIn   = root.querySelector('[data-pdp-name]');
-  var nameEcho = root.querySelector('[data-name-echo]');
-  var nameCt   = root.querySelector('[data-name-count]');
-  var qtyOut   = root.querySelector('[data-qty-n]');
-  var qtyNote  = root.querySelector('[data-qty-note]');
-  var totalOut = root.querySelector('[data-pdp-total]');
-  var saveOut  = root.querySelector('[data-pdp-save]');
-  var addRows  = root.querySelectorAll('[data-add]');
-  var addBtn   = root.querySelector('[data-pdp-add]');
+  /* One implementation, every design. The page names its product with
+     data-pdp="<handle>" and everything else — price, colorways, whether
+     there is a nameplate at all — is read from the catalog. */
+  var product = CAT.BY_HANDLE[root_.getAttribute('data-pdp')];
+  if (!product) { console.error('cc.js: unknown product on [data-pdp]'); return; }
+
+  var colors = product.colorsAvailable;
+  var state = { color: colors[0], name: '', qty: 1, refill: false, keys: 0 };
+
+  var stage    = root_.querySelector('[data-pdp-art]');
+  var picks    = root_.querySelectorAll('[data-pdp-way]');
+  var thumbs   = root_.querySelectorAll('[data-pdp-thumb]');
+  var wayLabel = root_.querySelector('[data-way-label]');
+  var nameIn   = root_.querySelector('[data-pdp-name]');
+  var nameEcho = root_.querySelector('[data-name-echo]');
+  var nameCt   = root_.querySelector('[data-name-count]');
+  var qtyOut   = root_.querySelector('[data-qty-n]');
+  var qtyNote  = root_.querySelector('[data-qty-note]');
+  var totalOut = root_.querySelector('[data-pdp-total]');
+  var saveOut  = root_.querySelector('[data-pdp-save]');
+  var addRows  = root_.querySelectorAll('[data-add]');
+  var addBtn   = root_.querySelector('[data-pdp-add]');
   var MAXNAME  = 18;
 
-  function total() {
-    var t = CC.templateTotal(state.qty);
-    if (state.refill) t += CC.PRICE.refill[3].price;
-    if (state.keys)   t += CC.PRICE.keychain[state.keys];
-    return t;
+  /* What the cart will hold if they press Add — used to price the page
+     with exactly the same functions the cart and Stripe use. */
+  /* The keychain is only stocked in the Cottage colorways. A scratcher in a
+     colorway it does not share \u2014 Sleepy Kitty is sage \u2014 would otherwise build a
+     line api/checkout.js rejects with "isn't available in that color". */
+  function keyColor() {
+    var kc = (CAT.BY_HANDLE.keychain || {}).colorsAvailable || [];
+    return kc.indexOf(state.color) !== -1 ? state.color : kc[0];
   }
 
-  function swapPhoto(el, way) {
+  function draft() {
+    var lines = [{ handle: product.h, qty: state.qty, color: state.color }];
+    if (state.refill) lines.push({ handle: 'refill', qty: 3, color: 'natural' });
+    if (state.keys)   lines.push({ handle: 'keychain', qty: state.keys, color: keyColor() });
+    return lines;
+  }
+
+  function total() {
+    var lines = draft(), sum = 0, i, p;
+    for (i = 0; i < lines.length; i++) {
+      p = CAT.BY_HANDLE[lines[i].handle];
+      sum += CAT.priceFor(p, lines[i].qty);
+    }
+    if (state.name) sum += CAT.ADDONS.name.price * state.qty;
+    return Math.max(0, Math.round((sum - CAT.secondUnitDiscount(lines)) * 100) / 100);
+  }
+
+  function swapPhoto(el, color) {
     if (!el) return;
-    el.setAttribute('data-way', way);
-    el.setAttribute('data-photo', 'images/cc-cottage-' + way + '.jpg');
+    el.setAttribute('data-way', color);
+    el.setAttribute('data-photo', CAT.colorImg(product, color));
+    el.setAttribute('data-alt', product.t);
     el.removeAttribute('data-painted');
     el.removeAttribute('data-real');
     el.classList.remove('ph');
@@ -506,58 +669,67 @@ CC.initPDP = function () {
   }
 
   function paint() {
-    swapPhoto(stage, state.way);
+    swapPhoto(stage, state.color);
+
     Array.prototype.forEach.call(picks, function (b) {
-      var on = b.getAttribute('data-pdp-way') === state.way;
+      var on = b.getAttribute('data-pdp-way') === state.color;
       b.setAttribute('aria-pressed', String(on));
       if (b.parentNode) b.parentNode.setAttribute('data-on', on ? '1' : '0');
     });
     Array.prototype.forEach.call(thumbs, function (b) {
-      b.setAttribute('aria-pressed', String(b.getAttribute('data-pdp-thumb') === state.way));
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-pdp-thumb') === state.color));
     });
-    if (wayLabel) wayLabel.textContent = CC.WAYS[state.way].name;
+    if (wayLabel) wayLabel.textContent = CAT.COLOR_LABEL[state.color] || state.color;
+
     if (nameCt)   nameCt.textContent = state.name.length + '/' + MAXNAME;
     if (nameEcho) nameEcho.textContent = state.name || 'Luna & Ruska';
     if (qtyOut)   qtyOut.textContent = state.qty;
 
     if (qtyNote) {
+      var off = Math.round(CAT.SECOND_UNIT_OFF * 100);
       if (state.qty === 1) {
-        qtyNote.innerHTML = '<b>Add a second and it’s 40% off</b> — ' + CC.money(CC.PRICE.template * 0.6) +
-          ' instead of ' + CC.money(CC.PRICE.template) + '. Two cats, two houses, or one for somebody else.';
-        qtyNote.setAttribute('data-tone','offer');
+        qtyNote.innerHTML = '<b>Add a second and it\u2019s ' + off + '% off</b> \u2014 ' +
+          CC.money(product.price * (1 - CAT.SECOND_UNIT_OFF)) + ' instead of ' +
+          CC.money(product.price) + '. Two cats, two rooms, or one for somebody else.';
+        qtyNote.setAttribute('data-tone', 'offer');
       } else {
-        qtyNote.innerHTML = '<b>Second one is 40% off.</b> You’re saving ' +
-          CC.money(CC.PRICE.template * CC.PRICE.secondOff) + ' on this order.';
-        qtyNote.setAttribute('data-tone','won');
+        qtyNote.innerHTML = '<b>Every second one is ' + off + '% off.</b> You\u2019re saving ' +
+          CC.money(CAT.secondUnitDiscount([{ handle: product.h, qty: state.qty }])) +
+          ' on this order.';
+        qtyNote.setAttribute('data-tone', 'won');
       }
     }
+
     Array.prototype.forEach.call(addRows, function (r) {
       var kind = r.getAttribute('data-add');
       var on = kind === 'refill' ? state.refill : state.keys === +r.getAttribute('data-keys');
       r.setAttribute('data-on', on ? '1' : '0');
       var tick = r.querySelector('.tick');
-      if (tick) tick.textContent = on ? '✓' : '';
+      if (tick) tick.textContent = on ? '\u2713' : '';
     });
+
     if (totalOut) totalOut.textContent = CC.money(total());
     if (saveOut) {
-      var saved = (CC.PRICE.template * state.qty) - CC.templateTotal(state.qty);
+      var saved = CAT.secondUnitDiscount([{ handle: product.h, qty: state.qty }]);
       saveOut.textContent = saved > 0 ? 'You save ' + CC.money(saved) : '';
       saveOut.hidden = saved <= 0;
     }
   }
 
   Array.prototype.forEach.call(picks, function (b) {
-    b.addEventListener('click', function () { state.way = b.getAttribute('data-pdp-way'); paint(); });
+    b.addEventListener('click', function () { state.color = b.getAttribute('data-pdp-way'); paint(); });
   });
   Array.prototype.forEach.call(thumbs, function (b) {
-    b.addEventListener('click', function () { state.way = b.getAttribute('data-pdp-thumb'); paint(); });
+    b.addEventListener('click', function () { state.color = b.getAttribute('data-pdp-thumb'); paint(); });
   });
+
   if (nameIn) nameIn.addEventListener('input', function () {
     state.name = nameIn.value.slice(0, MAXNAME);
     if (nameIn.value !== state.name) nameIn.value = state.name;
     paint();
   });
-  root.addEventListener('click', function (e) {
+
+  root_.addEventListener('click', function (e) {
     var q = e.target.closest('[data-qty]');
     if (q) { state.qty = Math.max(1, Math.min(9, state.qty + (+q.getAttribute('data-qty')))); paint(); return; }
     var a = e.target.closest('[data-add]');
@@ -571,19 +743,9 @@ CC.initPDP = function () {
 
   if (addBtn) addBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    CC.cart.add({
-      title: 'Storybook Cottage' + (state.qty > 1 ? ' ×' + state.qty : ''),
-      sub: CC.WAYS[state.way].name + (state.name ? ' · “' + state.name + '”' : ' · name to follow'),
-      price: CC.templateTotal(state.qty), qty: state.qty, way: state.way
-    });
-    if (state.refill) CC.cart.add({
-      title: 'Three refill inserts', sub: 'Added with your scratcher',
-      price: CC.PRICE.refill[3].price, qty: 1, icon: '📦'
-    });
-    if (state.keys) CC.cart.add({
-      title: state.keys === 2 ? 'Two keychains' : 'One keychain',
-      sub: 'Same design, pocket-sized', price: CC.PRICE.keychain[state.keys], qty: 1, icon: '🔑'
-    });
+    CC.cart.add({ h: product.h, qty: state.qty, color: state.color, name: state.name });
+    if (state.refill) CC.cart.add({ h: 'refill', qty: 3, color: 'natural' });
+    if (state.keys)   CC.cart.add({ h: 'keychain', qty: state.keys, color: keyColor(), name: state.name });
   });
 
   paint();

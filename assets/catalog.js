@@ -54,7 +54,7 @@ const COLORS = [
   ['butter',  'Buttercup',     'co-butter'],
   ['blossom', 'Blossom',       'co-blossom'],
   ['lilac',   'Lilac Sky',     'co-lilac'],
-  ['meadow',  'Meadow Green',  'co-meadow'],
+  ['sage',    'Sage Green',    'co-sage'],
   ['natural', 'Natural kraft', 'co-natural']
 ];
 const COLOR_KEYS  = COLORS.map(c => c[0]);
@@ -176,24 +176,38 @@ const SIZE_BUNDLES = {
    which is how you close the line if you need to stop taking orders.
    ================================================================ */
 const PRODUCTS = [
-  {id:101, h:'cottage', t:'Storybook Cottage', v:'scratcher', size:'XL', price:59,
+  {id:101, h:'cottage-kitties', t:'Cottage Kitties', v:'scratcher', size:'XL', price:59,
    sales:0, new:1, badge:'best', exclusive:1,
    colorsAvailable:COTTAGE, bundlePrices:[[1,59]],
-   canonical:'cc-template.html',
+   canonical:'cottage-kitties.html',
    img:'images/cc-cottage-cream.jpg',
-   desc:'Wood beams, window boxes and flowers, in four colorways. Your cats sit in the windows and their name goes on the sign at the front. Comes with two cat figures and the first pad.',
+   /* Four real colorway photographs, so the picker swaps a photo rather
+      than a drawing: images/cc-cottage-<key>.jpg for each COTTAGE key. */
+   swatchImg:'images/cc-cottage-{color}.jpg',
+   personalised:true,
+   desc:'Timber beams, window boxes and flowers, in four colorways. Your cats sit in the windows and their name goes on the sign at the front. Comes with two cat figures and the first pad.',
    /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
 
-  {id:102, h:'sleepy-meadow', t:'Sleepy Meadow', v:'scratcher', size:'XL', price:59,
+  {id:102, h:'sleepy-kitty', t:'Sleepy Kitty', v:'scratcher', size:'XL', price:59,
    sales:0, new:1, badge:'', exclusive:1,
-   colorsAvailable:['meadow'], bundlePrices:[[1,59]],
-   /* No canonical page yet. The landing page's "Choose" button for this
-      design currently links to cc-template.html, which is the hardcoded
-      Storybook Cottage PDP — see the Phase 2 notes. Until Meadow has its
-      own page, that button should say "Coming soon" like the other three. */
+   colorsAvailable:['sage'], bundlePrices:[[1,59]],
+   canonical:'sleepy-kitty.html',
    img:'images/cc-meadow-render.jpg',
-   desc:'Green hills, clouds and a little sun. The calm one. Your cats sit in the windows and their name goes on the front.',
-   /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:false},
+   /* ---------------------------------------------------------------
+      personalised:false is NOT a styling choice — it is what the only
+      photograph of this product actually shows. Sleepy Kitty has no
+      windows, no cat figures and no nameplate; the cat is moulded into
+      the side panel. So the page offers no name field, and the order
+      does not trigger the "send us a photo of your cat" flow, because
+      there is nothing on the piece that a photo would change.
+
+      If Sleepy Kitty is redrawn with a nameplate and window cats, flip
+      this to true and the name field, the photo ask and the order-email
+      wording all switch on together. Nothing else needs editing.
+      --------------------------------------------------------------- */
+   personalised:false,
+   desc:'Rolling hills, clouds and a little sun in soft sage, with a sleeping cat moulded into the side. The calm one — no lettering, nothing loud.',
+   /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
 
   {id:103, h:'refill', t:'Refill pads', v:'refill', size:'M', price:10,
    sales:0, new:0, badge:'', exclusive:1,
@@ -204,17 +218,19 @@ const PRODUCTS = [
    bundlePrices:[[1,10],[3,25],[6,40]],
    canonical:'cc-refills.html',
    img:'images/cc-refill-inserts.jpg',
+   personalised:false,
    desc:'The corrugated pad your cat actually shreds. Lifts out, drops in, no glue and no tools. One size fits every CatCustoms design.',
    /*TODO*/ weightOz:6, boxClass:'box-M', stock:99, photoReal:false},
 
   {id:104, h:'keychain', t:'Keychain of your cat', v:'keychain', size:'S', price:4,
    sales:0, new:0, badge:'', exclusive:1,
-   /* Same four colorways as the cottage, so the keychain matches the
-      scratcher it was drawn for. */
+   /* The keychain carries the cat we drew for the scratcher, so it is
+      offered in the same four colorways as Cottage Kitties. */
    colorsAvailable:COTTAGE,
    bundlePrices:[[1,4],[2,6]],
-   canonical:'cc-template.html',
+   canonical:'cottage-kitties.html',
    img:'images/keychains.jpg',
+   personalised:true,
    desc:'The same cat we drew for your scratcher, pocket-sized. Only available with a scratcher — the artwork has to exist first.',
    /*TODO*/ weightOz:1, boxClass:'poly-S', stock:99, photoReal:true}
 ];
@@ -384,12 +400,25 @@ function orderProblem(items) {
 
 /* Anything that needs a photo of the customer's cat before it can be
    made. This is what api/checkout.js stamps into metadata.needs_photo,
-   and what api/upload-photo.js checks before accepting an upload. */
+   and what api/upload-photo.js checks before accepting an upload.
+
+   Driven by the product's own `personalised` flag rather than by its
+   family, because not every scratcher carries a cat figure and a
+   nameplate — Sleepy Kitty does not. Asking for a photo we would do
+   nothing with is a promise we would then have to explain away. */
 function needsPhoto(items) {
   return (items || []).some(it => {
     const p = BY_HANDLE[it && it.handle];
-    return p && (p.v === 'scratcher' || p.v === 'keychain');
+    return !!(p && p.personalised);
   });
+}
+
+/* Where the picker should look for the photo of one colorway. Products
+   without per-colorway photography fall back to their single image. */
+function colorImg(product, colorKey) {
+  if (!product) return '';
+  if (product.swatchImg && colorKey) return product.swatchImg.replace('{color}', colorKey);
+  return product.imgUrl || '';
 }
 
 /* ================================================================
@@ -418,7 +447,7 @@ return {
   VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, COTTAGE, ADDONS, PRODUCTS, BY_HANDLE,
   SIZE_BUNDLES, FREE_SHIP, GIFTS, giftsFor, nextGift,
   priceFor, unitPriceAt, savingAt, betterDeal, packsFor, imgSrc,
-  SECOND_UNIT_OFF, secondUnitDiscount, orderProblem, needsPhoto,
+  SECOND_UNIT_OFF, secondUnitDiscount, orderProblem, needsPhoto, colorImg,
   BUILD_ID, ALL_PHOTOS_REAL
 };
 });
