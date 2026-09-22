@@ -74,7 +74,19 @@ function cloud(cx, cy, s) {
     '<ellipse cx="21" cy="6" rx="17" ry="11"/></g>';
 }
 
-CC.meadowScene = function (catCount) {
+/* Basking Paws coat colorways — must stay in step with COLORS in
+   assets/catalog.js. Used only as a drawn placeholder for whichever
+   colors don't have a real photo yet (see swatchImg in catalog.js). */
+CC.COAT = {
+  tuxedo:    { coat:'#2b2b2e', dark:'#000',    cream:'#fff'    },
+  orange:    { coat:'#e2711d', dark:'#a8500e', cream:'#fff3e4' },
+  calico:    { coat:'#e2711d', dark:'#7a4a10', cream:'#fff', patch:'#2b2b2e' },
+  black:     { coat:'#242426', dark:'#000',    cream:'#3f3f42' },
+  greywhite: { coat:'#8b9096', dark:'#5b6066', cream:'#fff'    },
+  grey:      { coat:'#8b9096', dark:'#5b6066', cream:'#c9cdd1' }
+};
+
+CC.meadowScene = function (catCount, coatKey) {
   catCount = catCount || 1;
   var label = catCount > 1 ? 'Two sleeping cats in a meadow scene' : 'A sleeping cat in a meadow scene';
   var o = '<svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + esc(label) + '">';
@@ -96,7 +108,16 @@ CC.meadowScene = function (catCount) {
     o += sleepingCat(168, 338, 1.5, '#2b2b2e', '#000', '#fff') +
          sleepingCat(352, 344, 1.5, '#e2711d', '#a8500e', '#fff3e4');
   } else {
-    o += sleepingCat(268, 344, 1.75, '#2b2b2e', '#000', '#fff');
+    var c = CC.COAT[coatKey] || CC.COAT.tuxedo;
+    o += sleepingCat(268, 344, 1.75, c.coat, c.dark, c.cream);
+    /* Calico is a rough approximation, not a real tri-color coat — two
+       dark patches over the orange base, just enough to read as
+       "calico" in a placeholder until a real photo replaces it. */
+    if (c.patch) {
+      o += '<g transform="translate(268,344) scale(1.75)" fill="' + c.patch + '" opacity=".9">' +
+           '<ellipse cx="16" cy="-10" rx="11" ry="8" transform="rotate(-18 16 -10)"/>' +
+           '<ellipse cx="-16" cy="-4" rx="7" ry="6" transform="rotate(12 -16 -4)"/></g>';
+    }
   }
   return o + '</svg>';
 };
@@ -165,7 +186,7 @@ CC.paintArt = function (scope) {
       } else if (el.hasAttribute('data-insert')) {
         el.innerHTML = CC.insert() + chip;
       } else if (el.hasAttribute('data-cats')) {
-        el.innerHTML = CC.meadowScene(+el.getAttribute('data-cats') || 1) + chip;
+        el.innerHTML = CC.meadowScene(+el.getAttribute('data-cats') || 1, el.getAttribute('data-coat')) + chip;
       } else {
         el.classList.add('ph');
         el.innerHTML = '<span class="swap">' + esc(alt) + '</span>';
@@ -368,7 +389,7 @@ CC.cart = {
           return '<div class="ci">' +
             '<div class="ci-art"><div class="art" data-photo="' + esc(CAT.colorImg(p, it.color)) +
               '" data-way="' + esc(it.color) + '" data-cats="' + (p.catCount || 1) +
-              '" data-alt="' + esc(p.t) + '" data-nonote></div></div>' +
+              '" data-coat="' + esc(it.color) + '" data-alt="' + esc(p.t) + '" data-nonote></div></div>' +
             '<div class="ci-t"><b>' + esc(p.t) + '</b><span>' + esc(bits.join(' \u00B7 ')) + '</span>' +
             '<button class="ci-rm" data-rm="' + i + '">Remove</button></div>' +
             '<div class="ci-p">' + CC.money(CC.cart.lineTotal(it)) + '</div></div>';
@@ -603,7 +624,9 @@ CC.initPDP = function () {
 
   function swapPhoto(el, p, color) {
     if (!el) return;
-    el.setAttribute('data-cats', String(p.catCount || 1));
+    var catCount = p.catCount || 1;
+    el.setAttribute('data-cats', String(catCount));
+    if (catCount === 1) el.setAttribute('data-coat', color); else el.removeAttribute('data-coat');
     var src = CAT.colorImg(p, color);
     if (src) el.setAttribute('data-photo', src); else el.removeAttribute('data-photo');
     el.setAttribute('data-way', color);

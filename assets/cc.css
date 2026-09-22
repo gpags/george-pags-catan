@@ -208,24 +208,30 @@ section{padding:60px 0}
 /* ================================================================
    ABOVE THE FOLD — must fit without scrolling
    ================================================================ */
-/* Blue sky at the top easing down into meadow green at the base, echoing
-   the real product photography and the expo backdrop art. The transition
-   to pale happens early (by ~30%) so the headline text sits on a calm,
-   legible ground rather than on saturated blue. */
+/* Blue sky at the top, staying blue through the headline zone (~45%) so
+   the white text always sits on a saturated ground, then easing down
+   into meadow green at the base — echoing the real product photography
+   and the expo backdrop art. */
 .atf{background:linear-gradient(180deg,
-    var(--blue) 0%, #7fb2ef 10%, #cfe6fb 24%, #f6faff 34%,
-    #fdf8ec 56%, #fdf8ec 100%);
+    var(--blue) 0%, #5f9eec 22%, #9fc7f5 45%, #eaf4ff 62%,
+    #fdf8ec 78%, #fdf8ec 100%);
   padding:26px 0 0;position:relative;overflow:hidden}
-.atf::before{content:'';position:absolute;width:260px;height:260px;border-radius:50%;
-  background:radial-gradient(circle, rgba(255,207,63,.7), transparent 70%);
-  top:-70px;right:-40px;pointer-events:none}
-.atf::after{content:'';position:absolute;left:0;right:0;bottom:0;height:130px;pointer-events:none;
+/* a real sun — solid disc + rays — not just a glow blob */
+.sun{position:absolute;top:-26px;right:-14px;width:170px;height:170px;pointer-events:none;
+  z-index:0;filter:drop-shadow(0 0 26px rgba(255,207,63,.6))}
+@media(max-width:600px){.sun{width:112px;height:112px;top:-14px;right:-10px}}
+.atf::after{content:'';position:absolute;left:0;right:0;bottom:0;height:210px;pointer-events:none;
   background-repeat:no-repeat;background-size:cover;background-position:bottom center;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'><path d='M0 110 Q180 60 360 110 T720 110 T1080 110 T1440 110 V220 H0 Z' fill='%236fb85e'/><path d='M0 150 Q180 100 360 150 T720 150 T1080 150 T1440 150 V220 H0 Z' fill='%234fa156'/></svg>")}
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 300' preserveAspectRatio='none'><path d='M0 130 Q180 70 360 130 T720 130 T1080 130 T1440 130 V300 H0 Z' fill='%2384c46f'/><path d='M0 180 Q180 120 360 180 T720 180 T1080 180 T1440 180 V300 H0 Z' fill='%236fb85e'/><path d='M0 230 Q180 175 360 230 T720 230 T1080 230 T1440 230 V300 H0 Z' fill='%234fa156'/></svg>")}
 .atf-in{position:relative;z-index:1;text-align:center;padding-bottom:70px}
-.atf h1{font-size:clamp(1.8rem,3.8vw,2.9rem);margin:10px 0 0;font-weight:700}
+/* White with a soft dark shadow — legible against every stop of the
+   blue gradient behind it, not just the ink-on-pale contrast that was
+   hard to read up near the top. */
+.atf h1{font-size:clamp(1.8rem,3.8vw,2.9rem);margin:10px 0 0;font-weight:700;
+  color:#fff;text-shadow:0 2px 18px rgba(18,35,58,.4)}
 .atf h1 em{font-style:normal;color:var(--pink)}
-.atf-lede{font-size:clamp(15px,1.6vw,17.5px);color:var(--ink-2);max-width:44rem;margin:12px auto 0}
+.atf-lede{font-size:clamp(15px,1.6vw,17.5px);color:rgba(255,255,255,.96);max-width:44rem;margin:12px auto 0;
+  text-shadow:0 1px 10px rgba(18,35,58,.35)}
 
 /* ---------------- hero photo carousel ----------------
    One slide today (Basking Paws); built to take more angles/cats later
@@ -233,10 +239,13 @@ section{padding:60px 0}
    one slide, CC.initCarousel() hides the arrows and dots on its own. */
 .carousel{position:relative;max-width:640px;aspect-ratio:4/3;margin:28px auto 0;
   border-radius:var(--r-lg);overflow:hidden;border:5px solid #fff;
-  box-shadow:0 0 0 1px rgba(31,58,92,.12), 0 24px 54px -20px rgba(31,58,92,.4)}
+  box-shadow:0 0 0 3px var(--pink-300), 0 0 46px -8px rgba(239,138,46,.6),
+             0 24px 54px -20px rgba(31,58,92,.35)}
 .carousel-track{display:flex;height:100%;transition:transform .4s cubic-bezier(.4,0,.2,1)}
 .carousel-slide{flex:0 0 100%;height:100%}
 .carousel-slide img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 78%}
+.carousel-slide .art{width:100%;height:100%}
+.carousel-slide .art img{object-fit:cover;object-position:center 78%}
 .carousel .ribbon{top:14px;left:14px;z-index:3}
 .carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;
   border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;z-index:3;
@@ -300,23 +309,25 @@ section{padding:60px 0}
   .marquee{padding:7px 0}
 }
 
-/* ---------------- template cards ---------------- */
-/* Capped at 260px and centered rather than stretched — with only two
-   scratchers, 1fr columns were blowing up to ~600px each. */
-.tpl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,260px));
-  gap:20px;justify-content:center}
-.tpl{background:#fff;border:3px solid var(--pink-300);border-radius:var(--r-lg);overflow:hidden;
+/* ---------------- template cards ----------------
+   Sized like a scaled-down hero shot — big enough that the photo (and
+   the meadow illustration) actually reads, not a cramped thumbnail.
+   Centered rather than stretched, so two cards don't blow up past a
+   comfortable reading width either. */
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,420px));
+  gap:28px;justify-content:center}
+.tpl{background:#fff;border:4px solid var(--pink-300);border-radius:var(--r-lg);overflow:hidden;
   box-shadow:0 0 0 1px rgba(239,138,46,.08), 0 10px 30px -16px rgba(239,138,46,.5);
   display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s}
 .tpl:hover{transform:translateY(-5px);border-color:var(--pink);
   box-shadow:0 0 0 1px rgba(239,138,46,.28), 0 0 30px -2px rgba(239,138,46,.45),
              0 20px 50px -18px rgba(239,138,46,.65)}
 /* the photograph carries the card; copy is a caption under it */
-.tpl .art,.tpl .ph,.tpl .frame{aspect-ratio:5/4;border-radius:0;background:#fff}
-.tpl .art img,.tpl .frame img{object-fit:contain;padding:6px}
-.tpl-b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:7px;flex:1}
-.tpl h3{font-size:20px}
-.tpl p{font-size:13px;color:var(--muted);flex:1;line-height:1.45}
+.tpl .art,.tpl .ph,.tpl .frame{aspect-ratio:4/3;border-radius:0;background:#fff}
+.tpl .art img,.tpl .frame img{object-fit:cover}
+.tpl-b{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tpl h3{font-size:23px}
+.tpl p{font-size:14px;color:var(--muted);flex:1;line-height:1.5}
 .tpl-f{display:flex;align-items:center;justify-content:space-between;gap:10px;
   border-top:2px dashed var(--line);padding-top:13px}
 .tpl-f .p{font-family:'Fredoka',sans-serif;font-size:22px}
@@ -358,11 +369,16 @@ section{padding:60px 0}
    ================================================================ */
 .pdp{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;padding-top:24px}
 @media(max-width:980px){.pdp{grid-template-columns:1fr;gap:26px}}
-.pdp-media{position:sticky;top:20px}
+/* top:82px clears the sticky nav-strip (~54px) plus a little air — at
+   top:20px the carousel used to duck half-behind the nav as you
+   scrolled, which read as the picture "moving". The carousel itself
+   (not this wrapper) now owns the border/shadow/aspect-ratio, so a
+   real photo carousel and this sticky column can share one page. */
+.pdp-media{position:sticky;top:82px}
 @media(max-width:980px){.pdp-media{position:static}}
-.pdp-media .art{border:3px solid var(--pink-300);aspect-ratio:1;border-radius:var(--r-lg);background:#fff;
-  box-shadow:0 0 0 1px rgba(239,138,46,.10), 0 14px 44px -18px rgba(239,138,46,.55)}
-.pdp-media .art img{object-fit:contain;padding:10px}
+.pdp-media .carousel{margin-top:0}
+.pdp-media .art{width:100%;height:100%}
+.pdp-media .art img{object-fit:cover}
 .thumbs{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}
 .thumb{width:70px;height:70px;border-radius:14px;overflow:hidden;border:3px solid var(--line);padding:0;background:#fff}
 .thumb[aria-pressed="true"]{border-color:var(--pink)}
@@ -383,6 +399,15 @@ section{padding:60px 0}
 .nameplate-echo{margin-top:12px;background:var(--pink-50);border:2px dashed var(--pink-300);border-radius:14px;
   padding:12px 16px;font-size:13.5px;color:var(--ink-2)}
 .nameplate-echo b{font-family:'Fredoka',sans-serif;font-size:19px;color:var(--pink-600);display:block;margin-top:3px}
+
+/* ---------------- coat/colorway swatches (Basking Paws) ---------------- */
+.swatches{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.swatch{width:50px;height:50px;border-radius:50%;border:3px solid var(--line);flex:none;
+  transition:border-color .15s,transform .15s,box-shadow .15s}
+.swatch:hover{transform:translateY(-2px)}
+.swatch[aria-pressed="true"]{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-50)}
+.swatch-pick{display:flex;flex-direction:column;align-items:center;gap:6px}
+.swatch-pick .nm{font-size:11.5px;font-weight:700;color:var(--muted);text-align:center}
 
 .qty-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .qty{display:inline-flex;align-items:center;border:2.5px solid var(--line);border-radius:999px;overflow:hidden}

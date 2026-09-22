@@ -42,21 +42,29 @@ const VIBES = {
 };
 
 /* ---------- colorways ----------
-   These MUST stay in step with CC.WAYS in assets/cc.js — the keys
-   are the same and the labels are shown to the customer on the
+   These MUST stay in step with the COAT lookup in assets/cc.js — the
+   keys are the same and the labels are shown to the customer on the
    Stripe receipt and in the order email.
 
-   One shared finish — 'meadow' — across the whole line now: sky blue,
-   hill green, sun yellow, matching the real product photography. The
-   old Storybook Cottage colorways (cream/butter/blossom/lilac) and the
-   separate 'sage' single-finish key are retired along with the timber-
-   cottage art style; images/cc-cottage-*.jpg stay on disk but nothing
+   Basking Paws is not personalised at all (see PRODUCTS below) — the
+   only choice on that page is which of 6 cat coats ships. Homestead
+   Buddies still shares one finish, 'meadow': sky blue, hill green, sun
+   yellow, matching the real product photography. The old Storybook
+   Cottage colorways (cream/butter/blossom/lilac) and the separate
+   'sage' single-finish key are retired along with the timber-cottage
+   art style; images/cc-cottage-*.jpg stay on disk but nothing
    references them any more.
 
    'natural' is refill pads — the only other single-finish product. */
 const COLORS = [
-  ['meadow',  'Sky & Meadow',  'co-meadow'],
-  ['natural', 'Natural kraft', 'co-natural']
+  ['tuxedo',    'Tuxedo',       'co-tuxedo'],
+  ['orange',    'Orange Tabby', 'co-orange'],
+  ['calico',    'Calico',       'co-calico'],
+  ['black',     'Black',        'co-black'],
+  ['greywhite', 'Grey & White', 'co-greywhite'],
+  ['grey',      'Grey',         'co-grey'],
+  ['meadow',    'Sky & Meadow', 'co-meadow'],
+  ['natural',   'Natural kraft','co-natural']
 ];
 const COLOR_KEYS  = COLORS.map(c => c[0]);
 const COLOR_LABEL = COLORS.reduce((m,[k,label]) => (m[k] = label, m), {});
@@ -186,23 +194,23 @@ const SIZE_BUNDLES = {
    which is how you close the line if you need to stop taking orders.
    ================================================================ */
 const PRODUCTS = [
+  /* Basking Paws is NOT personalised at all — no photo, no name. The
+     only choice is which of 6 cat coats ships, same as picking a size
+     or a finish on any other product. Only 'tuxedo' has a real
+     photograph (images/bp-tuxedo.jpg, a copy of the launch photo); the
+     other 5 fall back to CC.meadowScene(1, colorKey)'s drawn coat —
+     see the COAT lookup in assets/cc.js. Swap in a real photo for any
+     of them later by adding images/bp-<color>.jpg; swatchImg picks it
+     up automatically, no other change needed. */
   {id:101, h:'basking-paws', t:'Basking Paws', v:'scratcher', size:'XL', price:59,
    sales:0, new:1, badge:'best', exclusive:1,
-   colorsAvailable:['meadow'], bundlePrices:[[1,59]],
+   colorsAvailable:['tuxedo','orange','calico','black','greywhite','grey'],
+   bundlePrices:[[1,59]],
    canonical:'basking-paws.html',
-   img:'images/bp-scratcher.jpg',
+   img:'images/bp-tuxedo.jpg', swatchImg:'images/bp-{color}.jpg', catCount:1,
    personalised:false,
-   desc:'Rolling hills, clouds and a little sun, with one sleeping cat moulded into the side. The calm one — ships exactly as pictured, no photo needed.',
+   desc:'Rolling hills, clouds and a little sun, with one sleeping cat moulded into the side. Six coat colors, ships exactly as pictured — no photo needed.',
    /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
-
-  {id:102, h:'basking-paws-custom', t:'Basking Paws — Made For Your Cat', v:'scratcher', size:'XL', price:79,
-   sales:0, new:1, badge:'', exclusive:1,
-   colorsAvailable:['meadow'], bundlePrices:[[1,79]],
-   canonical:'basking-paws.html',
-   img:'images/bp-scratcher.jpg',
-   personalised:true,
-   desc:'The same Basking Paws scene, with your own cat drawn in sleeping on the hillside and their name added if you want it. Send the photo after you order.',
-   /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:false},
 
   {id:103, h:'homestead-buddies', t:'Homestead Buddies', v:'scratcher', size:'XL', price:59,
    sales:0, new:1, badge:'', exclusive:1,
@@ -242,10 +250,12 @@ const PRODUCTS = [
   {id:106, h:'keychain', t:'Keychain of your cat', v:'keychain', size:'S', price:4,
    sales:0, new:0, badge:'', exclusive:1,
    /* Only meaningful once a cat's likeness has actually been drawn, so
-      it shares the one meadow finish rather than its own colorway. */
+      it shares the one meadow finish rather than its own colorway.
+      Basking Paws has no personalised tier any more (see above), so
+      this only ever rides along with a Homestead Buddies custom order. */
    colorsAvailable:['meadow'],
    bundlePrices:[[1,4],[2,6]],
-   canonical:'basking-paws.html',
+   canonical:'homestead-buddies.html',
    img:'images/keychains.jpg',
    personalised:true,
    desc:'The same cat we drew for your scratcher, pocket-sized. Only available with a personalised scratcher — the artwork has to exist first.',
