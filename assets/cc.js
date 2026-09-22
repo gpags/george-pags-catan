@@ -1,5 +1,5 @@
 /* ================================================================
-   CatCustoms — shared browser JS
+   Cat Scratchers — shared browser JS
 
    Used by index.html, basking-paws.html, homestead-buddies.html,
    cc-custom.html, cc-refills.html, cc-partner.html.
@@ -29,7 +29,7 @@ var CC = root.CC = {};
    api/checkout.js recomputes every total from that same file, so what
    this page shows and what Stripe charges cannot drift apart.
 
-   Every CatCustoms page must load assets/catalog.js BEFORE assets/cc.js. */
+   Every Cat Scratchers page must load assets/catalog.js BEFORE assets/cc.js. */
 var CAT = root.RP_CATALOG;
 if (!CAT) throw new Error('cc.js: assets/catalog.js must be loaded first');
 
@@ -150,7 +150,7 @@ CC.paintArt = function (scope) {
 
     var src  = el.getAttribute('data-photo');
     var note = el.getAttribute('data-note');          /* placeholder caption, if any */
-    var alt  = el.getAttribute('data-alt') || 'CatCustoms cat scratcher';
+    var alt  = el.getAttribute('data-alt') || 'A Cat Scratchers piece';
     var chip = el.hasAttribute('data-nonote') ? '' :
       '<span class="artnote">' + esc(el.getAttribute('data-notelabel') || 'ILLUSTRATION') + '</span>';
 

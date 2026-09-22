@@ -104,7 +104,9 @@ section{padding:60px 0}
 /* ================================================================
    PAGE CHROME — drop bar, trust marquee, header, nav strip
    ================================================================ */
-.drop-bar{background:var(--pink-50);color:var(--ink);padding:11px 46px 11px 22px;position:relative}
+/* display:none disables the countdown bar for now — delete that one
+   declaration to bring it back. */
+.drop-bar{display:none;background:var(--pink-50);color:var(--ink);padding:11px 46px 11px 22px;position:relative}
 .drop-in{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
 .drop-label{font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px}
 .cd{display:flex;gap:6px}
@@ -123,7 +125,7 @@ section{padding:60px 0}
 }
 
 .marquee{background:var(--blue);color:#fff;overflow:hidden;padding:9px 0;position:relative}
-.mq-track{display:flex;width:max-content;animation:mq 38s linear infinite}
+.mq-track{display:flex;width:max-content;animation:mq 85s linear infinite}
 .mq-group{display:flex;flex-shrink:0}
 .mq-item{display:inline-flex;align-items:center;gap:9px;padding:0 34px;font-size:13px;font-weight:700;
   letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
@@ -205,15 +207,37 @@ section{padding:60px 0}
 /* ================================================================
    ABOVE THE FOLD — must fit without scrolling
    ================================================================ */
-.atf{background:linear-gradient(168deg,var(--blue-50) 0%,#fff 44%,var(--pink-50) 100%);
-  padding:26px 0 34px;position:relative;overflow:hidden}
-.atf::before,.atf::after{content:'';position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
-.atf::before{width:320px;height:320px;background:var(--blue-300);top:-120px;left:-90px}
-.atf::after{width:280px;height:280px;background:var(--pink-300);bottom:-110px;right:-70px}
-.atf-in{position:relative;z-index:1;text-align:center}
+/* Blue sky at the top easing down into meadow green at the base, echoing
+   the real product photography and the expo backdrop art. The transition
+   to pale happens early (by ~30%) so the headline text sits on a calm,
+   legible ground rather than on saturated blue. */
+.atf{background:linear-gradient(180deg,
+    var(--blue) 0%, #7fb2ef 10%, #cfe6fb 24%, #f6faff 34%,
+    #fdf8ec 56%, #fdf8ec 100%);
+  padding:26px 0 0;position:relative;overflow:hidden}
+.atf::before{content:'';position:absolute;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,207,63,.7), transparent 70%);
+  top:-70px;right:-40px;pointer-events:none}
+.atf::after{content:'';position:absolute;left:0;right:0;bottom:0;height:130px;pointer-events:none;
+  background-repeat:no-repeat;background-size:cover;background-position:bottom center;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'><path d='M0 110 Q180 60 360 110 T720 110 T1080 110 T1440 110 V220 H0 Z' fill='%236fb85e'/><path d='M0 150 Q180 100 360 150 T720 150 T1080 150 T1440 150 V220 H0 Z' fill='%234fa156'/></svg>")}
+.atf-in{position:relative;z-index:1;text-align:center;padding-bottom:70px}
 .atf h1{font-size:clamp(1.8rem,3.8vw,2.9rem);margin:10px 0 0;font-weight:700}
 .atf h1 em{font-style:normal;color:var(--pink)}
 .atf-lede{font-size:clamp(15px,1.6vw,17.5px);color:var(--ink-2);max-width:44rem;margin:12px auto 0}
+
+/* ---------------- single hero product shot ---------------- */
+.hero-shot{display:block;position:relative;max-width:640px;aspect-ratio:4/3;margin:28px auto 0;
+  border-radius:var(--r-lg);overflow:hidden;border:5px solid #fff;
+  box-shadow:0 0 0 1px rgba(74,47,28,.12), 0 24px 54px -20px rgba(74,47,28,.4);
+  transition:transform .2s ease, box-shadow .2s}
+.hero-shot:hover{transform:translateY(-4px);
+  box-shadow:0 0 0 1px rgba(74,47,28,.16), 0 30px 64px -18px rgba(74,47,28,.48)}
+.hero-shot img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 78%}
+.hero-shot .ribbon{top:14px;left:14px}
+@media(max-width:600px){
+  .hero-shot{margin-top:20px;border-width:4px}
+}
 
 .doors{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px;text-align:left}
 .door{background:#fff;border:4px solid var(--pink-300);border-radius:var(--r-lg);overflow:hidden;
