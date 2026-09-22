@@ -28,11 +28,12 @@
   --candy-50:#eef4fe; --candy-100:#dee9fd; --candy-200:#c3d9fb; --candy-300:#9dc0f7;
   --candy:#3f7fe0; --candy-600:#1c4fac; --candy-900:#12305e;
   --grape:#a855f7; --tangerine:#ff8a3d;
-  --ink:#4a2f1c; --ink-2:#6b4a32; --muted:#8a7460;
-  --paper:#fff; --paper-2:#f2f8ff; --line:#e6ddd0;
+  /* Ink is navy, not brown — the whole site reads as blue/orange/green only. */
+  --ink:#1f3a5c; --ink-2:#35547a; --muted:#6b7f97;
+  --paper:#fff; --paper-2:#f2f8ff; --line:#dde6f0;
   --r-sm:10px; --r:18px; --r-lg:28px;
-  --shadow:0 2px 4px rgba(74,47,28,.05), 0 12px 28px -14px rgba(63,142,232,.30);
-  --shadow-lift:0 4px 8px rgba(74,47,28,.07), 0 28px 54px -22px rgba(239,138,46,.45);
+  --shadow:0 2px 4px rgba(31,58,92,.05), 0 12px 28px -14px rgba(63,142,232,.30);
+  --shadow-lift:0 4px 8px rgba(31,58,92,.07), 0 28px 54px -22px rgba(239,138,46,.45);
   --wrap:1320px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -63,7 +64,7 @@ section{padding:60px 0}
   background-repeat:repeat;background-size:280px 280px}
 .paws-pink::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'><g fill='%23ef8a2e' fill-opacity='0.055'><g transform='translate(46,52) rotate(-14)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(196,178) rotate(18)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(212,54) rotate(-8)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g><g transform='translate(66,198) rotate(12)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g></g></svg>")}
 .paws-blue::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'><g fill='%233f7fe0' fill-opacity='0.075'><g transform='translate(46,52) rotate(-14)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(196,178) rotate(18)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(212,54) rotate(-8)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g><g transform='translate(66,198) rotate(12)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g></g></svg>")}
-.paws-ink::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'><g fill='%234a2f1c' fill-opacity='0.04'><g transform='translate(46,52) rotate(-14)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(196,178) rotate(18)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(212,54) rotate(-8)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g><g transform='translate(66,198) rotate(12)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g></g></svg>")}
+.paws-ink::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'><g fill='%231f3a5c' fill-opacity='0.04'><g transform='translate(46,52) rotate(-14)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(196,178) rotate(18)'><ellipse cx='-15' cy='-11' rx='6.5' ry='9' transform='rotate(-22 -15 -11)'/><ellipse cx='-5' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='6' cy='-19' rx='6.5' ry='9.5'/><ellipse cx='16' cy='-10' rx='6.5' ry='9' transform='rotate(22 16 -10)'/><path d='M0-4c10 0 17 7 17 14 0 7-5 10-11 10-3 0-4 1-6 1s-3-1-6-1c-6 0-11-3-11-10 0-7 7-14 17-14z'/></g><g transform='translate(212,54) rotate(-8)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g><g transform='translate(66,198) rotate(12)'><path d='M-17-7l-5-16 14 7a22 22 0 0 1 18 0l14-7-5 16a20 18 0 1 1-36 0z'/></g></g></svg>")}
 
 /* ================================================================
    GLOW SURFACES — colored stroke plus an emissive halo, matched to
@@ -117,7 +118,7 @@ section{padding:60px 0}
 .cd-cap{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .drop-when{font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px}
 .drop-x{position:absolute;right:14px;top:50%;transform:translateY(-50%);padding:6px;border-radius:8px;line-height:0;color:var(--ink)}
-.drop-x:hover{background:rgba(74,47,28,.08)}
+.drop-x:hover{background:rgba(31,58,92,.08)}
 @media(max-width:600px){
   .drop-bar{padding:9px 40px 9px 14px}
   .drop-label,.drop-when{font-size:15px}
@@ -193,11 +194,11 @@ section{padding:60px 0}
 .art,.frame{position:relative;background:linear-gradient(160deg,var(--blue-50),var(--pink-50));overflow:hidden}
 .art img,.frame img{width:100%;height:100%;object-fit:cover}
 .art svg{width:100%;height:auto}
-.artnote{position:absolute;left:10px;bottom:10px;background:rgba(74,47,28,.78);color:#fff;
+.artnote{position:absolute;left:10px;bottom:10px;background:rgba(31,58,92,.78);color:#fff;
   font-size:9px;font-weight:800;letter-spacing:.09em;padding:4px 9px;border-radius:6px;pointer-events:none}
 .art[data-real="1"] .artnote{display:none}
 .ph{position:relative;background:linear-gradient(160deg,var(--blue-50),var(--pink-50));overflow:hidden}
-.ph::after{content:'PLACEHOLDER';position:absolute;top:10px;right:10px;background:rgba(74,47,28,.82);color:#fff;
+.ph::after{content:'PLACEHOLDER';position:absolute;top:10px;right:10px;background:rgba(31,58,92,.82);color:#fff;
   font-size:9px;font-weight:800;letter-spacing:.1em;padding:4px 9px;border-radius:6px;z-index:2}
 .ph .swap{position:absolute;inset:0;display:grid;place-content:center;gap:6px;text-align:center;padding:16px;
   font-size:11.5px;font-weight:800;color:var(--muted);letter-spacing:.03em}
@@ -226,17 +227,31 @@ section{padding:60px 0}
 .atf h1 em{font-style:normal;color:var(--pink)}
 .atf-lede{font-size:clamp(15px,1.6vw,17.5px);color:var(--ink-2);max-width:44rem;margin:12px auto 0}
 
-/* ---------------- single hero product shot ---------------- */
-.hero-shot{display:block;position:relative;max-width:640px;aspect-ratio:4/3;margin:28px auto 0;
+/* ---------------- hero photo carousel ----------------
+   One slide today (Basking Paws); built to take more angles/cats later
+   without any markup changes — just add another .carousel-slide. With
+   one slide, CC.initCarousel() hides the arrows and dots on its own. */
+.carousel{position:relative;max-width:640px;aspect-ratio:4/3;margin:28px auto 0;
   border-radius:var(--r-lg);overflow:hidden;border:5px solid #fff;
-  box-shadow:0 0 0 1px rgba(74,47,28,.12), 0 24px 54px -20px rgba(74,47,28,.4);
-  transition:transform .2s ease, box-shadow .2s}
-.hero-shot:hover{transform:translateY(-4px);
-  box-shadow:0 0 0 1px rgba(74,47,28,.16), 0 30px 64px -18px rgba(74,47,28,.48)}
-.hero-shot img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 78%}
-.hero-shot .ribbon{top:14px;left:14px}
+  box-shadow:0 0 0 1px rgba(31,58,92,.12), 0 24px 54px -20px rgba(31,58,92,.4)}
+.carousel-track{display:flex;height:100%;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.carousel-slide{flex:0 0 100%;height:100%}
+.carousel-slide img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 78%}
+.carousel .ribbon{top:14px;left:14px;z-index:3}
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;
+  border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;z-index:3;
+  box-shadow:0 6px 16px -4px rgba(31,58,92,.4);transition:background .15s,transform .15s}
+.carousel-arrow:hover{background:var(--pink-50);transform:translateY(-50%) scale(1.06)}
+.carousel-arrow.prev{left:14px}
+.carousel-arrow.next{right:14px}
+.carousel-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;gap:8px;z-index:3}
+.carousel-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.65);
+  border:2px solid rgba(31,58,92,.3);padding:0;transition:background .15s,border-color .15s}
+.carousel-dot[aria-current="true"]{background:var(--pink);border-color:var(--pink)}
 @media(max-width:600px){
-  .hero-shot{margin-top:20px;border-width:4px}
+  .carousel{margin-top:20px;border-width:4px}
+  .carousel-arrow{width:36px;height:36px}
 }
 
 .doors{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px;text-align:left}
@@ -264,7 +279,7 @@ section{padding:60px 0}
 .door .pricetag small{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.06em}
 .ribbon{position:absolute;top:12px;left:12px;z-index:3;background:var(--yellow);color:var(--ink);
   font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;padding:5px 12px;border-radius:999px;
-  box-shadow:0 3px 0 0 rgba(74,47,28,.15)}
+  box-shadow:0 3px 0 0 rgba(31,58,92,.15)}
 .ribbon.mint{background:var(--mint);color:var(--mint-900)}
 @media(max-width:1000px){.door{grid-template-columns:1fr}.door .art,.door .frame{aspect-ratio:16/10}}
 @media(max-width:860px){
@@ -286,7 +301,10 @@ section{padding:60px 0}
 }
 
 /* ---------------- template cards ---------------- */
-.tpl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+/* Capped at 260px and centered rather than stretched — with only two
+   scratchers, 1fr columns were blowing up to ~600px each. */
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,260px));
+  gap:20px;justify-content:center}
 .tpl{background:#fff;border:3px solid var(--pink-300);border-radius:var(--r-lg);overflow:hidden;
   box-shadow:0 0 0 1px rgba(239,138,46,.08), 0 10px 30px -16px rgba(239,138,46,.5);
   display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s}
@@ -605,12 +623,12 @@ details p+p{margin-top:9px}
 @media(max-width:940px){.sitter{grid-template-columns:1fr;gap:24px}}
 
 /* ---------------- cart drawer ---------------- */
-.scrim{position:fixed;inset:0;background:rgba(74,47,28,.45);backdrop-filter:blur(2px);z-index:80;
+.scrim{position:fixed;inset:0;background:rgba(31,58,92,.45);backdrop-filter:blur(2px);z-index:80;
   opacity:0;pointer-events:none;transition:opacity .22s}
 .scrim.on{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:#fff;z-index:90;
   display:flex;flex-direction:column;transform:translateX(102%);transition:transform .26s cubic-bezier(.4,0,.2,1);
-  box-shadow:-20px 0 60px -20px rgba(74,47,28,.4)}
+  box-shadow:-20px 0 60px -20px rgba(31,58,92,.4)}
 .drawer.on{transform:none}
 .dr-h{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:2px solid var(--line)}
 .dr-h h3{font-size:21px}
@@ -638,18 +656,26 @@ details p+p{margin-top:9px}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);background:var(--ink);color:#fff;
   padding:13px 24px;border-radius:999px;font-weight:700;font-size:15px;z-index:100;transition:transform .3s;
-  box-shadow:0 12px 40px -10px rgba(74,47,28,.6);max-width:calc(100vw - 32px);text-align:center}
+  box-shadow:0 12px 40px -10px rgba(31,58,92,.6);max-width:calc(100vw - 32px);text-align:center}
 .toast.on{transform:translate(-50%,0)}
 
-/* ---------------- footer ---------------- */
+/* ---------------- footer ----------------
+   Navy (--ink), with the three brand colors called out on purpose: an
+   orange top border, and the Shop/Help/Legal headings rotating through
+   orange, green and the pale sky blue used elsewhere for this dark
+   background — so the footer reads as the same blue/orange/green site,
+   not a fourth, unrelated color. */
 footer{background:var(--ink);color:rgba(255,255,255,.68);padding:46px 0 28px;font-size:15px;
-  border-top:5px solid var(--mint)}
+  border-top:5px solid var(--pink)}
 .ft{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;padding-bottom:22px;
   border-bottom:2px solid rgba(255,255,255,.12)}
-.ft a:hover{color:#fff}
+.ft a:hover{color:var(--yellow)}
 .ft ul{list-style:none;display:grid;gap:8px}
 .ft h4{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;letter-spacing:.1em;
   text-transform:uppercase;color:var(--mint);margin-bottom:12px}
+.ft > div:nth-child(2) h4{color:var(--pink-300)}
+.ft > div:nth-child(3) h4{color:var(--blue-300)}
+.ft > div:nth-child(4) h4{color:var(--mint)}
 .ft-b{padding-top:18px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
   font-size:12.5px;color:rgba(255,255,255,.42)}
 

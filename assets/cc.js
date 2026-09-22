@@ -874,8 +874,70 @@ CC.initForms = function () {
   });
 };
 
+/* ================================================================
+   PHOTO CAROUSEL — arrows + dots, N slides.
+
+   <div class="carousel" data-carousel>
+     <div class="carousel-track" data-carousel-track>
+       <div class="carousel-slide"><img ...></div>
+       <div class="carousel-slide"><img ...></div>   -- add more any time
+     </div>
+     <button data-carousel-prev>...</button>
+     <button data-carousel-next>...</button>
+     <div class="carousel-dots" data-carousel-dots></div>
+   </div>
+
+   With a single slide the arrows and dots hide themselves — there is
+   nothing to browse to yet, and an arrow that goes nowhere is worse
+   than no arrow. Add a second .carousel-slide later and they appear
+   with no other change. */
+CC.initCarousel = function () {
+  var roots = document.querySelectorAll('[data-carousel]');
+  Array.prototype.forEach.call(roots, function (root) {
+    var track = root.querySelector('[data-carousel-track]');
+    if (!track) return;
+    var slides = track.children;
+    var n = slides.length;
+    var prev = root.querySelector('[data-carousel-prev]');
+    var next = root.querySelector('[data-carousel-next]');
+    var dotsWrap = root.querySelector('[data-carousel-dots]');
+    var i = 0;
+
+    if (n <= 1) {
+      if (prev) prev.hidden = true;
+      if (next) next.hidden = true;
+      if (dotsWrap) dotsWrap.hidden = true;
+      return;
+    }
+
+    if (dotsWrap) {
+      dotsWrap.innerHTML = '';
+      for (var d = 0; d < n; d++) {
+        var dot = document.createElement('button');
+        dot.className = 'carousel-dot';
+        dot.type = 'button';
+        dot.setAttribute('aria-label', 'Show photo ' + (d + 1) + ' of ' + n);
+        (function (idx) { dot.addEventListener('click', function () { go(idx); }); })(d);
+        dotsWrap.appendChild(dot);
+      }
+    }
+
+    function paint() {
+      track.style.transform = 'translateX(-' + (i * 100) + '%)';
+      if (dotsWrap) Array.prototype.forEach.call(dotsWrap.children, function (dot, idx) {
+        dot.setAttribute('aria-current', String(idx === i));
+      });
+    }
+    function go(idx) { i = ((idx % n) + n) % n; paint(); }
+
+    if (prev) prev.addEventListener('click', function () { go(i - 1); });
+    if (next) next.addEventListener('click', function () { go(i + 1); });
+    paint();
+  });
+};
+
 function boot() {
-  CC.mountChrome(); CC.mount(); CC.initRefills(); CC.initPDP(); CC.initPartner(); CC.initForms();
+  CC.mountChrome(); CC.mount(); CC.initCarousel(); CC.initRefills(); CC.initPDP(); CC.initPartner(); CC.initForms();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
