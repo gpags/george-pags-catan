@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Basking Paws &mdash; Cat Scratchers</title>
-<meta name="description" content="A blue-sky, green-hill cat scratcher with a sleeping cat moulded into the side. Ships ready to go at $59, or add your own cat's likeness and name for $79.">
+<meta name="description" content="A blue-sky, green-hill cat scratcher with a sleeping cat moulded into the side. $59, in six coat colors: tuxedo, orange, calico, black, grey &amp; white, or grey.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -64,43 +64,45 @@
 
 <div class="wrap crumb"><a href="index.html">Home</a> &middot; <a href="index.html#templates">Scratchers</a> &middot; Basking Paws</div>
 
-<div class="wrap pdp" data-pdp="basking-paws" data-pdp-custom="basking-paws-custom" data-name-placeholder="Whiskers">
+<div class="wrap pdp" data-pdp="basking-paws">
   <div class="pdp-media">
-    <div class="art" data-pdp-art data-photo="images/bp-scratcher.jpg" data-cats="1" data-alt="Basking Paws cat scratcher"></div>
-    <p class="fineprint" data-pdp-basefine>Blue sky, green hills, a little sun &mdash; and one sleeping cat moulded into the side. What you see is what ships.</p>
-    <p class="fineprint" data-pdp-customfine hidden>This photo shows the real Basking Paws frame and finish. Your own cat's likeness &mdash; and their name, if you want it &mdash; gets drawn into this same hillside scene after you order.</p>
+    <div class="carousel" data-carousel aria-label="Basking Paws cat scratcher photos">
+      <div class="carousel-track" data-carousel-track>
+        <div class="carousel-slide">
+          <div class="art" data-pdp-art data-photo="images/bp-tuxedo.jpg" data-cats="1" data-coat="tuxedo" data-alt="Basking Paws cat scratcher, Tuxedo"></div>
+        </div>
+      </div>
+      <button class="carousel-arrow prev" data-carousel-prev aria-label="Previous photo">&#8592;</button>
+      <button class="carousel-arrow next" data-carousel-next aria-label="Next photo">&#8594;</button>
+      <div class="carousel-dots" data-carousel-dots></div>
+    </div>
+    <p class="fineprint">No photo needed &mdash; pick a coat below and it ships exactly as pictured. Only Tuxedo has a real photo
+      so far; the rest are shown as a drawn stand-in until we shoot them.</p>
   </div>
 
   <div>
     <span class="tagline">Ships in 5&ndash;10 days</span>
-    <h1 style="margin-top:14px">Basking Paws</h1>
-
-    <div class="modes" role="tablist" aria-label="Choose a version" style="margin-top:14px">
-      <button class="mode" data-pdp-mode="base" aria-pressed="true">Ready to ship</button>
-      <button class="mode" data-pdp-mode="custom" aria-pressed="false">Made for your cat</button>
-    </div>
+    <h1 style="margin-top:10px">Basking Paws</h1>
 
     <div class="price-row">
       <span class="price" data-pdp-price>$59</span>
       <span class="price-note">Everything included</span>
     </div>
-    <ul class="plist" style="margin:14px 0 0">
-      <li><span class="pin">&#10003;</span><span>Rolling hills, clouds and a small sun, in sky blue and meadow green.</span></li>
-      <li><span class="pin">&#10003;</span><span>A sleeping cat moulded into the side panel.</span></li>
+    <ul class="plist" style="margin:10px 0 0">
+      <li><span class="pin">&#10003;</span><span>Rolling hills, clouds and a small sun, with one sleeping cat moulded into the side.</span></li>
       <li><span class="pin">&#10003;</span><span>Comes with the first cardboard pad.</span></li>
     </ul>
 
-    <div class="optblock" data-pdp-personalize hidden>
-      <div class="lbl"><span>Add their name</span><span class="count" data-name-count>0/18</span></div>
-      <label class="field">
-        <input type="text" data-pdp-name maxlength="18" placeholder="Whiskers" autocomplete="off">
-      </label>
-      <div class="nameplate-echo">Your sign will read
-        <b data-name-echo>Whiskers</b>
+    <div class="optblock">
+      <div class="lbl"><span>Pick a coat</span><span class="val" data-way-label>Tuxedo</span></div>
+      <div class="swatches">
+        <span class="swatch-pick"><button class="swatch" data-pdp-way="tuxedo" aria-pressed="true" style="background:#2b2b2e" aria-label="Tuxedo"></button><span class="nm">Tuxedo</span></span>
+        <span class="swatch-pick"><button class="swatch" data-pdp-way="orange" aria-pressed="false" style="background:#e2711d" aria-label="Orange Tabby"></button><span class="nm">Orange</span></span>
+        <span class="swatch-pick"><button class="swatch" data-pdp-way="calico" aria-pressed="false" style="background:linear-gradient(135deg,#e2711d 50%,#2b2b2e 50%)" aria-label="Calico"></button><span class="nm">Calico</span></span>
+        <span class="swatch-pick"><button class="swatch" data-pdp-way="black" aria-pressed="false" style="background:#242426" aria-label="Black"></button><span class="nm">Black</span></span>
+        <span class="swatch-pick"><button class="swatch" data-pdp-way="greywhite" aria-pressed="false" style="background:linear-gradient(135deg,#8b9096 50%,#fff 50%)" aria-label="Grey &amp; White"></button><span class="nm">Grey &amp; White</span></span>
+        <span class="swatch-pick"><button class="swatch" data-pdp-way="grey" aria-pressed="false" style="background:#8b9096" aria-label="Grey"></button><span class="nm">Grey</span></span>
       </div>
-      <p class="fineprint">Leave it blank if you'd rather skip the name. Send your cat's photo after you order &mdash; we email you a link.</p>
-      <p class="likeness-note"><b>Stylised, not photographic.</b> We draw your cat into the same hillside scene, simplified to match the art
-        style. Colors and markings come through; fine detail does not. That's the look, on purpose.</p>
     </div>
 
     <div class="optblock">
@@ -123,16 +125,6 @@
           <span>About six months of scratching.</span></span>
         <span class="pr">$25</span>
       </div>
-      <div class="addrow" data-add="key" data-keys="1" data-on="0" hidden>
-        <span class="tick"></span>
-        <span class="t"><b>A keychain of your cat</b><span>Same design, pocket size.</span></span>
-        <span class="pr">$4</span>
-      </div>
-      <div class="addrow" data-add="key" data-keys="2" data-on="0" hidden>
-        <span class="tick"></span>
-        <span class="t"><b>Two keychains <span class="save">Save $2</span></b><span>One to keep, one to give.</span></span>
-        <span class="pr">$6</span>
-      </div>
     </div>
 
     <div class="buybox">
@@ -140,8 +132,7 @@
       <div class="saved" data-pdp-save hidden></div>
       <button class="btn btn-pink btn-block btn-lg" data-pdp-add>Add to cart</button>
       <div class="trust">
-        <div><span>&#127807;</span><span><b>Ready to ship needs no photo.</b> Order and we make it exactly as pictured.</span></div>
-        <div><span>&#127912;</span><span><b>Made for your cat</b> swaps in their likeness and name &mdash; send the photo after you order.</span></div>
+        <div><span>&#127807;</span><span><b>No photo, no nameplate.</b> Order and we make it exactly as pictured.</span></div>
         <div><span>&#9851;</span><span><b>Pads from $10.</b> Lift the old one out, drop a new one in.</span></div>
         <div><span>&#127482;&#127480;</span><span><b>Husband and wife.</b> Made in the USA.</span></div>
       </div>
@@ -165,12 +156,12 @@
   <div class="wrap">
     <div class="sec-head"><h2 class="sec-title">Common questions</h2></div>
     <div class="qa">
-      <div class="q"><h4>What's the difference between the two versions?</h4>
-        <p><b>Ready to ship</b> is exactly the piece pictured &mdash; order it and it ships, no photo needed.
-        <b>Made for your cat</b> swaps the sleeping cat for your own cat's likeness, with their name on request,
-        for $20 more. Send the photo after you check out.</p></div>
-      <div class="q"><h4>Can I have it in another color?</h4>
-        <p>Not yet. Basking Paws is made in the one meadow finish shown here.</p></div>
+      <div class="q"><h4>Can I have my own cat drawn on it, with their name?</h4>
+        <p>Not on Basking Paws &mdash; this design ships exactly as pictured, in whichever coat you pick, with no
+        nameplate. For your own cat's likeness and name, see <a href="homestead-buddies.html">Homestead Buddies</a>.</p></div>
+      <div class="q"><h4>What colors does it come in?</h4>
+        <p>Six coats: Tuxedo, Orange, Calico, Black, Grey &amp; White, and Grey. Only Tuxedo has a real photo so far &mdash;
+        the others show a drawn stand-in until we shoot them.</p></div>
       <div class="q"><h4>How long does it take?</h4>
         <p>5&ndash;10 business days to build, plus shipping. Nothing is made ahead of time.</p></div>
       <div class="q"><h4>Does it take the same pads?</h4>
