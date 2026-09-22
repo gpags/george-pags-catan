@@ -46,23 +46,20 @@ const VIBES = {
    are the same and the labels are shown to the customer on the
    Stripe receipt and in the order email.
 
-   'meadow' and 'natural' are single-finish products that still need
-   a color key, because api/checkout.js validates every line against
-   colorsAvailable. */
+   One shared finish — 'meadow' — across the whole line now: sky blue,
+   hill green, sun yellow, matching the real product photography. The
+   old Storybook Cottage colorways (cream/butter/blossom/lilac) and the
+   separate 'sage' single-finish key are retired along with the timber-
+   cottage art style; images/cc-cottage-*.jpg stay on disk but nothing
+   references them any more.
+
+   'natural' is refill pads — the only other single-finish product. */
 const COLORS = [
-  ['cream',   'Cottage Cream', 'co-cream'],
-  ['butter',  'Buttercup',     'co-butter'],
-  ['blossom', 'Blossom',       'co-blossom'],
-  ['lilac',   'Lilac Sky',     'co-lilac'],
-  ['sage',    'Sage Green',    'co-sage'],
+  ['meadow',  'Sky & Meadow',  'co-meadow'],
   ['natural', 'Natural kraft', 'co-natural']
 ];
 const COLOR_KEYS  = COLORS.map(c => c[0]);
 const COLOR_LABEL = COLORS.reduce((m,[k,label]) => (m[k] = label, m), {});
-
-/* The four Storybook Cottage colorways, in the order the picker shows
-   them. Frozen so a stray mutation can't rewrite the list at once. */
-const COTTAGE = Object.freeze(['cream','butter','blossom','lilac']);
 
 /* ================================================================
    ADD-ONS
@@ -75,10 +72,12 @@ const COTTAGE = Object.freeze(['cream','butter','blossom','lilac']);
    needs_photo is now derived from whether the order contains anything
    personalised, so the photo flow survives the add-on being deleted.
 
-   The nameplate is INCLUDED in the price of a scratcher — every
-   CatCustoms page promises the cat's name on the front. It stays in
-   ADDONS at price 0 so the name still travels to Stripe metadata and
-   into the order email, but it is never charged for.
+   The nameplate itself is never charged for separately — the price
+   of adding a name and a likeness lives in the gap between a base
+   handle (basking-paws, homestead-buddies) and its "-custom" sibling.
+   ADDONS.name stays at price 0 so a typed name still travels to
+   Stripe metadata and into the order email once the customer is on
+   a personalised handle.
    ================================================================ */
 const ADDONS = { name:{label:'Name on the nameplate', price:0} };
 
@@ -156,11 +155,22 @@ const SIZE_BUNDLES = {
 /* ================================================================
    CATALOG
 
-   Four handles, not eleven. A colorway is what the `color` field is
-   for, so all four Storybook Cottage colorways are ONE product — if
-   they were four handles, a customer buying a cream one and a butter
-   one would be two separate lines of qty 1 and would silently lose
-   the 40%-off-the-second discount.
+   Two designs, each as a BASE handle (fixed meadow art, no photo
+   needed, ships as pictured) plus a "-custom" handle (their own cat's
+   likeness and name drawn in, priced higher). That is two handles per
+   design rather than one with a toggle, on purpose: colors, price and
+   personalised all come from the catalog per handle, so needs_photo /
+   Stripe metadata / bundle pricing never have to branch on anything
+   the client sends. Both handles of a design share one `canonical`
+   page — basking-paws.html and homestead-buddies.html each render
+   whichever handle the shopper has selected via a base/custom toggle.
+
+   PRICING NOTE: base prices ($59) are unchanged from the outgoing
+   Sleepy Kitty / Cottage Kitties baseline. The custom-upsell deltas
+   (+$20 one cat, +$25 two cats) are a first estimate, not a costed
+   figure — nothing else in the business gave us a number. Change
+   basking-paws-custom.price / homestead-buddies-custom.price here;
+   nothing else needs touching.
 
    Refills and keychains are one handle each with a quantity ladder,
    which is exactly what bundlePrices exists to express: refills read
@@ -176,40 +186,47 @@ const SIZE_BUNDLES = {
    which is how you close the line if you need to stop taking orders.
    ================================================================ */
 const PRODUCTS = [
-  {id:101, h:'cottage-kitties', t:'Cottage Kitties', v:'scratcher', size:'XL', price:59,
+  {id:101, h:'basking-paws', t:'Basking Paws', v:'scratcher', size:'XL', price:59,
    sales:0, new:1, badge:'best', exclusive:1,
-   colorsAvailable:COTTAGE, bundlePrices:[[1,59]],
-   canonical:'cottage-kitties.html',
-   img:'images/cc-cottage-cream.jpg',
-   /* Four real colorway photographs, so the picker swaps a photo rather
-      than a drawing: images/cc-cottage-<key>.jpg for each COTTAGE key. */
-   swatchImg:'images/cc-cottage-{color}.jpg',
-   personalised:true,
-   desc:'Timber beams, window boxes and flowers, in four colorways. Your cats sit in the windows and their name goes on the sign at the front. Comes with two cat figures and the first pad.',
-   /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
-
-  {id:102, h:'sleepy-kitty', t:'Sleepy Kitty', v:'scratcher', size:'XL', price:59,
-   sales:0, new:1, badge:'', exclusive:1,
-   colorsAvailable:['sage'], bundlePrices:[[1,59]],
-   canonical:'sleepy-kitty.html',
-   img:'images/cc-meadow-render.jpg',
-   /* ---------------------------------------------------------------
-      personalised:false is NOT a styling choice — it is what the only
-      photograph of this product actually shows. Sleepy Kitty has no
-      windows, no cat figures and no nameplate; the cat is moulded into
-      the side panel. So the page offers no name field, and the order
-      does not trigger the "send us a photo of your cat" flow, because
-      there is nothing on the piece that a photo would change.
-
-      If Sleepy Kitty is redrawn with a nameplate and window cats, flip
-      this to true and the name field, the photo ask and the order-email
-      wording all switch on together. Nothing else needs editing.
-      --------------------------------------------------------------- */
+   colorsAvailable:['meadow'], bundlePrices:[[1,59]],
+   canonical:'basking-paws.html',
+   img:'images/bp-scratcher.jpg',
    personalised:false,
-   desc:'Rolling hills, clouds and a little sun in soft sage, with a sleeping cat moulded into the side. The calm one — no lettering, nothing loud.',
+   desc:'Rolling hills, clouds and a little sun, with one sleeping cat moulded into the side. The calm one — ships exactly as pictured, no photo needed.',
    /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
 
-  {id:103, h:'refill', t:'Refill pads', v:'refill', size:'M', price:10,
+  {id:102, h:'basking-paws-custom', t:'Basking Paws — Made For Your Cat', v:'scratcher', size:'XL', price:79,
+   sales:0, new:1, badge:'', exclusive:1,
+   colorsAvailable:['meadow'], bundlePrices:[[1,79]],
+   canonical:'basking-paws.html',
+   img:'images/bp-scratcher.jpg',
+   personalised:true,
+   desc:'The same Basking Paws scene, with your own cat drawn in sleeping on the hillside and their name added if you want it. Send the photo after you order.',
+   /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:false},
+
+  {id:103, h:'homestead-buddies', t:'Homestead Buddies', v:'scratcher', size:'XL', price:59,
+   sales:0, new:1, badge:'', exclusive:1,
+   colorsAvailable:['meadow'], bundlePrices:[[1,59]],
+   canonical:'homestead-buddies.html',
+   /* No real two-cat photograph exists yet — see SCRATCHER-LINE-HANDOFF
+      and the note on homestead-buddies.html. img is deliberately empty
+      (not the one-cat Basking Paws photo) so the page draws the honest
+      two-cat meadow scene instead of implying a photo that isn't real. */
+   img:'', catCount:2,
+   personalised:false,
+   desc:'The same meadow scene as Basking Paws, built for two — a second sleeping cat on the hillside. Ships as pictured, no photo needed.',
+   /*TODO*/ weightOz:66, boxClass:'box-XL', stock:99, photoReal:false},
+
+  {id:104, h:'homestead-buddies-custom', t:'Homestead Buddies — Made For Your Cats', v:'scratcher', size:'XL', price:84,
+   sales:0, new:1, badge:'', exclusive:1,
+   colorsAvailable:['meadow'], bundlePrices:[[1,84]],
+   canonical:'homestead-buddies.html',
+   img:'', catCount:2,
+   personalised:true,
+   desc:'Your two cats drawn into the hillside together, with their names on the front if you want them. Send the photo after you order.',
+   /*TODO*/ weightOz:66, boxClass:'box-XL', stock:99, photoReal:false},
+
+  {id:105, h:'refill', t:'Refill pads', v:'refill', size:'M', price:10,
    sales:0, new:0, badge:'', exclusive:1,
    colorsAvailable:['natural'],
    /* 1/$10, 3/$25, 6/$40. priceFor() finds the cheapest combination, so
@@ -222,16 +239,16 @@ const PRODUCTS = [
    desc:'The corrugated pad your cat actually shreds. Lifts out, drops in, no glue and no tools. One size fits every CatCustoms design.',
    /*TODO*/ weightOz:6, boxClass:'box-M', stock:99, photoReal:false},
 
-  {id:104, h:'keychain', t:'Keychain of your cat', v:'keychain', size:'S', price:4,
+  {id:106, h:'keychain', t:'Keychain of your cat', v:'keychain', size:'S', price:4,
    sales:0, new:0, badge:'', exclusive:1,
-   /* The keychain carries the cat we drew for the scratcher, so it is
-      offered in the same four colorways as Cottage Kitties. */
-   colorsAvailable:COTTAGE,
+   /* Only meaningful once a cat's likeness has actually been drawn, so
+      it shares the one meadow finish rather than its own colorway. */
+   colorsAvailable:['meadow'],
    bundlePrices:[[1,4],[2,6]],
-   canonical:'cottage-kitties.html',
+   canonical:'basking-paws.html',
    img:'images/keychains.jpg',
    personalised:true,
-   desc:'The same cat we drew for your scratcher, pocket-sized. Only available with a scratcher — the artwork has to exist first.',
+   desc:'The same cat we drew for your scratcher, pocket-sized. Only available with a personalised scratcher — the artwork has to exist first.',
    /*TODO*/ weightOz:1, boxClass:'poly-S', stock:99, photoReal:true}
 ];
 
@@ -403,9 +420,10 @@ function orderProblem(items) {
    and what api/upload-photo.js checks before accepting an upload.
 
    Driven by the product's own `personalised` flag rather than by its
-   family, because not every scratcher carries a cat figure and a
-   nameplate — Sleepy Kitty does not. Asking for a photo we would do
-   nothing with is a promise we would then have to explain away. */
+   family, because not every scratcher handle carries a likeness and a
+   nameplate — the base basking-paws/homestead-buddies handles don't.
+   Asking for a photo we would do nothing with is a promise we would
+   then have to explain away. */
 function needsPhoto(items) {
   return (items || []).some(it => {
     const p = BY_HANDLE[it && it.handle];
@@ -444,7 +462,7 @@ function buildId() {
 const BUILD_ID = buildId();
 
 return {
-  VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, COTTAGE, ADDONS, PRODUCTS, BY_HANDLE,
+  VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
   SIZE_BUNDLES, FREE_SHIP, GIFTS, giftsFor, nextGift,
   priceFor, unitPriceAt, savingAt, betterDeal, packsFor, imgSrc,
   SECOND_UNIT_OFF, secondUnitDiscount, orderProblem, needsPhoto, colorImg,

@@ -1,15 +1,16 @@
 /* ================================================================
    CatCustoms — shared browser JS
 
-   Used by index.html, cottage-kitties.html, sleepy-kitty.html, cc-custom.html,
-   cc-refills.html, cc-partner.html.
+   Used by index.html, basking-paws.html, homestead-buddies.html,
+   cc-custom.html, cc-refills.html, cc-partner.html.
 
-     CAT          assets/catalog.js — the only place prices live
-     CC.WAYS       Cottage Kitties colorways
-     CC.cottage()  parametric SVG stand-in for product photography
-     CC.photo()    <img> with automatic SVG fallback — drop a real
-                   photo into images/ and it takes over on its own
-     CC.cart       localStorage cart + slide-over drawer
+     CAT            assets/catalog.js — the only place prices live
+     CC.meadowScene() parametric SVG stand-in for product photography —
+                    sky, hills, sun and 1 or 2 sleeping cats, matching
+                    the real Basking Paws photography
+     CC.photo()/paintArt()  <img> with automatic SVG fallback — drop a
+                    real photo into images/ and it takes over on its own
+     CC.cart        localStorage cart + slide-over drawer
      CC.mountChrome() countdown + trust marquee, same as rp.js
 
    catalog.js MUST load before this file on every page. It owns every
@@ -36,136 +37,73 @@ CC.money = function (n) {
   return '$' + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
 };
 
-/* ---------------- colorways ---------------- */
-CC.WAYS = {
-  cream:   { name:'Cottage Cream', body:'#f2e6d2', bodyDark:'#ddcbb2', timber:'#8a6a4d', timberDark:'#6d5039',
-             sign:'#93a883', signInk:'#6b4f3a', plinth:'#e8d9c0', swatch:'#f2e6d2' },
-  butter:  { name:'Buttercup',     body:'#f6d84e', bodyDark:'#dcbc32', timber:'#5f676f', timberDark:'#464d54',
-             sign:'#a9c39b', signInk:'#6b4f3a', plinth:'#efce3f', swatch:'#f6d84e' },
-  blossom: { name:'Blossom',       body:'#f2a9bb', bodyDark:'#dd8fa3', timber:'#9ec9a4', timberDark:'#7fae86',
-             sign:'#9ec9a4', signInk:'#7a5c42', plinth:'#eb9bae', swatch:'#f2a9bb' },
-  lilac:   { name:'Lilac Sky',     body:'#c3b1e1', bodyDark:'#a996cc', timber:'#a9c9ea', timberDark:'#8bb0d8',
-             sign:'#a9c9ea', signInk:'#5f5183', plinth:'#b6a2d9', swatch:'#c3b1e1' }
-};
-CC.WAY_ORDER = ['cream','butter','blossom','lilac'];
-
-var C = {
-  box:'#c9533f', boxDark:'#a8412f', leaf:'#7d9b6a', leafDark:'#658054',
-  bloom:'#fff6f2', bloomPink:'#ffc9d4', bloomCore:'#f6c86a',
-  card:'#bb8b52', cardDark:'#9a6d3b', cardLine:'#a87a45',
-  catA:'#c98f5e', catADark:'#a9713f', catB:'#82828a', catBDark:'#63636b',
-  ink:'#3a2a1c'
-};
-
 function esc(s){ return String(s == null ? '' : s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function cat(x, y, coat, dark, scale) {
+/* ================================================================
+   MEADOW SCENE — parametric SVG stand-in for product photography.
+
+   Sky, sun, clouds, two-tone hills and 1 or 2 sleeping cats, drawn in
+   the same style as the real Basking Paws photography and the expo
+   backdrop art. Used two ways:
+     - as the automatic fallback in paintArt() below, if a photo file
+       is ever missing
+     - as the deliberate PREVIEW art on homestead-buddies.html, which
+       has no real two-cat photograph yet (see catalog.js)
+   ================================================================ */
+function sleepingCat(x, y, scale, coat, dark, cream) {
   var s = scale || 1;
   return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">' +
-    '<path d="M-15-7 L-18-22 L-6-14 Z" fill="' + coat + '"/>' +
-    '<path d="M15-7 L18-22 L6-14 Z" fill="' + coat + '"/>' +
-    '<path d="M-14-9 L-15.6-17 L-8-12.5 Z" fill="' + C.bloomPink + '" opacity=".75"/>' +
-    '<path d="M14-9 L15.6-17 L8-12.5 Z" fill="' + C.bloomPink + '" opacity=".75"/>' +
-    '<ellipse cx="0" cy="0" rx="17" ry="14.5" fill="' + coat + '"/>' +
-    '<path d="M-11-9q4 4 2 9M0-12q0 5 0 8M11-9q-4 4-2 9" stroke="' + dark +
-      '" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".7"/>' +
-    '<ellipse cx="-6" cy="1.5" rx="3.4" ry="3.8" fill="' + C.ink + '"/>' +
-    '<ellipse cx="6" cy="1.5" rx="3.4" ry="3.8" fill="' + C.ink + '"/>' +
-    '<circle cx="-4.9" cy="0.2" r="1.2" fill="#fff"/><circle cx="7.1" cy="0.2" r="1.2" fill="#fff"/>' +
-    '<path d="M-2.6 7 L2.6 7 L0 9.4 Z" fill="' + C.bloomPink + '"/>' +
-    '<path d="M0 9.4v2.2M0 11.6q-3 2.4-6 .8M0 11.6q3 2.4 6 .8" stroke="' + dark +
-      '" stroke-width="1.5" fill="none" stroke-linecap="round"/></g>';
+    '<path d="M40 6q22-4 18-22q-3-14-18-10" fill="none" stroke="' + coat +
+      '" stroke-width="11" stroke-linecap="round"/>' +
+    '<ellipse cx="10" cy="2" rx="34" ry="22" fill="' + coat + '"/>' +
+    '<circle cx="-22" cy="4" r="17" fill="' + coat + '"/>' +
+    '<path d="M-34-6 L-38-19 L-23-11 Z" fill="' + coat + '"/>' +
+    '<path d="M-13-8 L-9-21 L-24-11 Z" fill="' + coat + '"/>' +
+    '<ellipse cx="-10" cy="20" rx="9" ry="6" fill="' + cream + '"/>' +
+    '<ellipse cx="3" cy="21" rx="9" ry="6" fill="' + cream + '"/>' +
+    '<path d="M-29 4q4 3 8 0" stroke="' + dark + '" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+    '<path d="M-20 10 l-3 2 l3 2 Z" fill="' + dark + '"/>' +
+  '</g>';
 }
 
-function flowerbox(x, y, w) {
-  var o = '<g transform="translate(' + x + ',' + y + ')">' +
-    '<rect x="' + (-w/2) + '" y="0" width="' + w + '" height="15" rx="3" fill="' + C.box + '"/>' +
-    '<rect x="' + (-w/2) + '" y="0" width="' + w + '" height="4.5" rx="2" fill="' + C.boxDark + '" opacity=".55"/>';
-  var n = Math.max(3, Math.round(w / 13));
-  for (var i = 0; i < n; i++) {
-    var fx = -w/2 + (w/(n-1))*i, up = (i % 2 ? -8 : -5.5);
-    o += '<ellipse cx="' + fx + '" cy="' + (up+2) + '" rx="5" ry="4" fill="' + C.leaf + '"/>' +
-         '<circle cx="' + fx + '" cy="' + up + '" r="3.1" fill="' + (i%2 ? C.bloom : C.bloomPink) + '"/>' +
-         '<circle cx="' + fx + '" cy="' + up + '" r="1.1" fill="' + C.bloomCore + '"/>';
-  }
-  return o + '</g>';
-}
-
-function sprig(x, y, s) {
+function cloud(cx, cy, s) {
   s = s || 1;
-  return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">' +
-    '<ellipse cx="-5" cy="0" rx="5.5" ry="3.4" fill="' + C.leaf + '" transform="rotate(-24 -5 0)"/>' +
-    '<ellipse cx="5" cy="0" rx="5.5" ry="3.4" fill="' + C.leafDark + '" transform="rotate(24 5 0)"/>' +
-    '<circle cx="0" cy="-3" r="3.4" fill="' + C.bloom + '"/>' +
-    '<circle cx="0" cy="-3" r="1.2" fill="' + C.bloomCore + '"/></g>';
+  return '<g transform="translate(' + cx + ',' + cy + ') scale(' + s + ')" fill="#fff" opacity=".92">' +
+    '<ellipse cx="0" cy="0" rx="26" ry="15"/><ellipse cx="-21" cy="6" rx="17" ry="11"/>' +
+    '<ellipse cx="21" cy="6" rx="17" ry="11"/></g>';
 }
 
-/* The nameplate always reads "Luna & Ruska" — it is a picture of a real
-   previous order, not a live preview. Typing a name in the product page
-   must NOT repaint it. */
-CC.cottage = function (wayKey) {
-  var w = CC.WAYS[wayKey] || CC.WAYS.cream;
-  var label = 'Luna & Ruska';
-  var uid = 'w' + wayKey;
-
-  var o = '<svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' +
-    esc(w.name + ' cottage scratcher') + '">';
-  o += '<defs><clipPath id="well' + uid + '"><path d="M99.7 177.8 L374.9 177.8 L464.3 126.2 L189.1 126.2 Z"/></clipPath></defs>';
-  o += '<ellipse cx="288" cy="336" rx="220" ry="24" fill="#1a1440" opacity=".11"/>';
-  o += '<path d="M70 182 L390 182 L494 122 L174 122 Z" fill="' + w.body + '"/>';
-  o += '<path d="M99.7 177.8 L374.9 177.8 L464.3 126.2 L189.1 126.2 Z" fill="' + C.cardDark + '"/>';
-  o += '<g clip-path="url(#well' + uid + ')"><path d="M101 176.4 L373.6 176.4 L463 127.6 L190.4 127.6 Z" fill="' + C.card + '"/>';
-  for (var i = 0; i <= 40; i++) {
-    var t = i/40;
-    o += '<line x1="' + (101+(373.6-101)*t).toFixed(1) + '" y1="176.4" x2="' + (190.4+(463-190.4)*t).toFixed(1) +
-         '" y2="127.6" stroke="' + C.cardLine + '" stroke-width="2.6" opacity=".9"/>';
+CC.meadowScene = function (catCount) {
+  catCount = catCount || 1;
+  var label = catCount > 1 ? 'Two sleeping cats in a meadow scene' : 'A sleeping cat in a meadow scene';
+  var o = '<svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + esc(label) + '">';
+  o += '<defs><linearGradient id="mSky" x1="0" y1="0" x2="0" y2="1">' +
+       '<stop offset="0%" stop-color="#3f8ee8"/><stop offset="100%" stop-color="#d8ecff"/></linearGradient></defs>';
+  o += '<rect width="560" height="400" fill="url(#mSky)"/>';
+  o += '<circle cx="440" cy="82" r="34" fill="#ffcf3f"/>';
+  for (var i = 0; i < 12; i++) {
+    var a = i * 30 * Math.PI / 180,
+        x1 = 440 + Math.cos(a) * 44, y1 = 82 + Math.sin(a) * 44,
+        x2 = 440 + Math.cos(a) * 58, y2 = 82 + Math.sin(a) * 58;
+    o += '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) +
+         '" stroke="#ffcf3f" stroke-width="6" stroke-linecap="round"/>';
   }
-  o += '</g>';
-  o += '<path d="M390 300 L494 240 L494 122 L390 182 Z" fill="' + w.bodyDark + '"/>';
-  o += '<g fill="' + w.timberDark + '" opacity=".85"><path d="M390 190 L494 130 L494 140 L390 200 Z"/>' +
-       '<path d="M390 252 L494 192 L494 202 L390 262 Z"/><path d="M436 165 L446 159 L446 277 L436 283 Z"/></g>';
-  o += '<path d="M404 244 q0-27 21-39 q21-12 21 13 v34 l-42 24 Z" fill="' + w.sign + '" opacity=".7"/>';
-  o += '<path d="M410 242 q0-22 17-32 q17-10 17 11 v28 l-34 20 Z" fill="#3a2e24" opacity=".75"/>';
-  o += '<path d="M70 182 L390 182 L390 300 L70 300 Z" fill="' + w.body + '"/>';
-  o += '<path d="M70 182 L390 182 L390 194 L70 194 Z" fill="' + w.body + '"/>';
-  var scal = 'M70 194 L70 184 ';
-  for (var s3 = 0; s3 < 10; s3++) scal += 'q16 -11 32 0 ';
-  scal += 'L390 194 Z';
-  o += '<path d="' + scal + '" fill="' + w.body + '"/>';
-  o += '<path d="M70 194 L390 194" stroke="' + w.bodyDark + '" stroke-width="2.5" opacity=".55"/>';
-  o += '<path d="M390 194 L494 134 L494 122 L390 182 Z" fill="' + w.bodyDark + '" opacity=".6"/>';
-  o += '<g fill="' + w.timber + '"><rect x="70" y="196" width="320" height="10"/><rect x="70" y="256" width="320" height="9"/>';
-  var posts = [70,116,162,208,254,300,346,380];
-  for (var p = 0; p < posts.length; p++) o += '<rect x="' + posts[p] + '" y="196" width="10" height="104"/>';
-  o += '</g>';
-  o += '<g stroke="' + w.timber + '" stroke-width="8" stroke-linecap="round" fill="none" opacity=".95">' +
-       '<path d="M176 254 L198 212"/><path d="M240 212 L262 254"/><path d="M314 254 L336 212"/></g>';
-  function win(cx) {
-    return '<g><path d="M' + (cx-36) + ' 266 v-28 a36 36 0 0 1 72 0 v28 Z" fill="' + w.sign + '"/>' +
-      '<path d="M' + (cx-29) + ' 264 v-26 a29 29 0 0 1 58 0 v26 Z" fill="' + w.timberDark + '"/>' +
-      '<path d="M' + (cx-23) + ' 263 v-25 a23 23 0 0 1 46 0 v25 Z" fill="#4a3b2e"/></g>';
+  o += cloud(92, 74) + cloud(152, 112, .68) + cloud(346, 54, .8);
+  o += '<path d="M0 296 Q140 248 280 296 T560 296 V400 H0 Z" fill="#6fb85e"/>';
+  o += '<path d="M0 330 Q140 292 280 330 T560 330 V400 H0 Z" fill="#4fa156"/>';
+  if (catCount > 1) {
+    o += sleepingCat(168, 338, 1.5, '#2b2b2e', '#000', '#fff') +
+         sleepingCat(352, 344, 1.5, '#e2711d', '#a8500e', '#fff3e4');
+  } else {
+    o += sleepingCat(268, 344, 1.75, '#2b2b2e', '#000', '#fff');
   }
-  o += win(125) + cat(125, 240, C.catA, C.catADark, 1.05) + flowerbox(125, 256, 62);
-  o += win(335) + cat(335, 240, C.catB, C.catBDark, 1.05) + flowerbox(335, 256, 62);
-  o += '<g transform="translate(230,232) scale(.9)">' +
-    '<path d="M-78 0 q0-13 13-15 q3-11 17-9 q7-9 20-5 q9-7 19 0 q13-4 20 5 q14-2 17 9 q13 2 13 15' +
-      ' q0 13-13 15 q-3 11-17 9 q-7 9-19 5 q-10 7-20 0 q-13 4-20-5 q-14 2-17-9 q-13-2-13-15 Z" fill="' + w.sign + '"/>' +
-    '<path d="M-69 0 q0-9 10-11 q3-8 14-6 q6-7 16-4 q8-5 16 0 q11-3 16 4 q11-2 14 6 q10 2 10 11' +
-      ' q0 9-10 11 q-3 8-14 6 q-6 7-16 4 q-8 5-16 0 q-11 3-16-4 q-11 2-14-6 q-10-2-10-11 Z" fill="' + w.body + '"/>' +
-    '<text x="0" y="7" text-anchor="middle" font-family="Fredoka, Nunito, sans-serif" font-weight="600" ' +
-      'font-size="20" fill="' + w.signInk + '">' + esc(label) + '</text></g>';
-  o += sprig(93,288,.95) + sprig(186,288,.8) + sprig(278,288,.8) + sprig(371,288,.95);
-  o += '<path d="M58 300 L402 300 L402 322 L58 322 Z" fill="' + w.plinth + '"/>';
-  o += '<path d="M402 300 L506 240 L506 262 L402 322 Z" fill="' + w.bodyDark + '"/>';
-  o += '<path d="M58 300 L402 300 L408 296 L64 296 Z" fill="' + w.body + '"/>';
-  o += '<path d="M402 300 L506 240 L500 237 L396 297 Z" fill="' + w.body + '" opacity=".8"/>';
   return o + '</svg>';
 };
 
 
 /* A stack of corrugated refill pads. Same fallback contract as
-   CC.cottage: a real photo at images/cc-refill-inserts.jpg wins. */
+   CC.meadowScene: a real photo at images/cc-refill-inserts.jpg wins. */
 CC.insert = function () {
   var o = '<svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Replacement corrugated cardboard inserts">';
   o += '<ellipse cx="280" cy="340" rx="200" ry="20" fill="#1a1440" opacity=".10"/>';
@@ -195,29 +133,30 @@ CC.insert = function () {
 /* ================================================================
    PHOTO WITH FALLBACK
 
-   <div class="art" data-photo="images/cc-cottage-cream.jpg" data-way="cream">
+   <div class="art" data-photo="images/bp-scratcher.jpg" data-alt="Basking Paws cat scratcher">
+   <div class="art" data-cats="2" data-alt="Homestead Buddies cat scratcher">
 
-   Renders an <img>. If the file isn't there yet the SVG stand-in takes
-   over automatically — so the moment a real photo is saved into
-   images/ under that name, the page starts using it with no code
+   Renders an <img>. If a data-photo file isn't there yet, or a slot
+   never names one (Homestead Buddies has no real photo yet), the SVG
+   stand-in takes over automatically — so the moment a real photo is
+   saved into images/ under that name, the page starts using it with no code
    change. See images/CC-IMAGE-LIST.md for the filenames.
    ================================================================ */
 CC.paintArt = function (scope) {
-  var nodes = (scope || document).querySelectorAll('[data-photo],[data-cottage],[data-insert]');
+  var nodes = (scope || document).querySelectorAll('[data-photo],[data-cats],[data-insert]');
   Array.prototype.forEach.call(nodes, function (el) {
     if (el.getAttribute('data-painted') === '1') return;
     el.setAttribute('data-painted', '1');
 
     var src  = el.getAttribute('data-photo');
-    var way  = el.getAttribute('data-way') || el.getAttribute('data-cottage') || 'cream';
     var note = el.getAttribute('data-note');          /* placeholder caption, if any */
-    var alt  = el.getAttribute('data-alt') ||
-               (CC.WAYS[way] ? CC.WAYS[way].name + ' cat scratcher' : 'CatCustoms cat scratcher');
-    var chip = el.hasAttribute('data-nonote') ? '' : '<span class="artnote">ILLUSTRATION</span>';
+    var alt  = el.getAttribute('data-alt') || 'CatCustoms cat scratcher';
+    var chip = el.hasAttribute('data-nonote') ? '' :
+      '<span class="artnote">' + esc(el.getAttribute('data-notelabel') || 'ILLUSTRATION') + '</span>';
 
     /* What to draw when no photograph can be found. Slots that name a
-       placeholder caption (the journey) get the caption; product slots
-       get the drawn cottage. */
+       placeholder caption (the journey) get the caption; a slot naming
+       data-cats gets the drawn meadow scene at that cat count. */
     function fallback() {
       if (note) {
         el.classList.add('ph');
@@ -225,11 +164,8 @@ CC.paintArt = function (scope) {
           (src ? '<code>' + esc(src) + '</code>' : '') + '</span>';
       } else if (el.hasAttribute('data-insert')) {
         el.innerHTML = CC.insert() + chip;
-      } else if (CC.WAYS[way]) {
-        /* Only the Cottage Kitties colorways have a drawn stand-in. Every
-           other design would otherwise be represented by a picture of a
-           cottage, which is worse than an honest empty frame. */
-        el.innerHTML = CC.cottage(way) + chip;
+      } else if (el.hasAttribute('data-cats')) {
+        el.innerHTML = CC.meadowScene(+el.getAttribute('data-cats') || 1) + chip;
       } else {
         el.classList.add('ph');
         el.innerHTML = '<span class="swap">' + esc(alt) + '</span>';
@@ -312,7 +248,7 @@ CC.mountChrome = function () {
   if (track) {
     var items = [
       ['♥','Husband &amp; wife, made in the USA'], ['✈','Shipping across the USA'],
-      ['★','Current fulfillment: 5–10 business days'], ['♥','Your cat, designed into the piece'],
+      ['★','Current fulfillment: 5–10 business days'], ['♥','Ready to ship, or made for your cat'],
       ['🎁','Free US shipping on two-scratcher orders'], ['★','Replaceable cardboard insert'],
       ['♥','Only 3 one-of-one commissions a month']
     ];
@@ -431,7 +367,8 @@ CC.cart = {
           if (it.name) bits.push('\u201C' + it.name + '\u201D');
           return '<div class="ci">' +
             '<div class="ci-art"><div class="art" data-photo="' + esc(CAT.colorImg(p, it.color)) +
-              '" data-way="' + esc(it.color) + '" data-alt="' + esc(p.t) + '" data-nonote></div></div>' +
+              '" data-way="' + esc(it.color) + '" data-cats="' + (p.catCount || 1) +
+              '" data-alt="' + esc(p.t) + '" data-nonote></div></div>' +
             '<div class="ci-t"><b>' + esc(p.t) + '</b><span>' + esc(bits.join(' \u00B7 ')) + '</span>' +
             '<button class="ci-rm" data-rm="' + i + '">Remove</button></div>' +
             '<div class="ci-p">' + CC.money(CC.cart.lineTotal(it)) + '</div></div>';
@@ -609,12 +546,20 @@ CC.initPDP = function () {
   /* One implementation, every design. The page names its product with
      data-pdp="<handle>" and everything else — price, colorways, whether
      there is a nameplate at all — is read from the catalog. */
-  var product = CAT.BY_HANDLE[root_.getAttribute('data-pdp')];
-  if (!product) { console.error('cc.js: unknown product on [data-pdp]'); return; }
+  var baseProduct   = CAT.BY_HANDLE[root_.getAttribute('data-pdp')];
+  var customProduct = CAT.BY_HANDLE[root_.getAttribute('data-pdp-custom')] || null;
+  if (!baseProduct) { console.error('cc.js: unknown product on [data-pdp]'); return; }
 
-  var colors = product.colorsAvailable;
-  var state = { color: colors[0], name: '', qty: 1, refill: false, keys: 0 };
+  var state = { mode: 'base', color: baseProduct.colorsAvailable[0], name: '', qty: 1, refill: false, keys: 0 };
 
+  function product() { return (state.mode === 'custom' && customProduct) ? customProduct : baseProduct; }
+
+  var modeBtns    = root_.querySelectorAll('[data-pdp-mode]');
+  var personalize = root_.querySelector('[data-pdp-personalize]');
+  var baseFine    = root_.querySelector('[data-pdp-basefine]');
+  var customFine  = root_.querySelector('[data-pdp-customfine]');
+  var priceOut    = root_.querySelector('[data-pdp-price]');
+  var namePlaceholder = root_.getAttribute('data-name-placeholder') || 'Luna & Ruska';
   var stage    = root_.querySelector('[data-pdp-art]');
   var picks    = root_.querySelectorAll('[data-pdp-way]');
   var thumbs   = root_.querySelectorAll('[data-pdp-thumb]');
@@ -631,19 +576,18 @@ CC.initPDP = function () {
   var MAXNAME  = 18;
 
   /* What the cart will hold if they press Add — used to price the page
-     with exactly the same functions the cart and Stripe use. */
-  /* The keychain is only stocked in the Cottage colorways. A scratcher in a
-     colorway it does not share \u2014 Sleepy Kitty is sage \u2014 would otherwise build a
-     line api/checkout.js rejects with "isn't available in that color". */
+     with exactly the same functions the cart and Stripe use. The
+     keychain needs a likeness to already exist, so it only makes
+     sense — and is only offered — once a personalised mode is picked. */
   function keyColor() {
     var kc = (CAT.BY_HANDLE.keychain || {}).colorsAvailable || [];
     return kc.indexOf(state.color) !== -1 ? state.color : kc[0];
   }
 
   function draft() {
-    var lines = [{ handle: product.h, qty: state.qty, color: state.color }];
+    var lines = [{ handle: product().h, qty: state.qty, color: state.color }];
     if (state.refill) lines.push({ handle: 'refill', qty: 3, color: 'natural' });
-    if (state.keys)   lines.push({ handle: 'keychain', qty: state.keys, color: keyColor() });
+    if (state.mode === 'custom' && state.keys) lines.push({ handle: 'keychain', qty: state.keys, color: keyColor() });
     return lines;
   }
 
@@ -653,15 +597,17 @@ CC.initPDP = function () {
       p = CAT.BY_HANDLE[lines[i].handle];
       sum += CAT.priceFor(p, lines[i].qty);
     }
-    if (state.name) sum += CAT.ADDONS.name.price * state.qty;
+    if (state.mode === 'custom' && state.name) sum += CAT.ADDONS.name.price * state.qty;
     return Math.max(0, Math.round((sum - CAT.secondUnitDiscount(lines)) * 100) / 100);
   }
 
-  function swapPhoto(el, color) {
+  function swapPhoto(el, p, color) {
     if (!el) return;
+    el.setAttribute('data-cats', String(p.catCount || 1));
+    var src = CAT.colorImg(p, color);
+    if (src) el.setAttribute('data-photo', src); else el.removeAttribute('data-photo');
     el.setAttribute('data-way', color);
-    el.setAttribute('data-photo', CAT.colorImg(product, color));
-    el.setAttribute('data-alt', product.t);
+    el.setAttribute('data-alt', p.t);
     el.removeAttribute('data-painted');
     el.removeAttribute('data-real');
     el.classList.remove('ph');
@@ -669,7 +615,16 @@ CC.initPDP = function () {
   }
 
   function paint() {
-    swapPhoto(stage, state.color);
+    var p = product();
+    swapPhoto(stage, p, state.color);
+
+    Array.prototype.forEach.call(modeBtns, function (b) {
+      var on = b.getAttribute('data-pdp-mode') === state.mode;
+      b.setAttribute('aria-pressed', String(on));
+    });
+    if (personalize) personalize.hidden = state.mode !== 'custom';
+    if (baseFine)   baseFine.hidden = state.mode === 'custom';
+    if (customFine) customFine.hidden = state.mode !== 'custom';
 
     Array.prototype.forEach.call(picks, function (b) {
       var on = b.getAttribute('data-pdp-way') === state.color;
@@ -682,19 +637,20 @@ CC.initPDP = function () {
     if (wayLabel) wayLabel.textContent = CAT.COLOR_LABEL[state.color] || state.color;
 
     if (nameCt)   nameCt.textContent = state.name.length + '/' + MAXNAME;
-    if (nameEcho) nameEcho.textContent = state.name || 'Luna & Ruska';
+    if (nameEcho) nameEcho.textContent = state.name || namePlaceholder;
     if (qtyOut)   qtyOut.textContent = state.qty;
+    if (priceOut) priceOut.textContent = CC.money(p.price);
 
     if (qtyNote) {
       var off = Math.round(CAT.SECOND_UNIT_OFF * 100);
       if (state.qty === 1) {
         qtyNote.innerHTML = '<b>Add a second and it\u2019s ' + off + '% off</b> \u2014 ' +
-          CC.money(product.price * (1 - CAT.SECOND_UNIT_OFF)) + ' instead of ' +
-          CC.money(product.price) + '. Two cats, two rooms, or one for somebody else.';
+          CC.money(p.price * (1 - CAT.SECOND_UNIT_OFF)) + ' instead of ' +
+          CC.money(p.price) + '. Two cats, two rooms, or one for somebody else.';
         qtyNote.setAttribute('data-tone', 'offer');
       } else {
         qtyNote.innerHTML = '<b>Every second one is ' + off + '% off.</b> You\u2019re saving ' +
-          CC.money(CAT.secondUnitDiscount([{ handle: product.h, qty: state.qty }])) +
+          CC.money(CAT.secondUnitDiscount([{ handle: p.h, qty: state.qty }])) +
           ' on this order.';
         qtyNote.setAttribute('data-tone', 'won');
       }
@@ -702,6 +658,10 @@ CC.initPDP = function () {
 
     Array.prototype.forEach.call(addRows, function (r) {
       var kind = r.getAttribute('data-add');
+      if (kind === 'key') {
+        r.hidden = state.mode !== 'custom';
+        if (r.hidden && state.keys) state.keys = 0;
+      }
       var on = kind === 'refill' ? state.refill : state.keys === +r.getAttribute('data-keys');
       r.setAttribute('data-on', on ? '1' : '0');
       var tick = r.querySelector('.tick');
@@ -710,11 +670,23 @@ CC.initPDP = function () {
 
     if (totalOut) totalOut.textContent = CC.money(total());
     if (saveOut) {
-      var saved = CAT.secondUnitDiscount([{ handle: product.h, qty: state.qty }]);
+      var saved = CAT.secondUnitDiscount([{ handle: p.h, qty: state.qty }]);
       saveOut.textContent = saved > 0 ? 'You save ' + CC.money(saved) : '';
       saveOut.hidden = saved <= 0;
     }
   }
+
+  Array.prototype.forEach.call(modeBtns, function (b) {
+    b.addEventListener('click', function () {
+      var m = b.getAttribute('data-pdp-mode');
+      if (m === state.mode || (m === 'custom' && !customProduct)) return;
+      state.mode = m;
+      if (m === 'base') { state.name = ''; if (nameIn) nameIn.value = ''; state.keys = 0; }
+      var colors = product().colorsAvailable;
+      if (colors.indexOf(state.color) === -1) state.color = colors[0];
+      paint();
+    });
+  });
 
   Array.prototype.forEach.call(picks, function (b) {
     b.addEventListener('click', function () { state.color = b.getAttribute('data-pdp-way'); paint(); });
@@ -733,7 +705,7 @@ CC.initPDP = function () {
     var q = e.target.closest('[data-qty]');
     if (q) { state.qty = Math.max(1, Math.min(9, state.qty + (+q.getAttribute('data-qty')))); paint(); return; }
     var a = e.target.closest('[data-add]');
-    if (a) {
+    if (a && !a.hidden) {
       var kind = a.getAttribute('data-add');
       if (kind === 'refill') state.refill = !state.refill;
       else { var k = +a.getAttribute('data-keys'); state.keys = (state.keys === k) ? 0 : k; }
@@ -743,9 +715,12 @@ CC.initPDP = function () {
 
   if (addBtn) addBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    CC.cart.add({ h: product.h, qty: state.qty, color: state.color, name: state.name });
+    var p = product();
+    CC.cart.add({ h: p.h, qty: state.qty, color: state.color, name: state.mode === 'custom' ? state.name : '' });
     if (state.refill) CC.cart.add({ h: 'refill', qty: 3, color: 'natural' });
-    if (state.keys)   CC.cart.add({ h: 'keychain', qty: state.keys, color: keyColor(), name: state.name });
+    if (state.mode === 'custom' && state.keys) {
+      CC.cart.add({ h: 'keychain', qty: state.keys, color: keyColor(), name: state.name });
+    }
   });
 
   paint();
