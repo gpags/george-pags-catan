@@ -249,16 +249,18 @@ const PRODUCTS = [
 
   {id:106, h:'keychain', t:'Keychain of your cat', v:'keychain', size:'S', price:4,
    sales:0, new:0, badge:'', exclusive:1,
-   /* Only meaningful once a cat's likeness has actually been drawn, so
-      it shares the one meadow finish rather than its own colorway.
-      Basking Paws has no personalised tier any more (see above), so
-      this only ever rides along with a Homestead Buddies custom order. */
-   colorsAvailable:['meadow'],
+   /* Rides along with any scratcher now, in that scratcher's own color:
+      the Basking Paws coat picked, or the shared Homestead Buddies
+      meadow finish. personalised:false because a coat-matched keychain
+      needs no photo of its own — when it DOES carry a real likeness
+      (added from a Homestead Buddies custom order) the scratcher line
+      it travels with is what sets metadata.needs_photo, not this one. */
+   colorsAvailable:['tuxedo','orange','calico','black','greywhite','grey','meadow'],
    bundlePrices:[[1,4],[2,6]],
-   canonical:'homestead-buddies.html',
+   canonical:'basking-paws.html',
    img:'images/keychains.jpg',
-   personalised:true,
-   desc:'The same cat we drew for your scratcher, pocket-sized. Only available with a personalised scratcher — the artwork has to exist first.',
+   personalised:false,
+   desc:'The same cat as your scratcher, pocket-sized. Only available alongside a scratcher order.',
    /*TODO*/ weightOz:1, boxClass:'poly-S', stock:99, photoReal:true}
 ];
 

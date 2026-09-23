@@ -369,13 +369,10 @@ section{padding:60px 0}
    ================================================================ */
 .pdp{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;padding-top:24px}
 @media(max-width:980px){.pdp{grid-template-columns:1fr;gap:26px}}
-/* top:82px clears the sticky nav-strip (~54px) plus a little air — at
-   top:20px the carousel used to duck half-behind the nav as you
-   scrolled, which read as the picture "moving". The carousel itself
-   (not this wrapper) now owns the border/shadow/aspect-ratio, so a
-   real photo carousel and this sticky column can share one page. */
-.pdp-media{position:sticky;top:82px}
-@media(max-width:980px){.pdp-media{position:static}}
+/* Deliberately NOT sticky — a sticky carousel still moves once the
+   right column runs out (it unsticks and scrolls with the page), which
+   read as the picture "moving". Plain static flow, no motion at all. */
+.pdp-media{position:static}
 .pdp-media .carousel{margin-top:0}
 .pdp-media .art{width:100%;height:100%}
 .pdp-media .art img{object-fit:cover}
@@ -383,13 +380,15 @@ section{padding:60px 0}
 .thumb{width:70px;height:70px;border-radius:14px;overflow:hidden;border:3px solid var(--line);padding:0;background:#fff}
 .thumb[aria-pressed="true"]{border-color:var(--pink)}
 .thumb .art{aspect-ratio:1;border-radius:0}
-.pdp h1{font-size:clamp(1.8rem,3.4vw,2.5rem)}
-.pdp .price-row{display:flex;align-items:baseline;gap:12px;margin:12px 0 6px;flex-wrap:wrap}
-.pdp .price{font-family:'Fredoka',sans-serif;font-size:36px}
+/* Compact on purpose — the buybox should sit close to the fold, not
+   several screens down. */
+.pdp h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+.pdp .price-row{display:flex;align-items:baseline;gap:12px;margin:8px 0 4px;flex-wrap:wrap}
+.pdp .price{font-family:'Fredoka',sans-serif;font-size:32px}
 .pdp .price-note{font-size:13.5px;font-weight:800;color:var(--muted)}
-.optblock{border-top:2px dashed var(--line);padding-top:20px;margin-top:20px}
+.optblock{border-top:2px dashed var(--line);padding-top:14px;margin-top:14px}
 .optblock>.lbl{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
-  font-size:12.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);margin-bottom:13px}
+  font-size:12.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px}
 .optblock>.lbl .val{color:var(--pink);letter-spacing:0;text-transform:none;font-size:15px}
 .field input[type=text]{width:100%;font:inherit;font-weight:700;font-size:17px;padding:13px 16px;
   border:2.5px solid var(--line);border-radius:14px;background:#fff;color:var(--ink)}
@@ -419,7 +418,7 @@ section{padding:60px 0}
 .qty-note[data-tone="won"]{background:var(--mint-100);color:var(--mint-800);border:2px solid var(--mint)}
 
 .addrow{display:flex;gap:13px;align-items:center;border:2.5px solid var(--line);border-radius:var(--r);
-  padding:14px 16px;margin-bottom:11px;transition:border-color .16s,background .16s;cursor:pointer}
+  padding:11px 16px;margin-bottom:9px;transition:border-color .16s,background .16s;cursor:pointer}
 .addrow:hover{border-color:var(--pink-300)}
 .addrow[data-on="1"]{border-color:var(--pink);background:var(--pink-50)}
 .addrow .tick{flex:none;width:25px;height:25px;border-radius:8px;border:2.5px solid var(--line);
@@ -432,12 +431,12 @@ section{padding:60px 0}
 .save{display:inline-block;background:var(--mint);color:var(--mint-900);font-size:11px;font-weight:800;
   padding:2px 8px;border-radius:999px;margin-left:6px;letter-spacing:.04em}
 
-.buybox{border:3px solid var(--ink);border-radius:var(--r-lg);padding:20px;margin-top:24px;background:#fff}
+.buybox{border:3px solid var(--ink);border-radius:var(--r-lg);padding:16px 20px;margin-top:16px;background:#fff}
 .buybox .tot{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
 .buybox .tot .l{font-size:12.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .buybox .tot .v{font-family:'Fredoka',sans-serif;font-size:30px}
 .buybox .saved{font-size:13px;font-weight:800;color:var(--mint-800);margin-bottom:14px}
-.trust{display:grid;gap:9px;margin-top:16px;font-size:13.5px;color:var(--muted)}
+.trust{display:grid;gap:7px;margin-top:12px;font-size:13px;color:var(--muted)}
 .trust div{display:flex;gap:9px;align-items:flex-start}
 .trust b{color:var(--ink)}
 

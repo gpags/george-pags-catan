@@ -608,7 +608,7 @@ CC.initPDP = function () {
   function draft() {
     var lines = [{ handle: product().h, qty: state.qty, color: state.color }];
     if (state.refill) lines.push({ handle: 'refill', qty: 3, color: 'natural' });
-    if (state.mode === 'custom' && state.keys) lines.push({ handle: 'keychain', qty: state.keys, color: keyColor() });
+    if (state.keys) lines.push({ handle: 'keychain', qty: state.keys, color: keyColor() });
     return lines;
   }
 
@@ -682,7 +682,12 @@ CC.initPDP = function () {
     Array.prototype.forEach.call(addRows, function (r) {
       var kind = r.getAttribute('data-add');
       if (kind === 'key') {
-        r.hidden = state.mode !== 'custom';
+        /* Basking Paws has no custom/base split at all (customProduct is
+           null there) — a keychain just matches whichever coat is picked,
+           so it's always offered. Homestead Buddies still gates it to
+           "Made for your cats", since a keychain there only makes sense
+           once a real likeness exists. */
+        r.hidden = !!customProduct && state.mode !== 'custom';
         if (r.hidden && state.keys) state.keys = 0;
       }
       var on = kind === 'refill' ? state.refill : state.keys === +r.getAttribute('data-keys');
@@ -741,7 +746,7 @@ CC.initPDP = function () {
     var p = product();
     CC.cart.add({ h: p.h, qty: state.qty, color: state.color, name: state.mode === 'custom' ? state.name : '' });
     if (state.refill) CC.cart.add({ h: 'refill', qty: 3, color: 'natural' });
-    if (state.mode === 'custom' && state.keys) {
+    if (state.keys) {
       CC.cart.add({ h: 'keychain', qty: state.keys, color: keyColor(), name: state.name });
     }
   });
