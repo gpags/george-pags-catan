@@ -11,6 +11,32 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link href="../assets/rp.css" rel="stylesheet">
+<link rel="icon" type="image/jpeg" href="../images/bp-logo.jpg">
+<!-- Cat Scratchers palette override — rp.css is shared with the rest of
+     the Realized Prints umbrella (Catan Artisan, Meow Meow, Custom
+     Figurines), so its own file stays untouched. Every rp.css rule reads
+     these same custom-property names, so redefining them here recolors
+     every generated page (this one included) to match the live
+     Cat Scratchers brand without forking the stylesheet. -->
+<style>
+:root{
+  --blue:#3f8ee8; --blue-600:#1f66b8; --blue-300:#8dc4f6; --blue-50:#eaf4ff; --blue-100:#dcecff; --blue-200:#c3d9fb; --blue-900:#12305e;
+  --pink:#ef8a2e; --pink-600:#d16f16; --pink-300:#f7bd85; --pink-50:#fff3e6; --pink-200:#fad2a8;
+  /* pink-900/pink-100 are the footer's bg/text pair (rp.css's own comment
+     calls this out as the swap point) — navy, to match the rest of the
+     site's footer, not another orange. */
+  --pink-900:#1f3a5c; --pink-100:#c9d8ea;
+  --yellow:#ffcf3f; --mint:#4fa156; --mint-100:#dcefd9; --mint-200:#bfe3b8; --mint-800:#265c2e; --mint-900:#173f1f;
+  --grape:#a855f7; --tangerine:#ff8a3d;
+  --ink:#1f3a5c; --ink-2:#35547a; --muted:#6b7f97;
+  --paper:#fff; --paper-2:#f2f8ff; --line:#dde6f0;
+  --shadow:0 2px 4px rgba(31,58,92,.05), 0 12px 28px -14px rgba(63,142,232,.30);
+  --shadow-lift:0 4px 8px rgba(31,58,92,.07), 0 28px 54px -22px rgba(239,138,46,.45);
+}
+/* Disabled for now, same as the rest of the site — delete this rule to
+   bring the countdown bar back. */
+.drop-bar{display:none}
+</style>
 </head>
 <body data-base="../">
 
@@ -36,7 +62,7 @@
       <div class="soc"><a class="ibtn" href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a><a class="ibtn" href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a><a class="ibtn" href="https://youtube.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a></div>
     </div>
     <a class="brand" href="../index.html">
-      <span class="brand-name">CatCustoms</span>
+      <span class="brand-name">Cat Scratchers</span>
       <span class="brand-sub">by Realized Prints</span>
     </a>
     <div class="head-right">
@@ -48,16 +74,17 @@
   </div>
 </header>
 
-<!-- The same five links as the hand-designed CatCustoms pages, in the same
+<!-- The same links as the hand-designed Cat Scratchers pages, in the same
      order, so the nav does not change shape when a customer crosses from
-     index.html into a generated page. The old "Shop" dropdown is gone: it was
-     built at runtime from the catalog's vibes and pointed at /products/ pages
-     that no longer exist. rp.js mountShopDropdown() no-ops without #shopDrop. -->
+     index.html into a generated page. Cattoo is deliberately not linked
+     here — pulled site-wide for now, same as everywhere else. The old
+     "Shop" dropdown is gone: it was built at runtime from the catalog's
+     vibes and pointed at /products/ pages that no longer exist. rp.js
+     mountShopDropdown() no-ops without #shopDrop. -->
 <nav class="nav-strip" aria-label="Main">
   <div class="wrap nav-in">
     <div><a class="nlink" href="../pages/contact.html">Contact Us</a></div>
-    <div><a class="nlink" href="../index.html#templates">Templates</a></div>
-    <div><a class="nlink" href="../cc-custom.html">Cattoo</a></div>
+    <div><a class="nlink" href="../index.html#templates">Scratchers</a></div>
     <div><a class="nlink" href="../cc-partner.html">Affiliates</a></div>
     <div><a class="nlink" href="../index.html#faq">FAQ</a></div>
   </div>
@@ -148,8 +175,7 @@
         <div class="foot-soc"><a class="" href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a><a class="" href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a><a class="" href="https://youtube.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a></div>
       </div>
       <div><h4>Shop</h4><ul>
-        <li><a href="../index.html#templates">Templates</a></li>
-        <li><a href="../cc-custom.html">Cattoo &mdash; 1-of-1</a></li>
+        <li><a href="../index.html#templates">Scratchers</a></li>
         <li><a href="../cc-refills.html">Refill inserts</a></li>
       </ul></div>
       <div><h4>Other lines</h4><ul>
