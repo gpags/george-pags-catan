@@ -77,6 +77,32 @@ const head = (b, title, desc) => `<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link href="${b}assets/rp.css" rel="stylesheet">
+<link rel="icon" type="image/jpeg" href="${b}images/bp-logo.jpg">
+<!-- Cat Scratchers palette override — rp.css is shared with the rest of
+     the Realized Prints umbrella (Catan Artisan, Meow Meow, Custom
+     Figurines), so its own file stays untouched. Every rp.css rule reads
+     these same custom-property names, so redefining them here recolors
+     every generated page (this one included) to match the live
+     Cat Scratchers brand without forking the stylesheet. -->
+<style>
+:root{
+  --blue:#3f8ee8; --blue-600:#1f66b8; --blue-300:#8dc4f6; --blue-50:#eaf4ff; --blue-100:#dcecff; --blue-200:#c3d9fb; --blue-900:#12305e;
+  --pink:#ef8a2e; --pink-600:#d16f16; --pink-300:#f7bd85; --pink-50:#fff3e6; --pink-200:#fad2a8;
+  /* pink-900/pink-100 are the footer's bg/text pair (rp.css's own comment
+     calls this out as the swap point) — navy, to match the rest of the
+     site's footer, not another orange. */
+  --pink-900:#1f3a5c; --pink-100:#c9d8ea;
+  --yellow:#ffcf3f; --mint:#4fa156; --mint-100:#dcefd9; --mint-200:#bfe3b8; --mint-800:#265c2e; --mint-900:#173f1f;
+  --grape:#a855f7; --tangerine:#ff8a3d;
+  --ink:#1f3a5c; --ink-2:#35547a; --muted:#6b7f97;
+  --paper:#fff; --paper-2:#f2f8ff; --line:#dde6f0;
+  --shadow:0 2px 4px rgba(31,58,92,.05), 0 12px 28px -14px rgba(63,142,232,.30);
+  --shadow-lift:0 4px 8px rgba(31,58,92,.07), 0 28px 54px -22px rgba(239,138,46,.45);
+}
+/* Disabled for now, same as the rest of the site — delete this rule to
+   bring the countdown bar back. */
+.drop-bar{display:none}
+</style>
 </head>
 <body data-base="${b}">`;
 
@@ -103,7 +129,7 @@ const chromeTop = b => `
       <div class="soc">${socLinks('ibtn')}</div>
     </div>
     <a class="brand" href="${b}index.html">
-      <span class="brand-name">CatCustoms</span>
+      <span class="brand-name">Cat Scratchers</span>
       <span class="brand-sub">by Realized Prints</span>
     </a>
     <div class="head-right">
@@ -115,16 +141,17 @@ const chromeTop = b => `
   </div>
 </header>
 
-<!-- The same five links as the hand-designed CatCustoms pages, in the same
+<!-- The same links as the hand-designed Cat Scratchers pages, in the same
      order, so the nav does not change shape when a customer crosses from
-     index.html into a generated page. The old "Shop" dropdown is gone: it was
-     built at runtime from the catalog's vibes and pointed at /products/ pages
-     that no longer exist. rp.js mountShopDropdown() no-ops without #shopDrop. -->
+     index.html into a generated page. Cattoo is deliberately not linked
+     here — pulled site-wide for now, same as everywhere else. The old
+     "Shop" dropdown is gone: it was built at runtime from the catalog's
+     vibes and pointed at /products/ pages that no longer exist. rp.js
+     mountShopDropdown() no-ops without #shopDrop. -->
 <nav class="nav-strip" aria-label="Main">
   <div class="wrap nav-in">
     <div><a class="nlink" href="${b}pages/contact.html">Contact Us</a></div>
-    <div><a class="nlink" href="${b}index.html#templates">Templates</a></div>
-    <div><a class="nlink" href="${b}cc-custom.html">Cattoo</a></div>
+    <div><a class="nlink" href="${b}index.html#templates">Scratchers</a></div>
     <div><a class="nlink" href="${b}cc-partner.html">Affiliates</a></div>
     <div><a class="nlink" href="${b}index.html#faq">FAQ</a></div>
   </div>
@@ -159,8 +186,7 @@ const footer = b => `
         <div class="foot-soc">${socLinks('')}</div>
       </div>
       <div><h4>Shop</h4><ul>
-        <li><a href="${b}index.html#templates">Templates</a></li>
-        <li><a href="${b}cc-custom.html">Cattoo &mdash; 1-of-1</a></li>
+        <li><a href="${b}index.html#templates">Scratchers</a></li>
         <li><a href="${b}cc-refills.html">Refill inserts</a></li>
       </ul></div>
       <div><h4>Other lines</h4><ul>
