@@ -33,7 +33,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-06-20',
 });
 
-const SITE = 'https://realizedprints.com';
+/* Where Stripe sends the customer back to. Override with SITE_URL in Vercel
+   if the domain ever changes; realizedprints.com only redirects here now. */
+const SITE = process.env.SITE_URL || 'https://www.mycatscratcher.com';
 
 /* Weight-banded USPS Ground Advantage, computed before the session is made.
    Stripe Checkout cannot fetch live carrier rates mid-session, so the band is

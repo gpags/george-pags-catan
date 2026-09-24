@@ -169,7 +169,7 @@ function customerEmail(session, md) {
 
       <p style="font-size:13px;color:#777;margin:0">
         Order reference <strong>${esc(String(session.id).slice(-12).toUpperCase())}</strong><br>
-        Made to order in the USA · returns and shipping terms at realizedprints.com/pages/policies
+        Made to order in the USA · returns and shipping terms at mycatscratcher.com/pages/policies
       </p>
     </div>`;
 
