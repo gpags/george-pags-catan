@@ -153,7 +153,7 @@ const chromeTop = b => `
     <div><a class="nlink" href="${b}pages/contact.html">Contact Us</a></div>
     <div><a class="nlink" href="${b}index.html#templates">Scratchers</a></div>
     <div><a class="nlink" href="${b}cc-partner.html">Affiliates</a></div>
-    <div><a class="nlink" href="${b}index.html#faq">FAQ</a></div>
+    <div><a class="nlink" href="${b}pages/policies.html#faq">FAQ</a></div>
   </div>
 </nav>`;
 
@@ -197,7 +197,7 @@ const footer = b => `
       <div><h4>Help</h4><ul>
         <li><a href="${b}pages/policies.html#shipping">Shipping</a></li>
         <li><a href="${b}pages/policies.html#returns">Returns</a></li>
-        <li><a href="${b}pages/faq.html">FAQ</a></li>
+        <li><a href="${b}pages/policies.html#faq">FAQ</a></li>
         <li><a href="${b}pages/terms.html">Terms</a></li>
         <li><a href="${b}pages/privacy.html">Privacy</a></li>
         <li><a href="${b}pages/contact.html">Contact</a></li>
@@ -490,215 +490,242 @@ ${footer(b)}
 `;
 }
 
-/* ---------- POLICIES ---------- */
+/* ---------- POLICIES + FAQ (one page) ----------
+   pages/faq.html is now only a redirect to #faq on this page (see
+   redirectPage below and vercel.json), so every answer lives in one place.
+   Every price here is read from assets/catalog.js — never type one in. */
+const m = n => '$' + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
+const REFILL = BY_HANDLE.refill, KEYCHAIN = BY_HANDLE.keychain;
+const HALF = Math.round(CATALOG.SECOND_UNIT_OFF * 100);
+const refillLadder = CATALOG.packsFor(REFILL)
+  .map(([q]) => `${q === 1 ? 'one pad' : q + ' pads'} for ${m(priceFor(REFILL, q))}`).join(', ');
+const keyLadder = CATALOG.packsFor(KEYCHAIN)
+  .map(([q]) => `${q === 1 ? 'one' : q} for ${m(priceFor(KEYCHAIN, q))}`).join(', ');
+const POLICIES_UPDATED = 'September 24, 2026';
+
+/* ---------- FAQ ----------
+   Rendered as the #faq section of pages/policies.html.
+   [anchor id, heading, [[question, answer, optional question id], ...]] */
+const FAQ = [
+  ['faq-orders', 'Orders &amp; shipping', [
+    ['How long does it take?',
+     '<p>1–2 business days to make once your photo arrives, then 3–5 business days in the mail. We email you photo and video updates while it\'s being made, so you\'re never left guessing.</p>'],
+    ['When do I send my cat\'s photo?',
+     '<p>After you order. There\'s nothing to upload before you pay. We email you, and you reply with a clear photo of each cat, plus the names you want on Homestead Buddies.</p>'],
+    ['What if I don\'t send a photo straight away?',
+     '<p>Your order waits on hold, and we\'ll send you a reminder or two. If we haven\'t heard from you within 30 days, we cancel and refund you in full.</p>'],
+    ['Where is my order?',
+     '<p>Your tracking number is in the email we send when the label is made. If tracking hasn\'t moved for 7 business days, <a href="contact.html">message us</a> and we\'ll chase it. See <a href="#shipping">lost, late or missing parcels</a>.</p>'],
+    ['Can I send it to someone else as a gift?',
+     '<p>Yes. Put their address as the shipping address at checkout and your own email, so the photo request and progress updates come to you. Message us if you\'d like a note put in the box.</p>'],
+    ['Do you ship outside the U.S.?',
+     '<p>Not yet. U.S. addresses only for now.</p>']
+  ]],
+  ['faq-scratcher', 'Your scratcher', [
+    ['Will it look exactly like my cat?',
+     '<p>Not exactly. Here\'s the honest answer:</p><ul><li>We paint the 3D model in software.</li><li>We match it as closely as we can to your cat\'s pattern.</li><li>We simplify some patterns to suit the art style.</li><li>Colours and markings come through. Fine detail does not.</li></ul>'],
+    ['One cat or two: which one do I want?',
+     '<p><a href="../basking-paws.html">Basking Paws</a> has one cat and no nameplate. <a href="../homestead-buddies.html">Homestead Buddies</a> has two cats and their names on the front. Only have one cat but want names? Order Homestead Buddies and tell us what you\'d like in the second spot.</p>'],
+    ['How big is it?',
+     '<p>Basking Paws is about 17.7 × 11.8 × 7.9 in (450 × 300 × 200 mm) and weighs around 5 lb.</p>'],
+    ['How do refills work?',
+     '<p>The pad lifts out and a new one drops in. No glue, no tools. Most cats need a new pad every 2 months, but most owners swap theirs about every 6. Prices: ' + refillLadder + '. <a href="../cc-refills.html">Buy refills</a>.</p>'],
+    ['What if my cat ignores it?',
+     '<p>Put it where they already scratch. Next to the couch or on a rug works best. A little catnip on the pad helps too. Still no luck? Message us and we\'ll help as best we can.</p>', 'faq-ignores'],
+    ['Is it safe for my cat?',
+     '<p>Yes, it\'s made to be scratched. Stand it on a flat, stable floor, swap the pad once it\'s shredded flat, and stop using it if any part ever comes loose. See <a href="#care">care &amp; safety</a>.</p>']
+  ]],
+  ['faq-problems', 'Problems', [
+    ['It arrived damaged.',
+     '<p>Message us within 7 days of delivery with photos of the damage, the box and the label, and we\'ll replace it free. Don\'t send it back unless we ask. <a href="#damage">Full details</a>.</p>'],
+    ['A part broke after a few weeks.',
+     '<p>If it failed under normal use within 30 days of delivery, we replace the part free. Past that, or if it was an accident, message us anyway. A replacement part is often cheap.</p>'],
+    ['You got something wrong.',
+     '<p>Wrong item, a name we misspelled, the wrong number of cats: it\'s our mistake, and we remake it free.</p>'],
+    ['Can I change or cancel my order?',
+     '<p>Yes, for a full refund, any time before we start making it. <a href="contact.html">Message us</a> as soon as you can.</p>']
+  ]],
+  ['faq-partners', 'Partners', [
+    ['I run a vet clinic, shelter, pet store or sitting business. Can we work together?',
+     '<p>Yes. See <a href="../cc-partner.html">partner options</a>. No stock, no packing, and you earn on every order.</p>']
+  ]]
+];
+
 const policiesBody = `
-<h2 id="shipping">Shipping policy</h2>
-
-<h3>Free shipping</h3>
-<p>Free USPS Ground Advantage shipping on U.S. domestic orders over <strong>$${FREE_SHIP}</strong>. Below
-that, a flat rate is calculated at checkout.</p>
-
-<h3>Processing time</h3>
-<p>Everything is made after you order it — nothing sits on a shelf. Allow
-<strong>1–2 business days</strong> (Mon–Fri, excluding holidays) for us to make, finish, and pack
-your order before it ships, then 3–5 business days in transit. Busy drop weeks can push this slightly longer; if it does, we email you.</p>
-<div class="callout note"><strong>Made to match your cat?</strong> The clock starts when your
-photo arrives, not when you order. We email you photo and video updates along the way.</div>
-
-<h3>Carriers</h3>
+<div class="callout note"><strong>The short version.</strong>
 <ul>
-  <li><strong>United States only, for now.</strong> USPS Ground Advantage on every order.
-      Checkout only accepts U.S. shipping addresses.</li>
-  <li><strong>International</strong> — not yet. We'd rather not take your money and then discover
-      the customs paperwork makes a $15 keychain cost $40 to deliver. It's on the list.</li>
-</ul>
+  <li>Made in <strong>1–2 business days</strong> once your cat's photo arrives, then <strong>3–5 business days</strong> in the mail. U.S. only.</li>
+  <li>Free shipping on orders over <strong>${m(FREE_SHIP)}</strong>.</li>
+  <li>Arrived damaged? Tell us within <strong>7 days</strong> of delivery, with photos, and we replace it free.</li>
+  <li>A part fails within <strong>30 days</strong>? Also covered.</li>
+  <li>Every scratcher is made for your cat, so we can't take change-of-mind returns. You can cancel for a
+      full refund any time before we start making it.</li>
+</ul></div>
+
+<h2 id="shipping">Shipping</h2>
+
+<h3>Where we ship</h3>
+<p>Any U.S. address, including Alaska, Hawaii and PO boxes. We don't ship internationally yet.</p>
+
+<h3>How long it takes</h3>
+<table>
+  <tr><th>Step</th><th>Time</th></tr>
+  <tr><td>You reply to our email with a photo of your cat</td><td>Whenever you're ready. Your order waits for it.</td></tr>
+  <tr><td>We make your scratcher</td><td>1–2 business days after the photo arrives</td></tr>
+  <tr><td>In the mail</td><td>3–5 business days</td></tr>
+</table>
+<p>Business days are Monday to Friday, not counting U.S. federal holidays. We email you photo and video
+updates of your actual piece while it's being made, then a tracking number when it ships.</p>
+
+<h3>Shipping cost</h3>
+<p>Shipping is worked out at checkout from the size and weight of your order, and you see it before you
+pay. Orders over <strong>${m(FREE_SHIP)}</strong> ship free.</p>
 
 <h3>Tracking</h3>
-<p>A tracking number is emailed when your order is packed and about to ship. Carrier scans often
-lag by a day or two after that first email — a tracking number that has not moved yet is normal.</p>
+<p>We email a tracking number when the label is made. The carrier's first scan can lag a day or two
+behind that email. That's normal.</p>
 
-<h2 id="returns">Returns, refunds &amp; replacements</h2>
-<p>Everything is handmade to order in small batches, so <strong>all sales are final</strong> except
-in the cases below.</p>
+<h3>Address mistakes</h3>
+<p>Please double-check your address at checkout. Spotted a mistake? Message us straight away and we'll fix
+it before the label is made. If a parcel comes back to us because of an address error, we'll send it
+again. You'll only pay the new postage.</p>
 
-<h3>What is covered</h3>
+<h3>Lost, late or missing parcels</h3>
 <ul>
-  <li>Your item arrives <strong>damaged</strong>.</li>
-  <li>Your item <strong>fails from a material or print defect within 30 days</strong> of purchase.</li>
-  <li>We sent the wrong item, colour, or add-on.</li>
+  <li><strong>Tracking hasn't moved for 7 business days?</strong> Message us. We'll chase the carrier and
+      open a claim. If the carrier confirms the parcel is lost, we remake it and send it again, free.</li>
+  <li><strong>Marked delivered but not there?</strong> Check around your door, with neighbours and in any
+      mailroom. Then give it 48 hours, because parcels marked delivered early often turn up. Still missing?
+      Message us within 7 days of the delivery scan and we'll help you file a claim with the carrier.
+      Once a parcel is marked delivered to the address you gave us, we can't cover theft ourselves. Your
+      homeowner's or renter's insurance may cover it.</li>
 </ul>
 
-<h3>What is not covered</h3>
+<h2 id="orders">Orders, changes &amp; cancellations</h2>
 <ul>
-  <li>Damage from drops, pets, dishwashers, heat, or normal wear.</li>
-  <li>Change of mind on a personalised item — engraved names and pattern-matched prints
-      cannot be resold, so they cannot be refunded.</li>
-  <li>Minor colour or layer variation between batches (see <a href="#variance">colour variance</a>).</li>
+  <li><strong>Changes</strong> to names, coat or address are free until we start making your scratcher.
+      Just message us.</li>
+  <li><strong>Cancel for a full refund</strong> any time before we start making it. Once we've started,
+      it's being made for your cat, so it can't be cancelled.</li>
+  <li><strong>Waiting on your photo:</strong> your order stays on hold until your photo arrives, and we'll
+      send you friendly reminders. If we haven't heard from you within <strong>30 days</strong>, we'll
+      cancel the order and refund you in full.</li>
 </ul>
 
-<h3>How to make a claim</h3>
+<h2 id="returns">Returns &amp; refunds</h2>
+<p>Every scratcher is made to order for one cat, so we can't resell it. That means
+<strong>no returns for change of mind</strong>, or because your cat isn't interested yet. Before you give
+up, see <a href="#faq-ignores">what to do if your cat ignores it</a>.</p>
+<h3>When we make it right</h3>
+<ul>
+  <li>It arrived damaged, or a part failed within 30 days (see <a href="#damage">Damage &amp; defects</a>).</li>
+  <li>We made a mistake: the wrong item, a name we misspelled, or the wrong number of cats.
+      We remake it free.</li>
+</ul>
+<h3>Refill pads</h3>
+<p>Unopened refill pads can be returned within 30 days of delivery. You pay the return postage, and we
+refund the pads once they're back with us.</p>
+<h3>How refunds are paid</h3>
+<p>Refunds go back to your original payment method within 5 business days of approval. Your bank may
+take another 3–10 business days to show it.</p>
+
+<h2 id="damage">Damage &amp; defects</h2>
+
+<h3>Damaged on arrival</h3>
 <ol>
-  <li>Message us through the <a href="contact.html">contact page</a> within
-      <strong>7 days of delivery</strong> for damage on arrival, or within
-      <strong>30 days of purchase</strong> for a material defect.</li>
-  <li>Include your <strong>order number</strong> and clear <strong>photos of the item and the packaging</strong>.</li>
-  <li>We reply within 1–2 business days.</li>
+  <li>Message us within <strong>7 days of delivery</strong> through the <a href="contact.html">contact page</a>
+      or by replying to your order email.</li>
+  <li>Include your order reference and clear photos of <strong>the damage</strong>, <strong>the outside of
+      the box</strong> and <strong>the shipping label</strong>.</li>
+  <li>Keep the box and packing until we've sorted it out. The carrier sometimes asks to see them.</li>
 </ol>
-<p>Approved claims get a replacement. If the item is out of stock, you can choose store credit or
-a refund instead. <strong>Do not send anything back unless we ask you to</strong> — usually we won't.</p>
+<p>We'll send a replacement part, or a whole new scratcher if the damage calls for it, at no cost. Don't
+send anything back unless we ask.</p>
 
-<h3>Timing</h3>
-<table>
-  <tr><th>Outcome</th><th>Processed within</th></tr>
-  <tr><td>Replacement made and shipped</td><td>1–2 business days, then transit</td></tr>
-  <tr><td>Store credit issued</td><td>5 business days</td></tr>
-  <tr><td>Refund to original payment method</td><td>5 business days</td></tr>
-</table>
-<p>Refunds land back on your card 3–10 business days after we issue them, depending on your bank.</p>
+<h3>Defects within 30 days</h3>
+<p>If a part breaks, splits or comes loose under normal use within 30 days of delivery, we replace that
+part free. If a replacement part can't fix it, we replace the scratcher.</p>
 
-<h3>Cancellations and changes</h3>
-<p>We can change or cancel an order any time before it goes on the printer — usually within about
-24 hours. After that the filament is committed and we can't stop it. Message us as fast as you can
-and we'll do what we can.</p>
-
-<h2 id="custom">Custom orders &amp; personalisation</h2>
-
-<h3>Exact pattern match</h3>
-<p>Choose <strong>Exact pattern match</strong> on any product and check out as normal — there is
-nothing to upload before you pay. We ask for the photo on the confirmation screen, and again by
-email, so you can send it whenever suits you.</p>
+<h3>What isn't covered</h3>
 <ul>
-  <li>One clear, well-lit photo of your cat is plenty.</li>
-  <li>We hand-pick filament to match the coat and send you a photo before it ships.</li>
-  <li>If we haven't received a photo within <strong>7 days</strong>, we print the preset colour you
-      selected so your order isn't stuck, and refund the match fee.</li>
-</ul>
-<div class="callout warn"><strong>What a match can and can't do.</strong> These are printed in a
-handful of solid filament colours, not painted. We match the coat <em>pattern and colours</em> —
-tuxedo markings, calico patches, tabby stripes. We can't reproduce individual fur detail or exact
-shading, and we'd rather tell you that now than disappoint you later.</div>
-
-<h3>Name engraving</h3>
-<p>Names are engraved into the base exactly as you type them, so please check the spelling. Once a
-personalised print starts we can't change it. Up to 18 characters.</p>
-
-<h2 id="bundles">Bundle offers</h2>
-<p>Buy more of the same cat and the price per cat drops. The bundle price is
-applied automatically in the cart, and it's shown on the product page first, so
-the price never changes on you at checkout.</p>
-<p>Which rungs a product has depends on its size — bigger cats take far longer to
-print, so their bundles are smaller:</p>
-<table>
-  <tr><th>Size</th><th>Bundles offered</th></tr>
-${LADDERS.map(([size, rows]) => `  <tr><td>${{S:'Small', M:'Medium', L:'Large'}[size]}</td><td>${rows.map(([q, add]) => q + (add ? ' for base +$' + add : ' at base price')).join(' &middot; ')}</td></tr>`).join('\n')}
-</table>
-<p>For example a $15 Cat Clicker runs 1 for $15, 3 for $20, 5 for $25 and 10 for $30.
-The exact prices are on every product page.</p>
-<ul>
-  <li>Bundles apply <strong>per product line</strong> — the units are the same product,
-      and you can pick a different colour for each.</li>
-  <li>Engraving and pattern match are charged on <strong>every unit</strong>, since each
-      one is done by hand.</li>
-  <li>If a quantity falls between two rungs you're charged whichever is cheaper —
-      you'll never pay more for buying more.</li>
-  <li>Not combinable with discount codes.</li>
+  <li>Shredded cardboard pads. Shredding is their job, and <a href="../cc-refills.html">refills</a> replace them.</li>
+  <li>Damage from chewing, drops, water, outdoor use or modifications.</li>
+  <li>Normal wear: scuffs, scratches on the frame, fading in direct sun.</li>
+  <li>Small differences from photos or screens (see <a href="#custom">how we match your cat</a>).</li>
 </ul>
 
-<h2 id="variance">Colour, finish &amp; variance</h2>
+<h3>How we handle claims</h3>
+<p>We reply within 1–2 business days. We may ask for another photo or a short video, and now and then
+for the broken part back (we pay the postage). If we can't replace something, we refund it instead.
+We look at every claim individually.</p>
+
+<h2 id="custom">Your cat's photo &amp; personalisation</h2>
+<h3>Sending your photo</h3>
+<p>After you order, we email you. Reply with <strong>one clear, well-lit photo of each cat</strong>. The
+whole cat in daylight works best, and asleep on a blanket is perfect. Nothing to upload before you pay.</p>
+<h3>How we match your cat</h3>
 <ul>
-  <li>Filament varies slightly between batches. Two prints of the same colour won't be identical.</li>
-  <li>Screens differ. Colours in photos are a guide, not a guarantee.</li>
-  <li>Faint layer lines are a normal, visible part of 3D printing, not a defect.</li>
-  <li>Sizes are approximate and listed per product.</li>
+  <li>We paint the 3D model in software, matching your cat's colours and markings as closely as the art
+      style allows.</li>
+  <li>Some complex patterns are simplified to suit the style.</li>
+  <li>Colours and markings come through. Fine fur detail does not.</li>
+</ul>
+<h3>Names</h3>
+<p>Homestead Buddies carries your cats' names, up to 18 characters, printed exactly as you type them.
+Please check the spelling. If we get it wrong, we remake it free. Basking Paws has no nameplate.</p>
+<h3>Your photos stay private</h3>
+<p>We use your photos only to make your order, and never post them or your finished piece without asking
+first. See our <a href="privacy.html">privacy policy</a>.</p>
+
+<h2 id="pricing">Pricing, discounts &amp; payment</h2>
+<ul>
+  <li>Prices are in U.S. dollars. Sales tax is added at checkout where it applies.</li>
+  <li><strong>Buy one, get one ${HALF}% off:</strong> every second scratcher in the same order is ${HALF}% off,
+      applied automatically to the lower-priced one.</li>
+  <li><strong>Refill pads:</strong> ${refillLadder}.</li>
+  <li><strong>Keychains</strong> (only with a scratcher): ${keyLadder}.</li>
+  <li>Discount codes go in at checkout, one per order. We can't add a code after an order is placed.</li>
+  <li>Payment runs through Stripe's secure checkout: card, Apple Pay, Google Pay or Link. We never see
+      your full card number.</li>
 </ul>
 
-<h2 id="safety">Safety</h2>
-<div class="callout warn"><strong>Not a cat toy, and not a children's toy.</strong> These are
-decorative figurines and desk accessories.</div>
+<h2 id="care">Care &amp; safety</h2>
 <ul>
-  <li><strong>Not intended for children under 5.</strong> Small parts present a choking hazard.
-      Use with adult supervision.</li>
-  <li><strong>Do not leave these with a pet unsupervised.</strong> Printed plastic can be chewed
-      into sharp pieces or swallowed. Nothing we sell is a chew toy.</li>
-  <li>Printed in PLA. Keep out of hot cars and away from direct heat — PLA softens and will deform.</li>
-  <li>Not food safe and not dishwasher safe. Wipe clean with a damp cloth.</li>
+  <li>Swap the pad when it's shredded flat. Vacuum up the crumbs as you go.</li>
+  <li>Wipe the frame with a damp cloth. Don't soak it.</li>
+  <li>Keep it indoors, dry, and away from radiators and direct heat.</li>
+  <li>Stand it on a flat, stable floor. Check it now and then, and stop using it if any part is loose or broken.</li>
+  <li>It's a scratcher, not a toy for children. Keep an eye on kittens around loose bits of cardboard.</li>
 </ul>
 
-<h2 id="contact">Questions</h2>
+<h2 id="faq">Frequently asked questions</h2>
+${FAQ.map(([id, section, items]) => `
+<h3 id="${id}">${section}</h3>
+${items.map(([q, a, qid]) => `<details class="acc"${qid ? ` id="${qid}"` : ''}><summary>${q}</summary><div class="acc-in">${a}</div></details>`).join('\n')}`).join('\n')}
+
+<h2 id="contact">Still have a question?</h2>
 <p>Email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> or use the
-<a href="contact.html">contact page</a>. You're emailing the two people who made your order.</p>
+<a href="contact.html">contact page</a>. You're writing to the two people who make your scratcher, and we
+reply within 1–2 business days.</p>
 <p style="font-size:13px;color:var(--muted)">${BIZ} · ${ADDR}</p>
 `;
 
-/* ---------- FAQ ---------- */
-/* [anchor id, heading, [[question, answer], ...]] — ids are explicit so they
-   can't drift from the jump list when a heading contains an HTML entity. */
-const FAQ = [
-  ['orders-shipping', 'Orders &amp; shipping', [
-    ['How long until my order ships?',
-     '<p>1–2 business days to make it once we have your photo, then 3–5 business days in transit. Everything is made after you order — nothing is pre-made. We email you photo and video updates as it comes together.</p>'],
-    ['My tracking number hasn\'t updated. Is something wrong?',
-     '<p>Almost certainly not. We email tracking when the label is created, which is often a day or two before the carrier scans the parcel. If there\'s no movement after 5 business days, message us and we\'ll chase it.</p>'],
-    ['Do you ship internationally?',
-     '<p>Not yet — U.S. addresses only. We would rather not take your money and then find that customs paperwork and duties make a $15 keychain cost $40 to deliver. It is on the list once we have the volume to do it properly.</p>'],
-    ['When is shipping free?',
-     '<p>Orders over $' + FREE_SHIP + ' ship free via USPS Ground Advantage. Below that, shipping is calculated from the packed weight of your order — a single keychain costs a lot less to post than three big figurines, and you only pay what it actually weighs. The cart shows how far you are from free shipping.</p>'],
-    ['Can I change or cancel my order?',
-     '<p>If it hasn\'t started printing — usually within about 24 hours — yes. After that the filament is committed. Message us quickly and we\'ll try.</p>'],
-    ['What is the inventory drop?',
-     '<p>We restock in batches rather than continuously. The countdown at the top of the site shows the next one. Sold-out items come back on a drop.</p>']
-  ]],
-  ['colours-customisation', 'Colours &amp; customisation', [
-    ['How do the nine colours work?',
-     '<p>Every figure is available in nine core animal colours — orange tabby, tuxedo, calico, grey tabby, brown tabby, tortoiseshell, siamese, black and white. Same model, different filament. Pick one on the product page.</p>'],
-    ['My cat isn\'t one of the nine. What do I do?',
-     '<p>Choose <strong>Exact pattern match</strong> (+$12), check out normally, then send a photo on the confirmation screen or by email. There is nothing to upload before you pay.</p>'],
-    ['How close will the match actually be?',
-     '<p>We match the pattern and colours of the coat — markings, patches, stripes — using solid filament. We can\'t reproduce individual fur detail or soft shading. We send you a photo before it ships, and if it\'s not right we\'ll talk about it.</p>'],
-    ['What if I forget to send the photo?',
-     '<p>After 7 days we print the preset colour you chose so your order isn\'t stuck waiting, and we refund the match fee.</p>'],
-    ['Can I get a name on it?',
-     '<p>Yes, +$5, engraved into the base, up to 18 characters. Check your spelling — once it starts printing we can\'t change it.</p>'],
-    ['Can you design something completely custom?',
-     '<p>Sometimes. Message us with what you have in mind. Bespoke sculpting is priced separately and takes considerably longer.</p>']
-  ]],
-  ['bundles-pricing', 'Bundles &amp; pricing', [
-    ['How do the bundles work?',
-     '<p>Every product has a "Bundle &amp; save" row showing set prices for set quantities — a $15 Cat Clicker is 1 for $15, 3 for $20, 5 for $25 or 10 for $30. Pick a quantity and the price is applied automatically in the cart, so it never changes on you at checkout.</p>'],
-    ['What if I want a quantity that is not one of the options?',
-     '<p>You will be charged whichever bundle is cheapest for that amount. Ask for 4 clickers and you pay the 5-pack price of $25, because it is less than four singles. You will never pay more for buying more.</p>'],
-    ['Do bundled cats have to be the same colour?',
-     '<p>They have to be the same product, but you can pick a different colour for each one.</p>'],
-    ['Can I stack a discount code on a bundle?',
-     '<p>No — bundles are already the best price we do.</p>']
-  ]],
-  ['the-products', 'The products themselves', [
-    ['Are these safe for my cat to play with?',
-     '<p><strong>No.</strong> These are decorative figurines, not pet toys. Printed plastic can be chewed into sharp pieces or swallowed. Please don\'t leave them with a pet unsupervised.</p>'],
-    ['Are they safe for kids?',
-     '<p>Not for under-5s — small parts are a choking hazard. Older children, with adult supervision, are fine.</p>'],
-    ['What are they made of?',
-     '<p>PLA, a plant-based plastic. Sturdy indoors, but it softens in heat — keep them out of hot cars and off radiators.</p>'],
-    ['How do I clean one?',
-     '<p>Wipe with a damp cloth. Not dishwasher safe, not food safe, no solvents.</p>'],
-    ['Why can I see faint lines on the surface?',
-     '<p>That\'s how 3D printing works — the object is built in layers. We print at a fine layer height to keep it subtle, but it\'s a characteristic of the process, not a fault.</p>'],
-    ['The colour looks slightly different to the photo.',
-     '<p>Filament varies between batches and every screen shows colour differently. Photos are a guide. A noticeable mismatch is worth messaging us about; a slight one is normal.</p>']
-  ]],
-  ['problems', 'Problems', [
-    ['My item arrived damaged.',
-     '<p>Message us within 7 days of delivery with your order number and photos of the item and the packaging. We\'ll replace it. Don\'t send it back unless we ask.</p>'],
-    ['It broke after a few weeks.',
-     '<p>If it\'s a material or print defect within 30 days of purchase, that\'s covered. Accidental damage isn\'t, but message us anyway — we can usually reprint a part cheaply.</p>'],
-    ['I got the wrong item or colour.',
-     '<p>Entirely our fault. Message us and we\'ll fix it at no cost to you.</p>']
-  ]]
-];
-const faqBody = FAQ.map(([id, section, items]) => `
-<h2 id="${id}">${section}</h2>
-${items.map(([q,a]) => `<details class="acc"><summary>${q}</summary><div class="acc-in">${a}</div></details>`).join('\n')}
-`).join('\n');
+/* A page that only forwards to another URL. vercel.json does the same
+   redirect server-side; this file covers old links, local previews and
+   any host that ignores vercel.json. */
+const redirectPage = to => `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FAQ has moved</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="${to}">
+<meta http-equiv="refresh" content="0; url=${to}">
+<script>location.replace(${JSON.stringify(to)});</script>
+</head>
+<body><p>Our FAQ now lives on the <a href="${to}">Policies &amp; FAQ page</a>.</p></body>
+</html>
+`;
 
 /* ---------- CONTACT ---------- */
 const contactBody = `
@@ -713,7 +740,7 @@ const contactBody = `
       <div class="cfield"><label for="cf-email">Email</label>
         <input id="cf-email" name="email" type="email" autocomplete="email" required></div>
       <div class="cfield"><label for="cf-order">Order number <span style="font-weight:600;color:var(--muted)">(if you have one)</span></label>
-        <input id="cf-order" name="order" type="text" placeholder="RP-0000"></div>
+        <input id="cf-order" name="order" type="text" placeholder="From your order email"></div>
       <div class="cfield"><label for="cf-topic">What's this about?</label>
         <select id="cf-topic" name="topic">
           <option>Where is my order</option>
@@ -721,7 +748,6 @@ const contactBody = `
           <option>Change or cancel an order</option>
           <option>Sending a photo of my cat</option>
           <option>Refill pads</option>
-          <option>Cattoo enquiry</option>
           <option>Partner application</option>
           <option>Something else</option>
         </select></div>
@@ -754,9 +780,9 @@ const contactBody = `
     </div>
     <div class="cblock">
       <h3>Before you write in</h3>
-      <p>Most questions are answered on the <a href="faq.html">FAQ</a> — especially
-      "where is my order" and how the pattern match works. Shipping and returns terms are on the
-      <a href="policies.html">policies page</a>.</p>
+      <p>Most questions are answered in our <a href="policies.html#faq">FAQ</a>, especially
+      "where is my order" and how we match your cat. Shipping, returns and damage are all on the
+      <a href="policies.html">Policies &amp; FAQ page</a>.</p>
     </div>
   </div>
 </div>
@@ -1137,21 +1163,14 @@ loadOrder();
 }
 
 const PAGES = [
-  {file:'policies.html', title:'Policies — Realized Prints',
-   desc:'Shipping, returns, replacements, custom orders, bundles and safety information for Realized Prints.',
-   heroTitle:'Policies', heroLede:'Shipping, returns, custom orders and bundles — in plain English, no fine print games.',
-   updated:UPDATED,
-   jump:[['shipping','Shipping'],['returns','Returns &amp; refunds'],['custom','Custom orders'],
-         ['bundles','Bundles'],['variance','Colour variance'],['safety','Safety'],['contact','Questions']],
+  {file:'policies.html', title:'Policies & FAQ — Cat Scratchers',
+   desc:'Shipping times, returns, damage and replacements, your cat\'s photo, pricing, care, and answers to common questions about Cat Scratchers.',
+   heroTitle:'Policies &amp; FAQ', heroLede:'Shipping, returns, damage and every question we get, in plain English, all on one page.',
+   updated:POLICIES_UPDATED,
+   jump:[['shipping','Shipping'],['orders','Orders &amp; cancellations'],['returns','Returns &amp; refunds'],
+         ['damage','Damage &amp; defects'],['custom','Your cat\'s photo'],['pricing','Pricing &amp; payment'],
+         ['care','Care &amp; safety'],['faq','FAQ'],['contact','Contact']],
    body:policiesBody},
-
-  {file:'faq.html', title:'FAQ — Realized Prints',
-   desc:'Answers on shipping times, the nine core colours, exact pattern matching, bundles, materials and safety.',
-   heroTitle:'Frequently asked questions', heroLede:'The things people actually ask us. If yours isn\'t here, message us.',
-   updated:UPDATED,
-   jump:[['orders-shipping','Orders &amp; shipping'],['colours-customisation','Colours &amp; customisation'],
-         ['bundles-pricing','Bundles &amp; pricing'],['the-products','The products'],['problems','Problems']],
-   body:faqBody},
 
   {file:'contact.html', title:'Contact Us — Realized Prints',
    desc:'Message the husband-and-wife team behind Realized Prints. Replies in 1–2 business days.',
@@ -1178,6 +1197,7 @@ const PAGES = [
    body:privacyBody}
 ];
 for (const pg of PAGES) fs.writeFileSync(path.join(OUT_G, pg.file), contentPage(pg), 'utf8');
+fs.writeFileSync(path.join(OUT_G, 'faq.html'), redirectPage('policies.html#faq'), 'utf8');
 fs.writeFileSync(path.join(ROOT, 'order-complete.html'), orderCompletePage(), 'utf8');
 
 console.log('Generated ' + GENERATED.length + ' product page(s) into products/'

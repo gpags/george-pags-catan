@@ -1,3 +1,7 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/pages/faq", "destination": "/pages/policies#faq", "permanent": true },
+    { "source": "/pages/faq.html", "destination": "/pages/policies#faq", "permanent": true }
+  ]
 }
