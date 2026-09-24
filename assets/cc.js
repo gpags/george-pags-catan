@@ -14,7 +14,7 @@
      CC.mountChrome() countdown + trust marquee, same as rp.js
 
    catalog.js MUST load before this file on every page. It owns every
-   price, the colorway keys, the 40%-off-the-second-scratcher rule and
+   price, the colorway keys, the half-off-the-second-scratcher rule and
    the cart-shape rules, and api/checkout.js recomputes all of them
    server-side from that same file.
    ================================================================ */
@@ -228,6 +228,34 @@ CC.paintArt = function (scope) {
 };
 
 /* ================================================================
+   PRICES IN COPY — filled from the catalog, never typed into HTML.
+
+   <span data-price="refill" data-qty="3"></span>              $25  what 3 cost
+   <span data-price="refill" data-qty="3" data-show="save"></span>  $5   vs buying singles
+   <span data-price="homestead-buddies" data-show="delta"
+         data-vs="basking-paws"></span>                         $13  gap between two handles
+
+   data-qty defaults to 1. An unknown handle leaves the element empty
+   rather than showing a wrong number.
+   ================================================================ */
+CC.fillPrices = function (scope) {
+  var nodes = (scope || document).querySelectorAll('[data-price]');
+  Array.prototype.forEach.call(nodes, function (el) {
+    var p = CAT.BY_HANDLE[el.getAttribute('data-price')];
+    if (!p) { el.textContent = ''; return; }
+    var n = +el.getAttribute('data-qty') || 1;
+    var show = el.getAttribute('data-show');
+    var v;
+    if (show === 'save') v = CAT.savingAt(p, n);
+    else if (show === 'delta') {
+      var vs = CAT.BY_HANDLE[el.getAttribute('data-vs')];
+      v = vs ? p.price - vs.price : 0;
+    } else v = CAT.priceFor(p, n);
+    el.textContent = CC.money(v);
+  });
+};
+
+/* ================================================================
    PAGE CHROME — countdown + trust marquee, mirroring rp.js
    ================================================================ */
 function ordinal(n){ var s=['th','st','nd','rd'], v=n%100; return n + (s[(v-20)%10] || s[v] || s[0]); }
@@ -269,8 +297,9 @@ CC.mountChrome = function () {
   if (track) {
     var items = [
       ['♥','Husband &amp; wife, made in the USA'], ['✈','Shipping across the USA'],
-      ['★','Current fulfillment: 5–10 business days'], ['♥','Ready to ship, or made for your cat'],
-      ['🎁','Free US shipping on two-scratcher orders'], ['★','Replaceable cardboard insert'],
+      ['★','Made in 1–2 days, ships in 3–5'], ['📸','Photo &amp; video updates as yours is made'],
+      ['♥','Painted to match your cat'], ['🎁','Buy one, get the second 50% off'],
+      ['✈','Free US shipping on two-scratcher orders'], ['★','Replaceable cardboard insert'],
       ['♥','Only 3 one-of-one commissions a month']
     ];
     var group = '<div class="mq-group">' + items.map(function (it) {
@@ -575,6 +604,11 @@ CC.initPDP = function () {
 
   function product() { return (state.mode === 'custom' && customProduct) ? customProduct : baseProduct; }
 
+  /* A page with a base/custom toggle only takes a name in custom mode.
+     A page without one (Homestead Buddies is always personalised now)
+     takes it whenever the page has a name field at all. */
+  function takesName() { return customProduct ? state.mode === 'custom' : !!personalize; }
+
   var modeBtns    = root_.querySelectorAll('[data-pdp-mode]');
   var personalize = root_.querySelector('[data-pdp-personalize]');
   var baseFine    = root_.querySelector('[data-pdp-basefine]');
@@ -618,7 +652,7 @@ CC.initPDP = function () {
       p = CAT.BY_HANDLE[lines[i].handle];
       sum += CAT.priceFor(p, lines[i].qty);
     }
-    if (state.mode === 'custom' && state.name) sum += CAT.ADDONS.name.price * state.qty;
+    if (takesName() && state.name) sum += CAT.ADDONS.name.price * state.qty;
     return Math.max(0, Math.round((sum - CAT.secondUnitDiscount(lines)) * 100) / 100);
   }
 
@@ -645,7 +679,7 @@ CC.initPDP = function () {
       var on = b.getAttribute('data-pdp-mode') === state.mode;
       b.setAttribute('aria-pressed', String(on));
     });
-    if (personalize) personalize.hidden = state.mode !== 'custom';
+    if (personalize) personalize.hidden = !takesName();
     if (baseFine)   baseFine.hidden = state.mode === 'custom';
     if (customFine) customFine.hidden = state.mode !== 'custom';
 
@@ -744,7 +778,7 @@ CC.initPDP = function () {
   if (addBtn) addBtn.addEventListener('click', function (e) {
     e.preventDefault();
     var p = product();
-    CC.cart.add({ h: p.h, qty: state.qty, color: state.color, name: state.mode === 'custom' ? state.name : '' });
+    CC.cart.add({ h: p.h, qty: state.qty, color: state.color, name: takesName() ? state.name : '' });
     if (state.refill) CC.cart.add({ h: 'refill', qty: 3, color: 'natural' });
     if (state.keys) {
       CC.cart.add({ h: 'keychain', qty: state.keys, color: keyColor(), name: state.name });
@@ -965,7 +999,7 @@ CC.initCarousel = function () {
 };
 
 function boot() {
-  CC.mountChrome(); CC.mount(); CC.initCarousel(); CC.initRefills(); CC.initPDP(); CC.initPartner(); CC.initForms();
+  CC.fillPrices(document); CC.mountChrome(); CC.mount(); CC.initCarousel(); CC.initRefills(); CC.initPDP(); CC.initPartner(); CC.initForms();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
