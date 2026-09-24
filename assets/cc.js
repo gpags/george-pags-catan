@@ -910,7 +910,10 @@ CC.initForms = function () {
         body: JSON.stringify(payload)
       }).then(function (res) {
         return res.json().catch(function () { return {}; }).then(function (data) {
-          if (!res.ok) throw new Error(data.message || data.error || 'send failed');
+          if (!res.ok) {
+            console.warn('form: send failed —', data.reason || res.status);
+            throw new Error(data.message || data.error || 'send failed');
+          }
           return data;
         });
       }).then(function () {

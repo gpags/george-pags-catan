@@ -371,7 +371,10 @@ function mountContactForm(){
         body: JSON.stringify(payload)
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || data.error || 'send failed');
+      if (!res.ok) {
+        console.warn('contact form: send failed —', data.reason || res.status);
+        throw new Error(data.message || data.error || 'send failed');
+      }
       form.reset();
       say('Thanks — that’s with us. We reply within 1–2 business days.', true);
     } catch (err) {
