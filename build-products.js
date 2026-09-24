@@ -24,7 +24,7 @@ const UPDATED = 'August 17, 2026';
 /* Same catalog module the storefront and api/checkout.js read, so the
    generated pages, the cart and the Stripe line items cannot drift. */
 const CATALOG = require('./assets/catalog.js');
-const { PRODUCTS, VIBES, ADDONS, GIFTS, BY_HANDLE, SIZE_BUNDLES, priceFor, savingAt, imgSrc, BUILD_ID } = CATALOG;
+const { PRODUCTS, VIBES, ADDONS, GIFTS, FREE_SHIP, BY_HANDLE, SIZE_BUNDLES, priceFor, savingAt, imgSrc, BUILD_ID } = CATALOG;
 
 /* Every distinct bundle tier actually in use, so the policies table and
    the FAQ describe the real offer instead of a stale hardcoded list. */
@@ -182,7 +182,7 @@ const footer = b => `
     <div class="foot-g">
       <div>
         <div class="foot-brand">Realized Prints</div>
-        <p class="foot-note">Husband &amp; wife, printed in the USA. Made to order in 5–10 business days.</p>
+        <p class="foot-note">Husband &amp; wife, printed in the USA. Made in 1–2 business days, ships in 3–5.</p>
         <div class="foot-soc">${socLinks('')}</div>
       </div>
       <div><h4>Shop</h4><ul>
@@ -269,9 +269,9 @@ ${chromeTop(b)}
       <div class="pdp-vibe">${esc(v.name)}</div>
       <h1>${esc(p.t)}</h1>
       <div class="pdp-price">$${p.price}.00 USD</div>
-      <div class="pdp-ship">Shipping calculated at checkout · Made to order in 5–10 business days</div>
+      <div class="pdp-ship">Shipping calculated at checkout · Made in 1–2 business days, ships in 3–5</div>
       <div class="pdp-sku">SKU: ${p.sku || 'RP-' + String(p.id).padStart(4,'0')}</div>
-      <div class="pdp-free">Free USPS Ground Advantage shipping on U.S. orders $65+</div>
+      <div class="pdp-free">Free USPS Ground Advantage shipping on U.S. orders $${FREE_SHIP}+</div>
       <p class="pdp-desc">${esc(p.desc)}</p>
 
       <div class="opt-t">Core animal color — <span id="colorName"></span></div>
@@ -495,15 +495,15 @@ const policiesBody = `
 <h2 id="shipping">Shipping policy</h2>
 
 <h3>Free shipping</h3>
-<p>Free USPS Ground Advantage shipping on U.S. domestic orders over <strong>$65</strong>. Below
+<p>Free USPS Ground Advantage shipping on U.S. domestic orders over <strong>$${FREE_SHIP}</strong>. Below
 that, a flat rate is calculated at checkout.</p>
 
 <h3>Processing time</h3>
 <p>Everything is made after you order it — nothing sits on a shelf. Allow
-<strong>5–10 business days</strong> (Mon–Fri, excluding holidays) for us to print, finish, and pack
-your order before it ships. Busy drop weeks can push this slightly longer; if it does, we email you.</p>
-<div class="callout note"><strong>Ordering an exact pattern match?</strong> Add roughly
-3 more business days. The clock starts when your photo arrives, not when you order.</div>
+<strong>1–2 business days</strong> (Mon–Fri, excluding holidays) for us to make, finish, and pack
+your order before it ships, then 3–5 business days in transit. Busy drop weeks can push this slightly longer; if it does, we email you.</p>
+<div class="callout note"><strong>Made to match your cat?</strong> The clock starts when your
+photo arrives, not when you order. We email you photo and video updates along the way.</div>
 
 <h3>Carriers</h3>
 <ul>
@@ -550,7 +550,7 @@ a refund instead. <strong>Do not send anything back unless we ask you to</strong
 <h3>Timing</h3>
 <table>
   <tr><th>Outcome</th><th>Processed within</th></tr>
-  <tr><td>Replacement printed and shipped</td><td>5–10 business days</td></tr>
+  <tr><td>Replacement made and shipped</td><td>1–2 business days, then transit</td></tr>
   <tr><td>Store credit issued</td><td>5 business days</td></tr>
   <tr><td>Refund to original payment method</td><td>5 business days</td></tr>
 </table>
@@ -636,13 +636,13 @@ decorative figurines and desk accessories.</div>
 const FAQ = [
   ['orders-shipping', 'Orders &amp; shipping', [
     ['How long until my order ships?',
-     '<p>5–10 business days to make it, then transit time on top. Everything is printed after you order — nothing is pre-made. Exact pattern match adds around 3 more days.</p>'],
+     '<p>1–2 business days to make it once we have your photo, then 3–5 business days in transit. Everything is made after you order — nothing is pre-made. We email you photo and video updates as it comes together.</p>'],
     ['My tracking number hasn\'t updated. Is something wrong?',
      '<p>Almost certainly not. We email tracking when the label is created, which is often a day or two before the carrier scans the parcel. If there\'s no movement after 5 business days, message us and we\'ll chase it.</p>'],
     ['Do you ship internationally?',
      '<p>Not yet — U.S. addresses only. We would rather not take your money and then find that customs paperwork and duties make a $15 keychain cost $40 to deliver. It is on the list once we have the volume to do it properly.</p>'],
     ['When is shipping free?',
-     '<p>Orders over $65 ship free via USPS Ground Advantage. Below that, shipping is calculated from the packed weight of your order — a single keychain costs a lot less to post than three big figurines, and you only pay what it actually weighs. The cart shows how far you are from free shipping.</p>'],
+     '<p>Orders over $' + FREE_SHIP + ' ship free via USPS Ground Advantage. Below that, shipping is calculated from the packed weight of your order — a single keychain costs a lot less to post than three big figurines, and you only pay what it actually weighs. The cart shows how far you are from free shipping.</p>'],
     ['Can I change or cancel my order?',
      '<p>If it hasn\'t started printing — usually within about 24 hours — yes. After that the filament is committed. Message us quickly and we\'ll try.</p>'],
     ['What is the inventory drop?',
@@ -808,8 +808,8 @@ seems unfair, <a href="contact.html">tell us</a>.</p>
 
 <h2 id="delivery">5. Making and delivery</h2>
 <ul>
-  <li>Production is <strong>5–10 business days</strong>, plus carrier transit. An exact pattern
-      match adds roughly 3 days, counted from when your photo arrives.</li>
+  <li>Production is <strong>1–2 business days</strong>, counted from when your photo arrives,
+      plus carrier transit (typically 3–5 business days).</li>
   <li>Risk passes to you on delivery. If it arrives damaged, that's covered under our
       <a href="policies.html#returns">returns policy</a>.</li>
   <li>Delivery estimates are estimates. Carriers have bad weeks.</li>
@@ -984,9 +984,9 @@ ${chromeTop(b)}
 
       <div class="pdp-gift" id="ocPhoto" style="display:none">
         📸 We need a photo of your cat
-        <span>You chose <strong>Exact pattern match</strong>. One clear, well-lit photo is all we
-        need. If we haven't got one within 7 days we'll print the preset colour you picked so your
-        order isn't stuck, and refund the match fee.</span>
+        <span>We paint your scratcher to match your cat. The easiest way: <strong>reply to your
+        confirmation email</strong> with one clear, well-lit photo of each cat. Your order is on hold
+        until it arrives. You can also upload it here.</span>
         <div class="oc-up">
           <label class="btn btn-pink btn-block oc-up-btn" for="ocFile">Choose a photo</label>
           <input id="ocFile" type="file" accept="image/*" capture="environment" hidden>
@@ -1002,7 +1002,8 @@ ${chromeTop(b)}
     <aside class="oc-side">
       <h2 class="oc-h">What happens next</h2>
       <ol class="oc-steps">
-        <li>We print and finish your order by hand — <strong>5–10 business days</strong>.</li>
+        <li>We make your order in <strong>1–2 business days</strong> once your photo arrives, and email you photo and video updates.</li>
+        <li>It ships in <strong>3–5 business days</strong>.</li>
         <li>You get a tracking email the moment the label is made.</li>
         <li>Questions? Reply to your receipt, or use the <a href="${b}pages/contact.html">contact page</a>.</li>
       </ol>
