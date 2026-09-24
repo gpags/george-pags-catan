@@ -61,7 +61,7 @@ function catOrderEmail(session, md) {
         const p = BY_HANDLE[i.handle];
         const bits = [];
         if (i.qty > 1) bits.push('<strong>x' + i.qty + '</strong>');
-        if (i.name) bits.push('engrave “<strong>' + esc(i.name) + '</strong>”');
+        if (i.name) bits.push('names “<strong>' + esc(i.name) + '</strong>”');
         if (i.match) bits.push('<strong style="color:#c62b6d">EXACT PATTERN MATCH — wait for photo</strong>');
         if (i.gift) bits.push('<em>free gift</em>');
         return `<tr>
@@ -81,8 +81,7 @@ function catOrderEmail(session, md) {
          packed weight ${esc(md.packed_oz || '?')} oz · shipping $${esc(md.shipping_usd || '?')}</p>
 
       ${needsPhoto ? `<p style="background:#fdeaf2;color:#c62b6d;padding:12px 14px;border-radius:8px;font-weight:700">
-        This order includes an Exact Pattern Match. Do not print it until the customer sends a photo.
-        If nothing arrives within 7 days, print the preset colour and refund the match fee.</p>` : ''}
+        ON HOLD until the customer replies with a photo of their cat(s). Do not start it before then.</p>` : ''}
 
       <h3 style="margin:18px 0 6px">Print list</h3>
       <table style="border-collapse:collapse;width:100%;font-size:14px">
@@ -151,23 +150,20 @@ function customerEmail(session, md) {
       comes off our own printers. Here's what happens next.</p>
 
       ${needsPhoto ? `<div style="background:#fdeaf2;border:2px dashed #ff3d9a;border-radius:10px;padding:14px;margin-bottom:18px">
-        <strong style="color:#c62b6d">We need a photo of your cat</strong>
-        <p style="margin:6px 0 0;font-size:14px">You chose <strong>Exact pattern match</strong>.
-        One clear, well-lit photo is all we need.</p>
-        <p style="margin:10px 0 0"><a href="https://realizedprints.com/order-complete?session_id=${encodeURIComponent(session.id)}"
-           style="display:inline-block;background:#ff3d9a;color:#fff;text-decoration:none;
-                  padding:11px 20px;border-radius:999px;font-weight:700">Upload your photo</a></p>
-        <p style="margin:10px 0 0;font-size:13px;color:#777">Or just reply to this email with it attached.
-        If we haven't heard in <strong>7 days</strong> we'll print the preset colour you picked so
-        your order isn't stuck, and refund the match fee.</p></div>` : ''}
+        <strong style="color:#c62b6d">Reply with a photo of your cat</strong>
+        <p style="margin:6px 0 0;font-size:14px">We paint your scratcher to match your cat, so we need
+        one clear, well-lit photo of each cat. Just <strong>reply to this email</strong> with it attached
+        (and the names you want, for Homestead Buddies).</p>
+        <p style="margin:10px 0 0;font-size:13px;color:#777">Your order is on hold until your photo
+        arrives, and we start the moment it does.</p></div>` : ''}
 
       <h3 style="margin:0 0 6px;font-size:16px">Your order</h3>
       <ul style="margin:0 0 18px;padding-left:18px;font-size:15px">${lines || '<li>See your receipt for details.</li>'}</ul>
 
       <h3 style="margin:0 0 6px;font-size:16px">What happens next</h3>
       <ol style="margin:0 0 18px;padding-left:18px;font-size:15px;line-height:1.7">
-        <li>We print and hand-finish your order — <strong>5–10 business days</strong>${needsPhoto ? ', starting when your photo arrives' : ''}.</li>
-        <li>You get a tracking email as soon as the label is made.</li>
+        <li>We make your order in <strong>1–2 business days</strong>${needsPhoto ? ' once your photo arrives' : ''}, and email you photo and video updates as it comes together.</li>
+        <li>It ships in <strong>3–5 business days</strong>. You get a tracking email as soon as the label is made.</li>
         <li>Anything at all — just reply to this email. It comes straight to the two of us.</li>
       </ol>
 

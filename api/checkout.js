@@ -115,7 +115,7 @@ function priceLine(raw) {
 }
 
 /* ================================================================
-   Apply the order-level 40%-off-the-second-scratcher discount.
+   Apply the order-level half-off-the-second-scratcher discount (BOGO 50%).
 
    Stripe will not take a negative line item, and creating a coupon on
    the fly is an extra API call that can fail after the cart has already
@@ -311,9 +311,12 @@ module.exports = async (req, res) => {
                         display_name: freeShipping
                             ? 'Free USPS Ground Advantage'
                             : ship.label,
+                        /* 1–2 days to make + 3–5 in transit. The clock really
+                           starts when the customer's photo arrives, which
+                           Stripe can't know, so the emails say that too. */
                         delivery_estimate: {
-                            minimum: { unit: 'business_day', value: 5 },
-                            maximum: { unit: 'business_day', value: 10 },
+                            minimum: { unit: 'business_day', value: 4 },
+                            maximum: { unit: 'business_day', value: 7 },
                         },
                         tax_behavior: 'exclusive',
                     },
