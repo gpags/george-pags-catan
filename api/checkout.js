@@ -65,12 +65,27 @@ function shippingFor(lines, gifts) {
 const MAX_LINES = 50;
 const MAX_QTY = 99;
 const NAME_MAX = 18;   // must match the maxlength on the product page field
+const GIFT_NOTE_MAX = 200;   // must match the maxlength on the gift note field
+
+/* Stripe Tax product codes. Without them Stripe falls back to the
+   account's default tax code; being explicit means a scratcher is
+   always taxed as tangible goods and shipping as shipping, whatever
+   the Dashboard default is. Tax still only collects in states added
+   under Stripe Dashboard → Tax → Registrations. */
+const TAX_CODE_GOODS = 'txcd_99999999';      // General - Tangible Goods
+const TAX_CODE_SHIPPING = 'txcd_92010001';   // Shipping
 
 /* Names are engraved and echoed into Stripe metadata — strip anything that
    isn't safe to print or store, and cap it at the same length the form allows. */
 function cleanName(v) {
     if (typeof v !== 'string') return '';
     return v.replace(/[\x00-\x1f\x7f]/g, '').trim().slice(0, NAME_MAX);
+}
+
+/* Gift notes may keep line breaks; everything else is stripped. */
+function cleanNote(v) {
+    if (typeof v !== 'string') return '';
+    return v.replace(/[\x00-\x09\x0b-\x1f\x7f]/g, '').trim().slice(0, GIFT_NOTE_MAX);
 }
 
 /* Recompute one cart line from the catalog. Throws a customer-safe message. */
@@ -98,6 +113,10 @@ function priceLine(raw) {
 
     const addons = raw.addons && typeof raw.addons === 'object' ? raw.addons : {};
     const name = cleanName(addons.name);
+    /* "This is a gift": pack with no prices, include the note. Not the
+       free-gift ladder (GIFTS in catalog.js) — a different thing entirely. */
+    const giftOrder = addons.gift === true;
+    const giftNote = giftOrder ? cleanNote(addons.giftNote) : '';
 
     /* Bundle price comes from the catalog's explicit ladder. Add-ons are
        charged on every unit — the nameplate is ADDONS.name at price 0, so
@@ -109,7 +128,7 @@ function priceLine(raw) {
     const savedCents = Math.round(savingAt(product, qty) * 100);
 
     return {
-        product, qty, color, name,
+        product, qty, color, name, giftOrder, giftNote,
         savedCents,
         unitCents: Math.round((bundleCents + addonCents) / qty),
         amountCents: bundleCents + addonCents,
@@ -217,6 +236,8 @@ module.exports = async (req, res) => {
             if (l.savedCents) bits.push(`saving $${(l.savedCents / 100).toFixed(2)}`);
             if (l.discountCents) bits.push(`${Math.round(SECOND_UNIT_OFF * 100)}% off the second`);
             if (l.name) bits.push(`Nameplate “${l.name}”`);
+            if (l.color === 'mycat') bits.push('Photo of your cat needed after checkout');
+            if (l.giftOrder) bits.push('Packed as a gift');
 
             return {
                 quantity: 1,   // the whole line is one priced unit; bundle maths is already applied
@@ -236,6 +257,7 @@ module.exports = async (req, res) => {
                             saved: (l.savedCents / 100).toFixed(2),
                             name: l.name,
                         },
+                        tax_code: TAX_CODE_GOODS,
                     },
                     tax_behavior: 'exclusive',
                 },
@@ -260,6 +282,7 @@ module.exports = async (req, res) => {
                             handle: gp.h, sku: gp.sku, color: g.color,
                             qty: '1', free: '1', gift: 'true', name: ''
                         },
+                        tax_code: TAX_CODE_GOODS,
                     },
                     tax_behavior: 'exclusive',
                 },
@@ -277,7 +300,8 @@ module.exports = async (req, res) => {
                refuses an upload unless this is 'true' — it used to be set from the
                deleted "exact pattern match" add-on, which would have silently
                switched the whole photo flow off. */
-            needs_photo: String(needsPhoto(lines.map(l => ({ handle: l.product.h, qty: l.qty })))),
+            needs_photo: String(needsPhoto(lines.map(l => ({ handle: l.product.h, qty: l.qty, color: l.color })))),
+            gift_order: String(lines.some(l => l.giftOrder)),
             gifts: gifts.map(g => g.handle).join(',') || 'none',
             /* Packed weight, so a label can be bought without re-weighing. */
             packed_oz: String(ship.oz),
@@ -293,6 +317,8 @@ module.exports = async (req, res) => {
                 handle: g.handle, color: g.color, qty: 1, name: '', gift: true
             })))
         ));
+        const giftNotes = [...new Set(lines.map(l => l.giftNote).filter(Boolean))];
+        if (giftNotes.length) chunkInto(metadata, 'gift_note', giftNotes.join('\n---\n'));
         chunkInto(metadata, 'summary', lines.map(l =>
             `${l.qty}× ${l.product.t} (${COLOR_LABEL[l.color] || l.color})` +
             (l.name ? ` “${l.name}”` : '')
@@ -321,6 +347,7 @@ module.exports = async (req, res) => {
                             maximum: { unit: 'business_day', value: 7 },
                         },
                         tax_behavior: 'exclusive',
+                        tax_code: TAX_CODE_SHIPPING,
                     },
                 },
             ],

@@ -37,6 +37,7 @@ module.exports = async (req, res) => {
                 summary: joinChunks('summary') || '',
                 gifts: md.gifts && md.gifts !== 'none' ? md.gifts.split(',') : [],
                 needsPhoto: md.needs_photo === 'true',
+                giftOrder: md.gift_order === 'true',
                 packedOz: Number(md.packed_oz) || null,
                 shippingUsd: md.shipping_usd || null,
                 total: session.amount_total ? session.amount_total / 100 : 0,

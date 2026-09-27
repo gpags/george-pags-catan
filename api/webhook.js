@@ -18,6 +18,13 @@ const { sendEmail, esc, SHOP_EMAIL } = require('../lib/email.js');
 
 const { BY_HANDLE, COLOR_LABEL } = CATALOG;
 
+const SITE = process.env.SITE_URL || 'https://www.mycatscratcher.com';
+
+/* The "this is a gift" flag and note, set from the product page. */
+function giftInfo(md) {
+    return { on: md.gift_order === 'true', note: joinChunks(md, 'gift_note') || '' };
+}
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
 
 /* Stripe signs the RAW body. Vercel parses bodies by default, which would
@@ -81,7 +88,13 @@ function catOrderEmail(session, md) {
          packed weight ${esc(md.packed_oz || '?')} oz · shipping $${esc(md.shipping_usd || '?')}</p>
 
       ${needsPhoto ? `<p style="background:#fdeaf2;color:#c62b6d;padding:12px 14px;border-radius:8px;font-weight:700">
-        ON HOLD until the customer replies with a photo of their cat(s). Do not start it before then.</p>` : ''}
+        ON HOLD until the customer sends a photo of their cat(s) — it arrives as a separate
+        "Cat photo received" email (upload) or as a reply to their confirmation. Do not start it before then.</p>` : ''}
+
+      ${giftInfo(md).on ? `<div style="background:#fff6d6;color:#5a4400;padding:12px 14px;border-radius:8px;margin-top:10px">
+        <strong>🎁 GIFT ORDER — no prices or receipt in the box.</strong>
+        ${giftInfo(md).note ? `<br>Include this note:<br><span style="white-space:pre-wrap;font-style:italic">${esc(giftInfo(md).note)}</span>` : '<br>No note written.'}
+      </div>` : ''}
 
       <h3 style="margin:18px 0 6px">Print list</h3>
       <table style="border-collapse:collapse;width:100%;font-size:14px">
@@ -134,7 +147,7 @@ function customerEmail(session, md) {
         const p = BY_HANDLE[i.handle];
         const extra = [];
         if (i.qty > 1) extra.push('qty ' + i.qty);
-        if (i.name) extra.push('engraved “' + esc(i.name) + '”');
+        if (i.name) extra.push('names “' + esc(i.name) + '”');
         if (i.match) extra.push('exact pattern match');
         return `<li style="margin-bottom:6px">${i.gift ? '🎁 ' : ''}<strong>${esc(p ? p.t : i.handle)}</strong>
                 — ${esc(COLOR_LABEL[i.color] || i.color)}${extra.length ? ' · ' + extra.join(' · ') : ''}
@@ -150,12 +163,20 @@ function customerEmail(session, md) {
       comes off our own printers. Here's what happens next.</p>
 
       ${needsPhoto ? `<div style="background:#fdeaf2;border:2px dashed #ff3d9a;border-radius:10px;padding:14px;margin-bottom:18px">
-        <strong style="color:#c62b6d">Reply with a photo of your cat</strong>
+        <strong style="color:#c62b6d">Send us a photo of your cat</strong>
         <p style="margin:6px 0 0;font-size:14px">We paint your scratcher to match your cat, so we need
-        one clear, well-lit photo of each cat. Just <strong>reply to this email</strong> with it attached
-        (and the names you want, for Homestead Buddies).</p>
+        one clear, well-lit photo of each cat.</p>
+        <p style="margin:10px 0 0"><a href="${SITE}/order-complete?session_id=${encodeURIComponent(session.id)}"
+           style="display:inline-block;background:#ef8a2e;color:#fff;text-decoration:none;
+                  padding:11px 20px;border-radius:999px;font-weight:700">Upload your photo</a></p>
+        <p style="margin:10px 0 0;font-size:14px">Or just <strong>reply to this email</strong> with it
+        attached (and the names you want, for Homestead Buddies).</p>
         <p style="margin:10px 0 0;font-size:13px;color:#777">Your order is on hold until your photo
         arrives, and we start the moment it does.</p></div>` : ''}
+
+      ${giftInfo(md).on ? `<div style="background:#fff6d6;border-radius:10px;padding:14px;margin-bottom:18px;font-size:14px">
+        🎁 <strong>We'll pack this as a gift</strong> — no prices or receipt in the box${giftInfo(md).note ? ', with your note' : ''}.
+      </div>` : ''}
 
       <h3 style="margin:0 0 6px;font-size:16px">Your order</h3>
       <ul style="margin:0 0 18px;padding-left:18px;font-size:15px">${lines || '<li>See your receipt for details.</li>'}</ul>
@@ -173,7 +194,7 @@ function customerEmail(session, md) {
       </p>
     </div>`;
 
-    return { subject: 'Your Realized Prints order is confirmed 🐾', html };
+    return { subject: 'Your Cat Scratchers order is confirmed 🐾', html };
 }
 
 module.exports = async (req, res) => {
