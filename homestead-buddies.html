@@ -61,6 +61,19 @@
   </div>
 </nav>
 
+<section class="pdp-sky">
+<div class="sun pdp-sun" aria-hidden="true">
+  <svg viewBox="0 0 200 200" width="100%" height="100%">
+    <circle cx="100" cy="100" r="40" fill="var(--yellow)"/>
+    <g stroke="var(--yellow)" stroke-width="9" stroke-linecap="round">
+      <line x1="100" y1="34" x2="100" y2="8"/><line x1="100" y1="166" x2="100" y2="192"/>
+      <line x1="34" y1="100" x2="8" y2="100"/><line x1="166" y1="100" x2="192" y2="100"/>
+      <line x1="53" y1="53" x2="34" y2="34"/><line x1="147" y1="53" x2="166" y2="34"/>
+      <line x1="53" y1="147" x2="34" y2="166"/><line x1="147" y1="147" x2="166" y2="166"/>
+    </g>
+  </svg>
+</div>
+
 <div class="wrap crumb"><a href="index.html">Home</a> &middot; <a href="index.html#templates">Scratchers</a> &middot; Homestead Buddies</div>
 
 <div class="wrap pdp" data-pdp="homestead-buddies" data-name-placeholder="Luna &amp; Ruska">
@@ -80,7 +93,7 @@
       stand-in drawn in the same style.</p>
   </div>
 
-  <div>
+  <div class="pdp-buy">
     <span class="tagline">Made in 1&ndash;2 days &middot; ships in 3&ndash;5</span>
     <h1 style="margin-top:14px">Homestead Buddies</h1>
 
@@ -103,7 +116,7 @@
         <b data-name-echo>Luna &amp; Ruska</b>
       </div>
       <p class="fineprint">Only have one cat? That's fine &mdash; tell us what you'd like in the second spot after you order.
-        After you order, reply to our email with a photo of each cat.</p>
+        Right after checkout, upload a photo of each cat on your order page, or reply to our email with them.</p>
       <p class="likeness-note"><b>Stylised, not photographic.</b> We paint your cats into the same hillside scene, simplified to
         match the art style. Colors and markings come through; fine detail does not. That's the look, on purpose.</p>
     </div>
@@ -121,22 +134,30 @@
     </div>
 
     <div class="optblock">
-      <div class="lbl"><span>Want to add anything?</span></div>
-      <div class="addrow" data-add="refill" data-on="0">
-        <span class="tick"></span>
-        <span class="t"><b>3 spare pads <span class="save">Save <span data-price="refill" data-qty="3" data-show="save"></span></span></b>
-          <span>About six months of scratching.</span></span>
-        <span class="pr" data-price="refill" data-qty="3"></span>
+      <div class="lbl"><span>Add to your order</span></div>
+      <div class="uprow" data-up="refill" data-on="0">
+        <div class="up-art art" data-photo="images/cc-refill-inserts.jpg" data-insert data-nonote data-alt="Spare cardboard pads"></div>
+        <div class="t"><b>Spare cardboard pads</b><span>Most cats need a fresh one every 2 months.</span>
+          <span class="save" data-up-save hidden></span></div>
+        <div class="up-r"><span class="pr" data-up-price></span>
+          <div class="qty qty-sm"><button data-up-qty="-1" aria-label="Fewer pads">&minus;</button><span class="n" data-up-n>0</span><button data-up-qty="1" aria-label="More pads">+</button></div></div>
       </div>
-      <div class="addrow" data-add="key" data-keys="1" data-on="0">
-        <span class="tick"></span>
-        <span class="t"><b>A keychain of your cat</b><span>Same design, pocket size.</span></span>
-        <span class="pr" data-price="keychain" data-qty="1"></span>
+      <div class="uprow" data-up="key" data-on="0">
+        <div class="up-art art" data-photo="images/keychains.jpg" data-nonote data-alt="Cat keychains"></div>
+        <div class="t"><b>Keychain, same cat</b><span>Pocket size, the same cats as your scratcher.</span>
+          <span class="save" data-up-save hidden></span></div>
+        <div class="up-r"><span class="pr" data-up-price></span>
+          <div class="qty qty-sm"><button data-up-qty="-1" aria-label="Fewer keychains">&minus;</button><span class="n" data-up-n>0</span><button data-up-qty="1" aria-label="More keychains">+</button></div></div>
       </div>
-      <div class="addrow" data-add="key" data-keys="2" data-on="0">
-        <span class="tick"></span>
-        <span class="t"><b>Two keychains <span class="save">Save <span data-price="keychain" data-qty="2" data-show="save"></span></span></b><span>One to keep, one to give.</span></span>
-        <span class="pr" data-price="keychain" data-qty="2"></span>
+    </div>
+
+    <div class="optblock">
+      <label class="giftrow"><input type="checkbox" data-gift>
+        <span><b>This is a gift &#127873;</b>
+          <span>No prices or receipt in the box. Ship it straight to them by using their address at checkout.</span></span></label>
+      <div class="giftbox" data-gift-box hidden>
+        <textarea data-gift-note maxlength="200" rows="3" placeholder="Add a note for the card (optional)"></textarea>
+        <div class="count" data-gift-count>0/200</div>
       </div>
     </div>
 
@@ -145,7 +166,7 @@
       <div class="saved" data-pdp-save hidden></div>
       <button class="btn btn-pink btn-block btn-lg" data-pdp-add>Add to cart</button>
       <div class="trust">
-        <div><span>&#127912;</span><span><b>Your cats, from your photos.</b> After you order, reply to our email with a photo of each.</span></div>
+        <div><span>&#127912;</span><span><b>Your cats, from your photos.</b> Upload them right after checkout, or reply to our email.</span></div>
         <div><span>&#128248;</span><span><b>Photo &amp; video updates.</b> We email you pictures of your actual piece as it&rsquo;s made.</span></div>
         <div><span>&#9851;</span><span><b>Pads from <span data-price="refill" data-qty="1"></span>.</b> Lift the old one out, drop a new one in.</span></div>
         <div><span>&#127482;&#127480;</span><span><b>Husband and wife.</b> Made in the USA.</span></div>
@@ -153,6 +174,7 @@
     </div>
   </div>
 </div>
+</section>
 
 <section class="band-blue paws paws-blue">
   <div class="wrap">

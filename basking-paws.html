@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Basking Paws &mdash; Cat Scratchers</title>
-<meta name="description" content="A blue-sky, green-hill cat scratcher with a sleeping cat moulded into the side, painted to match your own cat from a photo you send after ordering.">
+<meta name="description" content="A blue-sky, green-hill cat scratcher with a sleeping cat moulded into the side, in six coat colors, or painted to match your own cat from a photo. Gift-ready.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -61,6 +61,19 @@
   </div>
 </nav>
 
+<section class="pdp-sky">
+<div class="sun pdp-sun" aria-hidden="true">
+  <svg viewBox="0 0 200 200" width="100%" height="100%">
+    <circle cx="100" cy="100" r="40" fill="var(--yellow)"/>
+    <g stroke="var(--yellow)" stroke-width="9" stroke-linecap="round">
+      <line x1="100" y1="34" x2="100" y2="8"/><line x1="100" y1="166" x2="100" y2="192"/>
+      <line x1="34" y1="100" x2="8" y2="100"/><line x1="166" y1="100" x2="192" y2="100"/>
+      <line x1="53" y1="53" x2="34" y2="34"/><line x1="147" y1="53" x2="166" y2="34"/>
+      <line x1="53" y1="147" x2="34" y2="166"/><line x1="147" y1="147" x2="166" y2="166"/>
+    </g>
+  </svg>
+</div>
+
 <div class="wrap crumb"><a href="index.html">Home</a> &middot; <a href="index.html#templates">Scratchers</a> &middot; Basking Paws</div>
 
 <div class="wrap pdp" data-pdp="basking-paws">
@@ -70,14 +83,22 @@
         <div class="carousel-slide">
           <div class="art" data-pdp-art data-photo="images/bp-tuxedo.jpg" data-cats="1" data-coat="tuxedo" data-alt="Basking Paws cat scratcher, Tuxedo"></div>
         </div>
+        <!-- Gallery photos. Save them as images/bp-photo-1.jpg … bp-photo-5.jpg
+             and they appear on their own; any slot without a file is skipped. -->
+        <div class="carousel-slide" data-slide-src="images/bp-photo-1.jpg" data-alt="Basking Paws cat scratcher, photo 1"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-2.jpg" data-alt="Basking Paws cat scratcher, photo 2"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-3.jpg" data-alt="Basking Paws cat scratcher, photo 3"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-4.jpg" data-alt="Basking Paws cat scratcher, photo 4"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-5.jpg" data-alt="Basking Paws cat scratcher, photo 5"></div>
       </div>
       <button class="carousel-arrow prev" data-carousel-prev aria-label="Previous photo">&#8592;</button>
       <button class="carousel-arrow next" data-carousel-next aria-label="Next photo">&#8594;</button>
       <div class="carousel-dots" data-carousel-dots></div>
     </div>
+    <div class="thumbs" data-carousel-thumbs hidden></div>
   </div>
 
-  <div>
+  <div class="pdp-buy">
     <span class="tagline">Made in 1&ndash;2 days &middot; ships in 3&ndash;5</span>
     <h1 style="margin-top:10px">Basking Paws</h1>
 
@@ -87,12 +108,12 @@
     </div>
     <ul class="plist" style="margin:10px 0 0">
       <li><span class="pin">&#10003;</span><span>Rolling hills, clouds and a small sun, with one sleeping cat moulded into the side.</span></li>
-      <li><span class="pin">&#10003;</span><span>Painted to match your cat. Send a photo after you order.</span></li>
+      <li><span class="pin">&#10003;</span><span>Six coat colors, or painted to match your own cat.</span></li>
       <li><span class="pin">&#10003;</span><span>Comes with the first cardboard pad.</span></li>
     </ul>
 
     <div class="optblock">
-      <div class="lbl"><span>Closest coat</span><span class="val" data-way-label>Tuxedo</span></div>
+      <div class="lbl"><span>Color</span><span class="val" data-way-label>Tuxedo</span></div>
       <div class="swatches">
         <span class="swatch-pick"><button class="swatch" data-pdp-way="tuxedo" aria-pressed="true" style="background:#2b2b2e" aria-label="Tuxedo"></button><span class="nm">Tuxedo</span></span>
         <span class="swatch-pick"><button class="swatch" data-pdp-way="orange" aria-pressed="false" style="background:#e2711d" aria-label="Orange Tabby"></button><span class="nm">Orange</span></span>
@@ -100,8 +121,12 @@
         <span class="swatch-pick"><button class="swatch" data-pdp-way="black" aria-pressed="false" style="background:#242426" aria-label="Black"></button><span class="nm">Black</span></span>
         <span class="swatch-pick"><button class="swatch" data-pdp-way="greywhite" aria-pressed="false" style="background:linear-gradient(135deg,#8b9096 50%,#fff 50%)" aria-label="Grey &amp; White"></button><span class="nm">Grey &amp; White</span></span>
         <span class="swatch-pick"><button class="swatch" data-pdp-way="grey" aria-pressed="false" style="background:#8b9096" aria-label="Grey"></button><span class="nm">Grey</span></span>
+        <span class="swatch-pick"><button class="swatch swatch-mycat" data-pdp-way="mycat" aria-pressed="false" aria-label="Match my cat from a photo">&#128247;</button><span class="nm">My cat</span></span>
       </div>
-      <p class="fineprint">A starting point. We match the final pattern to the photo of your cat.</p>
+      <div class="mycat-note" data-mycat-note hidden>
+        <b>We&rsquo;ll paint it to match your cat.</b> Nothing to upload now. Right after checkout you can upload a
+        photo on your order page, or just reply to your confirmation email with it. We start the moment it arrives.
+      </div>
     </div>
 
     <div class="optblock">
@@ -117,22 +142,30 @@
     </div>
 
     <div class="optblock">
-      <div class="lbl"><span>Want to add anything?</span></div>
-      <div class="addrow" data-add="refill" data-on="0">
-        <span class="tick"></span>
-        <span class="t"><b>3 spare pads <span class="save">Save <span data-price="refill" data-qty="3" data-show="save"></span></span></b>
-          <span>About six months of scratching.</span></span>
-        <span class="pr" data-price="refill" data-qty="3"></span>
+      <div class="lbl"><span>Add to your order</span></div>
+      <div class="uprow" data-up="refill" data-on="0">
+        <div class="up-art art" data-photo="images/cc-refill-inserts.jpg" data-insert data-nonote data-alt="Spare cardboard pads"></div>
+        <div class="t"><b>Spare cardboard pads</b><span>Most cats need a fresh one every 2 months.</span>
+          <span class="save" data-up-save hidden></span></div>
+        <div class="up-r"><span class="pr" data-up-price></span>
+          <div class="qty qty-sm"><button data-up-qty="-1" aria-label="Fewer pads">&minus;</button><span class="n" data-up-n>0</span><button data-up-qty="1" aria-label="More pads">+</button></div></div>
       </div>
-      <div class="addrow" data-add="key" data-keys="1" data-on="0">
-        <span class="tick"></span>
-        <span class="t"><b>A keychain, same coat</b><span>Pocket size, matches the color you picked.</span></span>
-        <span class="pr" data-price="keychain" data-qty="1"></span>
+      <div class="uprow" data-up="key" data-on="0">
+        <div class="up-art art" data-photo="images/keychains.jpg" data-nonote data-alt="Cat keychains"></div>
+        <div class="t"><b>Keychain, same cat</b><span>Pocket size, matches the color you picked.</span>
+          <span class="save" data-up-save hidden></span></div>
+        <div class="up-r"><span class="pr" data-up-price></span>
+          <div class="qty qty-sm"><button data-up-qty="-1" aria-label="Fewer keychains">&minus;</button><span class="n" data-up-n>0</span><button data-up-qty="1" aria-label="More keychains">+</button></div></div>
       </div>
-      <div class="addrow" data-add="key" data-keys="2" data-on="0">
-        <span class="tick"></span>
-        <span class="t"><b>Two keychains <span class="save">Save <span data-price="keychain" data-qty="2" data-show="save"></span></span></b><span>One to keep, one to give.</span></span>
-        <span class="pr" data-price="keychain" data-qty="2"></span>
+    </div>
+
+    <div class="optblock">
+      <label class="giftrow"><input type="checkbox" data-gift>
+        <span><b>This is a gift &#127873;</b>
+          <span>No prices or receipt in the box. Ship it straight to them by using their address at checkout.</span></span></label>
+      <div class="giftbox" data-gift-box hidden>
+        <textarea data-gift-note maxlength="200" rows="3" placeholder="Add a note for the card (optional)"></textarea>
+        <div class="count" data-gift-count>0/200</div>
       </div>
     </div>
 
@@ -141,7 +174,7 @@
       <div class="saved" data-pdp-save hidden></div>
       <button class="btn btn-pink btn-block btn-lg" data-pdp-add>Add to cart</button>
       <div class="trust">
-        <div><span>&#127807;</span><span><b>Painted to match your cat.</b> After you order, reply to our email with a photo. No nameplate on this design.</span></div>
+        <div><span>&#127807;</span><span><b>Pick a coat, or match your cat.</b> Choose &ldquo;My cat&rdquo; and send a photo after checkout. No nameplate on this design.</span></div>
         <div><span>&#128248;</span><span><b>Photo &amp; video updates.</b> We email you pictures of your actual piece as it&rsquo;s made.</span></div>
         <div><span>&#9851;</span><span><b>Pads from <span data-price="refill" data-qty="1"></span>.</b> Lift the old one out, drop a new one in.</span></div>
         <div><span>&#127482;&#127480;</span><span><b>Husband and wife.</b> Made in the USA.</span></div>
@@ -149,25 +182,30 @@
     </div>
   </div>
 </div>
+</section>
 
 <section class="band-mint paws paws-blue" id="faq">
   <div class="wrap wrap-n">
     <div class="sec-head"><h2 class="sec-title">Common questions</h2></div>
     <div class="faq">
-      <details open><summary>Can I have my own cat on it, with their name?</summary>
-        <p>Your own cat, yes. We paint the cat to match the photo you send after ordering. A name, no &mdash;
-        Basking Paws has no nameplate. For names, see <a href="homestead-buddies.html">Homestead Buddies</a>.</p></details>
+      <details open><summary>Can I have my own cat on it?</summary>
+        <p>Yes. Pick &ldquo;My cat&rdquo; under Color. Right after checkout, upload a photo on your order page, or reply to
+        your confirmation email with it, and we paint the cat to match. Basking Paws has no nameplate.</p></details>
       <details><summary>What if my cat isn't one of the six coats?</summary>
-        <p>That's fine. The six coats are just a starting point for the preview. We match the final pattern to your
-        photo, and simplify where the art style needs it. Only Tuxedo has a real photo so far &mdash; the others show a
-        drawn stand-in.</p></details>
+        <p>Choose &ldquo;My cat&rdquo; and send us a photo. We match your cat&rsquo;s colors and markings as closely as the art
+        style allows, and simplify complex patterns. Only Tuxedo has a real photo so far &mdash; the other coats show a
+        drawn preview.</p></details>
       <details><summary>How long does it take?</summary>
-        <p>1&ndash;2 days to make once your photo arrives, then 3&ndash;5 business days in the mail. We email you photo and video updates along the way.</p></details>
+        <p>1&ndash;2 business days to make (once your photo arrives, if we&rsquo;re matching your cat), then 3&ndash;5 business
+        days in the mail. We email you photo and video updates along the way.</p></details>
+      <details><summary>Can I send it as a gift?</summary>
+        <p>Yes. Tick &ldquo;This is a gift&rdquo;, add a note if you like, and use their address at checkout. We leave prices
+        and the receipt out of the box.</p></details>
       <details><summary>Does it take the same pads?</summary>
         <p>Yes. Every Cat Scratchers frame takes the same cardboard pad, on purpose.</p></details>
       <details><summary>What if it breaks?</summary>
-        <p>The cardboard is meant to get shredded &mdash; that is the consumable part.
-        Damaged on arrival? Tell us within 7 days and we&rsquo;ll work with you. A part fails in 30 days? Also covered.</p></details>
+        <p>The cardboard is meant to get shredded &mdash; that is the consumable part. Damaged on arrival? Tell us within
+        7 days and we replace it. A part fails in 30 days? Also covered. <a href="pages/policies.html#damage">Details</a>.</p></details>
     </div>
   </div>
 </section>

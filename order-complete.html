@@ -104,26 +104,26 @@
       </div>
 
       <div class="pdp-gift" id="ocPhoto" style="display:none">
-        📸 We need a photo of your cat
-        <span>We paint your scratcher to match your cat. The easiest way: <strong>reply to your
-        confirmation email</strong> with one clear, well-lit photo of each cat. Your order is on hold
-        until it arrives. You can also upload it here.</span>
+        📸 Send us a photo of your cat
+        <span>We're painting your scratcher to match your cat. Upload one clear, well-lit photo of
+        each cat below and it comes straight to us. Your order is on hold until it arrives, and we
+        start the moment it does.</span>
         <div class="oc-up">
-          <label class="btn btn-pink btn-block oc-up-btn" for="ocFile">Choose a photo</label>
+          <label class="btn btn-pink btn-block oc-up-btn" for="ocFile">Upload a photo</label>
           <input id="ocFile" type="file" accept="image/*" capture="environment" hidden>
           <p class="oc-muted" id="ocUpMsg">JPG, PNG or WEBP. We resize it on your phone before sending,
              so it works fine on mobile data.</p>
           <img id="ocPreview" alt="" style="display:none">
         </div>
-        <span style="margin-top:10px">Prefer email? Send it to
-          <a href="mailto:realizedprints@gmail.com">realizedprints@gmail.com</a> quoting your order reference.</span>
+        <span style="margin-top:10px">Prefer email? Just reply to your confirmation email with the
+          photo attached. That link to this page is in there too, if you want to upload later.</span>
       </div>
     </div>
 
     <aside class="oc-side">
       <h2 class="oc-h">What happens next</h2>
       <ol class="oc-steps">
-        <li>We make your order in <strong>1–2 business days</strong> once your photo arrives, and email you photo and video updates.</li>
+        <li>We make your order in <strong>1–2 business days</strong> (after your photo arrives, if we're matching your cat), and email you photo and video updates.</li>
         <li>It ships in <strong>3–5 business days</strong>.</li>
         <li>You get a tracking email the moment the label is made.</li>
         <li>Questions? Reply to your receipt, or use the <a href="pages/contact.html">contact page</a>.</li>
@@ -244,14 +244,16 @@ function mountUpload() {
       });
       const d = await res.json().catch(function () { return {}; });
       if (!res.ok) throw new Error(d.error || 'Upload failed.');
-      btn.textContent = 'Photo received ✓';
+      btn.textContent = 'Photo received ✓ Upload another';
+      btn.classList.remove('is-busy');
       btn.classList.add('is-done');
-      msg.textContent = 'Got it — that is everything we need. Send another if you like.';
+      msg.textContent = 'Got it, it’s with us. More than one cat in this order? Upload the next one too.';
     } catch (e) {
       btn.classList.remove('is-busy');
       btn.textContent = 'Try again';
-      msg.textContent = e.message + ' You can also just email the photo to us.';
+      msg.textContent = e.message + ' You can also reply to your confirmation email with the photo.';
     }
+    input.value = '';   /* so choosing the same file again still fires */
   });
 }
 
@@ -283,11 +285,11 @@ async function loadOrder() {
       const bits = [];
       bits.push(RP.COLOR_LABEL[i.color] || i.color);
       if (i.qty > 1) bits.push('Qty ' + i.qty);
-      if (i.name) bits.push('engraved "' + i.name + '"');
-      if (i.match) bits.push('exact pattern match');
+      if (i.name) bits.push('names "' + i.name + '"');
       return row(i.gift ? '🎁 ' + title + ' (free gift)' : title, bits.join(' · '), i.gift ? 'FREE' : '');
     }).join('');
-    itemsEl.innerHTML = html || '<p class="oc-muted">Your receipt email has the full details.</p>';
+    itemsEl.innerHTML = (html || '<p class="oc-muted">Your receipt email has the full details.</p>')
+      + (d.giftOrder ? '<p class="oc-muted" style="margin-top:10px">🎁 Packed as a gift: no prices or receipt in the box.</p>' : '');
 
     if (d.total) {
       document.getElementById('ocTotal').textContent = RP.money(d.total);

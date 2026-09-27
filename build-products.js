@@ -511,21 +511,21 @@ const FAQ = [
     ['How long does it take?',
      '<p>1–2 business days to make once your photo arrives, then 3–5 business days in the mail. We email you photo and video updates while it\'s being made, so you\'re never left guessing.</p>'],
     ['When do I send my cat\'s photo?',
-     '<p>After you order. There\'s nothing to upload before you pay. We email you, and you reply with a clear photo of each cat, plus the names you want on Homestead Buddies.</p>'],
+     '<p>Only if you chose "My cat" as the colour. Nothing to upload before you pay: right after checkout your order page lets you upload it, or you can reply to your confirmation email with it.</p>'],
     ['What if I don\'t send a photo straight away?',
      '<p>Your order waits on hold, and we\'ll send you a reminder or two. If we haven\'t heard from you within 30 days, we cancel and refund you in full.</p>'],
     ['Where is my order?',
      '<p>Your tracking number is in the email we send when the label is made. If tracking hasn\'t moved for 7 business days, <a href="contact.html">message us</a> and we\'ll chase it. See <a href="#shipping">lost, late or missing parcels</a>.</p>'],
     ['Can I send it to someone else as a gift?',
-     '<p>Yes. Put their address as the shipping address at checkout and your own email, so the photo request and progress updates come to you. Message us if you\'d like a note put in the box.</p>'],
+     '<p>Yes. Tick "This is a gift" on the product page and add a note. Use their address at checkout and your own email. We leave prices and the receipt out of the box. <a href="#gifts">Gift details</a>.</p>'],
     ['Do you ship outside the U.S.?',
      '<p>Not yet. U.S. addresses only for now.</p>']
   ]],
   ['faq-scratcher', 'Your scratcher', [
     ['Will it look exactly like my cat?',
      '<p>Not exactly. Here\'s the honest answer:</p><ul><li>We paint the 3D model in software.</li><li>We match it as closely as we can to your cat\'s pattern.</li><li>We simplify some patterns to suit the art style.</li><li>Colours and markings come through. Fine detail does not.</li></ul>'],
-    ['One cat or two: which one do I want?',
-     '<p><a href="../basking-paws.html">Basking Paws</a> has one cat and no nameplate. <a href="../homestead-buddies.html">Homestead Buddies</a> has two cats and their names on the front. Only have one cat but want names? Order Homestead Buddies and tell us what you\'d like in the second spot.</p>'],
+    ['Do I have to send a photo?',
+     '<p>No. Pick one of six preset coats and it ships as pictured. Want it to look like your own cat? Pick "My cat" and send a photo after checkout.</p>'],
     ['How big is it?',
      '<p>Basking Paws is about 17.7 × 11.8 × 7.9 in (450 × 300 × 200 mm) and weighs around 5 lb.</p>'],
     ['How do refills work?',
@@ -554,7 +554,7 @@ const FAQ = [
 const policiesBody = `
 <div class="callout note"><strong>The short version.</strong>
 <ul>
-  <li>Made in <strong>1–2 business days</strong> once your cat's photo arrives, then <strong>3–5 business days</strong> in the mail. U.S. only.</li>
+  <li>Made in <strong>1–2 business days</strong> (after your cat's photo arrives, if we're matching your cat), then <strong>3–5 business days</strong> in the mail. U.S. only.</li>
   <li>Free shipping on orders over <strong>${m(FREE_SHIP)}</strong>.</li>
   <li>Arrived damaged? Tell us within <strong>7 days</strong> of delivery, with photos, and we replace it free.</li>
   <li>A part fails within <strong>30 days</strong>? Also covered.</li>
@@ -570,7 +570,7 @@ const policiesBody = `
 <h3>How long it takes</h3>
 <table>
   <tr><th>Step</th><th>Time</th></tr>
-  <tr><td>You reply to our email with a photo of your cat</td><td>Whenever you're ready. Your order waits for it.</td></tr>
+  <tr><td>Only if you chose "My cat": you send us a photo</td><td>Whenever you're ready. Your order waits for it.</td></tr>
   <tr><td>We make your scratcher</td><td>1–2 business days after the photo arrives</td></tr>
   <tr><td>In the mail</td><td>3–5 business days</td></tr>
 </table>
@@ -610,10 +610,22 @@ again. You'll only pay the new postage.</p>
   <li><strong>Waiting on your photo:</strong> your order stays on hold until your photo arrives, and we'll
       send you friendly reminders. If we haven't heard from you within <strong>30 days</strong>, we'll
       cancel the order and refund you in full.</li>
+  <li>Rarely, we may cancel and fully refund an order ourselves, for example if a price was shown wrongly
+      or a payment looks fraudulent. We'll always tell you why.</li>
+</ul>
+
+<h2 id="gifts">Gift orders</h2>
+<ul>
+  <li>Tick <strong>"This is a gift"</strong> on the product page and add a note if you like. We include your
+      note in the box, and leave prices and the receipt out of the box.</li>
+  <li>Use their address as the shipping address at checkout, and your own email. The photo request
+      (if any), progress updates and tracking come to you, so the surprise stays a surprise.</li>
+  <li>Damage claims can come from you or from them. Refunds always go back to the original payment method.</li>
 </ul>
 
 <h2 id="returns">Returns &amp; refunds</h2>
-<p>Every scratcher is made to order for one cat, so we can't resell it. That means
+<p>Every scratcher is made to order, and many are painted to match one particular cat, so we can't resell
+them. That means
 <strong>no returns for change of mind</strong>, or because your cat isn't interested yet. Before you give
 up, see <a href="#faq-ignores">what to do if your cat ignores it</a>.</p>
 <h3>When we make it right</h3>
@@ -660,9 +672,13 @@ for the broken part back (we pay the postage). If we can't replace something, we
 We look at every claim individually.</p>
 
 <h2 id="custom">Your cat's photo &amp; personalisation</h2>
+<h3>Do I need to send a photo?</h3>
+<p>Only if you picked <strong>"My cat"</strong> as the colour (or ordered a two-cat design). A preset coat
+ships as pictured, with no photo needed.</p>
 <h3>Sending your photo</h3>
-<p>After you order, we email you. Reply with <strong>one clear, well-lit photo of each cat</strong>. The
-whole cat in daylight works best, and asleep on a blanket is perfect. Nothing to upload before you pay.</p>
+<p>Right after checkout, your order page lets you upload it straight to us. Or reply to your confirmation
+email with it attached. Send <strong>one clear, well-lit photo of each cat</strong>. The whole cat in
+daylight works best, and asleep on a blanket is perfect. Nothing to upload before you pay.</p>
 <h3>How we match your cat</h3>
 <ul>
   <li>We paint the 3D model in software, matching your cat's colours and markings as closely as the art
@@ -679,7 +695,8 @@ first. See our <a href="privacy.html">privacy policy</a>.</p>
 
 <h2 id="pricing">Pricing, discounts &amp; payment</h2>
 <ul>
-  <li>Prices are in U.S. dollars. Sales tax is added at checkout where it applies.</li>
+  <li>Prices are in U.S. dollars. Sales tax is worked out at checkout from your shipping address, in the
+      states where we're required to collect it.</li>
   <li><strong>Buy one, get one ${HALF}% off:</strong> every second scratcher in the same order is ${HALF}% off,
       applied automatically to the lower-priced one.</li>
   <li><strong>Refill pads:</strong> ${refillLadder}.</li>
@@ -1009,26 +1026,26 @@ ${chromeTop(b)}
       </div>
 
       <div class="pdp-gift" id="ocPhoto" style="display:none">
-        📸 We need a photo of your cat
-        <span>We paint your scratcher to match your cat. The easiest way: <strong>reply to your
-        confirmation email</strong> with one clear, well-lit photo of each cat. Your order is on hold
-        until it arrives. You can also upload it here.</span>
+        📸 Send us a photo of your cat
+        <span>We're painting your scratcher to match your cat. Upload one clear, well-lit photo of
+        each cat below and it comes straight to us. Your order is on hold until it arrives, and we
+        start the moment it does.</span>
         <div class="oc-up">
-          <label class="btn btn-pink btn-block oc-up-btn" for="ocFile">Choose a photo</label>
+          <label class="btn btn-pink btn-block oc-up-btn" for="ocFile">Upload a photo</label>
           <input id="ocFile" type="file" accept="image/*" capture="environment" hidden>
           <p class="oc-muted" id="ocUpMsg">JPG, PNG or WEBP. We resize it on your phone before sending,
              so it works fine on mobile data.</p>
           <img id="ocPreview" alt="" style="display:none">
         </div>
-        <span style="margin-top:10px">Prefer email? Send it to
-          <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> quoting your order reference.</span>
+        <span style="margin-top:10px">Prefer email? Just reply to your confirmation email with the
+          photo attached. That link to this page is in there too, if you want to upload later.</span>
       </div>
     </div>
 
     <aside class="oc-side">
       <h2 class="oc-h">What happens next</h2>
       <ol class="oc-steps">
-        <li>We make your order in <strong>1–2 business days</strong> once your photo arrives, and email you photo and video updates.</li>
+        <li>We make your order in <strong>1–2 business days</strong> (after your photo arrives, if we're matching your cat), and email you photo and video updates.</li>
         <li>It ships in <strong>3–5 business days</strong>.</li>
         <li>You get a tracking email the moment the label is made.</li>
         <li>Questions? Reply to your receipt, or use the <a href="${b}pages/contact.html">contact page</a>.</li>
@@ -1098,14 +1115,16 @@ function mountUpload() {
       });
       const d = await res.json().catch(function () { return {}; });
       if (!res.ok) throw new Error(d.error || 'Upload failed.');
-      btn.textContent = 'Photo received ✓';
+      btn.textContent = 'Photo received ✓ Upload another';
+      btn.classList.remove('is-busy');
       btn.classList.add('is-done');
-      msg.textContent = 'Got it — that is everything we need. Send another if you like.';
+      msg.textContent = 'Got it, it’s with us. More than one cat in this order? Upload the next one too.';
     } catch (e) {
       btn.classList.remove('is-busy');
       btn.textContent = 'Try again';
-      msg.textContent = e.message + ' You can also just email the photo to us.';
+      msg.textContent = e.message + ' You can also reply to your confirmation email with the photo.';
     }
+    input.value = '';   /* so choosing the same file again still fires */
   });
 }
 
@@ -1137,11 +1156,11 @@ async function loadOrder() {
       const bits = [];
       bits.push(RP.COLOR_LABEL[i.color] || i.color);
       if (i.qty > 1) bits.push('Qty ' + i.qty);
-      if (i.name) bits.push('engraved "' + i.name + '"');
-      if (i.match) bits.push('exact pattern match');
+      if (i.name) bits.push('names "' + i.name + '"');
       return row(i.gift ? '🎁 ' + title + ' (free gift)' : title, bits.join(' · '), i.gift ? 'FREE' : '');
     }).join('');
-    itemsEl.innerHTML = html || '<p class="oc-muted">Your receipt email has the full details.</p>';
+    itemsEl.innerHTML = (html || '<p class="oc-muted">Your receipt email has the full details.</p>')
+      + (d.giftOrder ? '<p class="oc-muted" style="margin-top:10px">🎁 Packed as a gift: no prices or receipt in the box.</p>' : '');
 
     if (d.total) {
       document.getElementById('ocTotal').textContent = RP.money(d.total);
@@ -1168,7 +1187,7 @@ const PAGES = [
    heroTitle:'Policies &amp; FAQ', heroLede:'Shipping, returns, damage and every question we get, in plain English, all on one page.',
    updated:POLICIES_UPDATED,
    jump:[['shipping','Shipping'],['orders','Orders &amp; cancellations'],['returns','Returns &amp; refunds'],
-         ['damage','Damage &amp; defects'],['custom','Your cat\'s photo'],['pricing','Pricing &amp; payment'],
+         ['damage','Damage &amp; defects'],['gifts','Gift orders'],['custom','Your cat\'s photo'],['pricing','Pricing &amp; payment'],
          ['care','Care &amp; safety'],['faq','FAQ'],['contact','Contact']],
    body:policiesBody},
 
