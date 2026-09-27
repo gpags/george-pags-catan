@@ -732,3 +732,57 @@ ul.tight li b{color:var(--ink)}
 .keyrow+.keyrow{margin-top:18px}
 .keyrow .plist{gap:9px}
 .keyrow .plist li{font-size:14.5px}
+
+/* ================================================================
+   PRODUCT PAGE SKY — the homepage hero's sky, sun and hills behind the
+   product. The buy column sits in a white panel so its text never
+   depends on which stop of the gradient is behind it.
+   ================================================================ */
+.pdp-sky{position:relative;overflow:hidden;padding-bottom:150px;
+  background:linear-gradient(180deg,var(--blue) 0%,#5f9eec 18%,#9fc7f5 38%,#eaf4ff 58%,#fdf8ec 76%,#fdf8ec 100%)}
+.pdp-sky::after{content:'';position:absolute;left:0;right:0;bottom:0;height:190px;pointer-events:none;z-index:0;
+  background-repeat:no-repeat;background-size:cover;background-position:bottom center;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 300' preserveAspectRatio='none'><path d='M0 130 Q180 70 360 130 T720 130 T1080 130 T1440 130 V300 H0 Z' fill='%2384c46f'/><path d='M0 180 Q180 120 360 180 T720 180 T1080 180 T1440 180 V300 H0 Z' fill='%236fb85e'/><path d='M0 230 Q180 175 360 230 T720 230 T1080 230 T1440 230 V300 H0 Z' fill='%234fa156'/></svg>")}
+.pdp-sky>.wrap{position:relative;z-index:1}
+.pdp-sky .crumb,.pdp-sky .crumb a{color:rgba(255,255,255,.92);text-shadow:0 1px 8px rgba(18,35,58,.3)}
+.pdp-sky .crumb a:hover{color:#fff;text-decoration:underline}
+.pdp-sun{top:-30px;right:-18px}
+.pdp-buy{background:#fff;border-radius:28px;padding:26px 26px 22px;
+  box-shadow:0 18px 44px -20px rgba(31,58,92,.45)}
+@media(max-width:600px){.pdp-buy{padding:20px 16px 18px;border-radius:22px}.pdp-sky{padding-bottom:120px}}
+.pdp-media .thumbs{margin-top:12px}
+.thumb .art,.thumb>img{width:100%;height:100%;object-fit:cover}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb .artnote{display:none}
+
+/* "My cat" swatch + its explainer */
+.swatch-mycat{background:var(--pink-50);font-size:21px;display:grid;place-items:center;border-style:dashed}
+.mycat-note{margin-top:12px;background:var(--pink-50);border:2px dashed var(--pink-300);border-radius:14px;
+  padding:11px 14px;font-size:13.5px;line-height:1.45}
+
+/* Upsell rows: picture, text, price + 0–3 stepper */
+.uprow{display:flex;gap:12px;align-items:center;border:2.5px solid var(--line);border-radius:var(--r);
+  padding:10px 12px;margin-top:10px;background:#fff;transition:border-color .15s,background .15s}
+.uprow[data-on="1"]{border-color:var(--pink);background:var(--pink-50)}
+.up-art{flex:none;width:58px;height:58px;border-radius:12px;overflow:hidden}
+.up-art svg{height:100%;width:auto}
+.uprow .t{flex:1;min-width:0}
+.uprow .t b{display:block;font-size:15px}
+.uprow .t>span:not(.save){display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.uprow .save{margin-top:4px}
+.up-r{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.up-r .pr{font-family:'Fredoka',sans-serif;font-size:16px;white-space:nowrap}
+.qty-sm button{width:32px;height:32px;font-size:18px}
+.qty-sm .n{min-width:26px;font-size:15px}
+@media(max-width:420px){.up-art{width:46px;height:46px}.uprow{gap:9px;padding:9px 10px}}
+
+/* Gift option */
+.giftrow{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.giftrow input{width:22px;height:22px;margin-top:2px;accent-color:var(--pink);flex:none}
+.giftrow b{display:block;font-size:15px}
+.giftrow span span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.giftbox{margin-top:10px}
+.giftbox textarea{width:100%;font:inherit;font-size:15px;padding:11px 14px;border:2.5px solid var(--line);
+  border-radius:14px;resize:vertical;background:#fff}
+.giftbox textarea:focus{outline:none;border-color:var(--pink)}
+.giftbox .count{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}

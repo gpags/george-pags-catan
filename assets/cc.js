@@ -342,7 +342,8 @@ function cartRead() {
 /* The exact payload api/checkout.js expects. No money is sent. */
 function cartPayload(items) {
   return (items || cartRead()).map(function (i) {
-    return { handle: i.h, qty: i.qty, color: i.color, addons: { name: i.name || '' } };
+    return { handle: i.h, qty: i.qty, color: i.color,
+             addons: { name: i.name || '', gift: !!i.gift, giftNote: i.giftNote || '' } };
   });
 }
 
@@ -362,10 +363,12 @@ CC.cart = {
     var items = cartRead(), i, hit = null;
     for (i = 0; i < items.length; i++) {
       if (items[i].h === item.h && items[i].color === item.color &&
-          (items[i].name || '') === (item.name || '')) { hit = items[i]; break; }
+          (items[i].name || '') === (item.name || '') &&
+          !!items[i].gift === !!item.gift && (items[i].giftNote || '') === (item.giftNote || '')) { hit = items[i]; break; }
     }
     if (hit) hit.qty += (item.qty || 1);
-    else items.push({ h: item.h, qty: item.qty || 1, color: item.color, name: item.name || '' });
+    else items.push({ h: item.h, qty: item.qty || 1, color: item.color, name: item.name || '',
+                      gift: !!item.gift, giftNote: item.giftNote || '' });
     CC.cart.write(items);
     CC.toast(((CAT.BY_HANDLE[item.h] || {}).t || 'Item') + ' added');
     CC.drawer(true);
@@ -415,6 +418,7 @@ CC.cart = {
           var bits = [CAT.COLOR_LABEL[it.color] || it.color];
           if (it.qty > 1) bits.push('qty ' + it.qty);
           if (it.name) bits.push('\u201C' + it.name + '\u201D');
+          if (it.gift) bits.push('\uD83C\uDF81 Gift');
           return '<div class="ci">' +
             '<div class="ci-art"><div class="art" data-photo="' + esc(CAT.colorImg(p, it.color)) +
               '" data-way="' + esc(it.color) + '" data-cats="' + (p.catCount || 1) +
@@ -600,7 +604,10 @@ CC.initPDP = function () {
   var customProduct = CAT.BY_HANDLE[root_.getAttribute('data-pdp-custom')] || null;
   if (!baseProduct) { console.error('cc.js: unknown product on [data-pdp]'); return; }
 
-  var state = { mode: 'base', color: baseProduct.colorsAvailable[0], name: '', qty: 1, refill: false, keys: 0 };
+  /* refills / keys are 0–3 each: the steppers on the upsell rows. */
+  var state = { mode: 'base', color: baseProduct.colorsAvailable[0], name: '', qty: 1, refills: 0, keys: 0,
+                gift: false, giftNote: '' };
+  var UP_MAX = 3;
 
   function product() { return (state.mode === 'custom' && customProduct) ? customProduct : baseProduct; }
 
@@ -626,7 +633,13 @@ CC.initPDP = function () {
   var qtyNote  = root_.querySelector('[data-qty-note]');
   var totalOut = root_.querySelector('[data-pdp-total]');
   var saveOut  = root_.querySelector('[data-pdp-save]');
-  var addRows  = root_.querySelectorAll('[data-add]');
+  var upRows   = root_.querySelectorAll('[data-up]');
+  var mycatNote = root_.querySelector('[data-mycat-note]');
+  var giftIn   = root_.querySelector('[data-gift]');
+  var giftBox  = root_.querySelector('[data-gift-box]');
+  var giftNoteIn = root_.querySelector('[data-gift-note]');
+  var giftCt   = root_.querySelector('[data-gift-count]');
+  var carousel = root_.querySelector('[data-carousel]');
   var addBtn   = root_.querySelector('[data-pdp-add]');
   var MAXNAME  = 18;
 
@@ -641,7 +654,7 @@ CC.initPDP = function () {
 
   function draft() {
     var lines = [{ handle: product().h, qty: state.qty, color: state.color }];
-    if (state.refill) lines.push({ handle: 'refill', qty: 3, color: 'natural' });
+    if (state.refills) lines.push({ handle: 'refill', qty: state.refills, color: 'natural' });
     if (state.keys) lines.push({ handle: 'keychain', qty: state.keys, color: keyColor() });
     return lines;
   }
@@ -692,6 +705,9 @@ CC.initPDP = function () {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-pdp-thumb') === state.color));
     });
     if (wayLabel) wayLabel.textContent = CAT.COLOR_LABEL[state.color] || state.color;
+    if (mycatNote) mycatNote.hidden = state.color !== 'mycat';
+    if (giftBox) giftBox.hidden = !state.gift;
+    if (giftCt) giftCt.textContent = state.giftNote.length + '/200';
 
     if (nameCt)   nameCt.textContent = state.name.length + '/' + MAXNAME;
     if (nameEcho) nameEcho.textContent = state.name || namePlaceholder;
@@ -713,21 +729,32 @@ CC.initPDP = function () {
       }
     }
 
-    Array.prototype.forEach.call(addRows, function (r) {
-      var kind = r.getAttribute('data-add');
+    /* Upsell rows: a 0–3 stepper each. Price shows the pack total from the
+       catalog ladder (so 3 pads reads as the pack price), and the note
+       nudges to the next rung when it costs nothing extra. */
+    Array.prototype.forEach.call(upRows, function (r) {
+      var kind = r.getAttribute('data-up');
+      var p = CAT.BY_HANDLE[kind === 'refill' ? 'refill' : 'keychain'];
       if (kind === 'key') {
-        /* Basking Paws has no custom/base split at all (customProduct is
-           null there) — a keychain just matches whichever coat is picked,
-           so it's always offered. Homestead Buddies still gates it to
-           "Made for your cats", since a keychain there only makes sense
-           once a real likeness exists. */
+        /* A page with a base/custom toggle only offers keychains in custom
+           mode; every other page (Basking Paws, Homestead Buddies) always does. */
         r.hidden = !!customProduct && state.mode !== 'custom';
         if (r.hidden && state.keys) state.keys = 0;
       }
-      var on = kind === 'refill' ? state.refill : state.keys === +r.getAttribute('data-keys');
-      r.setAttribute('data-on', on ? '1' : '0');
-      var tick = r.querySelector('.tick');
-      if (tick) tick.textContent = on ? '\u2713' : '';
+      var n = kind === 'refill' ? state.refills : state.keys;
+      r.setAttribute('data-on', n ? '1' : '0');
+      var nOut = r.querySelector('[data-up-n]');
+      if (nOut) nOut.textContent = n;
+      var pr = r.querySelector('[data-up-price]');
+      if (pr) pr.textContent = n ? CC.money(CAT.priceFor(p, n)) : 'from ' + CC.money(CAT.priceFor(p, 1));
+      var note = r.querySelector('[data-up-save]');
+      if (note) {
+        var saved = n ? CAT.savingAt(p, n) : 0;
+        var better = n ? CAT.betterDeal(p, n) : null;
+        note.textContent = better && better.qty <= UP_MAX ? 'Get ' + better.qty + ' for the same price'
+                         : saved > 0 ? 'Save ' + CC.money(saved) : '';
+        note.hidden = !note.textContent;
+      }
     });
 
     if (totalOut) totalOut.textContent = CC.money(total());
@@ -751,7 +778,12 @@ CC.initPDP = function () {
   });
 
   Array.prototype.forEach.call(picks, function (b) {
-    b.addEventListener('click', function () { state.color = b.getAttribute('data-pdp-way'); paint(); });
+    b.addEventListener('click', function () {
+      state.color = b.getAttribute('data-pdp-way');
+      /* Jump back to the photo that shows the colour just picked. */
+      if (carousel && carousel.ccGo) carousel.ccGo(0);
+      paint();
+    });
   });
   Array.prototype.forEach.call(thumbs, function (b) {
     b.addEventListener('click', function () { state.color = b.getAttribute('data-pdp-thumb'); paint(); });
@@ -766,20 +798,27 @@ CC.initPDP = function () {
   root_.addEventListener('click', function (e) {
     var q = e.target.closest('[data-qty]');
     if (q) { state.qty = Math.max(1, Math.min(9, state.qty + (+q.getAttribute('data-qty')))); paint(); return; }
-    var a = e.target.closest('[data-add]');
-    if (a && !a.hidden) {
-      var kind = a.getAttribute('data-add');
-      if (kind === 'refill') state.refill = !state.refill;
-      else { var k = +a.getAttribute('data-keys'); state.keys = (state.keys === k) ? 0 : k; }
+    var u = e.target.closest('[data-up-qty]');
+    if (u) {
+      var row = u.closest('[data-up]');
+      var key = row.getAttribute('data-up') === 'refill' ? 'refills' : 'keys';
+      state[key] = Math.max(0, Math.min(UP_MAX, state[key] + (+u.getAttribute('data-up-qty'))));
       paint();
     }
+  });
+
+  if (giftIn) giftIn.addEventListener('change', function () { state.gift = giftIn.checked; paint(); });
+  if (giftNoteIn) giftNoteIn.addEventListener('input', function () {
+    state.giftNote = giftNoteIn.value.slice(0, 200);
+    paint();
   });
 
   if (addBtn) addBtn.addEventListener('click', function (e) {
     e.preventDefault();
     var p = product();
-    CC.cart.add({ h: p.h, qty: state.qty, color: state.color, name: takesName() ? state.name : '' });
-    if (state.refill) CC.cart.add({ h: 'refill', qty: 3, color: 'natural' });
+    CC.cart.add({ h: p.h, qty: state.qty, color: state.color, name: takesName() ? state.name : '',
+                  gift: state.gift, giftNote: state.gift ? state.giftNote : '' });
+    if (state.refills) CC.cart.add({ h: 'refill', qty: state.refills, color: 'natural' });
     if (state.keys) {
       CC.cart.add({ h: 'keychain', qty: state.keys, color: keyColor(), name: state.name });
     }
@@ -961,43 +1000,101 @@ CC.initCarousel = function () {
   Array.prototype.forEach.call(roots, function (root) {
     var track = root.querySelector('[data-carousel-track]');
     if (!track) return;
-    var slides = track.children;
-    var n = slides.length;
-    var prev = root.querySelector('[data-carousel-prev]');
-    var next = root.querySelector('[data-carousel-next]');
-    var dotsWrap = root.querySelector('[data-carousel-dots]');
-    var i = 0;
 
-    if (n <= 1) {
-      if (prev) prev.hidden = true;
-      if (next) next.hidden = true;
-      if (dotsWrap) dotsWrap.hidden = true;
-      return;
-    }
+    /* Optional photo slides: <div class="carousel-slide" data-slide-src="images/x.jpg">.
+       Each one only joins the carousel if its file actually loads, so the
+       page can list five gallery slots before the photos exist — a missing
+       photo is simply skipped, never shown as a broken image. */
+    var pending = track.querySelectorAll('[data-slide-src]');
+    var left = pending.length;
+    if (!left) return build();
+    Array.prototype.forEach.call(pending, function (slide) {
+      var img = new Image();
+      img.alt = slide.getAttribute('data-alt') || '';
+      img.onload = function () { slide.appendChild(img); slide.removeAttribute('data-slide-src'); if (!--left) build(); };
+      img.onerror = function () { slide.remove(); if (!--left) build(); };
+      img.src = slide.getAttribute('data-slide-src');
+    });
 
-    if (dotsWrap) {
-      dotsWrap.innerHTML = '';
-      for (var d = 0; d < n; d++) {
-        var dot = document.createElement('button');
-        dot.className = 'carousel-dot';
-        dot.type = 'button';
-        dot.setAttribute('aria-label', 'Show photo ' + (d + 1) + ' of ' + n);
-        (function (idx) { dot.addEventListener('click', function () { go(idx); }); })(d);
-        dotsWrap.appendChild(dot);
+    function build() {
+      var slides = track.children;
+      var n = slides.length;
+      var prev = root.querySelector('[data-carousel-prev]');
+      var next = root.querySelector('[data-carousel-next]');
+      var dotsWrap = root.querySelector('[data-carousel-dots]');
+      var thumbsWrap = root.parentNode && root.parentNode.querySelector('[data-carousel-thumbs]');
+      var i = 0;
+      root.ccGo = function () {};
+
+      if (n <= 1) {
+        if (prev) prev.hidden = true;
+        if (next) next.hidden = true;
+        if (dotsWrap) dotsWrap.hidden = true;
+        if (thumbsWrap) thumbsWrap.hidden = true;
+        return;
       }
-    }
 
-    function paint() {
-      track.style.transform = 'translateX(-' + (i * 100) + '%)';
-      if (dotsWrap) Array.prototype.forEach.call(dotsWrap.children, function (dot, idx) {
-        dot.setAttribute('aria-current', String(idx === i));
-      });
-    }
-    function go(idx) { i = ((idx % n) + n) % n; paint(); }
+      if (dotsWrap) {
+        dotsWrap.innerHTML = '';
+        for (var d = 0; d < n; d++) {
+          var dot = document.createElement('button');
+          dot.className = 'carousel-dot';
+          dot.type = 'button';
+          dot.setAttribute('aria-label', 'Show photo ' + (d + 1) + ' of ' + n);
+          (function (idx) { dot.addEventListener('click', function () { go(idx); }); })(d);
+          dotsWrap.appendChild(dot);
+        }
+      }
 
-    if (prev) prev.addEventListener('click', function () { go(i - 1); });
-    if (next) next.addEventListener('click', function () { go(i + 1); });
-    paint();
+      /* Thumbnails mirror each slide. The first slide on a product page
+         repaints when the colour changes, so its thumb follows it. */
+      if (thumbsWrap) {
+        thumbsWrap.innerHTML = '';
+        thumbsWrap.hidden = false;
+        Array.prototype.forEach.call(slides, function (slide, idx) {
+          var t = document.createElement('button');
+          t.type = 'button';
+          t.className = 'thumb';
+          t.setAttribute('aria-label', 'Show photo ' + (idx + 1) + ' of ' + n);
+          var sync = function () {
+            t.innerHTML = slide.innerHTML;
+            /* a copy, not a second product stage */
+            Array.prototype.forEach.call(t.querySelectorAll('[data-pdp-art]'), function (x) { x.removeAttribute('data-pdp-art'); });
+          };
+          sync();
+          if (window.MutationObserver) new MutationObserver(sync).observe(slide, { childList: true, subtree: true });
+          t.addEventListener('click', function () { go(idx); });
+          thumbsWrap.appendChild(t);
+        });
+      }
+
+      function paint() {
+        track.style.transform = 'translateX(-' + (i * 100) + '%)';
+        if (dotsWrap) Array.prototype.forEach.call(dotsWrap.children, function (dot, idx) {
+          dot.setAttribute('aria-current', String(idx === i));
+        });
+        if (thumbsWrap) Array.prototype.forEach.call(thumbsWrap.children, function (t, idx) {
+          t.setAttribute('aria-pressed', String(idx === i));
+        });
+      }
+      function go(idx) { i = ((idx % n) + n) % n; paint(); }
+      root.ccGo = go;
+
+      if (prev) prev.addEventListener('click', function () { go(i - 1); });
+      if (next) next.addEventListener('click', function () { go(i + 1); });
+
+      /* Swipe on phones. */
+      var x0 = null;
+      root.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+      root.addEventListener('touchend', function (e) {
+        if (x0 === null) return;
+        var dx = e.changedTouches[0].clientX - x0;
+        x0 = null;
+        if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+
+      paint();
+    }
   });
 };
 

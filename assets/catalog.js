@@ -63,6 +63,9 @@ const COLORS = [
   ['black',     'Black',        'co-black'],
   ['greywhite', 'Grey & White', 'co-greywhite'],
   ['grey',      'Grey',         'co-grey'],
+  /* Not a paint colour: "paint it to match my cat". Picking it is what
+     makes an order need a photo — see needsPhoto() below. */
+  ['mycat',     'Matched to my cat (photo)', 'co-mycat'],
   ['meadow',    'Sky & Meadow', 'co-meadow'],
   ['natural',   'Natural kraft','co-natural']
 ];
@@ -165,10 +168,10 @@ const SIZE_BUNDLES = {
    Two designs, ONE handle each, and both are always made for the
    customer's own cat(s) — there is no ready-to-ship tier and no
    paid personalisation upsell (Sep 2026 owner decision):
-     basking-paws       $74  one cat, matched to their photo, no name
+     basking-paws       $74  one cat: 6 preset coats, or matched to their photo
      homestead-buddies  $87  two cats matched to photos, plus names
-   personalised:true on both is what makes api/checkout.js set
-   needs_photo, so every scratcher order is held for a photo.
+   Homestead Buddies is personalised:true (always needs photos). Basking
+   Paws only needs a photo when the 'mycat' colour is picked.
 
    The only upsells are refills and keychains. Every second scratcher
    is half price (SECOND_UNIT_OFF below) — "buy one, get one 50% off".
@@ -187,10 +190,9 @@ const SIZE_BUNDLES = {
    which is how you close the line if you need to stop taking orders.
    ================================================================ */
 const PRODUCTS = [
-  /* Basking Paws: the cat is matched to the customer's own cat from a
-     photo sent after ordering. No nameplate on this design. The coat
-     picked on the page is the closest starting point and is what the
-     page previews; the photo decides the final pattern. Only 'tuxedo' has a real
+  /* Basking Paws: pick one of 6 preset coats (ships as pictured, no photo
+     needed) or 'mycat' (painted to match a photo sent after checkout).
+     Same price either way. No nameplate on this design. Only 'tuxedo' has a real
      photograph (images/bp-tuxedo.jpg, a copy of the launch photo); the
      other 5 fall back to CC.meadowScene(1, colorKey)'s drawn coat —
      see the COAT lookup in assets/cc.js. Swap in a real photo for any
@@ -198,12 +200,12 @@ const PRODUCTS = [
      up automatically, no other change needed. */
   {id:101, h:'basking-paws', t:'Basking Paws', v:'scratcher', size:'XL', price:74,
    sales:0, new:1, badge:'best', exclusive:1,
-   colorsAvailable:['tuxedo','orange','calico','black','greywhite','grey'],
+   colorsAvailable:['tuxedo','orange','calico','black','greywhite','grey','mycat'],
    bundlePrices:[[1,74]],
    canonical:'basking-paws.html',
    img:'images/bp-tuxedo.jpg', swatchImg:'images/bp-{color}.jpg', catCount:1,
-   personalised:true,
-   desc:'Rolling hills, clouds and a little sun, with one sleeping cat moulded into the side, painted to match your own cat. Send a photo after you order.',
+   personalised:false,
+   desc:'Rolling hills, clouds and a little sun, with one sleeping cat moulded into the side. Pick one of six coats, or have it painted to match your own cat from a photo.',
    /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
 
   {id:103, h:'homestead-buddies', t:'Homestead Buddies', v:'scratcher', size:'XL', price:87,
@@ -242,7 +244,7 @@ const PRODUCTS = [
       needs no photo of its own — when it DOES carry a real likeness
       (added from a Homestead Buddies custom order) the scratcher line
       it travels with is what sets metadata.needs_photo, not this one. */
-   colorsAvailable:['tuxedo','orange','calico','black','greywhite','grey','meadow'],
+   colorsAvailable:['tuxedo','orange','calico','black','greywhite','grey','meadow','mycat'],
    bundlePrices:[[1,4],[2,6]],
    canonical:'basking-paws.html',
    img:'images/keychains.jpg',
@@ -418,15 +420,14 @@ function orderProblem(items) {
    made. This is what api/checkout.js stamps into metadata.needs_photo,
    and what api/upload-photo.js checks before accepting an upload.
 
-   Driven by the product's own `personalised` flag rather than by its
-   family, because not every scratcher handle carries a likeness and a
-   nameplate — the base basking-paws/homestead-buddies handles don't.
-   Asking for a photo we would do nothing with is a promise we would
-   then have to explain away. */
+   True for an always-personalised product (Homestead Buddies), or any
+   line whose colour is 'mycat'. A preset Basking Paws coat needs no
+   photo, and asking for one we would do nothing with is a promise we
+   would then have to explain away. Callers must pass `color`. */
 function needsPhoto(items) {
   return (items || []).some(it => {
     const p = BY_HANDLE[it && it.handle];
-    return !!(p && p.personalised);
+    return !!(p && (p.personalised || it.color === 'mycat'));
   });
 }
 
@@ -434,6 +435,8 @@ function needsPhoto(items) {
    without per-colorway photography fall back to their single image. */
 function colorImg(product, colorKey) {
   if (!product) return '';
+  /* No photo of "your cat" exists yet — show the product's main photo. */
+  if (colorKey === 'mycat') return product.imgUrl || '';
   if (product.swatchImg && colorKey) return product.swatchImg.replace('{color}', colorKey);
   return product.imgUrl || '';
 }
