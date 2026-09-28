@@ -84,17 +84,17 @@
       </svg>
     </div>
 
-    <div class="carousel" data-carousel aria-label="Basking Paws cat scratcher photos">
+    <!-- Hero video. Plays muted on a loop; tapping it opens the product page.
+         Save the clip as images/hero.mp4 (and optionally images/hero.webm).
+         Until it exists, the poster photo shows instead. -->
+    <a class="hero-video" href="basking-paws.html" aria-label="Watch Basking Paws, then shop it">
       <span class="ribbon">Start here &middot; Basking Paws</span>
-      <div class="carousel-track" data-carousel-track>
-        <div class="carousel-slide">
-          <img src="images/bp-scratcher.jpg" alt="Basking Paws cat scratcher, blue sky and green hills with a sleeping cat moulded into the side">
-        </div>
-      </div>
-      <button class="carousel-arrow prev" data-carousel-prev aria-label="Previous photo">&#8592;</button>
-      <button class="carousel-arrow next" data-carousel-next aria-label="Next photo">&#8594;</button>
-      <div class="carousel-dots" data-carousel-dots></div>
-    </div>
+      <video autoplay muted loop playsinline preload="metadata" poster="images/bp-scratcher.jpg">
+        <source src="images/hero.webm" type="video/webm">
+        <source src="images/hero.mp4" type="video/mp4">
+      </video>
+      <span class="hv-cta">&#9654; Shop Basking Paws</span>
+    </a>
   </div>
 </section>
 
@@ -102,14 +102,14 @@
   <div class="wrap">
     <div class="sec-head">
       <h2 class="sec-title">Meet Basking Paws</h2>
-      <p class="sec-sub">One meadow, one sleeping cat &mdash; in six coat colors, or painted to match yours. Buy one, get the second 50% off.</p>
+      <p class="sec-sub">One meadow, one sleeping cat, painted to match yours. Buy 2: <span data-cat-money="SECOND_OFF_USD"></span> off the second + free keychains. Buy 3: free shipping.</p>
     </div>
     <div class="tpl-grid">
       <article class="tpl">
         <div class="art" data-photo="images/bp-scratcher.jpg" data-cats="1" data-coat="tuxedo" data-alt="Basking Paws cat scratcher"></div>
         <div class="tpl-b">
           <h3>Basking Paws</h3>
-          <p>Blue sky, green hills and one sleeping cat. Six coats, or matched to your own cat.</p>
+          <p>Blue sky, green hills and one sleeping cat, painted to match your own.</p>
           <div class="tpl-f"><span class="p" data-price="basking-paws"></span><a class="btn btn-pink btn-sm" href="basking-paws.html">Choose</a></div>
         </div>
       </article>
@@ -143,7 +143,7 @@
         <p>Put it where they already scratch. Next to the couch or on rugs works best. Message us anyway and we will help the best we can</p></details>
       <details><summary>How do refills work?</summary>
         <p>The pad lifts out and a new one drops in. Most cats need one every 2 months but we know owners typically do it every 6 months.</p>
-        <p><span data-price="refill" data-qty="1"></span> for one. <span data-price="refill" data-qty="3"></span> for three. <span data-price="refill" data-qty="6"></span> for six.</p></details>
+        <p><span data-price="refill" data-qty="1"></span> for one. <span data-price="refill" data-qty="2"></span> for two. <span data-price="refill" data-qty="3"></span> for three. Or subscribe and save <span data-cat-pct="SUB_OFF"></span>%.</p></details>
       <details><summary>What if it breaks?</summary>
         <ul class="tight">
           <li>The cardboard is meant to get shredded. That is the job.</li>

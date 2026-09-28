@@ -74,14 +74,14 @@
 
     <div class="ptabs-wrap">
       <div class="ptabs" role="group" aria-label="What kind of partner are you?">
-        <button class="ptab" data-ptab="vet" aria-pressed="true">I'm a Vet</button>
+        <button class="ptab" data-ptab="vet" aria-pressed="false">I'm a Vet</button>
         <button class="ptab" data-ptab="shelter" aria-pressed="false">I'm a Shelter</button>
         <button class="ptab" data-ptab="store" aria-pressed="false">I'm a Pet Store</button>
-        <button class="ptab" data-ptab="sitter" aria-pressed="false">I'm a Cat Sitter</button>
+        <button class="ptab" data-ptab="sitter" aria-pressed="true">I'm a Cat Sitter</button>
       </div>
     </div>
 
-      <div class="wins" data-ppane="vet">
+      <div class="wins" data-ppane="vet" hidden>
         <div class="win">
           <div class="ic" aria-hidden="true">💰</div>
           <h4>Profit that funds more care</h4>
@@ -132,7 +132,7 @@
           <p>No stock. No shelf space. No packing. We ship direct.</p>
         </div>
       </div>
-      <div class="wins" data-ppane="sitter" hidden>
+      <div class="wins" data-ppane="sitter">
         <div class="win">
           <div class="ic" aria-hidden="true">🔑</div>
           <h4>Free keychains for clients</h4>
@@ -194,7 +194,7 @@
       <div class="two">
         <label><span class="lb">Business name</span><input name="business" data-label="Business" type="text" placeholder="Rivera Veterinary"></label>
         <label><span class="lb">What are you?</span>
-          <select name="kind" data-label="Kind"><option>Veterinary practice</option><option>Shelter or rescue</option><option>Pet store</option><option>Independent cat sitter</option><option>Something else</option></select></label>
+          <select name="kind" data-label="Kind"><option>Veterinary practice</option><option>Shelter or rescue</option><option>Pet store</option><option selected>Independent cat sitter</option><option>Something else</option></select></label>
       </div>
       <div class="two">
         <label><span class="lb">Where are you?</span><input name="area" data-label="Area" type="text" placeholder="City or area"></label>

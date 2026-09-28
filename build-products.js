@@ -24,7 +24,7 @@ const UPDATED = 'August 17, 2026';
 /* Same catalog module the storefront and api/checkout.js read, so the
    generated pages, the cart and the Stripe line items cannot drift. */
 const CATALOG = require('./assets/catalog.js');
-const { PRODUCTS, VIBES, ADDONS, GIFTS, FREE_SHIP, BY_HANDLE, SIZE_BUNDLES, priceFor, savingAt, imgSrc, BUILD_ID } = CATALOG;
+const { PRODUCTS, VIBES, ADDONS, GIFTS, FREE_SHIP_AT, FREE_KEYS_AT, SECOND_OFF_USD, SUB_OFF, SUB_EVERY_MONTHS, BY_HANDLE, SIZE_BUNDLES, priceFor, savingAt, imgSrc, BUILD_ID } = CATALOG;
 
 /* Every distinct bundle tier actually in use, so the policies table and
    the FAQ describe the real offer instead of a stale hardcoded list. */
@@ -271,7 +271,7 @@ ${chromeTop(b)}
       <div class="pdp-price">$${p.price}.00 USD</div>
       <div class="pdp-ship">Shipping calculated at checkout · Made in 1–2 business days, ships in 3–5</div>
       <div class="pdp-sku">SKU: ${p.sku || 'RP-' + String(p.id).padStart(4,'0')}</div>
-      <div class="pdp-free">Free USPS Ground Advantage shipping on U.S. orders $${FREE_SHIP}+</div>
+      <div class="pdp-free">Free USPS Ground Advantage shipping on orders of ${FREE_SHIP_AT}+ scratchers</div>
       <p class="pdp-desc">${esc(p.desc)}</p>
 
       <div class="opt-t">Core animal color — <span id="colorName"></span></div>
@@ -496,7 +496,7 @@ ${footer(b)}
    Every price here is read from assets/catalog.js — never type one in. */
 const m = n => '$' + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
 const REFILL = BY_HANDLE.refill, KEYCHAIN = BY_HANDLE.keychain;
-const HALF = Math.round(CATALOG.SECOND_UNIT_OFF * 100);
+const SUB_PCT = Math.round(SUB_OFF * 100);
 const refillLadder = CATALOG.packsFor(REFILL)
   .map(([q]) => `${q === 1 ? 'one pad' : q + ' pads'} for ${m(priceFor(REFILL, q))}`).join(', ');
 const keyLadder = CATALOG.packsFor(KEYCHAIN)
@@ -511,7 +511,7 @@ const FAQ = [
     ['How long does it take?',
      '<p>1–2 business days to make once your photo arrives, then 3–5 business days in the mail. We email you photo and video updates while it\'s being made, so you\'re never left guessing.</p>'],
     ['When do I send my cat\'s photo?',
-     '<p>Only if you chose "My cat" as the colour. Nothing to upload before you pay: right after checkout your order page lets you upload it, or you can reply to your confirmation email with it.</p>'],
+     '<p>After you pay. Nothing to upload before: right after checkout your order page lets you upload it, or you can reply to your confirmation email with it.</p>'],
     ['What if I don\'t send a photo straight away?',
      '<p>Your order waits on hold, and we\'ll send you a reminder or two. If we haven\'t heard from you within 30 days, we cancel and refund you in full.</p>'],
     ['Where is my order?',
@@ -524,8 +524,10 @@ const FAQ = [
   ['faq-scratcher', 'Your scratcher', [
     ['Will it look exactly like my cat?',
      '<p>Not exactly. Here\'s the honest answer:</p><ul><li>We paint the 3D model in software.</li><li>We match it as closely as we can to your cat\'s pattern.</li><li>We simplify some patterns to suit the art style.</li><li>Colours and markings come through. Fine detail does not.</li></ul>'],
-    ['Do I have to send a photo?',
-     '<p>No. Pick one of six preset coats and it ships as pictured. Want it to look like your own cat? Pick "My cat" and send a photo after checkout.</p>'],
+    ['What do I get if I order more than one?',
+     '<p>Buy 2 and the second is ' + m(SECOND_OFF_USD) + ' off, plus a free keychain for every cat. Buy ' + FREE_SHIP_AT + ' and shipping is free too. It all applies automatically in the cart.</p>'],
+    ['Is there a pad subscription?',
+     '<p>Yes. Tick Subscribe &amp; Save when you add pads: ' + SUB_PCT + '% off, delivered every ' + SUB_EVERY_MONTHS + ' months, cancel any time by replying to one of our emails.</p>'],
     ['How big is it?',
      '<p>Basking Paws is about 17.7 × 11.8 × 7.9 in (450 × 300 × 200 mm) and weighs around 5 lb.</p>'],
     ['How do refills work?',
@@ -541,7 +543,7 @@ const FAQ = [
     ['A part broke after a few weeks.',
      '<p>If it failed under normal use within 30 days of delivery, we replace the part free. Past that, or if it was an accident, message us anyway. A replacement part is often cheap.</p>'],
     ['You got something wrong.',
-     '<p>Wrong item, a name we misspelled, the wrong number of cats: it\'s our mistake, and we remake it free.</p>'],
+     '<p>Wrong item or something missing from the box: it\'s our mistake, and we put it right free.</p>'],
     ['Can I change or cancel my order?',
      '<p>Yes, for a full refund, any time before we start making it. <a href="contact.html">Message us</a> as soon as you can.</p>']
   ]],
@@ -555,7 +557,8 @@ const policiesBody = `
 <div class="callout note"><strong>The short version.</strong>
 <ul>
   <li>Made in <strong>1–2 business days</strong> (after your cat's photo arrives, if we're matching your cat), then <strong>3–5 business days</strong> in the mail. U.S. only.</li>
-  <li>Free shipping on orders over <strong>${m(FREE_SHIP)}</strong>.</li>
+  <li><strong>Buy 2:</strong> ${m(SECOND_OFF_USD)} off the second scratcher, plus a free keychain for every cat.
+      <strong>Buy ${FREE_SHIP_AT}:</strong> free shipping too.</li>
   <li>Arrived damaged? Tell us within <strong>7 days</strong> of delivery, with photos, and we replace it free.</li>
   <li>A part fails within <strong>30 days</strong>? Also covered.</li>
   <li>Every scratcher is made for your cat, so we can't take change-of-mind returns. You can cancel for a
@@ -570,7 +573,7 @@ const policiesBody = `
 <h3>How long it takes</h3>
 <table>
   <tr><th>Step</th><th>Time</th></tr>
-  <tr><td>Only if you chose "My cat": you send us a photo</td><td>Whenever you're ready. Your order waits for it.</td></tr>
+  <tr><td>You send us a photo of your cat</td><td>Whenever you're ready. Your order waits for it.</td></tr>
   <tr><td>We make your scratcher</td><td>1–2 business days after the photo arrives</td></tr>
   <tr><td>In the mail</td><td>3–5 business days</td></tr>
 </table>
@@ -579,7 +582,8 @@ updates of your actual piece while it's being made, then a tracking number when 
 
 <h3>Shipping cost</h3>
 <p>Shipping is worked out at checkout from the size and weight of your order, and you see it before you
-pay. Orders over <strong>${m(FREE_SHIP)}</strong> ship free.</p>
+pay. Orders with <strong>${FREE_SHIP_AT} or more scratchers</strong> ship free. Subscribe &amp; Save refill
+deliveries after the first one ship free as well.</p>
 
 <h3>Tracking</h3>
 <p>We email a tracking number when the label is made. The carrier's first scan can lag a day or two
@@ -603,7 +607,7 @@ again. You'll only pay the new postage.</p>
 
 <h2 id="orders">Orders, changes &amp; cancellations</h2>
 <ul>
-  <li><strong>Changes</strong> to names, coat or address are free until we start making your scratcher.
+  <li><strong>Changes</strong> to your photo or address are free until we start making your scratcher.
       Just message us.</li>
   <li><strong>Cancel for a full refund</strong> any time before we start making it. Once we've started,
       it's being made for your cat, so it can't be cancelled.</li>
@@ -631,11 +635,13 @@ up, see <a href="#faq-ignores">what to do if your cat ignores it</a>.</p>
 <h3>When we make it right</h3>
 <ul>
   <li>It arrived damaged, or a part failed within 30 days (see <a href="#damage">Damage &amp; defects</a>).</li>
-  <li>We made a mistake: the wrong item, a name we misspelled, or the wrong number of cats.
+  <li>We made a mistake: the wrong item, or add-ons missing from the box.
       We remake it free.</li>
 </ul>
-<h3>Refill pads</h3>
-<p>Unopened refill pads can be returned within 30 days of delivery. You pay the return postage, and we
+<h3>Refill pads &amp; Subscribe &amp; Save</h3>
+<p>Subscribe &amp; Save pads ship every ${SUB_EVERY_MONTHS} months at ${SUB_PCT}% off. Cancel or pause any time
+before your next delivery by replying to any of our emails or through the <a href="contact.html">contact page</a>;
+a delivery that has already been charged still ships. Unopened refill pads can be returned within 30 days of delivery. You pay the return postage, and we
 refund the pads once they're back with us.</p>
 <h3>How refunds are paid</h3>
 <p>Refunds go back to your original payment method within 5 business days of approval. Your bank may
@@ -673,11 +679,10 @@ We look at every claim individually.</p>
 
 <h2 id="custom">Your cat's photo &amp; personalisation</h2>
 <h3>Do I need to send a photo?</h3>
-<p>Only if you picked <strong>"My cat"</strong> as the colour (or ordered a two-cat design). A preset coat
-ships as pictured, with no photo needed.</p>
+<p>Yes. Every scratcher is painted to match your own cat, so we need one photo before we start.</p>
 <h3>Sending your photo</h3>
 <p>Right after checkout, your order page lets you upload it straight to us. Or reply to your confirmation
-email with it attached. Send <strong>one clear, well-lit photo of each cat</strong>. The whole cat in
+email with it attached. Send <strong>one clear, well-lit photo of your cat</strong>. The whole cat in
 daylight works best, and asleep on a blanket is perfect. Nothing to upload before you pay.</p>
 <h3>How we match your cat</h3>
 <ul>
@@ -686,9 +691,6 @@ daylight works best, and asleep on a blanket is perfect. Nothing to upload befor
   <li>Some complex patterns are simplified to suit the style.</li>
   <li>Colours and markings come through. Fine fur detail does not.</li>
 </ul>
-<h3>Names</h3>
-<p>Homestead Buddies carries your cats' names, up to 18 characters, printed exactly as you type them.
-Please check the spelling. If we get it wrong, we remake it free. Basking Paws has no nameplate.</p>
 <h3>Your photos stay private</h3>
 <p>We use your photos only to make your order, and never post them or your finished piece without asking
 first. See our <a href="privacy.html">privacy policy</a>.</p>
@@ -697,9 +699,13 @@ first. See our <a href="privacy.html">privacy policy</a>.</p>
 <ul>
   <li>Prices are in U.S. dollars. Sales tax is worked out at checkout from your shipping address, in the
       states where we're required to collect it.</li>
-  <li><strong>Buy one, get one ${HALF}% off:</strong> every second scratcher in the same order is ${HALF}% off,
-      applied automatically to the lower-priced one.</li>
-  <li><strong>Refill pads:</strong> ${refillLadder}.</li>
+  <li><strong>Buy one, get ${m(SECOND_OFF_USD)} off the second:</strong> every second scratcher in the same order
+      is ${m(SECOND_OFF_USD)} off, applied automatically.</li>
+  <li><strong>Free keychains:</strong> order ${FREE_KEYS_AT} or more scratchers and we add a free keychain for
+      every one, matched to your cat.</li>
+  <li><strong>Free shipping:</strong> on orders of ${FREE_SHIP_AT} or more scratchers.</li>
+  <li><strong>Refill pads:</strong> ${refillLadder}. <strong>Subscribe &amp; Save ${SUB_PCT}%</strong> and they
+      arrive every ${SUB_EVERY_MONTHS} months; cancel any time.</li>
   <li><strong>Keychains</strong> (only with a scratcher): ${keyLadder}.</li>
   <li>Discount codes go in at checkout, one per order. We can't add a code after an order is placed.</li>
   <li>Payment runs through Stripe's secure checkout: card, Apple Pay, Google Pay or Link. We never see

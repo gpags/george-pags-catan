@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Basking Paws &mdash; Cat Scratchers</title>
-<meta name="description" content="A blue-sky, green-hill cat scratcher with a sleeping cat moulded into the side, in six coat colors, or painted to match your own cat from a photo. Gift-ready.">
+<meta name="description" content="A blue-sky, green-hill cat scratcher with a sleeping cat moulded into the side, painted to match your own cat from a photo. Gift-ready.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -83,13 +83,14 @@
         <div class="carousel-slide">
           <div class="art" data-pdp-art data-photo="images/bp-tuxedo.jpg" data-cats="1" data-coat="tuxedo" data-alt="Basking Paws cat scratcher, Tuxedo"></div>
         </div>
-        <!-- Gallery photos. Save them as images/bp-photo-1.jpg … bp-photo-5.jpg
-             and they appear on their own; any slot without a file is skipped. -->
-        <div class="carousel-slide" data-slide-src="images/bp-photo-1.jpg" data-alt="Basking Paws cat scratcher, photo 1"></div>
-        <div class="carousel-slide" data-slide-src="images/bp-photo-2.jpg" data-alt="Basking Paws cat scratcher, photo 2"></div>
-        <div class="carousel-slide" data-slide-src="images/bp-photo-3.jpg" data-alt="Basking Paws cat scratcher, photo 3"></div>
-        <div class="carousel-slide" data-slide-src="images/bp-photo-4.jpg" data-alt="Basking Paws cat scratcher, photo 4"></div>
-        <div class="carousel-slide" data-slide-src="images/bp-photo-5.jpg" data-alt="Basking Paws cat scratcher, photo 5"></div>
+        <!-- Gallery photos. Save them as images/bp-photo-1.jpg … bp-photo-5.jpg and
+             each replaces its slot on its own. Until then every slot shows
+             images/bp-scratcher.jpg (data-fallback-src). -->
+        <div class="carousel-slide" data-slide-src="images/bp-photo-1.jpg" data-fallback-src="images/bp-scratcher.jpg" data-alt="Basking Paws cat scratcher, photo 1"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-2.jpg" data-fallback-src="images/bp-scratcher.jpg" data-alt="Basking Paws cat scratcher, photo 2"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-3.jpg" data-fallback-src="images/bp-scratcher.jpg" data-alt="Basking Paws cat scratcher, photo 3"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-4.jpg" data-fallback-src="images/bp-scratcher.jpg" data-alt="Basking Paws cat scratcher, photo 4"></div>
+        <div class="carousel-slide" data-slide-src="images/bp-photo-5.jpg" data-fallback-src="images/bp-scratcher.jpg" data-alt="Basking Paws cat scratcher, photo 5"></div>
       </div>
       <button class="carousel-arrow prev" data-carousel-prev aria-label="Previous photo">&#8592;</button>
       <button class="carousel-arrow next" data-carousel-next aria-label="Next photo">&#8594;</button>
@@ -108,25 +109,13 @@
     </div>
     <ul class="plist" style="margin:10px 0 0">
       <li><span class="pin">&#10003;</span><span>Rolling hills, clouds and a small sun, with one sleeping cat moulded into the side.</span></li>
-      <li><span class="pin">&#10003;</span><span>Six coat colors, or painted to match your own cat.</span></li>
+      <li><span class="pin">&#10003;</span><span>Painted to match your own cat from a photo you send after checkout.</span></li>
       <li><span class="pin">&#10003;</span><span>Comes with the first cardboard pad.</span></li>
     </ul>
 
-    <div class="optblock">
-      <div class="lbl"><span>Color</span><span class="val" data-way-label>Tuxedo</span></div>
-      <div class="swatches">
-        <span class="swatch-pick"><button class="swatch" data-pdp-way="tuxedo" aria-pressed="true" style="background:#2b2b2e" aria-label="Tuxedo"></button><span class="nm">Tuxedo</span></span>
-        <span class="swatch-pick"><button class="swatch" data-pdp-way="orange" aria-pressed="false" style="background:#e2711d" aria-label="Orange Tabby"></button><span class="nm">Orange</span></span>
-        <span class="swatch-pick"><button class="swatch" data-pdp-way="calico" aria-pressed="false" style="background:linear-gradient(135deg,#e2711d 50%,#2b2b2e 50%)" aria-label="Calico"></button><span class="nm">Calico</span></span>
-        <span class="swatch-pick"><button class="swatch" data-pdp-way="black" aria-pressed="false" style="background:#242426" aria-label="Black"></button><span class="nm">Black</span></span>
-        <span class="swatch-pick"><button class="swatch" data-pdp-way="greywhite" aria-pressed="false" style="background:linear-gradient(135deg,#8b9096 50%,#fff 50%)" aria-label="Grey &amp; White"></button><span class="nm">Grey &amp; White</span></span>
-        <span class="swatch-pick"><button class="swatch" data-pdp-way="grey" aria-pressed="false" style="background:#8b9096" aria-label="Grey"></button><span class="nm">Grey</span></span>
-        <span class="swatch-pick"><button class="swatch swatch-mycat" data-pdp-way="mycat" aria-pressed="false" aria-label="Match my cat from a photo">&#128247;</button><span class="nm">My cat</span></span>
-      </div>
-      <div class="mycat-note" data-mycat-note hidden>
-        <b>We&rsquo;ll paint it to match your cat.</b> Nothing to upload now. Right after checkout you can upload a
-        photo on your order page, or just reply to your confirmation email with it. We start the moment it arrives.
-      </div>
+    <div class="mycat-note">
+      &#128248; <b>Painted to match your cat.</b> Nothing to upload now. Right after checkout you can upload a photo on
+      your order page, or just reply to your confirmation email with it. We start the moment it arrives.
     </div>
 
     <div class="optblock">
@@ -146,16 +135,24 @@
       <div class="uprow" data-up="refill" data-on="0">
         <div class="up-art art" data-photo="images/cc-refill-inserts.jpg" data-insert data-nonote data-alt="Spare cardboard pads"></div>
         <div class="t"><b>Spare cardboard pads</b><span>Most cats need a fresh one every 2 months.</span>
+          <div class="up-picks" role="group" aria-label="How many pads">
+            <button type="button" data-up-pick="1" aria-pressed="false"><b>1</b><span data-up-price></span></button>
+            <button type="button" data-up-pick="2" aria-pressed="false"><b>2</b><span data-up-price></span></button>
+            <button type="button" data-up-pick="3" aria-pressed="false"><b>3</b><span data-up-price></span></button>
+          </div>
+          <label class="subrow" data-sub-row hidden><input type="checkbox" data-sub>
+            <span><b>Subscribe &amp; save <span data-cat-pct="SUB_OFF"></span>%</b> &middot; delivered every <span data-cat-num="SUB_EVERY_MONTHS"></span> months, cancel any time</span></label>
           <span class="save" data-up-save hidden></span></div>
-        <div class="up-r"><span class="pr" data-up-price></span>
-          <div class="qty qty-sm"><button data-up-qty="-1" aria-label="Fewer pads">&minus;</button><span class="n" data-up-n>0</span><button data-up-qty="1" aria-label="More pads">+</button></div></div>
       </div>
       <div class="uprow" data-up="key" data-on="0">
         <div class="up-art art" data-photo="images/keychains.jpg" data-nonote data-alt="Cat keychains"></div>
-        <div class="t"><b>Keychain, same cat</b><span>Pocket size, matches the color you picked.</span>
+        <div class="t"><b>Keychain, same cat</b><span>Pocket size, painted to match your cat.</span>
+          <div class="up-picks" role="group" aria-label="How many keychains">
+            <button type="button" data-up-pick="1" aria-pressed="false"><b>1</b><span data-up-price></span></button>
+            <button type="button" data-up-pick="2" aria-pressed="false"><b>2</b><span data-up-price></span></button>
+            <button type="button" data-up-pick="3" aria-pressed="false"><b>3</b><span data-up-price></span></button>
+          </div>
           <span class="save" data-up-save hidden></span></div>
-        <div class="up-r"><span class="pr" data-up-price></span>
-          <div class="qty qty-sm"><button data-up-qty="-1" aria-label="Fewer keychains">&minus;</button><span class="n" data-up-n>0</span><button data-up-qty="1" aria-label="More keychains">+</button></div></div>
       </div>
     </div>
 
@@ -174,7 +171,7 @@
       <div class="saved" data-pdp-save hidden></div>
       <button class="btn btn-pink btn-block btn-lg" data-pdp-add>Add to cart</button>
       <div class="trust">
-        <div><span>&#127807;</span><span><b>Pick a coat, or match your cat.</b> Choose &ldquo;My cat&rdquo; and send a photo after checkout. No nameplate on this design.</span></div>
+        <div><span>&#127807;</span><span><b>Painted to match your cat.</b> Upload a photo right after checkout, or reply to our email with it.</span></div>
         <div><span>&#128248;</span><span><b>Photo &amp; video updates.</b> We email you pictures of your actual piece as it&rsquo;s made.</span></div>
         <div><span>&#9851;</span><span><b>Pads from <span data-price="refill" data-qty="1"></span>.</b> Lift the old one out, drop a new one in.</span></div>
         <div><span>&#127482;&#127480;</span><span><b>Husband and wife.</b> Made in the USA.</span></div>
@@ -188,15 +185,15 @@
   <div class="wrap wrap-n">
     <div class="sec-head"><h2 class="sec-title">Common questions</h2></div>
     <div class="faq">
-      <details open><summary>Can I have my own cat on it?</summary>
-        <p>Yes. Pick &ldquo;My cat&rdquo; under Color. Right after checkout, upload a photo on your order page, or reply to
-        your confirmation email with it, and we paint the cat to match. Basking Paws has no nameplate.</p></details>
-      <details><summary>What if my cat isn't one of the six coats?</summary>
-        <p>Choose &ldquo;My cat&rdquo; and send us a photo. We match your cat&rsquo;s colors and markings as closely as the art
-        style allows, and simplify complex patterns. Only Tuxedo has a real photo so far &mdash; the other coats show a
-        drawn preview.</p></details>
+      <details open><summary>Will it really be my cat?</summary>
+        <p>Yes. Every Basking Paws is painted to match your cat. Right after checkout, upload a photo on your order page,
+        or reply to your confirmation email with it. We match colors and markings as closely as the art style allows,
+        and simplify very complex patterns.</p></details>
+      <details><summary>What do I get if I buy more than one?</summary>
+        <p>Buy 2: <span data-cat-money="SECOND_OFF_USD"></span> off the second, plus a free keychain for every cat. Buy 3: free shipping too. It&rsquo;s all applied
+        automatically in your cart.</p></details>
       <details><summary>How long does it take?</summary>
-        <p>1&ndash;2 business days to make (once your photo arrives, if we&rsquo;re matching your cat), then 3&ndash;5 business
+        <p>1&ndash;2 business days to make once your photo arrives, then 3&ndash;5 business
         days in the mail. We email you photo and video updates along the way.</p></details>
       <details><summary>Can I send it as a gift?</summary>
         <p>Yes. Tick &ldquo;This is a gift&rdquo;, add a note if you like, and use their address at checkout. We leave prices
