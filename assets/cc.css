@@ -786,3 +786,40 @@ ul.tight li b{color:var(--ink)}
   border-radius:14px;resize:vertical;background:#fff}
 .giftbox textarea:focus{outline:none;border-color:var(--pink)}
 .giftbox .count{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+
+/* 1 / 2 / 3 quick picks on upsell rows (tap the picked one again to remove) */
+.up-picks{display:flex;gap:8px;margin-top:9px}
+.up-picks button{flex:1;min-width:0;border:2.5px solid var(--line);border-radius:12px;background:#fff;
+  padding:6px 4px;display:flex;flex-direction:column;align-items:center;line-height:1.15;cursor:pointer;
+  transition:border-color .15s,background .15s}
+.up-picks button b{font-family:'Fredoka',sans-serif;font-size:17px}
+.up-picks button span{font-size:12px;color:var(--muted);font-weight:700}
+.up-picks button:hover{border-color:var(--pink-300)}
+.up-picks button[aria-pressed="true"]{border-color:var(--pink);background:var(--pink);color:#fff}
+.up-picks button[aria-pressed="true"] span{color:rgba(255,255,255,.9)}
+.uprow{align-items:flex-start}
+.subrow{display:flex;gap:9px;align-items:flex-start;margin-top:10px;font-size:13px;line-height:1.35;cursor:pointer;
+  background:var(--mint-100);border-radius:10px;padding:8px 10px}
+.subrow input{width:18px;height:18px;margin-top:1px;accent-color:var(--mint-800);flex:none}
+.pdp-buy>.mycat-note{margin-top:14px}
+
+/* Cart milestone ladder: 1 → 2 → 3 scratchers */
+.ms{background:var(--blue-50);border-radius:14px;padding:12px 14px 30px;margin-bottom:12px}
+.ms-msg{font-size:13.5px;line-height:1.4;margin:0 0 14px}
+.ms-track{position:relative;height:6px;background:var(--line);border-radius:6px;margin:0 12px}
+.ms-fill{position:absolute;left:0;top:0;bottom:0;background:var(--pink);border-radius:6px;transition:width .3s}
+.ms-step{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center}
+.ms-step i{font-style:normal;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--line);
+  display:grid;place-items:center;font-size:11px;font-weight:800}
+.ms-step[data-on="1"] i{background:var(--pink);border-color:var(--pink);color:#fff}
+.ms-step em{position:absolute;top:26px;font-style:normal;font-size:10.5px;font-weight:800;color:var(--muted);white-space:nowrap}
+
+/* Hero video — whole tile links to the product page */
+.hero-video{position:relative;display:block;max-width:640px;aspect-ratio:4/3;margin:28px auto 0;border-radius:28px;
+  overflow:hidden;border:4px solid #fff;box-shadow:0 22px 50px -24px rgba(31,58,92,.6);background:var(--blue-50)}
+.hero-video video{width:100%;height:100%;object-fit:cover;display:block}
+.hero-video .ribbon{top:14px;left:14px;z-index:2}
+.hv-cta{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:var(--pink);color:#fff;
+  font-weight:800;padding:10px 18px;border-radius:999px;box-shadow:0 8px 20px -8px rgba(0,0,0,.4);white-space:nowrap;
+  transition:transform .15s}
+.hero-video:hover .hv-cta{transform:translateX(-50%) scale(1.05)}

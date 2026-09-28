@@ -239,6 +239,15 @@ CC.paintArt = function (scope) {
    rather than showing a wrong number.
    ================================================================ */
 CC.fillPrices = function (scope) {
+  /* Offer numbers from the catalog, for copy like "$30 off" / "save 25%":
+     data-cat-money="SECOND_OFF_USD", data-cat-pct="SUB_OFF", data-cat-num="SUB_EVERY_MONTHS". */
+  Array.prototype.forEach.call((scope || document).querySelectorAll('[data-cat-money],[data-cat-pct],[data-cat-num]'), function (el) {
+    var k, v;
+    if ((k = el.getAttribute('data-cat-money'))) v = CC.money(CAT[k]);
+    else if ((k = el.getAttribute('data-cat-pct'))) v = String(Math.round(CAT[k] * 100));
+    else v = String(CAT[el.getAttribute('data-cat-num')]);
+    el.textContent = CAT[k || el.getAttribute('data-cat-num')] == null ? '' : v;
+  });
   var nodes = (scope || document).querySelectorAll('[data-price]');
   Array.prototype.forEach.call(nodes, function (el) {
     var p = CAT.BY_HANDLE[el.getAttribute('data-price')];
@@ -298,8 +307,8 @@ CC.mountChrome = function () {
     var items = [
       ['♥','Husband &amp; wife, made in the USA'], ['✈','Shipping across the USA'],
       ['★','Made in 1–2 days, ships in 3–5'], ['📸','Photo &amp; video updates as yours is made'],
-      ['♥','Painted to match your cat'], ['🎁','Buy one, get the second 50% off'],
-      ['✈','Free US shipping on two-scratcher orders'], ['★','Replaceable cardboard insert'],
+      ['♥','Painted to match your cat'], ['🎁','$30 off your second scratcher + free keychains'],
+      ['✈','Free US shipping on 3+ scratchers'], ['★','Replaceable cardboard insert'],
       ['♥','Only 3 one-of-one commissions a month']
     ];
     var group = '<div class="mq-group">' + items.map(function (it) {
@@ -343,7 +352,7 @@ function cartRead() {
 function cartPayload(items) {
   return (items || cartRead()).map(function (i) {
     return { handle: i.h, qty: i.qty, color: i.color,
-             addons: { name: i.name || '', gift: !!i.gift, giftNote: i.giftNote || '' } };
+             addons: { name: i.name || '', gift: !!i.gift, giftNote: i.giftNote || '', sub: !!i.sub } };
   });
 }
 
@@ -364,11 +373,12 @@ CC.cart = {
     for (i = 0; i < items.length; i++) {
       if (items[i].h === item.h && items[i].color === item.color &&
           (items[i].name || '') === (item.name || '') &&
-          !!items[i].gift === !!item.gift && (items[i].giftNote || '') === (item.giftNote || '')) { hit = items[i]; break; }
+          !!items[i].gift === !!item.gift && (items[i].giftNote || '') === (item.giftNote || '') &&
+          !!items[i].sub === !!item.sub) { hit = items[i]; break; }
     }
     if (hit) hit.qty += (item.qty || 1);
     else items.push({ h: item.h, qty: item.qty || 1, color: item.color, name: item.name || '',
-                      gift: !!item.gift, giftNote: item.giftNote || '' });
+                      gift: !!item.gift, giftNote: item.giftNote || '', sub: !!item.sub });
     CC.cart.write(items);
     CC.toast(((CAT.BY_HANDLE[item.h] || {}).t || 'Item') + ' added');
     CC.drawer(true);
@@ -379,7 +389,8 @@ CC.cart = {
   lineTotal: function (it) {
     var p = CAT.BY_HANDLE[it.h];
     if (!p) return 0;
-    return CAT.priceFor(p, it.qty) + (it.name ? CAT.ADDONS.name.price : 0) * it.qty;
+    var base = it.sub ? CAT.subPriceFor(p, it.qty) : CAT.priceFor(p, it.qty);
+    return base + (it.name ? CAT.ADDONS.name.price : 0) * it.qty;
   },
 
   /* Order-level, so it can only be resolved once the whole cart is known.
@@ -413,16 +424,18 @@ CC.cart = {
       if (!items.length) {
         body.innerHTML = '<div class="dr-empty">Nothing in here yet.<br>Pick a design to get started.</div>';
       } else {
-        body.innerHTML = items.map(function (it, i) {
+        body.innerHTML = CC.milestones(CAT.scratcherCount(cartPayload())) + items.map(function (it, i) {
           var p = CAT.BY_HANDLE[it.h];
           var bits = [CAT.COLOR_LABEL[it.color] || it.color];
           if (it.qty > 1) bits.push('qty ' + it.qty);
           if (it.name) bits.push('\u201C' + it.name + '\u201D');
           if (it.gift) bits.push('\uD83C\uDF81 Gift');
+          if (it.sub) bits.push('every ' + CAT.SUB_EVERY_MONTHS + ' months, ' + Math.round(CAT.SUB_OFF * 100) + '% off');
           return '<div class="ci">' +
             '<div class="ci-art"><div class="art" data-photo="' + esc(CAT.colorImg(p, it.color)) +
               '" data-way="' + esc(it.color) + '" data-cats="' + (p.catCount || 1) +
-              '" data-coat="' + esc(it.color) + '" data-alt="' + esc(p.t) + '" data-nonote></div></div>' +
+              '" data-coat="' + esc(it.color) + '" data-alt="' + esc(p.t) + '"' +
+              (p.v === 'refill' ? ' data-insert' : '') + ' data-nonote></div></div>' +
             '<div class="ci-t"><b>' + esc(p.t) + '</b><span>' + esc(bits.join(' \u00B7 ')) + '</span>' +
             '<button class="ci-rm" data-rm="' + i + '">Remove</button></div>' +
             '<div class="ci-p">' + CC.money(CC.cart.lineTotal(it)) + '</div></div>';
@@ -431,9 +444,20 @@ CC.cart = {
         var off = CC.cart.discount();
         if (off > 0) {
           body.innerHTML += '<div class="ci ci-off"><div class="ci-t">' +
-            '<b>' + Math.round(CAT.SECOND_UNIT_OFF * 100) + '% off your second scratcher</b>' +
+            '<b>' + CC.money(CAT.SECOND_OFF_USD) + ' off every second scratcher</b>' +
             '<span>Applied automatically</span></div>' +
             '<div class="ci-p">\u2212' + CC.money(off) + '</div></div>';
+        }
+        var freeKeys = CAT.freeKeychains(cartPayload());
+        if (freeKeys) {
+          body.innerHTML += '<div class="ci ci-off"><div class="ci-t">' +
+            '<b>' + freeKeys + ' free keychain' + (freeKeys > 1 ? 's' : '') + '</b>' +
+            '<span>One for every scratcher, matched to your cat</span></div>' +
+            '<div class="ci-p">FREE</div></div>';
+        }
+        if (CAT.freeShipping(cartPayload())) {
+          body.innerHTML += '<div class="ci ci-off"><div class="ci-t"><b>Free shipping</b>' +
+            '<span>Unlocked with ' + CAT.FREE_SHIP_AT + '+ scratchers</span></div><div class="ci-p">FREE</div></div>';
         }
         CC.paintArt(body);
       }
@@ -449,6 +473,23 @@ CC.cart = {
     var co = document.querySelector('[data-checkout]');
     if (co) co.setAttribute('aria-disabled', (items.length && !problem) ? 'false' : 'true');
   }
+};
+
+/* The milestone ladder at the top of the cart: 1 → 2 → 3 scratchers.
+   Every number comes from the catalog, which checkout reads too. */
+CC.milestones = function (n) {
+  var K = CAT.FREE_KEYS_AT, S = CAT.FREE_SHIP_AT, off = CC.money(CAT.SECOND_OFF_USD), msg;
+  if (n < 1) msg = 'Add a scratcher to get started.';
+  else if (n < K) msg = '<b>Add ' + (K - n) + ' more scratcher</b> and get ' + off + ' off it, plus a free keychain for every cat.';
+  else if (n < S) msg = '\uD83C\uDF89 <b>' + off + ' off + ' + n + ' free keychains unlocked.</b> Add ' + (S - n) + ' more for free shipping.';
+  else msg = '\uD83C\uDF89 <b>Everything unlocked:</b> ' + off + ' off, ' + n + ' free keychains and free shipping.';
+  var steps = [[1, 'Scratcher'], [K, off + ' off + keychains'], [S, 'Free shipping']];
+  return '<div class="ms"><p class="ms-msg">' + msg + '</p><div class="ms-track">' +
+    '<div class="ms-fill" style="width:' + (Math.min(n, S) - 1) / (S - 1) * 100 + '%"></div>' +
+    steps.map(function (st, i) {
+      return '<span class="ms-step" data-on="' + (n >= st[0] ? '1' : '0') + '" style="left:' + (i / (steps.length - 1) * 100) + '%">' +
+        '<i>' + st[0] + '</i><em>' + st[1] + '</em></span>';
+    }).join('') + '</div></div>';
 };
 
 /* One place to show a checkout-blocking message, in the drawer footer. */
@@ -545,14 +586,14 @@ CC.initRefills = function () {
   var btn = document.querySelector('[data-refill-add]');
   var sum = document.querySelector('[data-refill-label]');
   var product = CAT.BY_HANDLE.refill;
-  var pick = 3;
+  var pick = 3;   /* default tile */
 
   /* Pack labels are copy, not pricing. Every price on this page comes from
      the catalog ladder so the tiles, the button and Stripe cannot disagree. */
   var LABEL = {
     1: 'One pad',
-    3: 'Three pads \u00B7 half a year',
-    6: 'Six pads \u00B7 a full year'
+    2: 'Two pads',
+    3: 'Three pads'
   };
 
   function paint() {
@@ -606,7 +647,7 @@ CC.initPDP = function () {
 
   /* refills / keys are 0–3 each: the steppers on the upsell rows. */
   var state = { mode: 'base', color: baseProduct.colorsAvailable[0], name: '', qty: 1, refills: 0, keys: 0,
-                gift: false, giftNote: '' };
+                sub: false, gift: false, giftNote: '' };
   var UP_MAX = 3;
 
   function product() { return (state.mode === 'custom' && customProduct) ? customProduct : baseProduct; }
@@ -663,7 +704,7 @@ CC.initPDP = function () {
     var lines = draft(), sum = 0, i, p;
     for (i = 0; i < lines.length; i++) {
       p = CAT.BY_HANDLE[lines[i].handle];
-      sum += CAT.priceFor(p, lines[i].qty);
+      sum += (lines[i].handle === 'refill' && state.sub) ? CAT.subPriceFor(p, lines[i].qty) : CAT.priceFor(p, lines[i].qty);
     }
     if (takesName() && state.name) sum += CAT.ADDONS.name.price * state.qty;
     return Math.max(0, Math.round((sum - CAT.secondUnitDiscount(lines)) * 100) / 100);
@@ -708,6 +749,7 @@ CC.initPDP = function () {
     if (mycatNote) mycatNote.hidden = state.color !== 'mycat';
     if (giftBox) giftBox.hidden = !state.gift;
     if (giftCt) giftCt.textContent = state.giftNote.length + '/200';
+    if (subIn) subIn.checked = state.sub;
 
     if (nameCt)   nameCt.textContent = state.name.length + '/' + MAXNAME;
     if (nameEcho) nameEcho.textContent = state.name || namePlaceholder;
@@ -715,23 +757,26 @@ CC.initPDP = function () {
     if (priceOut) priceOut.textContent = CC.money(p.price);
 
     if (qtyNote) {
-      var off = Math.round(CAT.SECOND_UNIT_OFF * 100);
-      if (state.qty === 1) {
-        qtyNote.innerHTML = '<b>Add a second and it\u2019s ' + off + '% off</b> \u2014 ' +
-          CC.money(p.price * (1 - CAT.SECOND_UNIT_OFF)) + ' instead of ' +
-          CC.money(p.price) + '. Two cats, two rooms, or one for somebody else.';
+      var off = CC.money(CAT.SECOND_OFF_USD);
+      var q = state.qty;
+      if (q < CAT.FREE_KEYS_AT) {
+        qtyNote.innerHTML = '<b>Buy 2: ' + off + ' off the second</b> + a free keychain for each cat. ' +
+          '<b>Buy 3:</b> free shipping too.';
         qtyNote.setAttribute('data-tone', 'offer');
+      } else if (q < CAT.FREE_SHIP_AT) {
+        qtyNote.innerHTML = '\uD83C\uDF89 <b>' + off + ' off + ' + q + ' free keychains unlocked.</b> ' +
+          'Add one more for free shipping.';
+        qtyNote.setAttribute('data-tone', 'won');
       } else {
-        qtyNote.innerHTML = '<b>Every second one is ' + off + '% off.</b> You\u2019re saving ' +
-          CC.money(CAT.secondUnitDiscount([{ handle: p.h, qty: state.qty }])) +
-          ' on this order.';
+        qtyNote.innerHTML = '\uD83C\uDF89 <b>Everything unlocked:</b> ' +
+          CC.money(CAT.secondUnitDiscount([{ handle: p.h, qty: q }])) + ' off, ' + q +
+          ' free keychains and free shipping.';
         qtyNote.setAttribute('data-tone', 'won');
       }
     }
 
-    /* Upsell rows: a 0–3 stepper each. Price shows the pack total from the
-       catalog ladder (so 3 pads reads as the pack price), and the note
-       nudges to the next rung when it costs nothing extra. */
+    /* Upsell rows: pick 1, 2 or 3 (tap the picked one again to remove).
+       Prices come from the catalog ladder; pads can be Subscribe & Save. */
     Array.prototype.forEach.call(upRows, function (r) {
       var kind = r.getAttribute('data-up');
       var p = CAT.BY_HANDLE[kind === 'refill' ? 'refill' : 'keychain'];
@@ -742,18 +787,27 @@ CC.initPDP = function () {
         if (r.hidden && state.keys) state.keys = 0;
       }
       var n = kind === 'refill' ? state.refills : state.keys;
+      var sub = kind === 'refill' && state.sub;
       r.setAttribute('data-on', n ? '1' : '0');
-      var nOut = r.querySelector('[data-up-n]');
-      if (nOut) nOut.textContent = n;
-      var pr = r.querySelector('[data-up-price]');
-      if (pr) pr.textContent = n ? CC.money(CAT.priceFor(p, n)) : 'from ' + CC.money(CAT.priceFor(p, 1));
+      Array.prototype.forEach.call(r.querySelectorAll('[data-up-pick]'), function (btn) {
+        var k = +btn.getAttribute('data-up-pick');
+        btn.setAttribute('aria-pressed', String(k === n));
+        var pr = btn.querySelector('[data-up-price]');
+        if (pr) pr.textContent = CC.money(sub ? CAT.subPriceFor(p, k) : CAT.priceFor(p, k));
+      });
+      var subRow = r.querySelector('[data-sub-row]');
+      if (subRow) subRow.hidden = !n;
       var note = r.querySelector('[data-up-save]');
       if (note) {
-        var saved = n ? CAT.savingAt(p, n) : 0;
-        var better = n ? CAT.betterDeal(p, n) : null;
-        note.textContent = better && better.qty <= UP_MAX ? 'Get ' + better.qty + ' for the same price'
-                         : saved > 0 ? 'Save ' + CC.money(saved) : '';
-        note.hidden = !note.textContent;
+        var t = '';
+        if (kind === 'key' && state.qty >= CAT.FREE_KEYS_AT) {
+          t = state.qty + ' come free with your ' + state.qty + ' scratchers' + (n ? ' \u2014 these are extra' : '');
+        } else if (n) {
+          var saved = sub ? p.price * n - CAT.subPriceFor(p, n) : CAT.savingAt(p, n);
+          t = saved > 0 ? 'Save ' + CC.money(saved) + (sub ? ' every delivery' : '') : '';
+        }
+        note.textContent = t;
+        note.hidden = !t;
       }
     });
 
@@ -798,14 +852,19 @@ CC.initPDP = function () {
   root_.addEventListener('click', function (e) {
     var q = e.target.closest('[data-qty]');
     if (q) { state.qty = Math.max(1, Math.min(9, state.qty + (+q.getAttribute('data-qty')))); paint(); return; }
-    var u = e.target.closest('[data-up-qty]');
+    var u = e.target.closest('[data-up-pick]');
     if (u) {
       var row = u.closest('[data-up]');
       var key = row.getAttribute('data-up') === 'refill' ? 'refills' : 'keys';
-      state[key] = Math.max(0, Math.min(UP_MAX, state[key] + (+u.getAttribute('data-up-qty'))));
+      var k = Math.max(0, Math.min(UP_MAX, +u.getAttribute('data-up-pick')));
+      state[key] = state[key] === k ? 0 : k;   /* tap again to remove */
+      if (key === 'refills' && !state.refills) state.sub = false;
       paint();
     }
   });
+
+  var subIn = root_.querySelector('[data-sub]');
+  if (subIn) subIn.addEventListener('change', function () { state.sub = subIn.checked; paint(); });
 
   if (giftIn) giftIn.addEventListener('change', function () { state.gift = giftIn.checked; paint(); });
   if (giftNoteIn) giftNoteIn.addEventListener('input', function () {
@@ -818,7 +877,7 @@ CC.initPDP = function () {
     var p = product();
     CC.cart.add({ h: p.h, qty: state.qty, color: state.color, name: takesName() ? state.name : '',
                   gift: state.gift, giftNote: state.gift ? state.giftNote : '' });
-    if (state.refills) CC.cart.add({ h: 'refill', qty: state.refills, color: 'natural' });
+    if (state.refills) CC.cart.add({ h: 'refill', qty: state.refills, color: 'natural', sub: state.sub });
     if (state.keys) {
       CC.cart.add({ h: 'keychain', qty: state.keys, color: keyColor(), name: state.name });
     }
@@ -856,7 +915,10 @@ CC.initPartner = function () {
   Array.prototype.forEach.call(tabs, function (t) {
     t.addEventListener('click', function () { pick(t.getAttribute('data-ptab')); });
   });
-  pick(tabs[0].getAttribute('data-ptab'));
+  /* Start on whichever tab the page marks as pressed (Cat Sitter), not
+     simply the first one. */
+  var start = document.querySelector('[data-ptab][aria-pressed="true"]') || tabs[0];
+  pick(start.getAttribute('data-ptab'));
 };
 
 /* ================================================================
@@ -1012,7 +1074,12 @@ CC.initCarousel = function () {
       var img = new Image();
       img.alt = slide.getAttribute('data-alt') || '';
       img.onload = function () { slide.appendChild(img); slide.removeAttribute('data-slide-src'); if (!--left) build(); };
-      img.onerror = function () { slide.remove(); if (!--left) build(); };
+      /* Missing file: try the slot's stand-in photo once, else drop the slot. */
+      img.onerror = function () {
+        var fb = slide.getAttribute('data-fallback-src');
+        if (fb && img.src.indexOf(fb) === -1) { img.src = fb; return; }
+        slide.remove(); if (!--left) build();
+      };
       img.src = slide.getAttribute('data-slide-src');
     });
 

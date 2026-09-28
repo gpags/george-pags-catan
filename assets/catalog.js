@@ -20,7 +20,7 @@
                 Weigh one packed unit on a kitchen scale before going
                 live: api/checkout.js picks the postage band from it,
                 and a wrong number loses real money on every order.
-     FREE_SHIP  threshold is provisional — see the note on it.
+     FREE_SHIP_AT / FREE_KEYS_AT  order milestones — see the note on them.
      GIFTS      deliberately empty for v1 — see the note on it.
    ================================================================ */
 (function (root, factory) {
@@ -32,7 +32,7 @@
 /* ---------- design families ----------
    `v` groups products. The validator throws on an unknown one, and
    api/checkout.js uses `v === 'scratcher'` to decide what the
-   second-scratcher-half-off rule applies to, and `v === 'keychain'` to
+   $30-off-the-second-scratcher rule applies to, and `v === 'keychain'` to
    enforce the scratcher-required rule. Renaming a key here means
    changing both places. */
 const VIBES = {
@@ -90,22 +90,31 @@ const COLOR_LABEL = COLORS.reduce((m,[k,label]) => (m[k] = label, m), {});
 const ADDONS = { name:{label:'Name on the nameplate', price:0} };
 
 /* ================================================================
-   FREE SHIPPING
+   ORDER MILESTONES — counted in scratchers, not dollars (Sep 2026
+   owner decision), so the cart can say "1 more scratcher and…":
 
-   TODO — PROVISIONAL. A scratcher is a wood/composite frame, not a
-   figurine: it is the heaviest thing this shop posts, so a low
-   threshold would make almost every order ship free on a
-   multi-pound parcel, which loses money on each one.
+     2 scratchers  $30 off the second (SECOND_OFF_USD below)
+                   + a free keychain for every scratcher in the order
+     3 scratchers  free shipping
 
-   111 is set so a single scratcher pays postage and the cheapest
-   two-scratcher order (two Basking Paws, $74 + $37 with the second
-   at half price) ships free. A single Homestead Buddies with a big
-   refill + keychain add-on can also cross it; that is accepted. Confirm
-   against a real Pirate Ship quote for a packed TWO-frame parcel
-   before launch, and keep the marquee line in assets/cc.js in step
-   with whatever number ends up here.
+   api/checkout.js applies all three from these same functions, so the
+   cart's promise and the Stripe total can't disagree.
    ================================================================ */
-const FREE_SHIP = 111;
+const FREE_KEYS_AT = 2;
+const FREE_SHIP_AT = 3;
+
+function scratcherCount(items) {
+  return (items || []).reduce((n, it) => {
+    const p = BY_HANDLE[it && it.handle];
+    return n + (p && p.v === 'scratcher' ? Math.max(0, Math.floor(it.qty) || 0) : 0);
+  }, 0);
+}
+function freeShipping(items) { return scratcherCount(items) >= FREE_SHIP_AT; }
+/* One free keychain per scratcher, once the order has at least two. */
+function freeKeychains(items) {
+  const n = scratcherCount(items);
+  return n >= FREE_KEYS_AT ? n : 0;
+}
 
 /* ================================================================
    PHOTOGRAPHY
@@ -125,7 +134,7 @@ const ALL_PHOTOS_REAL = () => PRODUCTS.every(p => p.photoReal);
 
    The obvious move is a free keychain over $X. Don't: the keychain is
    a paid $4 upsell on the product page, and giving it away on every
-   $74 order removes that revenue line before it has ever run.
+   scratcher order removes that revenue line before it has ever run.
 
    The place a gift ladder does earn its keep is the partner channel —
    see SCRATCHER-LINE-HANDOFF.md §4.4. A free keychain or refill pack
@@ -168,17 +177,16 @@ const SIZE_BUNDLES = {
    Two designs, ONE handle each, and both are always made for the
    customer's own cat(s) — there is no ready-to-ship tier and no
    paid personalisation upsell (Sep 2026 owner decision):
-     basking-paws       $74  one cat: 6 preset coats, or matched to their photo
+     basking-paws       $55  one cat, always matched to their photo
      homestead-buddies  $87  two cats matched to photos, plus names
-   Homestead Buddies is personalised:true (always needs photos). Basking
-   Paws only needs a photo when the 'mycat' colour is picked.
+   Both are personalised:true, so every scratcher order needs a photo.
 
    The only upsells are refills and keychains. Every second scratcher
-   is half price (SECOND_UNIT_OFF below) — "buy one, get one 50% off".
+   is $30 off (SECOND_OFF_USD below); see ORDER MILESTONES for the rest.
 
    Refills and keychains are one handle each with a quantity ladder,
    which is exactly what bundlePrices exists to express: refills read
-   1/$10, 3/$20, 6/$30 and keychains read 1/$4, 2/$6.
+   1/$12, 2/$22, 3/$30 and keychains read 1/$4, 2/$6.
 
    `canonical` names the hand-designed page that already sells this
    product. build-products.js skips generating a products/*.html for
@@ -190,22 +198,24 @@ const SIZE_BUNDLES = {
    which is how you close the line if you need to stop taking orders.
    ================================================================ */
 const PRODUCTS = [
-  /* Basking Paws: pick one of 6 preset coats (ships as pictured, no photo
-     needed) or 'mycat' (painted to match a photo sent after checkout).
-     Same price either way. No nameplate on this design. Only 'tuxedo' has a real
+  /* Basking Paws: ALWAYS painted to match the customer's own cat from a
+     photo sent after checkout (owner decision, Sep 2026 — the colour
+     picker is gone), so its only colour is 'mycat'. No nameplate. The
+     preset coat keys below stay in COLORS for the keychain and for any
+     old carts. Only 'tuxedo' has a real
      photograph (images/bp-tuxedo.jpg, a copy of the launch photo); the
      other 5 fall back to CC.meadowScene(1, colorKey)'s drawn coat —
      see the COAT lookup in assets/cc.js. Swap in a real photo for any
      of them later by adding images/bp-<color>.jpg; swatchImg picks it
      up automatically, no other change needed. */
-  {id:101, h:'basking-paws', t:'Basking Paws', v:'scratcher', size:'XL', price:74,
+  {id:101, h:'basking-paws', t:'Basking Paws', v:'scratcher', size:'XL', price:55,
    sales:0, new:1, badge:'best', exclusive:1,
-   colorsAvailable:['tuxedo','orange','calico','black','greywhite','grey','mycat'],
-   bundlePrices:[[1,74]],
+   colorsAvailable:['mycat'],
+   bundlePrices:[[1,55]],
    canonical:'basking-paws.html',
    img:'images/bp-tuxedo.jpg', swatchImg:'images/bp-{color}.jpg', catCount:1,
-   personalised:false,
-   desc:'Rolling hills, clouds and a little sun, with one sleeping cat moulded into the side. Pick one of six coats, or have it painted to match your own cat from a photo.',
+   personalised:true,
+   desc:'Rolling hills, clouds and a little sun, with one sleeping cat moulded into the side, painted to match your own cat. Send a photo after checkout.',
    /*TODO*/ weightOz:64, boxClass:'box-XL', stock:99, photoReal:true},
 
   {id:103, h:'homestead-buddies', t:'Homestead Buddies', v:'scratcher', size:'XL', price:87,
@@ -223,13 +233,12 @@ const PRODUCTS = [
    desc:'The same meadow scene as Basking Paws, built for two — your two cats drawn into the hillside together, with their names on the front. Send photos after you order.',
    /*TODO*/ weightOz:66, boxClass:'box-XL', stock:99, photoReal:false},
 
-  {id:105, h:'refill', t:'Refill pads', v:'refill', size:'M', price:10,
+  {id:105, h:'refill', t:'Refill pads', v:'refill', size:'M', price:12,
    sales:0, new:0, badge:'', exclusive:1,
    colorsAvailable:['natural'],
-   /* 1/$10, 3/$20, 6/$30. priceFor() finds the cheapest combination, so
-      a quantity between two rungs is billed at whichever is cheaper —
-      4 pads is 3+1 = $30, 7 pads is 6+1 = $40. */
-   bundlePrices:[[1,10],[3,20],[6,30]],
+   /* 1/$12, 2/$22, 3/$30. priceFor() finds the cheapest combination, so
+      4 pads is 3+1 = $42. The product page offers 1, 2 or 3. */
+   bundlePrices:[[1,12],[2,22],[3,30]],
    canonical:'cc-refills.html',
    img:'images/cc-refill-inserts.jpg',
    personalised:false,
@@ -329,6 +338,17 @@ function imgSrc(product, base) {
   return (base || '') + u;
 }
 
+/* ================================================================
+   SUBSCRIBE & SAVE — refill pads only. The pack price minus SUB_OFF,
+   billed and shipped every SUB_EVERY_MONTHS. api/checkout.js turns a
+   cart line with sub:true into a recurring Stripe price from these.
+   ================================================================ */
+const SUB_OFF = 0.25;
+const SUB_EVERY_MONTHS = 3;
+function subPriceFor(product, qty) {
+  return Math.round(priceFor(product, qty) * (1 - SUB_OFF) * 100) / 100;
+}
+
 /* What a single unit works out at, for the "$X each" line. */
 function unitPriceAt(product, qty) {
   const n = Math.max(1, Math.floor(qty) || 1);
@@ -357,15 +377,16 @@ function betterDeal(product, qty) {
 }
 
 /* ================================================================
-   BUY ONE, GET ONE 50% OFF — THE SECOND-SCRATCHER RULE
+   BUY ONE, GET $30 OFF THE SECOND — THE SECOND-SCRATCHER RULE
 
    This is an ORDER-LEVEL rule, not a per-product bundle ladder, and
    it has to be: bundle ladders are per handle, so a customer buying
    one Storybook Cottage and one Sleepy Meadow would be two lines of
    qty 1 and would get nothing — while the page told them the second
-   one was half off.
+   one was discounted.
 
-   Every second scratcher in the order comes off at 50%. Four
+   Every second scratcher in the order comes off by SECOND_OFF_USD
+   (never below $0). Four
    scratchers means two discounted, which is the same way a bundle
    ladder behaves and the same way "every second one" reads.
 
@@ -377,7 +398,7 @@ function betterDeal(product, qty) {
    `items` is [{handle, qty}, ...]. Both api/checkout.js and
    assets/cc.js call this so the browser and Stripe cannot disagree.
    ================================================================ */
-const SECOND_UNIT_OFF = 0.50;
+const SECOND_OFF_USD = 30;
 
 function secondUnitDiscount(items) {
   const units = [];
@@ -389,7 +410,7 @@ function secondUnitDiscount(items) {
   });
   units.sort((a, b) => b - a);
   let off = 0;
-  for (let i = 1; i < units.length; i += 2) off += units[i] * SECOND_UNIT_OFF;
+  for (let i = 1; i < units.length; i += 2) off += Math.min(units[i], SECOND_OFF_USD);
   return Math.round(off * 100) / 100;
 }
 
@@ -454,7 +475,7 @@ function colorImg(product, colorKey) {
    ================================================================ */
 function buildId() {
   const shape = JSON.stringify([
-    SIZE_BUNDLES, ADDONS, FREE_SHIP, GIFTS, SECOND_UNIT_OFF,
+    SIZE_BUNDLES, ADDONS, FREE_SHIP_AT, FREE_KEYS_AT, GIFTS, SECOND_OFF_USD, SUB_OFF, SUB_EVERY_MONTHS,
     PRODUCTS.map(p => [p.h, p.price, p.size, p.stock, p.bundlePrices])
   ]);
   let h = 5381;
@@ -465,9 +486,10 @@ const BUILD_ID = buildId();
 
 return {
   VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
-  SIZE_BUNDLES, FREE_SHIP, GIFTS, giftsFor, nextGift,
+  SIZE_BUNDLES, FREE_SHIP_AT, FREE_KEYS_AT, scratcherCount, freeShipping, freeKeychains,
+  SUB_OFF, SUB_EVERY_MONTHS, subPriceFor, GIFTS, giftsFor, nextGift,
   priceFor, unitPriceAt, savingAt, betterDeal, packsFor, imgSrc,
-  SECOND_UNIT_OFF, secondUnitDiscount, orderProblem, needsPhoto, colorImg,
+  SECOND_OFF_USD, secondUnitDiscount, orderProblem, needsPhoto, colorImg,
   BUILD_ID, ALL_PHOTOS_REAL
 };
 });

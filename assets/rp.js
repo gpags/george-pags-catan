@@ -19,9 +19,9 @@
 const CATALOG = global.RP_CATALOG;
 if (!CATALOG) throw new Error('rp.js: assets/catalog.js must be loaded first');
 
-const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE, FREE_SHIP,
+const { VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE, FREE_SHIP_AT, scratcherCount,
         priceFor, unitPriceAt, savingAt, betterDeal, imgSrc,
-        SECOND_UNIT_OFF, secondUnitDiscount,
+        SECOND_OFF_USD, secondUnitDiscount,
         GIFTS, giftsFor, nextGift, BUILD_ID } = CATALOG;
 
 const BASE = (document.body && document.body.dataset.base) || '';
@@ -68,7 +68,7 @@ const lineTotal = it => {
   return priceFor(p, it.qty) + addonsPerUnit(it) * it.qty;
 };
 const cartCount = () => CART.reduce((n, i) => n + i.qty, 0);
-/* The 40%-off-the-second-scratcher rule is an ORDER-level discount, not a
+/* The $30-off-the-second-scratcher rule is an ORDER-level discount, not a
    per-product bundle ladder, so it can only be applied once the whole cart
    is known. api/checkout.js applies the identical rule from the identical
    catalog function, so the drawer and the Stripe total always agree. */
@@ -168,7 +168,7 @@ function mountMarquee(){
   const track = document.getElementById('mqTrack'); if (!track) return;
   const items = [
     ['♥','Follow us @realizedprints'], ['✈','Shipping across the USA'],
-    ['♥','Made in 1–2 days, ships in 3–5'], ['★','Free US shipping over $' + FREE_SHIP],
+    ['♥','Made in 1–2 days, ships in 3–5'], ['★','Free US shipping on ' + FREE_SHIP_AT + '+ scratchers'],
     ['♥','Husband & wife, printed in the USA'], ['🎁','Bundle & save on selected cats'],
     ['★','Replaceable cardboard pad'], ['♥','Your cat, drawn into the design']
   ];
@@ -233,15 +233,17 @@ function renderCart(){
     return;
   }
   const total = cartTotal();
-  const left = Math.max(0, FREE_SHIP - total);
+  /* Free shipping is a scratcher-count milestone now, not a dollar one. */
+  const count = scratcherCount(CART.map(i => ({ handle: i.h, qty: i.qty })));
+  const left = Math.max(0, FREE_SHIP_AT - count);
   /* Gift ladder, mirrored from the server. api/checkout.js decides the real
      entitlement — this is only the shopper-facing preview of it. */
   const earned = giftsFor(total);
   const next = nextGift(total);
   body.innerHTML =
     `<div class="ship-bar">
-       <p>${left > 0 ? "You're " + money(left) + ' away from free shipping' : '🎉 You’ve got free shipping'}</p>
-       <div class="ship-track"><div class="ship-fill" style="width:${Math.min(100,total/FREE_SHIP*100)}%"></div></div>
+       <p>${left > 0 ? 'Add ' + left + ' more scratcher' + (left > 1 ? 's' : '') + ' for free shipping' : '🎉 You’ve got free shipping'}</p>
+       <div class="ship-track"><div class="ship-fill" style="width:${Math.min(100, count / FREE_SHIP_AT * 100)}%"></div></div>
      </div>` +
     (next ? `<div class="gift-bar">Add ${money(next.minSpend - total)} more and we’ll throw in a free
        <strong>${BY_HANDLE[next.handle].t}</strong></div>` : '') +
@@ -267,7 +269,7 @@ function renderCart(){
     }).join('') +
     (cartDiscount() > 0 ? `<div class="ci ci-gift">
         <div>
-          <div class="ci-t">${Math.round(SECOND_UNIT_OFF * 100)}% off your second scratcher</div>
+          <div class="ci-t">${money(SECOND_OFF_USD)} off every second scratcher</div>
           <div class="ci-m">Applied automatically</div>
           <div class="ci-p">−${money(cartDiscount())}</div>
         </div></div>` : '');
@@ -391,9 +393,9 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 else boot();
 
 global.RP = { BASE, BUILD_ID, VIBES, COLORS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE, imgSrc,
-              SECOND_UNIT_OFF, secondUnitDiscount,
+              SECOND_OFF_USD, secondUnitDiscount,
               priceFor, unitPriceAt, savingAt, betterDeal, money, unitPrice,
               GIFTS, giftsFor, nextGift,
-              addToCart, renderCart, openCart, closeCart, cardHTML, FREE_SHIP,
+              addToCart, renderCart, openCart, closeCart, cardHTML, FREE_SHIP_AT,
               startCheckout, buyNow, get cart(){ return CART; } };
 })(window);
