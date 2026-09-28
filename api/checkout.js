@@ -15,8 +15,9 @@ const Stripe = require('stripe');
 const CATALOG = require('../assets/catalog.js');
 
 const {
-    BY_HANDLE, ADDONS, COLOR_LABEL, FREE_SHIP, priceFor, savingAt, giftsFor,
-    SECOND_UNIT_OFF, secondUnitDiscount, orderProblem, needsPhoto,
+    BY_HANDLE, ADDONS, COLOR_LABEL, priceFor, savingAt, giftsFor,
+    SECOND_OFF_USD, secondUnitDiscount, orderProblem, needsPhoto,
+    freeShipping, freeKeychains, SUB_OFF, SUB_EVERY_MONTHS, subPriceFor,
 } = CATALOG;
 
 /* Explicit list, deliberately NOT Stripe's dynamic payment methods. Dynamic
@@ -28,6 +29,9 @@ const {
    Shop Pay is absent because it is Shopify's wallet and cannot be offered
    through Stripe at all. 'link' is the equivalent: sign in, autofill, one tap. */
 const PAYMENT_METHODS = ['card', 'link', 'amazon_pay', 'cashapp', 'us_bank_account'];
+/* A cart with a Subscribe & Save line becomes a subscription-mode session,
+   which only the recurring-capable methods can pay. */
+const SUB_PAYMENT_METHODS = ['card', 'link'];
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-06-20',
@@ -117,18 +121,22 @@ function priceLine(raw) {
        free-gift ladder (GIFTS in catalog.js) — a different thing entirely. */
     const giftOrder = addons.gift === true;
     const giftNote = giftOrder ? cleanNote(addons.giftNote) : '';
+    /* Subscribe & Save: refill pads only, whatever the client claims. */
+    const sub = addons.sub === true && product.v === 'refill';
 
     /* Bundle price comes from the catalog's explicit ladder. Add-ons are
        charged on every unit — the nameplate is ADDONS.name at price 0, so
        this is currently always zero and is kept so a future paid add-on
        still prices correctly. */
     const addonsPerUnit = name ? ADDONS.name.price : 0;
-    const bundleCents = Math.round(priceFor(product, qty) * 100);
+    const bundleCents = Math.round((sub ? subPriceFor(product, qty) : priceFor(product, qty)) * 100);
     const addonCents = Math.round(addonsPerUnit * 100) * qty;
-    const savedCents = Math.round(savingAt(product, qty) * 100);
+    /* Against buying each unit singly at full price — covers both the
+       bundle ladder and the Subscribe & Save discount. */
+    const savedCents = Math.max(0, Math.round(product.price * qty * 100) - bundleCents);
 
     return {
-        product, qty, color, name, giftOrder, giftNote,
+        product, qty, color, name, giftOrder, giftNote, sub,
         savedCents,
         unitCents: Math.round((bundleCents + addonCents) / qty),
         amountCents: bundleCents + addonCents,
@@ -136,7 +144,7 @@ function priceLine(raw) {
 }
 
 /* ================================================================
-   Apply the order-level half-off-the-second-scratcher discount (BOGO 50%).
+   Apply the order-level $30-off-the-second-scratcher discount.
 
    Stripe will not take a negative line item, and creating a coupon on
    the fly is an extra API call that can fail after the cart has already
@@ -225,16 +233,28 @@ module.exports = async (req, res) => {
            could otherwise ask for a free keychain on a $5 order. */
         const gifts = giftsFor(subtotalCents / 100);
 
-        const freeShipping = subtotalCents >= FREE_SHIP * 100;
+        /* Milestones, counted in scratchers (see catalog.js ORDER MILESTONES). */
+        const counted = lines.map(l => ({ handle: l.product.h, qty: l.qty }));
+        const shipFree = freeShipping(counted);
+        const freeKeys = freeKeychains(counted);
+        const keyProduct = BY_HANDLE.keychain;
+        /* The free keychains match the order's first scratcher's cat. */
+        const firstScratcher = lines.find(l => l.product.v === 'scratcher');
+        const keyColor = firstScratcher && keyProduct.colorsAvailable.indexOf(firstScratcher.color) !== -1
+            ? firstScratcher.color : keyProduct.colorsAvailable[0];
+
         const ship = shippingFor(lines, gifts);
-        const shippingCents = freeShipping ? 0 : ship.cents;
+        if (freeKeys) ship.oz += (keyProduct.weightOz || 0) * freeKeys;
+        const shippingCents = shipFree ? 0 : ship.cents;
+        const isSub = lines.some(l => l.sub);
 
         const line_items = lines.map(l => {
             const colorLabel = COLOR_LABEL[l.color] || l.color;
             const bits = [`Qty ${l.qty}`];
             bits.push(`$${(l.unitCents / 100).toFixed(2)} each`);
             if (l.savedCents) bits.push(`saving $${(l.savedCents / 100).toFixed(2)}`);
-            if (l.discountCents) bits.push(`${Math.round(SECOND_UNIT_OFF * 100)}% off the second`);
+            if (l.discountCents) bits.push(`$${SECOND_OFF_USD} off the second scratcher`);
+            if (l.sub) bits.push(`Subscribe & Save ${Math.round(SUB_OFF * 100)}% · ships every ${SUB_EVERY_MONTHS} months · cancel anytime`);
             if (l.name) bits.push(`Nameplate “${l.name}”`);
             if (l.color === 'mycat') bits.push('Photo of your cat needed after checkout');
             if (l.giftOrder) bits.push('Packed as a gift');
@@ -260,9 +280,45 @@ module.exports = async (req, res) => {
                         tax_code: TAX_CODE_GOODS,
                     },
                     tax_behavior: 'exclusive',
+                    ...(l.sub ? { recurring: { interval: 'month', interval_count: SUB_EVERY_MONTHS } } : {}),
                 },
             };
         });
+
+        /* Milestone reward: a free keychain for every scratcher once the order
+           has two. $0 lines so they show on the receipt and the print list. */
+        if (freeKeys) {
+            line_items.push({
+                quantity: 1,
+                price_data: {
+                    currency: 'usd',
+                    unit_amount: 0,
+                    product_data: {
+                        name: `FREE: ${freeKeys} × ${keyProduct.t}`,
+                        description: 'Unlocked by ordering 2+ scratchers — one keychain per scratcher.',
+                        metadata: { handle: keyProduct.h, sku: keyProduct.sku, color: keyColor,
+                                    qty: String(freeKeys), free: '1', name: '' },
+                        tax_code: TAX_CODE_GOODS,
+                    },
+                    tax_behavior: 'exclusive',
+                },
+            });
+        }
+
+        /* Subscription-mode sessions can't use shipping_options, so there the
+           postage rides as a one-time line on the first invoice. Renewal
+           shipments of pads ship free. */
+        if (isSub && shippingCents > 0) {
+            line_items.push({
+                quantity: 1,
+                price_data: {
+                    currency: 'usd',
+                    unit_amount: shippingCents,
+                    product_data: { name: `Shipping — ${ship.label}`, tax_code: TAX_CODE_SHIPPING },
+                    tax_behavior: 'exclusive',
+                },
+            });
+        }
 
         /* Gifts ride along as $0 line items so they appear on the Stripe
            receipt and in the print queue, and the customer can see exactly
@@ -302,6 +358,8 @@ module.exports = async (req, res) => {
                switched the whole photo flow off. */
             needs_photo: String(needsPhoto(lines.map(l => ({ handle: l.product.h, qty: l.qty, color: l.color })))),
             gift_order: String(lines.some(l => l.giftOrder)),
+            free_keychains: String(freeKeys),
+            subscription: isSub ? `pads every ${SUB_EVERY_MONTHS} months` : 'none',
             gifts: gifts.map(g => g.handle).join(',') || 'none',
             /* Packed weight, so a label can be bought without re-weighing. */
             packed_oz: String(ship.oz),
@@ -313,7 +371,10 @@ module.exports = async (req, res) => {
                 color: l.color,
                 qty: l.qty,
                 name: l.name,
-            })).concat(gifts.map(g => ({
+                ...(l.sub ? { sub: true } : {}),
+            })).concat(freeKeys ? [{
+                handle: keyProduct.h, color: keyColor, qty: freeKeys, name: '', free: true
+            }] : []).concat(gifts.map(g => ({
                 handle: g.handle, color: g.color, qty: 1, name: '', gift: true
             })))
         ));
@@ -321,39 +382,38 @@ module.exports = async (req, res) => {
         if (giftNotes.length) chunkInto(metadata, 'gift_note', giftNotes.join('\n---\n'));
         chunkInto(metadata, 'summary', lines.map(l =>
             `${l.qty}× ${l.product.t} (${COLOR_LABEL[l.color] || l.color})` +
-            (l.name ? ` “${l.name}”` : '')
-        ).join(' | '));
+            (l.name ? ` “${l.name}”` : '') + (l.sub ? ` every ${SUB_EVERY_MONTHS} mo` : '')
+        ).concat(freeKeys ? [`${freeKeys}× FREE keychain`] : []).join(' | '));
+
+        const shippingOption = {
+            shipping_rate_data: {
+                type: 'fixed_amount',
+                fixed_amount: { amount: shippingCents, currency: 'usd' },
+                display_name: shipFree ? 'Free USPS Ground Advantage' : ship.label,
+                /* 1–2 days to make + 3–5 in transit. The clock really
+                   starts when the customer's photo arrives, which
+                   Stripe can't know, so the emails say that too. */
+                delivery_estimate: {
+                    minimum: { unit: 'business_day', value: 4 },
+                    maximum: { unit: 'business_day', value: 7 },
+                },
+                tax_behavior: 'exclusive',
+                tax_code: TAX_CODE_SHIPPING,
+            },
+        };
 
         const session = await stripe.checkout.sessions.create({
-            mode: 'payment',
-            payment_method_types: PAYMENT_METHODS,
+            mode: isSub ? 'subscription' : 'payment',
+            payment_method_types: isSub ? SUB_PAYMENT_METHODS : PAYMENT_METHODS,
             line_items,
             shipping_address_collection: { allowed_countries: ['US'] },
             billing_address_collection: 'auto',
             phone_number_collection: { enabled: true },
-            shipping_options: [
-                {
-                    shipping_rate_data: {
-                        type: 'fixed_amount',
-                        fixed_amount: { amount: shippingCents, currency: 'usd' },
-                        display_name: freeShipping
-                            ? 'Free USPS Ground Advantage'
-                            : ship.label,
-                        /* 1–2 days to make + 3–5 in transit. The clock really
-                           starts when the customer's photo arrives, which
-                           Stripe can't know, so the emails say that too. */
-                        delivery_estimate: {
-                            minimum: { unit: 'business_day', value: 4 },
-                            maximum: { unit: 'business_day', value: 7 },
-                        },
-                        tax_behavior: 'exclusive',
-                        tax_code: TAX_CODE_SHIPPING,
-                    },
-                },
-            ],
+            ...(isSub
+                ? { subscription_data: { metadata } }
+                : { shipping_options: [shippingOption], payment_intent_data: { metadata } }),
             automatic_tax: { enabled: true },
             metadata,
-            payment_intent_data: { metadata },
             /* The cat shop has its own confirmation page. /success is Catan's and
                renders a Catan order summary. */
             success_url: `${SITE}/order-complete?session_id={CHECKOUT_SESSION_ID}`,

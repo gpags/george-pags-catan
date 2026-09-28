@@ -71,6 +71,8 @@ function catOrderEmail(session, md) {
         if (i.name) bits.push('names “<strong>' + esc(i.name) + '</strong>”');
         if (i.match) bits.push('<strong style="color:#c62b6d">EXACT PATTERN MATCH — wait for photo</strong>');
         if (i.gift) bits.push('<em>free gift</em>');
+        if (i.free) bits.push('<strong>FREE — 2+ scratcher milestone</strong>');
+        if (i.sub) bits.push('<strong>SUBSCRIPTION — repeats every 3 months</strong>');
         return `<tr>
             <td style="padding:8px 10px;border-bottom:1px solid #eee">${esc(p ? p.t : i.handle)}</td>
             <td style="padding:8px 10px;border-bottom:1px solid #eee">${esc(COLOR_LABEL[i.color] || i.color)}</td>
@@ -148,6 +150,8 @@ function customerEmail(session, md) {
         const extra = [];
         if (i.qty > 1) extra.push('qty ' + i.qty);
         if (i.name) extra.push('names “' + esc(i.name) + '”');
+        if (i.free) extra.push('free with 2+ scratchers');
+        if (i.sub) extra.push('delivered every 3 months — reply any time to pause or cancel');
         if (i.match) extra.push('exact pattern match');
         return `<li style="margin-bottom:6px">${i.gift ? '🎁 ' : ''}<strong>${esc(p ? p.t : i.handle)}</strong>
                 — ${esc(COLOR_LABEL[i.color] || i.color)}${extra.length ? ' · ' + extra.join(' · ') : ''}
@@ -197,6 +201,33 @@ function customerEmail(session, md) {
     return { subject: 'Your Cat Scratchers order is confirmed 🐾', html };
 }
 
+/* A Subscribe & Save renewal: Stripe charged the card, now pads need posting.
+   The address comes from the Customer, which checkout.session.completed
+   stamps below (Stripe doesn't copy it there on its own). */
+async function renewalEmail(invoice) {
+    let customer = {};
+    try { customer = await stripe.customers.retrieve(String(invoice.customer)); } catch (_) { }
+    const sh = customer.shipping || {};
+    const a = sh.address || {};
+    const addr = [sh.name, a.line1, a.line2, [a.city, a.state, a.postal_code].filter(Boolean).join(' ')]
+        .filter(Boolean).map(esc).join('<br>');
+    const lines = ((invoice.lines || {}).data || [])
+        .map(l => `<li>${esc(l.description || '')}</li>`).join('');
+    const total = ((invoice.amount_paid || 0) / 100).toFixed(2);
+    return {
+        subject: `Subscription renewal — ship refill pads to ${sh.name || customer.email || 'customer'}`,
+        html: `<div style="font-family:system-ui,sans-serif;max-width:640px">
+          <h2 style="margin:0 0 6px">Subscription renewal — $${esc(total)} paid</h2>
+          <p style="margin:0 0 14px;color:#666">Post these pads. Shipping on renewals is free.</p>
+          <ul>${lines || '<li>See the invoice in Stripe.</li>'}</ul>
+          <h3 style="margin:16px 0 6px">Ship to</h3>
+          <p style="margin:0;line-height:1.6">${addr || 'No address on file — check the customer in Stripe.'}</p>
+          <p style="margin:14px 0 0">${esc(customer.email || '')}</p>
+          <p style="margin:18px 0 0;color:#888;font-size:12px">Invoice ${esc(invoice.id)} · subscription ${esc(String(invoice.subscription || ''))}</p>
+        </div>`,
+    };
+}
+
 module.exports = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -214,6 +245,22 @@ module.exports = async (req, res) => {
         /* A parsed-away body shows up here as a signature failure, so say so. */
         console.error('webhook: signature verification failed —', err && err.message);
         return res.status(400).json({ error: 'Invalid signature' });
+    }
+
+    /* Pad subscription renewals. The first invoice (billing_reason
+       'subscription_create') is the original order, already handled by
+       checkout.session.completed — only later cycles need a shipment. */
+    if (event.type === 'invoice.paid') {
+        const invoice = event.data.object;
+        if (invoice.billing_reason === 'subscription_cycle') {
+            try {
+                const mail = await renewalEmail(invoice);
+                const r = await sendEmail({ to: SHOP_EMAIL, subject: mail.subject, html: mail.html,
+                    replyTo: invoice.customer_email || undefined });
+                if (!r.sent) console.error('webhook: renewal email not sent —', r.reason, invoice.id);
+            } catch (err) { console.error('webhook: renewal handler error', err && err.message); }
+        }
+        return res.status(200).json({ received: true });
     }
 
     if (event.type !== 'checkout.session.completed') {
@@ -235,6 +282,18 @@ module.exports = async (req, res) => {
                 '— using the event payload instead (normal for Dashboard test events):', e && e.message);
         }
         const md = session.metadata || {};
+
+        /* Subscription orders: save the shipping address onto the Customer so
+           each renewal email knows where to post the pads. */
+        if (session.mode === 'subscription' && session.customer && session.shipping_details) {
+            try {
+                await stripe.customers.update(String(session.customer), {
+                    shipping: { name: session.shipping_details.name, address: session.shipping_details.address,
+                                phone: (session.customer_details || {}).phone || undefined },
+                });
+            } catch (e) { console.warn('webhook: could not save shipping to customer —', e && e.message); }
+        }
+
         const mail = md.shop === 'cats' ? catOrderEmail(session, md) : catanOrderEmail(session, md);
 
         const result = await sendEmail({
