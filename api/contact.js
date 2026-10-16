@@ -12,7 +12,7 @@ const MAX = { name: 100, email: 200, order: 60, topic: 80, message: 4000 };
 /* Anything not on this list is filed as "Something else" rather than
    rejected, so a stale form can never lose a customer's message.
    The <select> in build-products.js contactBody must stay in step, and so
-   must the hidden topic field on the cc-custom and cc-partner forms. */
+   must the data-topic on the cc-custom, cc-partner, Reviews and PostingInfo forms. */
 const TOPICS = [
     'Where is my order',
     'Damaged or faulty item',
@@ -21,6 +21,10 @@ const TOPICS = [
     'Refill pads',
     'Cattoo enquiry',
     'Partner application',
+    'Customer review',
+    'Poster sign-up',
+    'Posts submitted',
+    'Friend intro',
     'Something else',
 ];
 
