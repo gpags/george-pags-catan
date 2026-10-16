@@ -187,7 +187,7 @@ const footer = b => `
       </div>
       <div><h4>Shop</h4><ul>
         <li><a href="${b}index.html#templates">Scratchers</a></li>
-        <li><a href="${b}cc-refills.html">Refill inserts</a></li>
+        <li><a href="${b}refills.html">Refill pads</a></li>
       </ul></div>
       <div><h4>Other lines</h4><ul>
         <li><a href="${b}catan/">Catan Artisan</a></li>
@@ -531,7 +531,7 @@ const FAQ = [
     ['How big is it?',
      '<p>Basking Paws is about 17.7 × 11.8 × 7.9 in (450 × 300 × 200 mm) and weighs around 5 lb.</p>'],
     ['How do refills work?',
-     '<p>The pad lifts out and a new one drops in. No glue, no tools. Most cats need a new pad every 2 months, but most owners swap theirs about every 6. Prices: ' + refillLadder + '. <a href="../cc-refills.html">Buy refills</a>.</p>'],
+     '<p>The pad lifts out and a new one drops in. No glue, no tools. Most cats need a new pad every 2 months, but most owners swap theirs about every 6. Prices: ' + refillLadder + '. <a href="../refills.html">Buy refills</a>.</p>'],
     ['What if my cat ignores it?',
      '<p>Put it where they already scratch. Next to the couch or on a rug works best. A little catnip on the pad helps too. Still no luck? Message us and we\'ll help as best we can.</p>', 'faq-ignores'],
     ['Is it safe for my cat?',
@@ -666,7 +666,7 @@ part free. If a replacement part can't fix it, we replace the scratcher.</p>
 
 <h3>What isn't covered</h3>
 <ul>
-  <li>Shredded cardboard pads. Shredding is their job, and <a href="../cc-refills.html">refills</a> replace them.</li>
+  <li>Shredded cardboard pads. Shredding is their job, and <a href="../refills.html">refills</a> replace them.</li>
   <li>Damage from chewing, drops, water, outdoor use or modifications.</li>
   <li>Normal wear: scuffs, scratches on the frame, fading in direct sun.</li>
   <li>Small differences from photos or screens (see <a href="#custom">how we match your cat</a>).</li>

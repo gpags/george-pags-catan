@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post &amp; earn &mdash; Cat Scratchers</title>
+<meta name="description" content="Post your cat with your scratcher 5 times and get free refill pads. Share your own code: friends save, you earn on every scratcher.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="assets/cc.css" rel="stylesheet">
+<link rel="icon" type="image/jpeg" href="images/bp-logo.jpg">
+</head>
+<body>
+
+<div class="drop-bar" id="dropBar">
+  <div class="drop-in">
+    <span class="drop-label">Next Inventory Drop</span>
+    <div class="cd" id="cd" aria-live="polite"></div>
+    <span class="drop-when" id="dropWhen">&mdash;</span>
+  </div>
+  <button class="drop-x" id="dropX" aria-label="Dismiss">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<div class="marquee" aria-label="Store highlights"><div class="mq-track" id="mqTrack"></div></div>
+
+<header class="head-main">
+  <div class="wrap head-row">
+    <div class="head-left">
+      <button class="burger" data-burger aria-expanded="false" aria-label="Menu">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="soc">
+        <a class="ibtn" href="https://instagram.com/realizedprints" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a class="ibtn" href="https://tiktok.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.2 1.6 3.6 3.8 3.8v2.6c-1.3.1-2.5-.2-3.8-.9v5.9c0 4.6-4.4 6.9-8 5-2.3-1.3-3.1-4.4-1.8-6.8 1-1.9 3.2-2.9 5.4-2.5v2.8c-.4-.1-.8-.2-1.2-.2-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1 2.4-2.4V3h3.2z"/></svg></a>
+        <a class="ibtn" href="https://youtube.com/@realizedprints" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/></svg></a>
+      </div>
+    </div>
+    <a class="brand" href="index.html">
+      <img src="images/bp-logo.jpg" alt="" width="34" height="34" style="border-radius:50%;border:2px solid var(--pink-300)">
+      <span class="brand-name">Cat Scratchers</span>
+      <span class="brand-sub">by Realized Prints</span>
+    </a>
+    <div class="head-right">
+      <button class="ibtn" data-cart-open aria-label="Open cart">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 7h12l-1.2 12H7.2z"/><path d="M9 7a3 3 0 016 0"/></svg>
+        <span class="cart-pill" data-cart-count>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-strip" aria-label="Main">
+  <div class="wrap nav-in">
+    <a class="nlink" href="pages/contact.html">Contact Us</a>
+    <a class="nlink" href="index.html#templates">Scratchers</a>
+    <a class="nlink" href="cc-partner.html" aria-current="page">Affiliates</a>
+    <a class="nlink" href="pages/policies.html#faq">FAQ</a>
+  </div>
+</nav>
+
+<div class="wrap crumb"><a href="index.html">Home</a> &middot; Post &amp; earn</div>
+
+<section class="band-blue paws paws-blue" style="padding-top:30px">
+  <div class="wrap wrap-n">
+    <div class="sec-head" style="max-width:66ch">
+      <span class="tagline blue">For Cat Scratchers owners</span>
+      <h1 class="sec-title" style="margin-top:14px">Your cat is already the star. Get paid for it.</h1>
+      <p class="sec-sub" style="font-size:17px">Post your cat with your scratcher, or introduce friends who have cats, and get free refill pads.
+        Then share your own referral code: your friends save, and you earn cash on every scratcher they buy.</p>
+      <p class="sec-sub">No follower count needed. A real cat in a real home beats any ad we could make.</p>
+    </div>
+
+    <div class="paths">
+      <div class="path p1">
+        <span class="k">Path 1 &middot; Post</span>
+        <h3><span data-cat-num="POSTS_NEEDED">5</span> posts</h3>
+        <div class="big"><span data-cat-num="POST_REWARD_PADS">3</span> free pads</div>
+        <p>Post your cat with the scratcher 5 times. We send a free <span data-cat-num="POST_REWARD_PADS">3</span>-pad pack
+          (a <span data-price="refill" data-qty="3">$30</span> value), shipped free.</p>
+        <a class="btn btn-pink btn-sm" href="#join" data-go="join">Start posting</a>
+      </div>
+      <div class="path p2">
+        <span class="k">Path 2 &middot; Skip the posts</span>
+        <h3><span data-cat-num="INTROS_NEEDED">5</span> intros</h3>
+        <div class="big"><span data-cat-num="POST_REWARD_PADS">3</span> free pads</div>
+        <p>Not a poster? Introduce us to <span data-cat-num="INTROS_NEEDED">5</span> friends or family members with cats. We send
+          you the same free pads, and every one who buys earns you <span data-cat-money="AFF_PAY_USD">$10</span>.</p>
+        <a class="btn btn-mint btn-sm" href="#join" data-go="intro">Introduce friends</a>
+      </div>
+      <div class="path p3">
+        <span class="k">Path 3 &middot; Referrals</span>
+        <h3>Ongoing</h3>
+        <div class="big"><span data-cat-money="AFF_PAY_USD">$10</span> a sale</div>
+        <p>Get your own code instantly. Your friends get <span data-cat-money="AFF_OFF_USD">$10</span> off a scratcher with it, and you get
+          <span data-cat-money="AFF_PAY_USD">$10</span> for every order. No cap, no limit.</p>
+        <a class="btn btn-candy btn-sm" href="#join" data-go="join">Get my code</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paws paws-ink">
+  <div class="wrap wrap-n">
+    <div class="sec-head"><h2 class="sec-title">How it works</h2></div>
+    <div class="hiw">
+      <div class="step"><div class="num">1</div><h4>Get your code</h4><p>Fill in the form below. Your personal referral code, like <b>LUNA10</b>,
+        shows up on the screen right away and in your inbox.</p></div>
+      <div class="step blue"><div class="num">2</div><h4>Post</h4><p>Post your cat with the scratcher 5 times, on 5 different days.
+        Put your code in each one.</p></div>
+      <div class="step mint"><div class="num">3</div><h4>Send us the links</h4><p>Paste your 5 links in the form. Your free pads
+        ship within a week. Your code keeps paying after that.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band-soft paws paws-pink">
+  <div class="wrap wrap-n">
+    <div class="sec-head"><h2 class="sec-title">What counts as a post</h2>
+      <p class="sec-sub">Simple rules, so nobody has to guess.</p></div>
+    <ul class="rules">
+      <li><span class="pin">&#10003;</span><span><b>Any public account.</b> Instagram, TikTok, Facebook, YouTube, Pinterest, Threads or X.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>Your scratcher is in it.</b> Your cat on it is even better.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>Tag us or name us.</b> @realizedprints, or write mycatscratcher.com.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>Your code is in the caption</b> once you have it.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>Say it&rsquo;s a partnership.</b> Add #ad or #partner. It&rsquo;s an FTC rule, and it keeps your account safe.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>5 different days</b>, all within 60 days of joining.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>Stories count.</b> They vanish in 24 hours, so send us a screenshot.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>Leave them up</b> for at least 30 days.</span></li>
+      <li><span class="pin">&#10003;</span><span><b>Private account?</b> Those don&rsquo;t count on their own, but send us the photo or
+        video and we&rsquo;ll post it on our socials with your code. That counts as one of your 5.</span></li>
+      <li class="no"><span class="pin">&#10005;</span><span><b>No posting the same video 5 times.</b> Five different posts.</span></li>
+      <li class="no"><span class="pin">&#10005;</span><span><b>No paid ads with our name</b> and no coupon sites. Share it with real people.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="paws paws-blue">
+  <div class="wrap wrap-n">
+    <div class="sec-head"><h2 class="sec-title">Not sure what to post?</h2>
+      <p class="sec-sub">Pick any 5. Phone video is perfect. Nobody wants polished.</p></div>
+    <div class="ideas">
+      <div class="idea"><div class="e">&#128230;</div><h4>The unboxing</h4>
+        <p>Film your cat&rsquo;s face when the box opens and they see themselves.</p>
+        <span class="hook">&ldquo;They painted my actual cat on this&hellip;&rdquo;</span></div>
+      <div class="idea"><div class="e">&#128064;</div><h4>Spot the difference</h4>
+        <p>Your cat next to the painted cat. Let people guess which is real.</p>
+        <span class="hook">&ldquo;One of these is my cat. One is a scratcher.&rdquo;</span></div>
+      <div class="idea"><div class="e">&#128465;</div><h4>Before and after</h4>
+        <p>The ugly old scratcher in the bin, then the new one in your living room.</p>
+        <span class="hook">&ldquo;Finally, a scratcher I don&rsquo;t hide when guests come.&rdquo;</span></div>
+      <div class="idea"><div class="e">&#128074;</div><h4>First scratch</h4>
+        <p>The first time your cat goes for it. Slow motion is a bonus.</p>
+        <span class="hook">&ldquo;It took her 4 seconds.&rdquo;</span></div>
+      <div class="idea"><div class="e">&#128564;</div><h4>Nap check</h4>
+        <p>Your cat asleep on or next to it. Cats napping always win.</p>
+        <span class="hook">&ldquo;Bought a scratcher. Got a bed.&rdquo;</span></div>
+      <div class="idea"><div class="e">&#9201;</div><h4>The 10-second pad swap</h4>
+        <p>Pull the old pad out, drop a new one in. Show how easy it is.</p>
+        <span class="hook">&ldquo;The only part that wears out takes 10 seconds to swap.&rdquo;</span></div>
+      <div class="idea"><div class="e">&#127873;</div><h4>The gift reaction</h4>
+        <p>Gave one to someone? Film them opening it.</p>
+        <span class="hook">&ldquo;I gave my mom her cat as a scratcher.&rdquo;</span></div>
+      <div class="idea"><div class="e">&#128172;</div><h4>Honest review</h4>
+        <p>30 seconds to camera: what you like, what you&rsquo;d change. Honest works best.</p>
+        <span class="hook">&ldquo;Honest review after one month.&rdquo;</span></div>
+    </div>
+
+    <div class="sec-head" style="margin-top:44px"><h2 class="sec-title" style="font-size:clamp(1.5rem,3vw,2rem)">Captions you can copy</h2>
+      <p class="sec-sub">Change anything you like. Swap <b>YOURCODE</b> for your code.</p></div>
+    <div class="caps">
+      <div class="cap"><p data-cap>They painted my actual cat onto her scratcher and she has not left it alone 😹
+Made in the USA by a tiny family shop. Use code YOURCODE for $10 off at mycatscratcher.com #ad</p>
+        <button class="btn btn-ghost btn-sm" type="button" data-copy>Copy</button></div>
+      <div class="cap"><p data-cap>One of these is my cat. One of them is a cat scratcher. 👀
+Code YOURCODE = $10 off at mycatscratcher.com #partner</p>
+        <button class="btn btn-ghost btn-sm" type="button" data-copy>Copy</button></div>
+      <div class="cap"><p data-cap>Finally a scratcher I don't hide when people come over. When the cardboard wears out you just swap the pad.
+$10 off with YOURCODE at mycatscratcher.com #ad</p>
+        <button class="btn btn-ghost btn-sm" type="button" data-copy>Copy</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="join" class="band-candy paws paws-ink">
+  <div class="wrap wrap-n">
+    <div class="sec-head">
+      <h2 class="sec-title">Get your code, send posts, or introduce friends</h2>
+      <p class="sec-sub">Pick one. Your code arrives instantly. Everything else, we reply within 1&ndash;2 business days.</p>
+    </div>
+
+    <div class="ptabs-wrap" style="justify-content:flex-start;margin:0 0 22px">
+      <div class="ptabs" role="group" aria-label="What are you sending?">
+        <button class="ptab" type="button" data-ptab="join" aria-pressed="true">Get my code</button>
+        <button class="ptab" type="button" data-ptab="posts" aria-pressed="false">I did my 5 posts</button>
+        <button class="ptab" type="button" data-ptab="intro" aria-pressed="false">Introduce friends</button>
+      </div>
+    </div>
+
+    <div data-ppane="join">
+      <form class="form" data-program="join"
+            data-ok-code="<b>You&rsquo;re in!</b> Your referral code is {code} &mdash; friends get $10 off a scratcher with it. We also emailed it to {email}. Copy it into your captions and start posting."
+            data-ok="<b>You&rsquo;re in!</b> We&rsquo;ll email your code to {email} within 1 business day.">
+        <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+        <div class="two">
+          <label><span class="lb">Your name</span><input name="yourname" type="text" required autocomplete="name" placeholder="Alex Rivera"></label>
+          <label><span class="lb">Email you ordered with</span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+        </div>
+        <div class="two">
+          <label><span class="lb">Your cat&rsquo;s name</span><input name="catname" data-label="Cat's name" type="text" required placeholder="Luna"></label>
+          <label><span class="lb">Code you&rsquo;d like <span class="opt">Optional</span></span><input name="wantcode" data-label="Requested code" type="text" maxlength="20" placeholder="LUNA10"></label>
+        </div>
+        <label><span class="lb">Where will you post?</span>
+          <input name="handles" data-label="Social handles" type="text" required placeholder="@lunathecat on Instagram, @alexr on TikTok (or &ldquo;private&rdquo;)"></label>
+        <div class="two">
+          <label><span class="lb">How should we pay you?</span>
+            <select name="payout" data-label="Payout method"><option>PayPal</option><option>Venmo</option><option>Store credit</option></select></label>
+          <label><span class="lb">PayPal / Venmo handle <span class="opt">Optional</span></span>
+            <input name="payto" data-label="Pay to" type="text" placeholder="@alex-rivera"></label>
+        </div>
+        <label style="display:flex;gap:10px;align-items:flex-start;font-size:14.5px">
+          <input type="checkbox" name="agree" value="Yes" data-label="Agreed to the posting rules" required style="width:18px;height:18px;margin-top:3px;flex:none">
+          <span>I&rsquo;ll follow the rules above, including adding #ad or #partner to my posts.</span></label>
+        <button class="btn btn-pink btn-lg" type="submit">Get my code</button>
+        <div class="okmsg"></div>
+      </form>
+    </div>
+
+    <div data-ppane="posts" hidden>
+      <form class="form" data-program="posts"
+            data-ok="<b>Got them, thank you!</b> We&rsquo;ll check your posts and email {email} when your free pads ship.">
+        <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+        <div class="two">
+          <label><span class="lb">Your name</span><input name="yourname" type="text" required autocomplete="name"></label>
+          <label><span class="lb">Email</span><input name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <label><span class="lb">Your code</span><input name="code" data-label="Their code" type="text" placeholder="LUNA10"></label>
+        <p class="hint">Paste a link for each post. Private account or a Story? Type &ldquo;emailed&rdquo; and send the photo, video or
+          screenshot to <b>realizedprints@gmail.com</b>.</p>
+        <label><span class="lb">Post 1</span><input name="post1" data-label="Post 1" type="text" required placeholder="https://"></label>
+        <label><span class="lb">Post 2</span><input name="post2" data-label="Post 2" type="text" required placeholder="https://"></label>
+        <label><span class="lb">Post 3</span><input name="post3" data-label="Post 3" type="text" required placeholder="https://"></label>
+        <label><span class="lb">Post 4</span><input name="post4" data-label="Post 4" type="text" required placeholder="https://"></label>
+        <label><span class="lb">Post 5</span><input name="post5" data-label="Post 5" type="text" required placeholder="https://"></label>
+        <label><span class="lb">Where should the pads go?</span>
+          <textarea name="address" data-label="Ship pads to" style="min-height:80px" required placeholder="Street, city, state, ZIP"></textarea></label>
+        <button class="btn btn-pink btn-lg" type="submit">Send my 5 posts</button>
+        <div class="okmsg"></div>
+      </form>
+    </div>
+
+    <div data-ppane="intro" hidden>
+      <form class="form" data-program="intro" data-min-refs="1"
+            data-ok="<b>Thank you!</b> We&rsquo;ll reach out to each friend once. We&rsquo;ll email {email} when your free pads ship, and every time one of them orders.">
+        <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+        <p class="sec-sub" style="margin:0"><b><span data-cat-num="INTROS_NEEDED">5</span> friends = <span data-cat-num="POST_REWARD_PADS">3</span> free pads.</b>
+          Add as many as you like: every one who buys earns you <span data-cat-money="AFF_PAY_USD">$10</span>. Please give them a heads-up
+          first. We mention your name, reach out once, and never add them to a mailing list.</p>
+        <div class="two">
+          <label><span class="lb">Your name</span><input name="yourname" type="text" required autocomplete="name"></label>
+          <label><span class="lb">Your email</span><input name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <div class="refs" data-refs data-start="5">
+          <div class="refs" data-ref-list></div>
+          <template data-ref-tpl>
+            <div class="refrow" data-ref-row>
+              <span class="refn" data-ref-n></span>
+              <input data-ref="name" type="text" aria-label="Friend's name" placeholder="Their name">
+              <input data-ref="contact" type="text" aria-label="Friend's email or phone" placeholder="Email or phone">
+              <input data-ref="note" type="text" aria-label="How you know them" placeholder="One sentence: how you know them, why they'd love it">
+            </div>
+          </template>
+          <button class="btn btn-ghost btn-sm ref-add" type="button" data-ref-add>+ Add another friend</button>
+        </div>
+        <label><span class="lb">Where should your pads go?</span>
+          <textarea name="address" data-label="Ship pads to" style="min-height:80px" placeholder="Street, city, state, ZIP (once you've added 5)"></textarea></label>
+        <label><span class="lb">How should we pay you for friends who buy?</span>
+          <input name="payto" data-label="Pay to" type="text" placeholder="PayPal or Venmo handle, or &ldquo;store credit&rdquo;"></label>
+        <button class="btn btn-mint btn-lg" type="submit">Send my intros</button>
+        <div class="okmsg"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="band-soft paws paws-pink">
+  <div class="wrap wrap-n">
+    <div class="faq">
+      <details open><summary>Do I need a lot of followers?</summary>
+        <p>No. Your friends and family trust you more than any ad. A post seen by 200 people who know you sells
+        better than one seen by 20,000 strangers.</p></details>
+      <details><summary>How does my referral code work?</summary>
+        <p>You get it the moment you fill in the form. Your friend types it at checkout and gets <span data-cat-money="AFF_OFF_USD">$10</span> off any order with
+        a scratcher in it. It stacks with our multi-scratcher deals. You get <span data-cat-money="AFF_PAY_USD">$10</span> for every one of those orders.</p></details>
+      <details><summary>When do I get paid?</summary>
+        <p>On the 1st of each month, for the orders from the month before, by PayPal, Venmo or store credit. Cancelled or
+        refunded orders don&rsquo;t count.</p></details>
+      <details><summary>How do I earn from friends I introduce?</summary>
+        <p>We reach out to each friend once, mentioning you. If one of them orders with the email or phone number you gave us, you
+        get <span data-cat-money="AFF_PAY_USD">$10</span>. There&rsquo;s no limit on how many friends you introduce.</p></details>
+      <details><summary>Can I do both the posts and the intros?</summary>
+        <p>The free pads are one pack per person, so pick whichever is easier. The <span data-cat-money="AFF_PAY_USD">$10</span> per
+        sale has no limit, from your code and from your intros.</p></details>
+      <details><summary>Can I use my own code?</summary>
+        <p>No, it&rsquo;s for the people you share it with. Want more pads for yourself? They&rsquo;re on the
+        <a href="refills.html" style="text-decoration:underline">refills page</a>.</p></details>
+      <details><summary>Are you a vet, shelter, pet store or cat sitter?</summary>
+        <p>We have a separate program for you, with partner pricing. See <a href="cc-partner.html" style="text-decoration:underline">Affiliates &amp; partners</a>.</p></details>
+    </div>
+  </div>
+</section>
+
+<script>
+/* Copy-caption buttons, and the path buttons that jump to the right form tab. */
+(function () {
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy]');
+    if (b) {
+      var text = b.parentNode.querySelector('[data-cap]').textContent;
+      var done = function () { var t = b.textContent; b.textContent = 'Copied!'; setTimeout(function () { b.textContent = t; }, 1600); };
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
+      return;
+    }
+    var go = e.target.closest('[data-go]');
+    if (go) {
+      var tab = document.querySelector('[data-ptab="' + go.getAttribute('data-go') + '"]');
+      if (tab) tab.click();
+    }
+  });
+})();
+</script>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div style="max-width:280px">
+        <div class="brand-name" style="font-size:25px">Cat Scratchers</div>
+        <p style="margin-top:10px;font-size:14px">Cat scratchers with your cat on them. Husband and wife. Made in the USA.</p>
+      </div>
+      <div><h4>Shop</h4><ul>
+        <li><a href="index.html#templates">Scratchers</a></li>
+        <li><a href="refills.html">Refill pads</a></li>
+      </ul></div>
+      <div><h4>Help</h4><ul>
+        <li><a href="pages/policies.html#faq">FAQ</a></li>
+        <li><a href="pages/policies.html">Shipping &amp; returns</a></li>
+        <li><a href="pages/contact.html">Contact us</a></li>
+        <li><a href="cc-partner.html">Affiliates &amp; partners</a></li>
+      </ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="pages/terms.html">Terms</a></li>
+        <li><a href="pages/privacy.html">Privacy</a></li>
+      </ul></div>
+    </div>
+    <div class="ft-b"><span>&copy; 2026 Cat Scratchers &mdash; a Realized Prints brand.</span><span>Some product art is illustration.</span></div>
+  </div>
+</footer>
+
+<div class="scrim" data-cart-close></div>
+<aside class="drawer" aria-label="Cart">
+  <div class="dr-h"><h3>Your cart</h3><button class="dr-x" data-cart-close aria-label="Close cart">&times;</button></div>
+  <div class="dr-b" data-cart-body></div>
+  <div class="dr-f">
+    <div class="dr-tot"><span class="l">Total</span><span class="v" data-cart-total>$0</span></div>
+    <button class="btn btn-pink btn-block" data-checkout aria-disabled="true">Checkout</button>
+    <p class="dr-err" data-cart-error hidden></p>
+  </div>
+</aside>
+<div class="toast"></div>
+
+<script src="assets/catalog.js"></script>
+<script src="assets/cc.js"></script>
+</body>
+</html>
