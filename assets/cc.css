@@ -823,3 +823,104 @@ ul.tight li b{color:var(--ink)}
   font-weight:800;padding:10px 18px;border-radius:999px;box-shadow:0 8px 20px -8px rgba(0,0,0,.4);white-space:nowrap;
   transition:transform .15s}
 .hero-video:hover .hv-cta{transform:translateX(-50%) scale(1.05)}
+
+/* ================================================================
+   REVIEWS (Reviews.html) + POSTING PROGRAM (PostingInfo.html)
+   ================================================================ */
+/* survey: one question per card */
+.qcard{background:#fff;border:2.5px solid var(--line);border-radius:var(--r);padding:20px 22px}
+.qcard .qn{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--blue-100);
+  color:var(--blue-600);font-weight:800;font-size:13px;margin-right:8px;flex:none}
+.qcard .qt{display:flex;align-items:flex-start;font-family:'Fredoka',sans-serif;font-size:19px;font-weight:600;line-height:1.25}
+.qcard .qh{font-size:14px;color:var(--muted);margin:6px 0 12px 36px}
+.qcard>label,.qcard>.stars,.qcard>.chips,.qcard>.money{margin-left:36px}
+@media(max-width:560px){.qcard .qh,.qcard>label,.qcard>.stars,.qcard>.chips,.qcard>.money{margin-left:0}}
+.form .qcard textarea{min-height:96px}
+.qgroup{font-size:12.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mint-800);margin:14px 0 -4px}
+.opt{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--paper-2);border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:middle;white-space:nowrap}
+
+/* 1–5 star rating; row-reverse lets :hover/:checked light every star below it */
+.stars{display:inline-flex;flex-direction:row-reverse;justify-content:flex-end;gap:4px}
+.stars input{position:absolute;opacity:0;width:1px;height:1px}
+.stars label{font-size:40px;line-height:1;color:var(--line);cursor:pointer;transition:transform .12s,color .12s}
+.stars label:hover,.stars label:hover~label,.stars input:checked~label{color:var(--yellow)}
+.stars label:hover{transform:scale(1.12)}
+.stars input:focus-visible+label{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+.star-read{font-size:14px;font-weight:800;color:var(--muted);margin:6px 0 0 36px;min-height:1.4em}
+@media(max-width:560px){.star-read{margin-left:0}}
+
+/* pill-style radio answers */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{position:relative}
+.chips input{position:absolute;opacity:0;width:1px;height:1px}
+.chips span{display:inline-block;padding:9px 16px;border:2.5px solid var(--line);border-radius:999px;font-weight:700;
+  font-size:14.5px;cursor:pointer;background:#fff;transition:border-color .12s,background .12s}
+.chips span:hover{border-color:var(--pink-300)}
+.chips input:checked+span{background:var(--pink);border-color:var(--pink);color:#fff}
+.chips input:focus-visible+span{outline:3px solid var(--blue);outline-offset:2px}
+
+/* dollar input */
+.money{position:relative;max-width:220px;display:block}
+.money::before{content:'$';position:absolute;left:16px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--muted)}
+.form .money input{padding-left:30px}
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.price-grid{grid-template-columns:1fr}}
+.price-grid .qcard .qh,.price-grid .qcard>label{margin-left:0}
+.price-grid .qcard .qt{font-size:17px}
+
+/* highlighted "skip the posts" box */
+.skipbox{background:linear-gradient(160deg,var(--mint-100),#fff);border:3px solid var(--mint);border-radius:var(--r-lg);
+  padding:22px 24px;display:grid;gap:14px}
+.skipbox h3{font-size:24px;color:var(--mint-800)}
+.skipbox p{font-size:15px;color:var(--ink-2)}
+.skipbox .flag{display:inline-block;background:var(--mint);color:var(--mint-900);font-size:11px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:999px}
+
+/* PostingInfo: the three ways to earn */
+.paths{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+@media(max-width:900px){.paths{grid-template-columns:1fr}}
+.path{background:#fff;border:3px solid var(--line);border-radius:var(--r-lg);padding:24px;display:flex;flex-direction:column;gap:10px;
+  box-shadow:var(--shadow)}
+.path.p1{border-color:var(--pink-300)} .path.p2{border-color:var(--mint)} .path.p3{border-color:var(--candy-300)}
+.path .k{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.path h3{font-size:25px}
+.path .big{font-family:'Fredoka',sans-serif;font-size:40px;line-height:1;color:var(--pink-600)}
+.path.p2 .big{color:var(--mint-800)} .path.p3 .big{color:var(--candy-600)}
+.path p{font-size:14.5px;color:var(--muted)}
+.path .btn{margin-top:auto;align-self:flex-start}
+
+/* post ideas */
+.ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.idea{background:#fff;border:2.5px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.idea .e{font-size:28px;line-height:1}
+.idea h4{font-size:18px;margin:10px 0 6px}
+.idea p{font-size:14px;color:var(--muted)}
+.idea .hook{display:block;margin-top:10px;font-size:13.5px;font-weight:700;color:var(--ink-2);
+  background:var(--pink-50);border-radius:10px;padding:8px 11px}
+
+/* copy-paste captions */
+.caps{display:grid;gap:14px}
+.cap{background:#fff;border:2.5px dashed var(--candy-200);border-radius:var(--r);padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
+.cap p{flex:1;font-size:15px;white-space:pre-line}
+.cap button{flex:none}
+@media(max-width:560px){.cap{flex-direction:column}}
+
+/* rules checklist */
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px}
+@media(max-width:760px){.rules{grid-template-columns:1fr}}
+.rules li{list-style:none;display:flex;gap:11px;font-size:15px;align-items:flex-start}
+.rules li .pin{flex:none;width:24px;height:24px;border-radius:50%;background:var(--mint-100);color:var(--mint-800);
+  display:grid;place-items:center;font-weight:800;font-size:13px;margin-top:1px}
+.rules li.no .pin{background:var(--pink-50);color:var(--pink-600)}
+
+/* Refills.html: per-pad line on each tile + subscription note */
+.tile .each{display:block;font-size:13px;font-weight:800;color:var(--mint-800);margin-top:8px}
+.refill-modes{margin-top:18px}
+.subnote{margin-top:14px;font-size:13.5px;color:var(--mint-800);background:var(--mint-100);border-radius:12px;padding:10px 14px}
+.pdp-buy .tiles{grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.pdp-buy .tile{padding:18px 8px 14px}
+.pdp-buy .tile .n{font-size:26px}
+.pdp-buy .tile .was{display:block;margin:4px 0 0}
+.pdp-buy .tile .flag{font-size:10px;padding:3px 9px}
+@media(max-width:420px){.pdp-buy .tile .n{font-size:22px}.pdp-buy .tile .l{font-size:10.5px}}

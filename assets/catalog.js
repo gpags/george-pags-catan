@@ -239,7 +239,7 @@ const PRODUCTS = [
    /* 1/$12, 2/$22, 3/$30. priceFor() finds the cheapest combination, so
       4 pads is 3+1 = $42. The product page offers 1, 2 or 3. */
    bundlePrices:[[1,12],[2,22],[3,30]],
-   canonical:'cc-refills.html',
+   canonical:'Refills.html',
    img:'images/cc-refill-inserts.jpg',
    personalised:false,
    desc:'The corrugated pad your cat actually shreds. Lifts out, drops in, no glue and no tools. One size fits every CatCustoms design.',
@@ -348,6 +348,24 @@ const SUB_EVERY_MONTHS = 3;
 function subPriceFor(product, qty) {
   return Math.round(priceFor(product, qty) * (1 - SUB_OFF) * 100) / 100;
 }
+
+/* ================================================================
+   POSTING PROGRAM — PostingInfo.html and Reviews.html read these.
+
+   Post 5 times (or introduce one friend with a cat) and earn a free
+   pack of POST_REWARD_PADS refill pads. Separately, every poster gets
+   a personal Stripe promotion code: their friend saves AFF_OFF_USD on
+   an order with a scratcher in it, and the poster is paid AFF_PAY_USD.
+
+   Nothing here touches checkout. The codes are made by hand in the
+   Stripe Dashboard (Products > Coupons) and checkout already has
+   allow_promotion_codes on. Change a number here and the copy on both
+   pages follows; the Stripe coupon has to be changed to match.
+   ================================================================ */
+const POSTS_NEEDED = 5;
+const POST_REWARD_PADS = 3;
+const AFF_OFF_USD = 10;
+const AFF_PAY_USD = 10;
 
 /* What a single unit works out at, for the "$X each" line. */
 function unitPriceAt(product, qty) {
@@ -488,6 +506,7 @@ return {
   VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
   SIZE_BUNDLES, FREE_SHIP_AT, FREE_KEYS_AT, scratcherCount, freeShipping, freeKeychains,
   SUB_OFF, SUB_EVERY_MONTHS, subPriceFor, GIFTS, giftsFor, nextGift,
+  POSTS_NEEDED, POST_REWARD_PADS, AFF_OFF_USD, AFF_PAY_USD,
   priceFor, unitPriceAt, savingAt, betterDeal, packsFor, imgSrc,
   SECOND_OFF_USD, secondUnitDiscount, orderProblem, needsPhoto, colorImg,
   BUILD_ID, ALL_PHOTOS_REAL

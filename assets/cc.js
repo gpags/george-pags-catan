@@ -585,8 +585,12 @@ CC.initRefills = function () {
 
   var btn = document.querySelector('[data-refill-add]');
   var sum = document.querySelector('[data-refill-label]');
+  var modeBtns = document.querySelectorAll('[data-refill-mode]');
+  var subNote = document.querySelector('[data-refill-subnote]');
   var product = CAT.BY_HANDLE.refill;
   var pick = 3;   /* default tile */
+  /* One-time vs Subscribe & Save. Pages without the toggle stay one-time. */
+  var sub = !!document.querySelector('[data-refill-mode="sub"][aria-pressed="true"]');
 
   /* Pack labels are copy, not pricing. Every price on this page comes from
      the catalog ladder so the tiles, the button and Stripe cannot disagree. */
@@ -596,36 +600,47 @@ CC.initRefills = function () {
     3: 'Three pads'
   };
 
+  function priceAt(n) { return sub ? CAT.subPriceFor(product, n) : CAT.priceFor(product, n); }
+
   function paint() {
+    Array.prototype.forEach.call(modeBtns, function (b) {
+      b.setAttribute('aria-pressed', String((b.getAttribute('data-refill-mode') === 'sub') === sub));
+    });
     Array.prototype.forEach.call(tiles, function (el) {
       var n = +el.getAttribute('data-refill');
       el.setAttribute('aria-pressed', String(n === pick));
       var pn = el.querySelector('[data-tile-price]');
-      if (pn) pn.textContent = CC.money(CAT.priceFor(product, n));
+      if (pn) pn.textContent = CC.money(priceAt(n));
 
       /* The struck-through "was" price is what n pads cost bought one at a
-         time. On the single pad there is no saving, so nothing is shown. */
+         time. On the single pad there is no saving, unless subscribed. */
       var was = el.querySelector('[data-tile-was]');
       if (was) {
         var full = product.price * n;
-        var save = full - CAT.priceFor(product, n);
         was.textContent = CC.money(full);
-        was.hidden = save <= 0;
+        was.hidden = full - priceAt(n) <= 0;
       }
+      var each = el.querySelector('[data-tile-each]');
+      if (each) each.textContent = CC.money(priceAt(n) / n) + ' a pad';
     });
 
-    var p = CAT.priceFor(product, pick);
-    if (sum) sum.textContent = LABEL[pick] + ' \u2014 ' + CC.money(p);
-    if (btn) btn.textContent = 'Add to cart \u2014 ' + CC.money(p);
+    var p = priceAt(pick);
+    var every = sub ? ' every ' + CAT.SUB_EVERY_MONTHS + ' months' : '';
+    if (sum) sum.textContent = LABEL[pick] + ' — ' + CC.money(p) + every;
+    if (btn) btn.textContent = 'Add to cart — ' + CC.money(p);
+    if (subNote) subNote.hidden = !sub;
   }
 
   Array.prototype.forEach.call(tiles, function (el) {
     el.addEventListener('click', function () { pick = +el.getAttribute('data-refill'); paint(); });
   });
+  Array.prototype.forEach.call(modeBtns, function (b) {
+    b.addEventListener('click', function () { sub = b.getAttribute('data-refill-mode') === 'sub'; paint(); });
+  });
 
   if (btn) btn.addEventListener('click', function (e) {
     e.preventDefault();
-    CC.cart.add({ h: 'refill', qty: pick, color: 'natural' });
+    CC.cart.add({ h: 'refill', qty: pick, color: 'natural', sub: sub });
   });
 
   paint();
@@ -963,6 +978,8 @@ CC.initForms = function () {
       var lines = [];
       Array.prototype.forEach.call(f.querySelectorAll('[name]'), function (el) {
         if (SKIP[el.getAttribute('name')]) return;
+        /* Every radio in a group carries a value; only the ticked one is an answer. */
+        if ((el.type === 'radio' || el.type === 'checkbox') && !el.checked) return;
         var v = (el.value || '').trim();
         if (!v) return;
         lines.push((el.getAttribute('data-label') || el.getAttribute('name')) + ': ' + v);
@@ -1025,8 +1042,11 @@ CC.initForms = function () {
         f.reset();
         if (keep && kept !== null) keep.value = kept;
 
-        say('<b>Thanks — that’s with us.</b> We’ll reply to <strong>' +
-            esc(payload.email) + '</strong> within 1–2 business days.', true);
+        /* data-ok on the form swaps in its own thank-you (Reviews, PostingInfo). */
+        var custom = f.getAttribute('data-ok');
+        say(custom ? custom.replace('{email}', '<strong>' + esc(payload.email) + '</strong>')
+                   : '<b>Thanks — that’s with us.</b> We’ll reply to <strong>' +
+                     esc(payload.email) + '</strong> within 1–2 business days.', true);
         if (fine) fine.hidden = true;
       }).catch(function () {
         say('<b>That didn’t send.</b> Opening your email app instead — ' +
