@@ -15,6 +15,8 @@
 const Stripe = require('stripe');
 const CATALOG = require('../assets/catalog.js');
 const { sendEmail, esc, SHOP_EMAIL } = require('../lib/email.js');
+const db = require('../lib/db.js');
+const { normContact, normEmail } = require('../lib/referrals.js');
 
 const { BY_HANDLE, COLOR_LABEL } = CATALOG;
 
@@ -228,6 +230,98 @@ async function renewalEmail(invoice) {
     };
 }
 
+/* ================================================================
+   REFERRAL PAYOUTS — $AFF_PAY_USD owed to whoever brought this buyer in.
+
+   Two ways an order earns one (postinginfo.html):
+     code   the buyer typed someone's referral code; it is a Stripe
+            promotion code made by api/program.js with metadata.program
+            'referral' and the owner's email.
+     intro  the buyer's email or phone matches a friend someone introduced
+            (needs Supabase — lib/db.js). The earliest introducer wins, and
+            only when no referral code was used — one payout per order.
+
+   Each one emails the shop ("$10 owed to …"), stores a referral_payouts row
+   (unique per order + person + reason, so a Stripe retry never doubles it),
+   and emails the referrer the good news. Someone using their own code is
+   flagged, not paid. Nothing here can affect the order itself.
+   ================================================================ */
+async function referralCredits(session) {
+    const buyer = session.customer_details || {};
+    const buyerEmail = normEmail(buyer.email);
+    const buyerPhone = normContact(buyer.phone).phone;
+    const credits = [];
+
+    const discounts = ((session.total_details || {}).breakdown || {}).discounts || [];
+    for (const d of discounts) {
+        const pcId = d && d.discount && d.discount.promotion_code;
+        if (!pcId) continue;
+        let pc = null;
+        try { pc = await stripe.promotionCodes.retrieve(String(pcId)); } catch (_) { continue; }
+        const md = (pc && pc.metadata) || {};
+        if (md.program !== 'referral' || !md.affiliate_email) continue;
+        credits.push({
+            email: md.affiliate_email, name: md.affiliate_name || '', reason: 'code', code: pc.code,
+            payout: [md.payout, md.pay_to].filter(Boolean).join(' '),
+            selfUse: !!buyerEmail && normEmail(md.affiliate_email) === buyerEmail,
+        });
+    }
+
+    if (db.enabled() && (buyerEmail || buyerPhone)) {
+        const ors = [buyerEmail && `friend_email.eq.${db.q(buyerEmail)}`, buyerPhone && `friend_phone.eq.${db.q(buyerPhone)}`]
+            .filter(Boolean).join(',');
+        const found = await db.select('referrals', `status=eq.pending&or=(${ors})&order=created_at.asc`);
+        const rows = (found.ok && found.data) || [];
+        if (rows.length) {
+            const first = rows[0];
+            /* One $10 per order: a typed code beats an intro, since the buyer chose it. */
+            if (!credits.length) {
+                credits.push({ email: first.referrer_email, name: first.referrer_name || '', reason: 'intro',
+                    friend: first.friend_name, selfUse: normEmail(first.referrer_email) === buyerEmail });
+            }
+            const now = new Date().toISOString();
+            await db.update('referrals', `id=eq.${first.id}`, { status: 'converted', converted_session: session.id, converted_at: now });
+            const others = rows.slice(1).map(r => r.id);
+            if (others.length) await db.update('referrals', `id=in.(${others.join(',')})`, { status: 'converted_other', converted_session: session.id, converted_at: now });
+        }
+    }
+
+    for (const c of credits) {
+        const ins = await db.insert('referral_payouts', [{
+            referrer_email: normEmail(c.email), referrer_name: c.name, reason: c.reason, code: c.code || null,
+            session_id: session.id, buyer_email: buyerEmail, amount_usd: CATALOG.AFF_PAY_USD, self_use: c.selfUse,
+        }]);
+        /* 409 = this order already credited this person (Stripe retried the event). */
+        if (ins.status === 409) continue;
+
+        const how = c.reason === 'code' ? `used their code <strong>${esc(c.code)}</strong>`
+            : `was introduced by them${c.friend ? ` (as “${esc(c.friend)}”)` : ''}`;
+        await sendEmail({
+            to: SHOP_EMAIL,
+            subject: (c.selfUse ? `Referral code SELF-USE — no payout — ${c.email}`
+                : `$${CATALOG.AFF_PAY_USD} referral owed to ${c.name || c.email}`).slice(0, 120),
+            replyTo: c.email,
+            html: `<div style="font-family:system-ui,sans-serif;max-width:600px">
+              <h2 style="margin:0 0 6px">${c.selfUse ? 'Own code used — do not pay' : `$${esc(CATALOG.AFF_PAY_USD)} referral owed`}</h2>
+              <p>The buyer (${esc(buyerEmail || buyer.phone || 'unknown')}) ${how}.</p>
+              <p><strong>Pay:</strong> ${esc(c.name)} &lt;${esc(c.email)}&gt;${c.payout ? ` — ${esc(c.payout)}` : ''}</p>
+              <p style="color:#888;font-size:12px">Stripe session ${esc(session.id)}.${db.enabled() ? ' Logged in referral_payouts — tick "paid" once paid.' : ''}
+              Hold until the return window closes if you like; refunded orders don't count.</p></div>`,
+        });
+        if (!c.selfUse) {
+            await sendEmail({
+                to: c.email, replyTo: SHOP_EMAIL,
+                subject: `Someone you sent our way just ordered — $${CATALOG.AFF_PAY_USD} for you 🐾`,
+                html: `<div style="font-family:system-ui,sans-serif;max-width:600px;color:#1f3a5c">
+                  <h2 style="margin:0 0 8px">Thank you${c.name ? ', ' + esc(c.name.split(' ')[0]) : ''}!</h2>
+                  <p>A friend ${c.reason === 'code' ? `used your code <strong>${esc(c.code)}</strong>` : 'you introduced'} just ordered a
+                  scratcher. That's <strong>$${esc(CATALOG.AFF_PAY_USD)}</strong> added to your next payout on the 1st.</p>
+                  <p style="color:#6b7f97;font-size:13px">Keep sharing — there's no limit. ${SITE.replace(/^https?:\/\//, '')}/postinginfo</p></div>`,
+            });
+        }
+    }
+}
+
 module.exports = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -276,7 +370,7 @@ module.exports = async (req, res) => {
            dropping the notification and leaving the test looking broken. */
         let session = event.data.object;
         try {
-            session = await stripe.checkout.sessions.retrieve(session.id);
+            session = await stripe.checkout.sessions.retrieve(session.id, { expand: ['total_details.breakdown'] });
         } catch (e) {
             console.warn('webhook: could not re-fetch', session.id,
                 '— using the event payload instead (normal for Dashboard test events):', e && e.message);
@@ -313,6 +407,11 @@ module.exports = async (req, res) => {
                 to: buyer, subject: c.subject, html: c.html, replyTo: SHOP_EMAIL,
             });
             if (!r2.sent) console.error('webhook: customer email not sent —', r2.reason, session.id);
+        }
+
+        if (md.shop === 'cats') {
+            try { await referralCredits(session); }
+            catch (e) { console.error('webhook: referral credit error', e && e.message); }
         }
     } catch (err) {
         /* Never 500 here: the payment already succeeded, and a non-200 makes
