@@ -1,7 +1,39 @@
 {
   "cleanUrls": true,
   "redirects": [
-    { "source": "/pages/faq", "destination": "/pages/policies#faq", "permanent": true },
-    { "source": "/pages/faq.html", "destination": "/pages/policies#faq", "permanent": true }
+    {
+      "source": "/pages/faq",
+      "destination": "/pages/policies#faq",
+      "permanent": true
+    },
+    {
+      "source": "/pages/faq.html",
+      "destination": "/pages/policies#faq",
+      "permanent": true
+    },
+    {
+      "source": "/cc-refills",
+      "destination": "/Refills",
+      "permanent": true
+    },
+    {
+      "source": "/cc-refills.html",
+      "destination": "/Refills",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/reviews",
+      "destination": "/Reviews"
+    },
+    {
+      "source": "/postinginfo",
+      "destination": "/PostingInfo"
+    },
+    {
+      "source": "/refills",
+      "destination": "/Refills"
+    }
   ]
 }
