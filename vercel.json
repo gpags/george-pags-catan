@@ -7,9 +7,24 @@
     { "source": "/cc-refills.html", "destination": "/refills", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/review", "destination": "/reviews" },
+    { "source": "/Review", "destination": "/reviews" },
     { "source": "/Reviews", "destination": "/reviews" },
+    { "source": "/REVIEW", "destination": "/reviews" },
+    { "source": "/REVIEWS", "destination": "/reviews" },
+
+    { "source": "/refill", "destination": "/refills" },
+    { "source": "/Refill", "destination": "/refills" },
+    { "source": "/Refills", "destination": "/refills" },
+    { "source": "/REFILL", "destination": "/refills" },
+    { "source": "/REFILLS", "destination": "/refills" },
+
+    { "source": "/postinfo", "destination": "/postinginfo" },
+    { "source": "/PostInfo", "destination": "/postinginfo" },
+    { "source": "/Postinfo", "destination": "/postinginfo" },
+    { "source": "/POSTINFO", "destination": "/postinginfo" },
     { "source": "/PostingInfo", "destination": "/postinginfo" },
     { "source": "/Postinginfo", "destination": "/postinginfo" },
-    { "source": "/Refills", "destination": "/refills" }
+    { "source": "/POSTINGINFO", "destination": "/postinginfo" }
   ]
 }
