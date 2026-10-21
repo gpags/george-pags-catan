@@ -468,6 +468,13 @@
               <input name="showas" data-label="Show as" type="text" placeholder="Sarah K. &amp; Luna"></label>
           </fieldset>
 
+          <div class="qp-two">
+            <label><span class="qp-lb">Your name</span><input name="q1name" type="text" autocomplete="name" placeholder="Alex Rivera"></label>
+            <label><span class="qp-lb">Your email</span><input name="q1email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+          </div>
+          <button class="qp-btn qp-btn-block" type="button" data-review-btn>Submit review <span aria-hidden="true">&#9654;</span></button>
+          <div class="qp-msg" data-review-msg role="alert" hidden></div>
+
           <p class="qp-fine">Love it or not, every honest answer counts the same. This is our own form, not an Etsy or Google review.
             If we show your words, we&rsquo;ll mention you got free refills.</p>
         </div>
@@ -671,9 +678,13 @@ mycatscratcher.com #ad</p>
    are NOT form[data-program], so cc.js's program-form handler (when
    it is deployed) never double-submits them.
 
-     Quest 1 done = a star rating + a few words of feedback
+     Quest 1 done = a star rating + a few words of feedback, sent on its
+                    own with "Submit review" as kind 'review', so the
+                    feedback reaches the shop even if they never post
      Quest 2 done = a post link, or "I'll email it" ticked
      Reward       = name + email + address, sent as kind 'reward'
+                    (repeats the Quest 1 answers, so the claim email
+                    has everything in one place)
    ================================================================ */
 (function () {
   'use strict';
@@ -766,7 +777,7 @@ mycatscratcher.com #ad</p>
     var out = [];
     Array.prototype.forEach.call(form.querySelectorAll('[name]'), function (el) {
       var key = el.getAttribute('name');
-      if (key === 'yourname' || key === 'email' || key === 'company') return;
+      if (key === 'yourname' || key === 'email' || key === 'company' || key === 'q1name' || key === 'q1email') return;
       if ((el.type === 'radio' || el.type === 'checkbox') && !el.checked) return;
       if (el.closest('[hidden]')) return;   /* e.g. "Show it as" after picking "keep it private" */
       var v = (el.value || '').trim();
@@ -864,13 +875,17 @@ mycatscratcher.com #ad</p>
   var starsBox = form.querySelector('[data-stars]');
   var starSay = form.querySelector('[data-star-say]');
   var showAs = form.querySelector('[data-showas]');
+  var reviewBtn = form.querySelector('[data-review-btn]');
+  var reviewMsg = form.querySelector('[data-review-msg]');
   var STAR_WORDS = { 1: 'Very bad', 2: 'Bad', 3: 'OK', 4: 'Good', 5: 'Love it' };
   var was = { q1: false, q2: false };
+  var q1sent = false;   /* Quest 1's review reached the shop */
 
   var rating = function () { var r = form.querySelector('[name="rating"]:checked'); return r ? parseInt(r.value, 10) : 0; };
   /* Anything with a dot and no spaces is a link; "instagram.com/p/x" gets https:// added on send. */
   var linkOk = function (v) { v = v.trim(); return /^\S+\.\S+$/.test(v) && v.length >= 6; };
-  var q1Done = function () { return rating() > 0 && F.feedback.value.trim().length >= 2; };
+  var q1Ready = function () { return rating() > 0 && F.feedback.value.trim().length >= 2; };
+  var q1Done = function () { return q1sent; };
   var q2Done = function () { return linkOk(F.postlink.value) || F.emailinstead.checked; };
 
   function lightStars(n) {
@@ -913,8 +928,10 @@ mycatscratcher.com #ad</p>
     hudSay.textContent = both ? '2 of 2 done · reward unlocked!' : count + ' of 2 quests done · about ' + (count ? 2 : 3) + ' minutes';
     gateText.textContent = both ? 'Unlocked! Tell us where to send them.'
       : a ? 'One to go: finish Quest 2 to unlock.'
+      : q1Ready() ? 'Press “Submit review” to finish Quest 1.'
       : b ? 'One to go: finish Quest 1 to unlock.'
       : 'Finish Quest 1 and Quest 2 to unlock.';
+    if (!reviewBusy) reviewBtn.innerHTML = q1sent ? 'Send an update <span aria-hidden="true">&#9654;</span>' : 'Submit review <span aria-hidden="true">&#9654;</span>';
     gateIco.setAttribute('data-sprite', both ? 'sparkle' : 'lock');
     gateIco.innerHTML = sprite(both ? 'sparkle' : 'lock');
 
@@ -927,11 +944,11 @@ mycatscratcher.com #ad</p>
   }
 
   /* ---------- draft: kept on this device while they go and post ---------- */
-  var DRAFT_FIELDS = ['rating', 'feedback', 'canquote', 'showas', 'postlink', 'emailinstead', 'yourname', 'email', 'address'];
+  var DRAFT_FIELDS = ['rating', 'feedback', 'canquote', 'showas', 'q1name', 'q1email', 'postlink', 'emailinstead', 'yourname', 'email', 'address'];
   var claimed = false;
   function saveDraft() {
     if (claimed) return;
-    var d = {};
+    var d = { q1sent: q1sent };
     DRAFT_FIELDS.forEach(function (k) {
       var el = F[k];
       if (!el) return;
@@ -943,6 +960,7 @@ mycatscratcher.com #ad</p>
     var d = null;
     try { d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch (e) {}
     if (!d) return;
+    q1sent = !!d.q1sent;
     DRAFT_FIELDS.forEach(function (k) {
       var el = F[k];
       if (!el || d[k] == null) return;
@@ -958,6 +976,7 @@ mycatscratcher.com #ad</p>
   function onChange(e) {
     if (e && e.target && e.target.hasAttribute('aria-invalid')) flag(e.target, false);
     if (!busy) msg.hidden = true;
+    if (!reviewBusy && reviewMsg.getAttribute('data-tone') !== 'ok') reviewMsg.hidden = true;
     update();
     clearTimeout(saveTimer);
     saveTimer = setTimeout(saveDraft, 300);
@@ -967,6 +986,57 @@ mycatscratcher.com #ad</p>
 
   loadDraft();
   update(true);
+
+  /* ---------- Quest 1: send the review on its own ---------- */
+  var reviewBusy = false;
+  function reviewStop(text, el) {
+    if (el !== reviewBtn) flag(el, true);
+    say(reviewMsg, text, false);
+    el.focus({ preventScroll: true });
+    reviewMsg.scrollIntoView({ block: 'center', behavior: STILL ? 'auto' : 'smooth' });
+  }
+  reviewBtn.addEventListener('click', function () {
+    if (reviewBusy) return;
+    if (!rating()) return reviewStop('Pick how many stars first.', form.querySelector('#qr1'));
+    if (F.feedback.value.trim().length < 2) return reviewStop('Tell us what your cat thinks first.', F.feedback);
+    if (!F.q1name.value.trim()) return reviewStop('Please add your name.', F.q1name);
+    if (!EMAIL_RE.test(F.q1email.value.trim())) return reviewStop('That email address doesn&rsquo;t look right.', F.q1email);
+
+    var fields = [{ key: 'source', label: 'From', value: 'Unlock Rewards page, Quest 1' }];
+    ['rating', 'feedback', 'canquote', 'showas'].forEach(function (k) {
+      var el = F[k];
+      var node = el instanceof RadioNodeList ? form.querySelector('[name="' + k + '"]:checked') : el;
+      if (!node || node.closest('[hidden]')) return;
+      var v = (node.value || '').trim();
+      if (v) fields.push({ key: k, label: node.getAttribute('data-label') || k, value: v });
+    });
+    if (q1sent) fields.push({ key: 'update', label: 'Note', value: 'Updated answers. They sent a review earlier.' });
+
+    reviewBusy = true;
+    reviewBtn.disabled = true;
+    reviewBtn.textContent = 'Sending…';
+    post({
+      kind: 'review',
+      name: F.q1name.value.trim(),
+      email: F.q1email.value.trim(),
+      company: F.company.value,
+      fields: fields,
+      referrals: []
+    }).then(function (r) {
+      if (!r.ok) {
+        if (window.console) console.warn('rewards: review send failed —', (r.data && r.data.reason) || r.status);
+        throw new Error((r.data && r.data.error) || 'send failed');
+      }
+      q1sent = true;
+      /* the claim form asks again; save them typing it twice */
+      if (!F.yourname.value.trim()) F.yourname.value = F.q1name.value.trim();
+      if (!F.email.value.trim()) F.email.value = F.q1email.value.trim();
+      say(reviewMsg, '<b>Review sent. Thank you!</b> Quest 1 is done. On to Quest 2.', true);
+      update();
+      saveDraft();
+    }).catch(function (err) { say(reviewMsg, sendError(err), false); })
+      .then(function () { reviewBusy = false; reviewBtn.disabled = false; update(true); });
+  });
 
   /* ---------- claim ---------- */
   var busy = false;
@@ -987,6 +1057,7 @@ mycatscratcher.com #ad</p>
 
     if (!rating()) { return stop('<b>Quest 1 isn&rsquo;t done yet.</b> Pick how many stars.', form.querySelector('#qr1')); }
     if (F.feedback.value.trim().length < 2) { flag(F.feedback, true); return stop('<b>Quest 1 isn&rsquo;t done yet.</b> Tell us what your cat thinks.', F.feedback); }
+    if (!q1sent) { return stop('<b>Quest 1 isn&rsquo;t done yet.</b> Press &ldquo;Submit review&rdquo; to send it.', reviewBtn); }
     if (!q2Done()) {
       flag(F.postlink, true);
       return stop(F.postlink.value.trim()
