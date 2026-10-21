@@ -10,7 +10,7 @@
 create table if not exists submissions (
   id          bigserial primary key,
   created_at  timestamptz not null default now(),
-  kind        text not null,            -- review | join | posts | intro
+  kind        text not null,            -- review | join | posts | intro | reward
   name        text,
   email       text,
   data        jsonb not null default '{}'::jsonb
