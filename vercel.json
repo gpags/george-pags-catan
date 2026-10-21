@@ -4,15 +4,18 @@
     { "source": "/pages/faq", "destination": "/pages/policies#faq", "permanent": true },
     { "source": "/pages/faq.html", "destination": "/pages/policies#faq", "permanent": true },
     { "source": "/cc-refills", "destination": "/refills", "permanent": true },
-    { "source": "/cc-refills.html", "destination": "/refills", "permanent": true }
+    { "source": "/cc-refills.html", "destination": "/refills", "permanent": true },
+
+    { "source": "/reviews", "destination": "/postinginfo#quest1", "permanent": false },
+    { "source": "/reviews.html", "destination": "/postinginfo#quest1", "permanent": false },
+    { "source": "/review", "destination": "/postinginfo#quest1", "permanent": false },
+    { "source": "/review.html", "destination": "/postinginfo#quest1", "permanent": false },
+    { "source": "/Reviews", "destination": "/postinginfo#quest1", "permanent": false },
+    { "source": "/Review", "destination": "/postinginfo#quest1", "permanent": false },
+    { "source": "/REVIEWS", "destination": "/postinginfo#quest1", "permanent": false },
+    { "source": "/REVIEW", "destination": "/postinginfo#quest1", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/review", "destination": "/reviews" },
-    { "source": "/Review", "destination": "/reviews" },
-    { "source": "/Reviews", "destination": "/reviews" },
-    { "source": "/REVIEW", "destination": "/reviews" },
-    { "source": "/REVIEWS", "destination": "/reviews" },
-
     { "source": "/refill", "destination": "/refills" },
     { "source": "/Refill", "destination": "/refills" },
     { "source": "/Refills", "destination": "/refills" },
