@@ -255,5 +255,7 @@ module.exports = async (req, res) => {
     if (!sent.sent && !stored.ok && !code) {
         return res.status(502).json({ error: 'We couldn’t send that just now. Please try again in a minute.', reason: sent.reason });
     }
-    return res.status(200).json({ ok: true, ...(code ? { code } : {}) });
+    /* emailed / stored say where this submission can be found (the shop inbox,
+       the Supabase submissions table), so a test post can be checked end to end. */
+    return res.status(200).json({ ok: true, emailed: !!sent.sent, stored: !!stored.ok, ...(code ? { code } : {}) });
 };
