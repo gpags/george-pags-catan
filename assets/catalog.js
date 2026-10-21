@@ -186,7 +186,7 @@ const SIZE_BUNDLES = {
 
    Refills and keychains are one handle each with a quantity ladder,
    which is exactly what bundlePrices exists to express: refills read
-   1/$12, 2/$22, 3/$30 and keychains read 1/$4, 2/$6.
+   1/$10, 2/$18, 3/$24 and keychains read 1/$4, 2/$6.
 
    `canonical` names the hand-designed page that already sells this
    product. build-products.js skips generating a products/*.html for
@@ -233,13 +233,13 @@ const PRODUCTS = [
    desc:'The same meadow scene as Basking Paws, built for two — your two cats drawn into the hillside together, with their names on the front. Send photos after you order.',
    /*TODO*/ weightOz:66, boxClass:'box-XL', stock:99, photoReal:false},
 
-  {id:105, h:'refill', t:'Refill pads', v:'refill', size:'M', price:12,
+  {id:105, h:'refill', t:'Refill pads', v:'refill', size:'M', price:10,
    sales:0, new:0, badge:'', exclusive:1,
    colorsAvailable:['natural'],
-   /* 1/$12, 2/$22, 3/$30. priceFor() finds the cheapest combination, so
-      4 pads is 3+1 = $42. The product page offers 1, 2 or 3. */
-   bundlePrices:[[1,12],[2,22],[3,30]],
-   canonical:'Refills.html',
+   /* 1/$10, 2/$18, 3/$24 (Oct 2026). priceFor() finds the cheapest combination, so
+      4 pads is 3+1 = $34. The product page offers 1, 2 or 3. */
+   bundlePrices:[[1,10],[2,18],[3,24]],
+   canonical:'refills.html',
    img:'images/cc-refill-inserts.jpg',
    personalised:false,
    desc:'The corrugated pad your cat actually shreds. Lifts out, drops in, no glue and no tools. One size fits every CatCustoms design.',
@@ -350,10 +350,11 @@ function subPriceFor(product, qty) {
 }
 
 /* ================================================================
-   POSTING PROGRAM — PostingInfo.html and Reviews.html read these.
+   POSTING PROGRAM — postinginfo.html and reviews.html read these.
 
-   Post 5 times (or introduce one friend with a cat) and earn a free
-   pack of POST_REWARD_PADS refill pads. Separately, every poster gets
+   Post POSTS_NEEDED times (or introduce INTROS_NEEDED friends with cats)
+   and earn a free pack of POST_REWARD_PADS refill pads. Every introduced
+   friend who buys also earns the introducer AFF_PAY_USD (api/webhook.js). Separately, every poster gets
    a personal Stripe promotion code: their friend saves AFF_OFF_USD on
    an order with a scratcher in it, and the poster is paid AFF_PAY_USD.
 
@@ -363,6 +364,7 @@ function subPriceFor(product, qty) {
    pages follows; the Stripe coupon has to be changed to match.
    ================================================================ */
 const POSTS_NEEDED = 5;
+const INTROS_NEEDED = 5;
 const POST_REWARD_PADS = 3;
 const AFF_OFF_USD = 10;
 const AFF_PAY_USD = 10;
@@ -506,7 +508,7 @@ return {
   VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
   SIZE_BUNDLES, FREE_SHIP_AT, FREE_KEYS_AT, scratcherCount, freeShipping, freeKeychains,
   SUB_OFF, SUB_EVERY_MONTHS, subPriceFor, GIFTS, giftsFor, nextGift,
-  POSTS_NEEDED, POST_REWARD_PADS, AFF_OFF_USD, AFF_PAY_USD,
+  POSTS_NEEDED, INTROS_NEEDED, POST_REWARD_PADS, AFF_OFF_USD, AFF_PAY_USD,
   priceFor, unitPriceAt, savingAt, betterDeal, packsFor, imgSrc,
   SECOND_OFF_USD, secondUnitDiscount, orderProblem, needsPhoto, colorImg,
   BUILD_ID, ALL_PHOTOS_REAL

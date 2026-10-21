@@ -2,7 +2,7 @@
    Cat Scratchers — shared browser JS
 
    Used by index.html, basking-paws.html, homestead-buddies.html,
-   cc-custom.html, cc-refills.html, cc-partner.html.
+   cc-custom.html, refills.html, cc-partner.html.
 
      CAT            assets/catalog.js — the only place prices live
      CC.meadowScene() parametric SVG stand-in for product photography —
@@ -1185,8 +1185,151 @@ CC.initCarousel = function () {
   });
 };
 
+/* ================================================================
+   PROGRAM FORMS — reviews.html + postinginfo.html
+
+   <form data-program="review|join|posts|intro"> posts structured JSON to
+   /api/program instead of the contact form's flat message, because the
+   friends people introduce have to be stored one by one: api/webhook.js
+   matches every later order against them to pay the $10 referral.
+
+   Repeatable friend rows:
+     <div data-refs data-start="3">
+       <div data-ref-list></div>
+       <template data-ref-tpl> … inputs with data-ref="name|contact|note" … </template>
+       <button type="button" data-ref-add>Add another friend</button>
+     </div>
+   Row inputs have no name="", so they never leak into the flat fields.
+
+   Messages: data-ok (any success), data-ok-code (join, when the server
+   hands back a code). {email} and {code} are filled in.
+   ================================================================ */
+CC.initProgramForms = function () {
+  var MAX_REFS = 25;
+
+  function addRow(box) {
+    var list = box.querySelector('[data-ref-list]');
+    var tpl = box.querySelector('[data-ref-tpl]');
+    if (!list || !tpl || list.children.length >= MAX_REFS) return null;
+    var row = tpl.content.firstElementChild.cloneNode(true);
+    list.appendChild(row);
+    number(box);
+    return row;
+  }
+  function number(box) {
+    var rows = box.querySelectorAll('[data-ref-row]');
+    Array.prototype.forEach.call(rows, function (r, i) {
+      var n = r.querySelector('[data-ref-n]');
+      if (n) n.textContent = 'Friend ' + (i + 1);
+    });
+    var add = box.querySelector('[data-ref-add]');
+    if (add) add.hidden = rows.length >= MAX_REFS;
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-refs]'), function (box) {
+    var start = +box.getAttribute('data-start') || 1;
+    for (var i = 0; i < start; i++) addRow(box);
+    var add = box.querySelector('[data-ref-add]');
+    if (add) add.addEventListener('click', function () {
+      var row = addRow(box);
+      var first = row && row.querySelector('input');
+      if (first) first.focus();
+    });
+  });
+
+  var looksLikeContact = function (v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || v.replace(/\D/g, '').length >= 7;
+  };
+
+  Array.prototype.forEach.call(document.querySelectorAll('form[data-program]'), function (f) {
+    var btn = f.querySelector('button[type="submit"]');
+    var ok = f.querySelector('.okmsg');
+    var busy = false;
+
+    function say(msg, good) {
+      if (!ok) return;
+      ok.innerHTML = msg;
+      ok.classList.add('on');
+      ok.setAttribute('data-tone', good ? 'ok' : 'bad');
+      if (!good) ok.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    function collect() {
+      var fields = [];
+      Array.prototype.forEach.call(f.querySelectorAll('[name]'), function (el) {
+        var key = el.getAttribute('name');
+        if (key === 'yourname' || key === 'email' || key === 'company') return;
+        if ((el.type === 'radio' || el.type === 'checkbox') && !el.checked) return;
+        var v = (el.value || '').trim();
+        if (v) fields.push({ key: key, label: el.getAttribute('data-label') || key, value: v });
+      });
+      var refs = [], bad = 0;
+      Array.prototype.forEach.call(f.querySelectorAll('[data-ref-row]'), function (r) {
+        var get = function (k) { var el = r.querySelector('[data-ref="' + k + '"]'); return el ? el.value.trim() : ''; };
+        var row = { name: get('name'), contact: get('contact'), note: get('note') };
+        if (!row.name && !row.contact && !row.note) return;
+        if (!row.name || !row.contact || !looksLikeContact(row.contact)) { bad++; r.setAttribute('data-bad', '1'); return; }
+        r.removeAttribute('data-bad');
+        refs.push(row);
+      });
+      return { fields: fields, refs: refs, bad: bad };
+    }
+
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (busy) return;
+      var nameEl = f.querySelector('[name="yourname"]');
+      var emailEl = f.querySelector('[name="email"]');
+      var hp = f.querySelector('[name="company"]');
+      var got = collect();
+      var payload = {
+        kind: f.getAttribute('data-program'),
+        name: nameEl ? nameEl.value.trim() : '',
+        email: emailEl ? emailEl.value.trim() : '',
+        company: hp ? hp.value : '',
+        fields: got.fields,
+        referrals: got.refs
+      };
+
+      if (!payload.name || !payload.email) return say('Please fill in your name and email.', false);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return say('That email address doesn’t look right.', false);
+      if (got.bad) return say('Each friend needs a name and an email or phone number. Check the highlighted rows.', false);
+      var min = +f.getAttribute('data-min-refs') || 0;
+      if (got.refs.length < min) return say('Please add at least ' + min + ' friend' + (min > 1 ? 's' : '') + '.', false);
+
+      busy = true;
+      var label = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      say('Sending…', true);
+
+      fetch('/api/program', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (d) {
+          if (!res.ok) { console.warn('program form: send failed —', d.reason || res.status); throw new Error(d.error || 'send failed'); }
+          return d;
+        });
+      }).then(function (d) {
+        var tplMsg = (d.code && f.getAttribute('data-ok-code')) || f.getAttribute('data-ok') ||
+          '<b>Thanks — that’s with us.</b> We’ll reply to {email} within 1–2 business days.';
+        f.reset();
+        Array.prototype.forEach.call(f.querySelectorAll('[data-ref-row]'), function (r) { r.removeAttribute('data-bad'); });
+        say(tplMsg.replace(/\{email\}/g, '<strong>' + esc(payload.email) + '</strong>')
+                  .replace(/\{code\}/g, '<strong class="code-out">' + esc(d.code || '') + '</strong>'), true);
+      }).catch(function (err) {
+        say('<b>That didn’t send.</b> ' + esc(err && err.message && err.message !== 'send failed' ? err.message : 'Please try again, or email us at realizedprints@gmail.com.'), false);
+      }).then(function () {
+        busy = false;
+        if (btn) { btn.disabled = false; btn.textContent = label; }
+      });
+    });
+  });
+};
+
 function boot() {
-  CC.fillPrices(document); CC.mountChrome(); CC.mount(); CC.initCarousel(); CC.initRefills(); CC.initPDP(); CC.initPartner(); CC.initForms();
+  CC.fillPrices(document); CC.mountChrome(); CC.mount(); CC.initCarousel(); CC.initRefills(); CC.initPDP(); CC.initPartner(); CC.initForms(); CC.initProgramForms();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();

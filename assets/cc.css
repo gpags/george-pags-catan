@@ -924,3 +924,22 @@ ul.tight li b{color:var(--ink)}
 .pdp-buy .tile .was{display:block;margin:4px 0 0}
 .pdp-buy .tile .flag{font-size:10px;padding:3px 9px}
 @media(max-width:420px){.pdp-buy .tile .n{font-size:22px}.pdp-buy .tile .l{font-size:10.5px}}
+
+/* Oct 2026 — answer boxes sit fully inside their card (an inline label with a
+   left margin let a 100%-wide textarea poke out of the right edge). */
+.qcard{padding:24px 26px}
+.qcard>label{display:block;width:auto}
+.form .qcard textarea{min-height:130px}
+@media(max-width:560px){.qcard{padding:20px 18px}}
+
+/* repeatable "friend" rows (reviews + postinginfo intro form) */
+.refs{display:grid;gap:12px}
+.refrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#fff;border:2.5px solid var(--line);
+  border-radius:var(--r);padding:14px}
+.refrow .refn{grid-column:1/-1;font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--mint-800)}
+.refrow input[data-ref="note"]{grid-column:1/-1}
+.refrow[data-bad="1"]{border-color:var(--pink);background:var(--pink-50)}
+@media(max-width:620px){.refrow{grid-template-columns:1fr}}
+.ref-add{justify-self:start}
+.code-out{font-family:'Fredoka',sans-serif;font-size:22px;letter-spacing:.06em;background:#fff;border:2px dashed var(--mint);
+  border-radius:10px;padding:2px 10px;display:inline-block;margin:4px 0}
