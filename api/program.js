@@ -7,6 +7,8 @@
 //                  spot, shows it on the page and emails it to them
 //   kind 'posts'   their 5 post links + where to ship the free pads
 //   kind 'intro'   friends introduced instead of posting
+//   kind 'reward'  postinginfo.html's two quests (feedback + one post link)
+//                  plus where to ship the free pads
 //
 // Every submission is emailed to the shop (same Resend setup as the contact
 // form) and, when SUPABASE_* env vars are set, stored — see lib/db.js and
@@ -33,6 +35,7 @@ const KINDS = {
     join: 'Referral code sign-up',
     posts: 'Posts submitted',
     intro: 'Friend intros',
+    reward: 'Reward claim',
 };
 
 /* The code only works on an order that has a scratcher in it: Stripe checks
@@ -120,6 +123,8 @@ function shopEmail(kind, b, extra) {
       ${extra || ''}
       ${kind === 'posts' ? `<p style="background:#fff6d6;padding:10px 12px;border-radius:8px">Check the ${POSTS_NEEDED} posts, then ship a free
         ${POST_REWARD_PADS}-pad pack to the address below.</p>` : ''}
+      ${kind === 'reward' ? `<p style="background:#fff6d6;padding:10px 12px;border-radius:8px">Both quests done. Check the post link
+        (or look for their emailed photo), then ship a free ${POST_REWARD_PADS}-pad pack to the address below.</p>` : ''}
       ${pads ? `<p style="background:#e5f4e3;padding:10px 12px;border-radius:8px"><strong>${refs.length} friends introduced — that earns
         the free ${POST_REWARD_PADS}-pad pack.</strong> Reply to ask for a shipping address if it isn't below.</p>` : ''}
       ${b.fields.length ? `<table style="border-collapse:collapse;font-size:14px;width:100%">${fieldRows(b.fields)}</table>` : ''}
@@ -146,10 +151,10 @@ function codeEmail(name, code) {
           <ul style="line-height:1.7;padding-left:18px">
             <li>Friends get <strong>$${AFF_OFF_USD} off</strong> a scratcher when they type it at checkout.</li>
             <li>You get <strong>$${AFF_PAY_USD}</strong> for every order that uses it. No limit.</li>
-            <li>Post your cat ${POSTS_NEEDED} times with the code (and #ad or #partner) and we send you
+            <li>Finish the 2 quick quests (your feedback + one post) and we send you
                 ${POST_REWARD_PADS} free refill pads.</li>
           </ul>
-          <p>Post ideas, captions to copy, and the form to send us your links:
+          <p>The quests, post ideas and captions to copy:
              <a href="${SITE}/postinginfo">${SITE.replace(/^https?:\/\//, '')}/postinginfo</a></p>
           <p style="color:#6b7f97;font-size:13px">Private account or a Story? Reply to this email with the photo, video or
              screenshot and we'll take it from there.</p>
