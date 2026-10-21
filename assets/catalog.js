@@ -369,6 +369,16 @@ const POST_REWARD_PADS = 3;
 const AFF_OFF_USD = 10;
 const AFF_PAY_USD = 10;
 
+/* Unlock Rewards, Quest 2: friends someone introduces. Counted by friends who
+   actually order (api/webhook.js matches the buyer's email or phone), and a
+   reward unlocks at each of these totals. Intros earn these, not AFF_PAY_USD;
+   AFF_PAY_USD is now only for people who still have a referral code. */
+const FRIEND_REWARDS = [
+  { sales: 1, reward: 'a cat keychain' },
+  { sales: 3, reward: '1 cardboard refill' },
+  { sales: 5, reward: 'another cat scratcher' }
+];
+
 /* What a single unit works out at, for the "$X each" line. */
 function unitPriceAt(product, qty) {
   const n = Math.max(1, Math.floor(qty) || 1);
@@ -508,7 +518,7 @@ return {
   VIBES, COLORS, COLOR_KEYS, COLOR_LABEL, ADDONS, PRODUCTS, BY_HANDLE,
   SIZE_BUNDLES, FREE_SHIP_AT, FREE_KEYS_AT, scratcherCount, freeShipping, freeKeychains,
   SUB_OFF, SUB_EVERY_MONTHS, subPriceFor, GIFTS, giftsFor, nextGift,
-  POSTS_NEEDED, INTROS_NEEDED, POST_REWARD_PADS, AFF_OFF_USD, AFF_PAY_USD,
+  POSTS_NEEDED, INTROS_NEEDED, POST_REWARD_PADS, AFF_OFF_USD, AFF_PAY_USD, FRIEND_REWARDS,
   priceFor, unitPriceAt, savingAt, betterDeal, packsFor, imgSrc,
   SECOND_OFF_USD, secondUnitDiscount, orderProblem, needsPhoto, colorImg,
   BUILD_ID, ALL_PHOTOS_REAL
