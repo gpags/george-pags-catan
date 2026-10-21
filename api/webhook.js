@@ -239,7 +239,8 @@ async function renewalEmail(invoice) {
             'referral' and the owner's email.
      intro  the buyer's email or phone matches a friend someone introduced
             (needs Supabase — lib/db.js). The earliest introducer wins, and
-            only when no referral code was used — one payout per order.
+            only when no referral code was used — one credit per order.
+            Intros earn FRIEND_REWARDS items, not cash: see friendReward().
 
    Each one emails the shop ("$10 owed to …"), stores a referral_payouts row
    (unique per order + person + reason, so a Stripe retry never doubles it),
@@ -289,10 +290,14 @@ async function referralCredits(session) {
     for (const c of credits) {
         const ins = await db.insert('referral_payouts', [{
             referrer_email: normEmail(c.email), referrer_name: c.name, reason: c.reason, code: c.code || null,
-            session_id: session.id, buyer_email: buyerEmail, amount_usd: CATALOG.AFF_PAY_USD, self_use: c.selfUse,
+            session_id: session.id, buyer_email: buyerEmail, self_use: c.selfUse,
+            /* intros earn FRIEND_REWARDS (items), not cash */
+            amount_usd: c.reason === 'intro' ? 0 : CATALOG.AFF_PAY_USD,
         }]);
         /* 409 = this order already credited this person (Stripe retried the event). */
         if (ins.status === 409) continue;
+
+        if (c.reason === 'intro') { await friendReward(c, buyerEmail, buyer, session); continue; }
 
         const how = c.reason === 'code' ? `used their code <strong>${esc(c.code)}</strong>`
             : `was introduced by them${c.friend ? ` (as “${esc(c.friend)}”)` : ''}`;
@@ -320,6 +325,52 @@ async function referralCredits(session) {
             });
         }
     }
+}
+
+/* ================================================================
+   FRIEND REWARDS — postinginfo.html Quest 2. A friend someone listed just
+   ordered. Count that person's friend orders so far (referral_payouts rows,
+   reason 'intro', not self-use) and tell the shop and them which reward
+   that reaches: CATALOG.FRIEND_REWARDS, e.g. 1 → keychain, 3 → refill,
+   5 → another scratcher. Rewards are sent by hand.
+   ================================================================ */
+async function friendReward(c, buyerEmail, buyer, session) {
+    const rewards = CATALOG.FRIEND_REWARDS || [];
+    const counted = await db.select('referral_payouts',
+        `referrer_email=eq.${db.q(normEmail(c.email))}&reason=eq.intro&self_use=is.false&select=id`);
+    const n = counted.ok && Array.isArray(counted.data) ? counted.data.length : 0;
+    const hit = rewards.find(t => t.sales === n);
+    const next = rewards.find(t => t.sales > n);
+    const who = c.name || c.email;
+    const buyerLabel = esc(buyerEmail || buyer.phone || 'unknown');
+
+    await sendEmail({
+        to: SHOP_EMAIL,
+        replyTo: c.email,
+        subject: (c.selfUse ? `Friend intro SELF-ORDER — doesn't count — ${who}`
+            : hit ? `Friend reward unlocked: ${hit.reward} for ${who}`
+            : `Friend order #${n || '?'} for ${who}`).slice(0, 120),
+        html: `<div style="font-family:system-ui,sans-serif;max-width:600px">
+          <h2 style="margin:0 0 6px">${c.selfUse ? 'They ordered for themselves — not counted'
+            : hit ? `Send ${esc(who)} ${esc(hit.reward)}` : `Friend order #${n || '?'} for ${esc(who)}`}</h2>
+          <p>The buyer (${buyerLabel}) was introduced by ${esc(who)} &lt;${esc(c.email)}&gt;${c.friend ? ` as “${esc(c.friend)}”` : ''}.</p>
+          ${c.selfUse ? '' : `<p><strong>Friend orders so far:</strong> ${n || 'unknown (database not connected)'}.
+            ${hit ? `That unlocks <strong>${esc(hit.reward)}</strong>. Ship it with a note.` : ''}
+            ${next ? `Next reward: ${esc(next.reward)} at ${next.sales}.` : ''}</p>`}
+          <p style="color:#888;font-size:12px">Stripe session ${esc(session.id)}. Logged in referral_payouts (reason intro, $0).
+          Refunded orders shouldn't count; hold the reward until the return window closes if you like.</p></div>`,
+    });
+    if (c.selfUse || !n) return;
+    await sendEmail({
+        to: c.email, replyTo: SHOP_EMAIL,
+        subject: hit ? `You unlocked ${hit.reward}! 🐾` : `A friend you sent our way just ordered 🐾`,
+        html: `<div style="font-family:system-ui,sans-serif;max-width:600px;color:#1f3a5c">
+          <h2 style="margin:0 0 8px">Thank you${c.name ? ', ' + esc(c.name.split(' ')[0]) : ''}!</h2>
+          <p>A friend you told us about just ordered a scratcher. That's <strong>${n} friend${n > 1 ? 's' : ''}</strong> so far.</p>
+          ${hit ? `<p>You've unlocked <strong>${esc(hit.reward)}</strong>. We'll email you when it ships.</p>` : ''}
+          ${next ? `<p>Next up: <strong>${esc(next.reward)}</strong> when ${next.sales} friends have ordered.</p>` : ''}
+          <p style="color:#6b7f97;font-size:13px">Know more cat parents? Add them anytime: ${SITE.replace(/^https?:\/\//, '')}/postinginfo#quest2</p></div>`,
+    });
 }
 
 module.exports = async (req, res) => {

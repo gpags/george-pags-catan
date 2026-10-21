@@ -6,8 +6,9 @@
 //   kind 'join'    "Get my code" — creates a real Stripe promotion code on the
 //                  spot, shows it on the page and emails it to them
 //   kind 'posts'   their 5 post links + where to ship the free pads
-//   kind 'intro'   friends introduced instead of posting
-//   kind 'reward'  postinginfo.html's two quests (feedback + one post link)
+//   kind 'intro'   friends introduced (postinginfo.html Quest 2); each friend
+//                  who orders counts toward FRIEND_REWARDS (api/webhook.js)
+//   kind 'reward'  postinginfo.html's claim once both quests are done,
 //                  plus where to ship the free pads
 //
 // Every submission is emailed to the shop (same Resend setup as the contact
@@ -28,7 +29,7 @@ const { normContact, normEmail } = require('../lib/referrals.js');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
 const SITE = process.env.SITE_URL || 'https://www.mycatscratcher.com';
 
-const { AFF_OFF_USD, AFF_PAY_USD, POSTS_NEEDED, INTROS_NEEDED, POST_REWARD_PADS } = CATALOG;
+const { AFF_OFF_USD, AFF_PAY_USD, POSTS_NEEDED, INTROS_NEEDED, POST_REWARD_PADS, FRIEND_REWARDS } = CATALOG;
 
 const KINDS = {
     review: 'Customer review',
@@ -113,9 +114,13 @@ function refRows(refs) {
         <td style="padding:6px 10px;color:#444">${esc(r.note)}</td></tr>`).join('');
 }
 
+const ladder = () => FRIEND_REWARDS.map(t => `${t.sales} → ${t.reward}`).join(', ');
+
 function shopEmail(kind, b, extra) {
     const refs = b.referrals;
-    const pads = (kind === 'intro' || kind === 'review') && refs.length >= INTROS_NEEDED;
+    /* reviews.html's old deal: 5 friends introduced earns the pads. The rewards
+       page's Quest 2 (kind 'intro') earns FRIEND_REWARDS per friend who orders instead. */
+    const pads = kind === 'review' && refs.length >= INTROS_NEEDED;
     const html = `
     <div style="font-family:system-ui,sans-serif;max-width:680px">
       <h2 style="margin:0 0 4px">${esc(KINDS[kind])}</h2>
@@ -123,14 +128,17 @@ function shopEmail(kind, b, extra) {
       ${extra || ''}
       ${kind === 'posts' ? `<p style="background:#fff6d6;padding:10px 12px;border-radius:8px">Check the ${POSTS_NEEDED} posts, then ship a free
         ${POST_REWARD_PADS}-pad pack to the address below.</p>` : ''}
-      ${kind === 'reward' ? `<p style="background:#fff6d6;padding:10px 12px;border-radius:8px">Both quests done. Check the post link
-        (or look for their emailed photo), then ship a free ${POST_REWARD_PADS}-pad pack to the address below.</p>` : ''}
+      ${kind === 'reward' ? `<p style="background:#fff6d6;padding:10px 12px;border-radius:8px">Both quests done: their review and
+        their friends arrived in separate emails. Ship a free ${POST_REWARD_PADS}-pad pack to the address below.</p>` : ''}
       ${pads ? `<p style="background:#e5f4e3;padding:10px 12px;border-radius:8px"><strong>${refs.length} friends introduced — that earns
         the free ${POST_REWARD_PADS}-pad pack.</strong> Reply to ask for a shipping address if it isn't below.</p>` : ''}
       ${b.fields.length ? `<table style="border-collapse:collapse;font-size:14px;width:100%">${fieldRows(b.fields)}</table>` : ''}
+      ${kind === 'intro' ? `<p style="background:#e5f4e3;padding:10px 12px;border-radius:8px">Text each friend once, mentioning
+        ${esc(b.name)}. When a friend orders, the order email says which reward ${esc(b.name)} has reached
+        (friends who order: ${esc(ladder())}).</p>` : ''}
       ${refs.length ? `<h3 style="margin:18px 0 6px">Friends introduced (${refs.length})</h3>
         <p style="margin:0 0 8px;color:#666;font-size:13px">Reach out once, mentioning ${esc(b.name)}. If one orders with this
-        email or phone, the order email will say "$${AFF_PAY_USD} referral owed".</p>
+        email or phone, the order email will say so${kind === 'intro' ? ' and which reward they unlocked' : ` ("$${AFF_PAY_USD} referral owed")`}.</p>
         <table style="border-collapse:collapse;font-size:14px;width:100%">${refRows(refs)}</table>` : ''}
       <p style="margin:18px 0 0;color:#888;font-size:12px">Reply to this email to answer ${esc(b.email)} directly.${db.enabled() ? '' :
         ' (Database not connected — this email is the only copy.)'}</p>
