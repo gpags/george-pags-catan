@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Unlock Rewards &mdash; MyCatScratcher</title>
-<meta name="description" content="Two quick quests: tell us what your cat thinks, then share a photo or video. Finish both and we send you 3 free cardboard refills, shipped free.">
+<meta name="description" content="Two quick quests: give us your honest feedback and review, then tell us about cat parents you know. Finish both and we send you 3 cardboard pads, shipped free.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Jersey+15&family=Pixelify+Sans:wght@700&display=swap" rel="stylesheet">
@@ -24,7 +24,11 @@
 :root{--q-navy:#102c8c;--q-navy-d:#0a1d63;--q-navy-dd:#06103d;--q-green:#0d6e25;--q-green-d:#08501a;--q-green-50:#ecf8e6;
   --q-cream:#fffce8;--q-gold:#f7c51e;--q-gold-d:#c48c00;--q-gold-l:#fff1a8;--q-ink:#14245e;--q-muted:#4b5a85;
   --q-line:#c9d2ee;--q-red:#b3261e;--q-px:4px}
-.qp{background:#fff;color:var(--q-ink);overflow:hidden}
+/* the whole page is the card's sky: light blue all the way down to the meadow */
+.qp{position:relative;color:var(--q-ink);overflow:hidden;
+  background:linear-gradient(180deg,#d3ebff 0%,#dff0ff 30%,#e6f4ff 70%,#d9eeff 100%)}
+.qp-sky{position:absolute;inset:0;z-index:0;pointer-events:none}
+.qp>.qp-col,.qp>.qp-hero,.qp>.qp-meadow{position:relative;z-index:1}
 
 /* ---------- header, 8-bit. Only this page for now: the markup is the same as
    every other page (cc.js still runs the marquee, burger menu and cart), so
@@ -86,8 +90,7 @@
     calc(var(--q-px)*2) var(--q-px) 0 0 var(--sc),var(--q-px) calc(var(--q-px)*2) 0 0 var(--sc)}
 
 /* ---------- hero ---------- */
-.qp-hero{position:relative;text-align:center;padding:34px 0 42px;
-  background:linear-gradient(180deg,#dff0ff 0%,#f2f8ff 58%,#fff 100%)}
+.qp-hero{position:relative;text-align:center;padding:34px 0 42px}
 .qp-title{font-family:'Pixelify Sans','Jersey 15',monospace;font-size:clamp(2.75rem,11.5vw,5.2rem);font-weight:700;line-height:1;color:var(--q-navy);letter-spacing:.01em;
   text-shadow:.05em 0 #fff,-.05em 0 #fff,0 .05em #fff,0 -.05em #fff,.05em .05em #fff,-.05em -.05em #fff,.05em -.05em #fff,-.05em .05em #fff,
     .1em 0 var(--q-navy-dd),-.1em 0 var(--q-navy-dd),0 .1em var(--q-navy-dd),0 -.1em var(--q-navy-dd),
@@ -164,7 +167,7 @@
 .qp fieldset{border:0;padding:0;margin:0;min-width:0}
 .qp-lb{display:block;font-family:'Jersey 15','Nunito',monospace;font-weight:400;font-size:22px;line-height:1.1;letter-spacing:.02em;color:var(--q-navy);margin-bottom:9px}
 .qp-opt{font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--q-muted);margin-left:6px}
-.qp input[type=text],.qp input[type=email],.qp input[type=url],.qp textarea,.qp select{
+.qp input[type=text],.qp input[type=email],.qp input[type=url],.qp input[type=tel],.qp textarea,.qp select{
   display:block;width:100%;font:inherit;font-size:16px;color:var(--q-ink);background:#fff;border:3px solid var(--q-navy);border-radius:0;
   padding:12px 14px;box-shadow:inset 3px 3px 0 rgba(16,44,140,.1);-webkit-appearance:none;appearance:none}
 .qp select{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6' shape-rendering='crispEdges'%3E%3Cpath fill='%23102c8c' d='M0 0h10v2H8v2H6v2H4V4H2V2H0z'/%3E%3C/svg%3E") right 14px center/14px no-repeat;padding-right:40px}
@@ -206,20 +209,30 @@
   display:grid;place-items:center;background:var(--q-navy);color:#fff}
 .qp-steps b{font-weight:800}
 
-/* ideas + captions */
-.qp-more{background:#fff;border:3px dashed var(--q-line)}
-.qp-more summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;
-  font-family:'Jersey 15',monospace;font-weight:400;font-size:21px;color:var(--q-navy)}
-.qp-more summary::-webkit-details-marker{display:none}
-.qp-more summary::after{content:'+';margin-left:auto;font-size:22px;line-height:1}
-.qp-more[open] summary::after{content:'\2212'}
-.qp-more summary .spr{width:20px}
-.qp-more-b{padding:0 14px 16px;display:grid;gap:14px}
-.qp-ideas{list-style:none;display:grid;gap:8px;padding:0;margin:0}
-.qp-ideas li{display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;font-size:15px;line-height:1.45}
-.qp-ideas li::before{content:'';width:10px;height:10px;margin-top:6px;background:var(--q-gold);box-shadow:0 0 0 2px var(--q-gold-d)}
-.qp-cap{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--q-cream);padding:10px 10px 10px 14px}
-.qp-cap p{font-size:14.5px;line-height:1.45;white-space:pre-line}
+/* Quest 2: friend rows */
+.qp-friends{display:grid;gap:16px}
+.qp-friend{position:relative;display:grid;gap:14px;padding:14px 14px 16px!important;background:#fff;border:3px dashed var(--q-line)!important}
+.qp-friend-h{display:flex;align-items:center;gap:8px;padding:0 6px;font-size:21px;color:var(--q-navy)}
+.qp-friend-h .spr{width:22px}
+.qp-friend-x{position:absolute;top:-14px;right:10px;width:30px;height:30px;display:grid;place-items:center;font:900 20px/1 'Nunito',sans-serif;
+  color:var(--q-navy);background:#fff;border:3px solid var(--q-navy);border-radius:0;cursor:pointer}
+.qp-friend-x:hover{background:var(--q-gold-l)}
+.qp-add{justify-self:start}
+.qp-sent{font-weight:800;color:var(--q-green-d)}
+
+/* Quest 2: the friend rewards ladder */
+.qp-ladder{display:grid;gap:12px}
+.qp-ladder-k{font-size:22px;line-height:1.1;color:var(--q-green)}
+.qp-ladder-list{list-style:none;display:grid;gap:14px;padding:0;margin:0}
+.qp-ladder-list li{--bc:var(--q-green);position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;
+  align-items:center;padding:10px 12px 10px 56px;background:#fff}
+.qp-ladder-n{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:34px;height:34px;display:grid;place-items:center;
+  font:900 18px/1 'Nunito',sans-serif;color:#fff;background:var(--q-green)}
+.qp-ladder-ico{grid-row:1 / 3;width:34px}
+.qp-ladder-list b{font-weight:400;font-size:22px;line-height:1.05;color:var(--q-navy)}
+.qp-ladder-list small{font-size:13.5px;font-weight:800;color:var(--q-muted)}
+.qp-ladder-top{background:var(--q-gold-l)!important;--bc:var(--q-gold-d)}
+.qp-ladder-top .qp-ladder-n{background:var(--q-gold-d)}
 
 /* buttons */
 .qp-btn{--bg:var(--q-gold);--bs:var(--q-gold-d);--fg:var(--q-navy-dd);--edge:var(--q-navy-dd);
@@ -264,19 +277,7 @@
 .qp-win p{font-size:17px;line-height:1.5;max-width:36ch}
 .qp-win .spr{width:40px}
 
-/* bonus + faq */
-.qp-bonus{padding:30px 0 0}
-.qp-bonus details{background:#fff}
-.qp-bonus summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--q-navy-d);color:#fff}
-.qp-bonus summary::-webkit-details-marker{display:none}
-.qp-bonus summary .spr{width:30px}
-.qp-bonus summary b{font-family:'Jersey 15',monospace;font-weight:400;font-size:clamp(1.45rem,5.4vw,1.75rem);line-height:1.05;letter-spacing:.02em;display:block}
-.qp-bonus summary small{display:block;font-size:14px;font-weight:700;color:var(--q-gold-l);margin-top:3px}
-.qp-bonus summary::after{content:'+';margin-left:auto;font-family:'Jersey 15',monospace;font-size:32px;line-height:1;color:var(--q-gold-l)}
-.qp-bonus details[open] summary::after{content:'\2212'}
-.qp-bonus .qp-pb{background:#fff}
-.qp-code{display:grid;gap:10px;justify-items:start}
-.qp-code-v{font-size:42px;line-height:1;letter-spacing:.08em;color:var(--q-navy);background:var(--q-cream);padding:6px 16px;border:3px dashed var(--q-green)}
+/* faq */
 .qp-faq{padding:34px 0 0}
 .qp-faq h2{font-family:'Jersey 15',monospace;font-weight:400;font-size:clamp(2rem,6.6vw,2.6rem);color:var(--q-navy);margin-bottom:12px}
 .qp-faq details{background:#fff;margin:4px 4px 14px}
@@ -381,6 +382,8 @@
 </nav>
 
 <main class="qp" id="main">
+  <!-- sky decorations for the whole page; the script scatters clouds, stars and sparkles in here -->
+  <div class="qp-sky" aria-hidden="true" data-sky></div>
 
   <section class="qp-hero" aria-labelledby="qp-title">
     <span class="qp-deco qp-cloud c1 spr" data-sprite="cloud"></span>
@@ -400,7 +403,7 @@
         <span class="spr qp-gold" data-sprite="star"></span>
       </div>
       <p class="qp-tag px"><span class="spr" data-sprite="cat"></span>Help Us Help More Cats<span class="spr" data-sprite="cat"></span></p>
-      <p class="qp-lede">Finish 2 quick quests. Get <mark><span data-cat-num="POST_REWARD_PADS">3</span> free cardboard refills</mark>, shipped free.</p>
+      <p class="qp-lede">Finish 2 quick quests. Get <mark><span data-cat-num="POST_REWARD_PADS">3</span> cardboard pads</mark>, shipped free.</p>
 
       <ol class="qp-hud" aria-label="Your quest log">
         <li><a class="qp-slot qp-frame" href="#quest1" data-slot="q1">
@@ -410,7 +413,7 @@
           <span class="sr" data-slot-sr>not done yet</span>
         </a></li>
         <li><a class="qp-slot qp-frame" href="#quest2" data-slot="q2">
-          <span class="ico"><span class="spr" data-sprite="picture"></span></span>
+          <span class="ico"><span class="spr" data-sprite="heart"></span></span>
           <span class="qp-slot-t">Quest 2</span><span class="qp-slot-s">Share</span>
           <span class="qp-slot-chk" aria-hidden="true"><span class="spr" data-sprite="check"></span></span>
           <span class="sr" data-slot-sr>not done yet</span>
@@ -439,12 +442,16 @@
         </header>
         <div class="qp-pb">
           <div class="qp-lead-row">
-            <p class="qp-lead">Tell us what your cat thinks.<span>About 1 minute</span></p>
+            <p class="qp-lead">Tell us what you and your cat think.<span>About 1 minute</span></p>
             <span class="spr" data-sprite="bubble"></span>
           </div>
 
+          <label><span class="qp-lb">Please give us your honest feedback on what sucked so we can improve it!</span>
+            <textarea name="feedback" data-label="What sucked (private feedback)" placeholder="The box arrived a little dented, and the cardboard sheds more than I expected&hellip;"></textarea>
+            <span class="qp-hint">Just for us. We read every one.</span></label>
+
           <fieldset>
-            <legend class="qp-lb">How many stars?</legend>
+            <legend class="qp-lb">On a scale of 1&ndash;5, what would you rate the scratcher?</legend>
             <div class="qp-stars" data-stars>
               <input type="radio" id="qr1" name="rating" value="1 / 5" data-label="Rating"><label for="qr1"><span class="spr" data-sprite="star"></span><span class="sr">1 star</span></label>
               <input type="radio" id="qr2" name="rating" value="2 / 5" data-label="Rating"><label for="qr2"><span class="spr" data-sprite="star"></span><span class="sr">2 stars</span></label>
@@ -455,28 +462,18 @@
             <p class="qp-star-say" data-star-say aria-live="polite"></p>
           </fieldset>
 
-          <label><span class="qp-lb">What does your cat think? Anything we could do better?</span>
-            <textarea name="feedback" data-label="What their cat thinks" placeholder="Luna naps on it every afternoon. The box arrived a little dented&hellip;"></textarea></label>
-
-          <fieldset>
-            <legend class="qp-lb">Can we show your words on our website? <span class="qp-opt">Optional</span></legend>
-            <div class="qp-chips">
-              <label><input type="radio" name="canquote" value="Yes, show my words" data-label="OK to show on website"><span>Yes, show them</span></label>
-              <label><input type="radio" name="canquote" value="No, keep it private" data-label="OK to show on website"><span>No, keep it private</span></label>
-            </div>
-            <label data-showas hidden style="display:block;margin-top:14px"><span class="qp-lb">Show it as</span>
-              <input name="showas" data-label="Show as" type="text" placeholder="Sarah K. &amp; Luna"></label>
-          </fieldset>
+          <label><span class="qp-lb">Leave us a review that we can share</span>
+            <textarea name="review" data-label="Review we can share" placeholder="Luna naps on it every afternoon and finally leaves the couch alone&hellip;"></textarea></label>
 
           <div class="qp-two">
-            <label><span class="qp-lb">Your name</span><input name="q1name" type="text" autocomplete="name" placeholder="Alex Rivera"></label>
+            <label><span class="qp-lb">Your name to show</span><input name="q1name" type="text" autocomplete="name" placeholder="Sarah K. &amp; Luna"></label>
             <label><span class="qp-lb">Your email</span><input name="q1email" type="email" autocomplete="email" placeholder="you@example.com"></label>
           </div>
           <button class="qp-btn qp-btn-block" type="button" data-review-btn>Submit review <span aria-hidden="true">&#9654;</span></button>
           <div class="qp-msg" data-review-msg role="alert" hidden></div>
 
           <p class="qp-fine">Love it or not, every honest answer counts the same. This is our own form, not an Etsy or Google review.
-            If we show your words, we&rsquo;ll mention you got free refills.</p>
+            If we share your review, we&rsquo;ll mention you got free pads.</p>
         </div>
       </section>
 
@@ -484,48 +481,59 @@
       <section class="qp-panel qp-frame" id="quest2" data-quest="q2" aria-labelledby="q2-h">
         <header class="qp-ph">
           <span class="qp-num" aria-hidden="true">2</span>
-          <h2 id="q2-h"><span class="qp-ph-k">Quest 2</span>Share or Post</h2>
+          <h2 id="q2-h"><span class="qp-ph-k">Quest 2</span>Share with Other Cat Parents</h2>
           <span class="qp-badge px" data-badge>To do</span>
         </header>
         <div class="qp-pb">
           <div class="qp-lead-row">
-            <p class="qp-lead">Share a photo or video of your cat with the scratcher.<span>Phone pics are perfect</span></p>
-            <span class="spr" data-sprite="picture"></span>
+            <p class="qp-lead">Know other cat parents? Tell us who&rsquo;d love one.<span>Add as many friends as you like</span></p>
+            <span class="spr" data-sprite="heart"></span>
+          </div>
+
+          <div class="qp-ladder">
+            <p class="qp-ladder-k px">Earn more for every friend who orders</p>
+            <ol class="qp-ladder-list">
+              <li class="qp-frame"><span class="qp-ladder-n">1</span><span class="qp-ladder-ico spr" data-sprite="cat"></span>
+                <b class="px">Cat keychain</b><small>when 1 friend orders</small></li>
+              <li class="qp-frame"><span class="qp-ladder-n">3</span><span class="qp-ladder-ico spr" data-sprite="box"></span>
+                <b class="px">1 cardboard refill</b><small>when 3 friends order</small></li>
+              <li class="qp-frame qp-ladder-top"><span class="qp-ladder-n">5</span><span class="qp-ladder-ico spr qp-gold" data-sprite="star"></span>
+                <b class="px">Another cat scratcher!</b><small>when 5 friends order</small></li>
+            </ol>
           </div>
 
           <ol class="qp-steps">
-            <li><span><b>Post it anywhere public:</b> Instagram, TikTok, Facebook, YouTube, Reddit or a cat group.</span></li>
-            <li><span><b>Add mycatscratcher.com and #ad</b> to the caption. (#ad because you&rsquo;re getting free refills. It&rsquo;s an FTC rule.)</span></li>
-            <li><span><b>Paste the link here.</b></span></li>
+            <li><span><b>Add a friend or two:</b> their name, their phone number, and why you thought of them.</span></li>
+            <li><span><b>We send each one friendly text</b> that says you sent us. No spam, and we never share their number.</span></li>
+            <li><span><b>When they order,</b> it counts toward your rewards. We match it to the phone number and email you as you unlock each one.</span></li>
           </ol>
 
-          <label><span class="qp-lb">Link to your post</span>
-            <input name="postlink" data-label="Post link" type="url" inputmode="url" autocomplete="off" placeholder="https://www.instagram.com/p/&hellip;"></label>
+          <div class="qp-friends" data-friends></div>
+          <button class="qp-btn qp-btn-sm qp-btn-ghost qp-add" type="button" data-add-friend>+ Add another friend</button>
 
-          <label class="qp-check"><input type="checkbox" name="emailinstead" value="Yes, check realizedprints@gmail.com" data-label="Sending the photo by email">
-            <span>No public account? I&rsquo;ll email a photo or screenshot to <a class="qp-link" href="mailto:realizedprints@gmail.com?subject=My%20Quest%202%20photo">realizedprints@gmail.com</a> instead.</span></label>
+          <div class="qp-two">
+            <label><span class="qp-lb">Your name</span><input name="q2name" type="text" autocomplete="name" placeholder="Sarah K."></label>
+            <label><span class="qp-lb">Your email</span><input name="q2email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+          </div>
+          <button class="qp-btn qp-btn-block" type="button" data-friends-btn>Send my friends <span aria-hidden="true">&#9654;</span></button>
+          <div class="qp-msg" data-friends-msg role="alert" hidden></div>
+          <p class="qp-sent" data-friends-sent hidden></p>
 
-          <details class="qp-more">
-            <summary><span class="spr" data-sprite="sparkle"></span>Need an idea or a caption?</summary>
-            <div class="qp-more-b">
-              <ul class="qp-ideas">
-                <li><span><b>Unboxing:</b> your cat meeting their scratcher.</span></li>
-                <li><span><b>Spot the difference:</b> your cat next to the painted cat.</span></li>
-                <li><span><b>First scratch:</b> the very first go at it.</span></li>
-                <li><span><b>Nap check:</b> cats asleep on it always win.</span></li>
-              </ul>
-              <div class="qp-cap"><p data-cap>They painted my actual cat on her scratcher and she hasn&rsquo;t left it alone 😹
-mycatscratcher.com #ad</p>
-                <button class="qp-btn qp-btn-sm qp-btn-ghost" type="button" data-copy>Copy</button></div>
-              <div class="qp-cap"><p data-cap>One of these is my cat. One is a cat scratcher. 👀
-mycatscratcher.com #ad</p>
-                <button class="qp-btn qp-btn-sm qp-btn-ghost" type="button" data-copy>Copy</button></div>
-            </div>
-          </details>
-
-          <p class="qp-fine">Your answers stay saved on this device while you go post.</p>
+          <p class="qp-fine">Only add people who&rsquo;d be happy to hear about it. Your answers stay saved on this device.</p>
         </div>
       </section>
+
+      <template id="friendRow">
+        <fieldset class="qp-friend">
+          <legend class="qp-friend-h px"><span class="spr" data-sprite="cat"></span>Friend <span data-n>1</span></legend>
+          <button class="qp-friend-x" type="button" data-remove aria-label="Remove this friend">&times;</button>
+          <div class="qp-two">
+            <label><span class="qp-lb">Their name</span><input data-f="name" type="text" autocomplete="off" placeholder="Mia Chen"></label>
+            <label><span class="qp-lb">Their phone (for a text)</span><input data-f="phone" type="tel" inputmode="tel" autocomplete="off" placeholder="(555) 123-4567"></label>
+          </div>
+          <label><span class="qp-lb">Why you recommended them</span><input data-f="note" type="text" autocomplete="off" placeholder="Her 2 cats shred her couch"></label>
+        </fieldset>
+      </template>
 
       <!-- REWARD -->
       <section class="qp-panel qp-frame qp-reward" id="reward" aria-labelledby="rw-h">
@@ -555,81 +563,39 @@ mycatscratcher.com #ad</p>
                 <textarea name="address" data-label="Ship refills to" style="min-height:88px" autocomplete="street-address" placeholder="Street, city, state, ZIP"></textarea></label>
               <button class="qp-btn qp-btn-block" type="submit" data-claim-btn>Claim my free refills <span aria-hidden="true">&#9654;</span></button>
               <div class="qp-msg" data-msg role="alert" hidden></div>
-              <p class="qp-fine">One reward per person. Please keep your post up for at least 30 days.</p>
+              <p class="qp-fine">One reward per person.</p>
             </div>
           </div>
 
           <div class="qp-win" data-win tabindex="-1" hidden>
             <span class="spr qp-gold" data-sprite="star"></span>
             <p class="qp-win-t px">Quest complete!</p>
-            <p>Thank you<span data-win-name></span>! We&rsquo;ll check your post and email <b data-win-email></b> when your
-              refills ship, usually within a week.</p>
-            <a class="qp-link" href="#bonus" data-open-bonus>Try the bonus quest</a>
+            <p>Thank you<span data-win-name></span>! We&rsquo;ll email <b data-win-email></b> when your refills ship,
+              usually within a week, and again each time a friend&rsquo;s order unlocks a reward.</p>
           </div>
         </div>
       </section>
     </form>
 
-    <!-- BONUS -->
-    <section class="qp-bonus" id="bonus" aria-label="Bonus quest">
-      <details class="qp-frame" data-bonus>
-        <summary><span class="spr qp-gold" data-sprite="star"></span>
-          <span><b>Bonus quest: earn <span data-cat-money="AFF_PAY_USD">$10</span> a friend</b>
-          <small>Optional. Your own code for friends who want a scratcher.</small></span></summary>
-        <div class="qp-pb">
-          <p style="font-size:16px;line-height:1.5">Get your own code, like <b>LUNA10</b>. Friends get <b><span data-cat-money="AFF_OFF_USD">$10</span> off</b>
-            a scratcher with it, and you get <b><span data-cat-money="AFF_PAY_USD">$10</span></b> for every order. No limit. Paid on the 1st of each month.</p>
-          <form class="qp-quests" style="padding:0;gap:18px" data-join novalidate>
-            <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
-            <div data-join-fields style="display:grid;gap:18px">
-            <div class="qp-two">
-              <label><span class="qp-lb">Your name</span><input name="yourname" type="text" autocomplete="name"></label>
-              <label><span class="qp-lb">Your email</span><input name="email" type="email" autocomplete="email"></label>
-            </div>
-            <div class="qp-two">
-              <label><span class="qp-lb">Your cat&rsquo;s name</span><input name="catname" data-label="Cat's name" type="text" placeholder="Luna"></label>
-              <label><span class="qp-lb">Where will you share it?</span><input name="handles" data-label="Social handles" type="text" placeholder="@lunathecat, or &ldquo;friends&rdquo;"></label>
-            </div>
-            <div class="qp-two">
-              <label><span class="qp-lb">How should we pay you?</span>
-                <select name="payout" data-label="Payout method"><option>PayPal</option><option>Venmo</option><option>Store credit</option></select></label>
-              <label><span class="qp-lb">PayPal / Venmo handle <span class="qp-opt">Optional</span></span>
-                <input name="payto" data-label="Pay to" type="text" placeholder="@alex-rivera"></label>
-            </div>
-            <label class="qp-check"><input type="checkbox" name="agree" value="Yes" data-label="Agreed to add #ad">
-              <span>I&rsquo;ll add #ad when I post my code. No paid ads or coupon sites.</span></label>
-            <button class="qp-btn qp-btn-block" type="submit">Get my code <span aria-hidden="true">&#9654;</span></button>
-            </div>
-            <div class="qp-msg" data-msg role="alert" hidden></div>
-            <div class="qp-code" data-code-box hidden>
-              <p class="qp-lb" style="margin:0">Your code</p>
-              <p class="qp-code-v px" data-code-val></p>
-              <button class="qp-btn qp-btn-sm qp-btn-ghost" type="button" data-copy-code>Copy code</button>
-              <p class="qp-fine">We also emailed it to <b data-code-email></b>. Friends type it at checkout.</p>
-            </div>
-          </form>
-        </div>
-      </details>
-    </section>
-
     <!-- FAQ -->
     <section class="qp-faq" aria-labelledby="faq-h">
       <h2 id="faq-h">Quick answers</h2>
-      <details class="qp-frame"><summary>Do I need lots of followers?</summary>
-        <p>No. Any public account counts, big or small.</p></details>
       <details class="qp-frame"><summary>Does my feedback have to be positive?</summary>
         <p>No. Honest is the whole point. Love it or not, the reward is the same.</p></details>
-      <details class="qp-frame"><summary>My account is private.</summary>
-        <p>No problem. Tick &ldquo;I&rsquo;ll email a photo&rdquo; in Quest 2 and send it to
-          <a class="qp-link" href="mailto:realizedprints@gmail.com">realizedprints@gmail.com</a>.</p></details>
+      <details class="qp-frame"><summary>Do my friends have to buy anything?</summary>
+        <p>No. Your free pads only need the two quests. The keychain, refill and extra scratcher count friends who place an order.</p></details>
+      <details class="qp-frame"><summary>How will you contact my friends?</summary>
+        <p>One friendly text that says you sent us. No spam, and we never share their number.</p></details>
+      <details class="qp-frame"><summary>How do you know a friend ordered?</summary>
+        <p>We match their order to the phone number you gave us, then email you when you unlock a reward.</p></details>
       <details class="qp-frame"><summary>When do my refills ship?</summary>
-        <p>We check your post, then ship them free, usually within a week. We&rsquo;ll email you when they&rsquo;re on the way.</p></details>
+        <p>Usually within a week of your claim. We&rsquo;ll email you when they&rsquo;re on the way.</p></details>
       <details class="qp-frame"><summary>Are you a vet, shelter, pet store or cat sitter?</summary>
         <p>We have a partner program for you. See <a class="qp-link" href="cc-partner.html">Affiliates &amp; partners</a>.</p></details>
     </section>
   </div>
 
-  <div class="qp-meadow" aria-hidden="true"><img src="images/rewards-meadow.webp" alt="" width="1294" height="430" loading="lazy"></div>
+  <div class="qp-meadow" aria-hidden="true"><img src="images/rewards-meadow-sky.webp" alt="" width="1294" height="430" loading="lazy"></div>
 </main>
 
 <footer>
@@ -672,25 +638,29 @@ mycatscratcher.com #ad</p>
 
 <script>
 /* ================================================================
-   Unlock Rewards page. Self-contained on purpose: the quest form and
-   the bonus code form post to /api/program from here, so the page
-   works even if an older assets/cc.js is what's deployed. The forms
-   are NOT form[data-program], so cc.js's program-form handler (when
-   it is deployed) never double-submits them.
+   Unlock Rewards page. Self-contained on purpose: the quests post to
+   /api/program from here, so the page works even if an older
+   assets/cc.js is what's deployed. The form is NOT form[data-program],
+   so cc.js's program-form handler (when it is deployed) never
+   double-submits it.
 
-     Quest 1 done = a star rating + a few words of feedback, sent on its
-                    own with "Submit review" as kind 'review', so the
-                    feedback reaches the shop even if they never post
-     Quest 2 done = a post link, or "I'll email it" ticked
+     Quest 1 done = the review was sent with "Submit review" (kind
+                    'review'): what sucked, a 1-5 rating, a review we
+                    can share, the name to show and their email
+     Quest 2 done = at least one friend sent with "Send my friends"
+                    (kind 'intro'). Friends are stored one row each, so
+                    api/webhook.js can match a later order to them and
+                    count toward the keychain / refill / scratcher
+                    rewards (FRIEND_REWARDS in assets/catalog.js)
      Reward       = name + email + address, sent as kind 'reward'
-                    (repeats the Quest 1 answers, so the claim email
-                    has everything in one place)
+                    (repeats the Quest 1 answers and says how many
+                    friends were sent, so the claim email has everything)
    ================================================================ */
 (function () {
   'use strict';
 
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var DRAFT_KEY = 'mcs-rewards-draft-v1';
+  var DRAFT_KEY = 'mcs-rewards-draft-v2';
   var STILL = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var esc = function (s) {
     return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
@@ -710,9 +680,12 @@ mycatscratcher.com #ad</p>
     bubble: { p: { k: '#102c8c', w: '#fff', h: '#143c9e', r: '#3f86f0' }, r: [
       '.kkkkkkkkkkkk.', 'kwwwwwwwwwwwwk', 'kwwwhhwwhhwwwk', 'kwwhrrhhrrhwwk', 'kwwhrrrrrrhwwk', 'kwwwhrrrrhwwwk',
       'kwwwwhrrhwwwwk', 'kwwwwwhhwwwwwk', 'kwwwwwwwwwwwwk', '.kwwkkkkkkkkk.', '..kwk.........', '..kk..........'] },
-    picture: { p: { k: '#3a2a10', f: '#e9c27a', b: '#8fd0f5', y: '#ffd23f', g: '#3c9a3f', d: '#2b7a2e' }, r: [
-      'kkkkkkkkkkkkkk', 'kffffffffffffk', 'kfbbbbbbbbbbfk', 'kfbyybbbbbbbfk', 'kfbyybbbbgbbfk', 'kfbbbbbbgggbfk',
-      'kfbbgbbgggggfk', 'kfbgggggggggfk', 'kfddddddddddfk', 'kffffffffffffk', 'kkkkkkkkkkkkkk'] },
+    heart: { p: { k: '#8a1538', r: '#ef4f7a', h: '#ffc2d3' }, r: [
+      '.kkk...kkk.', 'krrrk.krrrk', 'krhrrkrrrrk', 'krrrrrrrrrk', '.krrrrrrrk.', '..krrrrrk..', '...krrrk...', '....krk....',
+      '.....k.....'] },
+    box: { p: { k: '#5b3a12', c: '#d9a35a', d: '#b98238', t: '#f2d39a' }, r: [
+      '..kkkkkkkkkk..', '.kttttttttttk.', 'kttttttttttttk', 'kkkkkkkkkkkkkk', 'kccccckkccccck', 'kccccckkccccck',
+      'kddddddddddddk', 'kcccccccccccck', 'kcccccccccccck', 'kkkkkkkkkkkkkk'] },
     cat: { p: { k: '#6b3a00', o: '#f4a322', w: '#ffe1a6', p: '#ef7fa4' }, r: [
       'kk........kk', 'kok......kok', 'kookkkkkkook', 'kooooooooook', 'kookooookook', 'kowooppoowok',
       'koookookoook', '.kooooooook.', '..kkkkkkkk..'] },
@@ -752,6 +725,37 @@ mycatscratcher.com #ad</p>
   }
   paintSprites(document);
 
+  /* ---------- the sky: clouds, stars and sparkles all the way down ----------
+     Placed from a fixed pattern (no randomness), so they never jump about.
+     They sit in the side margins on wide screens and peek out between the
+     panels on phones. Re-laid out when the page height changes. */
+  var sky = document.querySelector('[data-sky]');
+  var SKY_ITEMS = [
+    { s: 'cloud', w: 104, side: 'l', x: 2 }, { s: 'sparkle', w: 24, side: 'r', x: 6 }, { s: 'star', w: 26, side: 'l', x: 9, gold: 1 },
+    { s: 'cloud', w: 86, side: 'r', x: 1 }, { s: 'dots', w: 40, side: 'l', x: 5 }, { s: 'sparkle', w: 16, side: 'r', x: 10 },
+    { s: 'star', w: 20, side: 'r', x: 4, gold: 1 }, { s: 'cloud', w: 120, side: 'l', x: 0 }, { s: 'sparkle', w: 20, side: 'l', x: 11 },
+    { s: 'dots', w: 36, side: 'r', x: 7 }
+  ];
+  var skyH = 0;
+  function layoutSky() {
+    if (!sky) return;
+    var main = sky.parentNode, h = main.offsetHeight;
+    if (Math.abs(h - skyH) < 40) return;
+    skyH = h;
+    var start = 520, step = 190, out = '', i = 0;
+    for (var top = start; top < h - 260; top += step, i++) {
+      var it = SKY_ITEMS[i % SKY_ITEMS.length];
+      var pos = it.side === 'l' ? 'left:' + it.x + '%' : 'right:' + it.x + '%';
+      var cls = it.s === 'cloud' ? 'qp-cloud' : it.s === 'dots' ? 'qp-dots' : 'qp-twinkle';
+      out += '<span class="qp-deco ' + cls + (it.gold ? ' qp-gold' : '') + ' spr" style="top:' + (top + (i % 3) * 37) + 'px;' + pos +
+        ';width:' + it.w + 'px;animation-delay:-' + (i * 1.7).toFixed(1) + 's">' + sprite(it.s) + '</span>';
+    }
+    sky.innerHTML = out;
+  }
+  layoutSky();
+  if (window.ResizeObserver && sky) new ResizeObserver(layoutSky).observe(sky.parentNode);
+  else window.addEventListener('resize', layoutSky);
+
   /* ---------- little pixel burst, for a finished quest ---------- */
   var BURST = ['#f7c51e', '#2fae4a', '#3f86f0', '#ffffff', '#f4a322'];
   function burst(el) {
@@ -773,18 +777,6 @@ mycatscratcher.com #ad</p>
   }
 
   /* ---------- sending ---------- */
-  function fieldsOf(form) {
-    var out = [];
-    Array.prototype.forEach.call(form.querySelectorAll('[name]'), function (el) {
-      var key = el.getAttribute('name');
-      if (key === 'yourname' || key === 'email' || key === 'company' || key === 'q1name' || key === 'q1email') return;
-      if ((el.type === 'radio' || el.type === 'checkbox') && !el.checked) return;
-      if (el.closest('[hidden]')) return;   /* e.g. "Show it as" after picking "keep it private" */
-      var v = (el.value || '').trim();
-      if (v) out.push({ key: key, label: el.getAttribute('data-label') || key, value: v });
-    });
-    return out;
-  }
   function post(body) {
     return fetch('/api/program', {
       method: 'POST',
@@ -794,26 +786,6 @@ mycatscratcher.com #ad</p>
       return res.json().catch(function () { return {}; }).then(function (d) {
         return { ok: res.ok, status: res.status, data: d };
       });
-    });
-  }
-  function send(kind, form, extraFields) {
-    var body = {
-      kind: kind,
-      name: form.elements.yourname.value.trim(),
-      email: form.elements.email.value.trim(),
-      company: form.elements.company.value,
-      fields: (extraFields || []).concat(fieldsOf(form)),
-      referrals: []
-    };
-    return post(body).then(function (r) {
-      /* An api/program.js from before 'reward' existed answers "Unknown form."
-         Resend it as a review so the claim still reaches the shop; the first
-         field says it is a reward claim. */
-      if (!r.ok && kind === 'reward' && r.data && r.data.error === 'Unknown form.') {
-        body.kind = 'review';
-        return post(body);
-      }
-      return r;
     }).then(function (r) {
       if (!r.ok) {
         if (window.console) console.warn('rewards: send failed —', (r.data && r.data.reason) || r.status);
@@ -834,31 +806,16 @@ mycatscratcher.com #ad</p>
   function flag(el, bad) {
     if (bad) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
   }
-
-  /* ---------- copy buttons ---------- */
-  function copyText(text, btn) {
-    var done = function () {
-      var t = btn.textContent;
-      btn.textContent = 'Copied!';
-      setTimeout(function () { btn.textContent = t; }, 1600);
-    };
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text) && done(); });
-    } else if (fallbackCopy(text)) done();
+  function shout(box, text, el) {
+    if (el.tagName !== 'BUTTON' && el.type !== 'radio') flag(el, true);
+    say(box, text, false);
+    el.focus({ preventScroll: true });
+    box.scrollIntoView({ block: 'center', behavior: STILL ? 'auto' : 'smooth' });
   }
-  function fallbackCopy(text) {
-    var ta = document.createElement('textarea');
-    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta); ta.select();
-    var ok = false;
-    try { ok = document.execCommand('copy'); } catch (e) {}
-    ta.remove();
-    return ok;
+  function busyBtn(btn, on, label) {
+    btn.disabled = on;
+    btn.innerHTML = on ? 'Sending…' : label;
   }
-  document.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-copy]');
-    if (b) copyText(b.parentNode.querySelector('[data-cap]').textContent.trim(), b);
-  });
 
   /* ================= the quests ================= */
   var form = document.getElementById('questForm');
@@ -874,19 +831,61 @@ mycatscratcher.com #ad</p>
   var btn = reward.querySelector('[data-claim-btn]');
   var starsBox = form.querySelector('[data-stars]');
   var starSay = form.querySelector('[data-star-say]');
-  var showAs = form.querySelector('[data-showas]');
   var reviewBtn = form.querySelector('[data-review-btn]');
   var reviewMsg = form.querySelector('[data-review-msg]');
+  var friendsBox = form.querySelector('[data-friends]');
+  var friendsBtn = form.querySelector('[data-friends-btn]');
+  var friendsMsg = form.querySelector('[data-friends-msg]');
+  var friendsSent = form.querySelector('[data-friends-sent]');
+  var rowTpl = document.getElementById('friendRow');
   var STAR_WORDS = { 1: 'Very bad', 2: 'Bad', 3: 'OK', 4: 'Good', 5: 'Love it' };
   var was = { q1: false, q2: false };
   var q1sent = false;   /* Quest 1's review reached the shop */
+  var sentFriends = 0;  /* friends that reached the shop */
+  var busy = { review: false, friends: false, claim: false };
 
   var rating = function () { var r = form.querySelector('[name="rating"]:checked'); return r ? parseInt(r.value, 10) : 0; };
-  /* Anything with a dot and no spaces is a link; "instagram.com/p/x" gets https:// added on send. */
-  var linkOk = function (v) { v = v.trim(); return /^\S+\.\S+$/.test(v) && v.length >= 6; };
-  var q1Ready = function () { return rating() > 0 && F.feedback.value.trim().length >= 2; };
+  var words = function (el) { return el.value.trim().length >= 2; };
+  var q1Ready = function () { return rating() > 0 && (words(F.feedback) || words(F.review)); };
   var q1Done = function () { return q1sent; };
-  var q2Done = function () { return linkOk(F.postlink.value) || F.emailinstead.checked; };
+  var q2Done = function () { return sentFriends > 0; };
+  var digits = function (v) { var d = String(v || '').replace(/\D/g, ''); return d.length === 11 && d[0] === '1' ? d.slice(1) : d; };
+
+  /* ---------- friend rows ---------- */
+  function rows() { return Array.prototype.slice.call(friendsBox.querySelectorAll('.qp-friend')); }
+  function renumber() {
+    rows().forEach(function (r, i) {
+      r.querySelector('[data-n]').textContent = i + 1;
+      r.querySelector('[data-remove]').hidden = rows().length < 2;
+    });
+  }
+  function addRow(v, focus) {
+    var r = rowTpl.content.firstElementChild.cloneNode(true);
+    paintSprites(r);
+    if (v) ['name', 'phone', 'note'].forEach(function (k) { r.querySelector('[data-f="' + k + '"]').value = v[k] || ''; });
+    friendsBox.appendChild(r);
+    renumber();
+    if (focus) r.querySelector('[data-f="name"]').focus();
+    return r;
+  }
+  function rowVal(r) {
+    var g = function (k) { return r.querySelector('[data-f="' + k + '"]').value.trim(); };
+    return { name: g('name'), phone: g('phone'), note: g('note') };
+  }
+  function filledRows() { return rows().filter(function (r) { var v = rowVal(r); return v.name || v.phone || v.note; }); }
+  friendsBox.addEventListener('click', function (e) {
+    var x = e.target.closest('[data-remove]');
+    if (!x) return;
+    x.closest('.qp-friend').remove();
+    if (!rows().length) addRow();
+    renumber();
+    onChange();
+  });
+  form.querySelector('[data-add-friend]').addEventListener('click', function () {
+    if (rows().length >= 25) return;
+    addRow(null, true);
+    saveDraftSoon();
+  });
 
   function lightStars(n) {
     Array.prototype.forEach.call(starsBox.querySelectorAll('label'), function (l, i) { l.classList.toggle('on', i < n); });
@@ -913,7 +912,6 @@ mycatscratcher.com #ad</p>
     var n = rating();
     lightStars(n);
     starSay.textContent = n ? n + ' of 5: ' + STAR_WORDS[n] : '';
-    showAs.hidden = !(F.canquote.value === 'Yes, show my words');
 
     var a = q1Done(), b = q2Done(), both = a && b;
     setPanel(q1, a); setPanel(q2, b);
@@ -931,9 +929,13 @@ mycatscratcher.com #ad</p>
       : q1Ready() ? 'Press “Submit review” to finish Quest 1.'
       : b ? 'One to go: finish Quest 1 to unlock.'
       : 'Finish Quest 1 and Quest 2 to unlock.';
-    if (!reviewBusy) reviewBtn.innerHTML = q1sent ? 'Send an update <span aria-hidden="true">&#9654;</span>' : 'Submit review <span aria-hidden="true">&#9654;</span>';
     gateIco.setAttribute('data-sprite', both ? 'sparkle' : 'lock');
     gateIco.innerHTML = sprite(both ? 'sparkle' : 'lock');
+    if (!busy.review) reviewBtn.innerHTML = (q1sent ? 'Send an update' : 'Submit review') + ' <span aria-hidden="true">&#9654;</span>';
+    if (!busy.friends) friendsBtn.innerHTML = (sentFriends ? 'Send more friends' : 'Send my friends') + ' <span aria-hidden="true">&#9654;</span>';
+    friendsSent.hidden = !sentFriends;
+    friendsSent.textContent = sentFriends ? '✓ ' + sentFriends + ' friend' + (sentFriends > 1 ? 's' : '') +
+      ' sent. Know more cat parents? Add them anytime.' : '';
 
     if (!quiet) {
       if (a && !was.q1) burst(q1.querySelector('[data-badge]'));
@@ -943,103 +945,119 @@ mycatscratcher.com #ad</p>
     was.q1 = a; was.q2 = b;
   }
 
-  /* ---------- draft: kept on this device while they go and post ---------- */
-  var DRAFT_FIELDS = ['rating', 'feedback', 'canquote', 'showas', 'q1name', 'q1email', 'postlink', 'emailinstead', 'yourname', 'email', 'address'];
+  /* ---------- draft: kept on this device while they work through it ---------- */
+  var DRAFT_FIELDS = ['rating', 'feedback', 'review', 'q1name', 'q1email', 'q2name', 'q2email', 'yourname', 'email', 'address'];
   var claimed = false;
   function saveDraft() {
     if (claimed) return;
-    var d = { q1sent: q1sent };
+    var d = { q1sent: q1sent, sentFriends: sentFriends, friends: rows().map(rowVal) };
     DRAFT_FIELDS.forEach(function (k) {
       var el = F[k];
-      if (!el) return;
-      d[k] = el.type === 'checkbox' ? el.checked : el.value;
+      if (el) d[k] = el.value;
     });
     try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch (e) {}
   }
+  var saveTimer;
+  function saveDraftSoon() { clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 300); }
   function loadDraft() {
     var d = null;
     try { d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch (e) {}
     if (!d) return;
     q1sent = !!d.q1sent;
+    sentFriends = +d.sentFriends || 0;
+    (d.friends || []).forEach(function (v) { addRow(v); });
     DRAFT_FIELDS.forEach(function (k) {
       var el = F[k];
       if (!el || d[k] == null) return;
-      if (el.type === 'checkbox') el.checked = !!d[k];
-      else if (el instanceof RadioNodeList) {
+      if (el instanceof RadioNodeList) {
         Array.prototype.forEach.call(el, function (r) { r.checked = r.value === d[k]; });
       } else el.value = d[k];
     });
   }
   function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
 
-  var saveTimer;
   function onChange(e) {
-    if (e && e.target && e.target.hasAttribute('aria-invalid')) flag(e.target, false);
-    if (!busy) msg.hidden = true;
-    if (!reviewBusy && reviewMsg.getAttribute('data-tone') !== 'ok') reviewMsg.hidden = true;
+    if (e && e.target && e.target.hasAttribute && e.target.hasAttribute('aria-invalid')) flag(e.target, false);
+    if (!busy.claim) msg.hidden = true;
+    [reviewMsg, friendsMsg].forEach(function (m) { if (m.getAttribute('data-tone') !== 'ok') m.hidden = true; });
+    /* whoever they said they were in one quest, fill it in for the next */
+    if (e && e.target === F.q1email && !F.q2email.dataset.typed) F.q2email.value = F.q1email.value;
+    if (e && e.target === F.q1name && !F.q2name.dataset.typed) F.q2name.value = F.q1name.value;
+    if (e && (e.target === F.q2name || e.target === F.q2email)) e.target.dataset.typed = '1';
     update();
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveDraft, 300);
+    saveDraftSoon();
   }
   form.addEventListener('input', onChange);
   form.addEventListener('change', onChange);
 
   loadDraft();
+  if (!rows().length) addRow();
   update(true);
 
   /* ---------- Quest 1: send the review on its own ---------- */
-  var reviewBusy = false;
-  function reviewStop(text, el) {
-    if (el !== reviewBtn) flag(el, true);
-    say(reviewMsg, text, false);
-    el.focus({ preventScroll: true });
-    reviewMsg.scrollIntoView({ block: 'center', behavior: STILL ? 'auto' : 'smooth' });
-  }
   reviewBtn.addEventListener('click', function () {
-    if (reviewBusy) return;
-    if (!rating()) return reviewStop('Pick how many stars first.', form.querySelector('#qr1'));
-    if (F.feedback.value.trim().length < 2) return reviewStop('Tell us what your cat thinks first.', F.feedback);
-    if (!F.q1name.value.trim()) return reviewStop('Please add your name.', F.q1name);
-    if (!EMAIL_RE.test(F.q1email.value.trim())) return reviewStop('That email address doesn&rsquo;t look right.', F.q1email);
+    if (busy.review) return;
+    if (!words(F.feedback) && !words(F.review)) return shout(reviewMsg, 'Tell us what sucked, or leave a review we can share. Either one is fine.', F.feedback);
+    if (!rating()) return shout(reviewMsg, 'Pick 1 to 5 stars for the scratcher.', form.querySelector('#qr1'));
+    if (!F.q1name.value.trim()) return shout(reviewMsg, 'Add the name you&rsquo;d like shown with your review.', F.q1name);
+    if (!EMAIL_RE.test(F.q1email.value.trim())) return shout(reviewMsg, 'That email address doesn&rsquo;t look right.', F.q1email);
 
     var fields = [{ key: 'source', label: 'From', value: 'Unlock Rewards page, Quest 1' }];
-    ['rating', 'feedback', 'canquote', 'showas'].forEach(function (k) {
-      var el = F[k];
-      var node = el instanceof RadioNodeList ? form.querySelector('[name="' + k + '"]:checked') : el;
-      if (!node || node.closest('[hidden]')) return;
-      var v = (node.value || '').trim();
+    ['feedback', 'rating', 'review'].forEach(function (k) {
+      var node = k === 'rating' ? form.querySelector('[name="rating"]:checked') : F[k];
+      var v = node ? (node.value || '').trim() : '';
       if (v) fields.push({ key: k, label: node.getAttribute('data-label') || k, value: v });
     });
+    fields.push({ key: 'showas', label: 'Name to show', value: F.q1name.value.trim() });
     if (q1sent) fields.push({ key: 'update', label: 'Note', value: 'Updated answers. They sent a review earlier.' });
 
-    reviewBusy = true;
-    reviewBtn.disabled = true;
-    reviewBtn.textContent = 'Sending…';
+    busy.review = true;
+    busyBtn(reviewBtn, true);
+    post({ kind: 'review', name: F.q1name.value.trim(), email: F.q1email.value.trim(), company: F.company.value, fields: fields, referrals: [] })
+      .then(function () {
+        q1sent = true;
+        if (!F.q2email.value.trim()) F.q2email.value = F.q1email.value.trim();
+        if (!F.email.value.trim()) F.email.value = F.q1email.value.trim();
+        say(reviewMsg, '<b>Review sent. Thank you!</b> Quest 1 is done. On to Quest 2.', true);
+      })
+      .catch(function (err) { say(reviewMsg, sendError(err), false); })
+      .then(function () { busy.review = false; reviewBtn.disabled = false; update(); saveDraft(); });
+  });
+
+  /* ---------- Quest 2: send the friends ---------- */
+  friendsBtn.addEventListener('click', function () {
+    if (busy.friends) return;
+    var list = filledRows();
+    if (!list.length) return shout(friendsMsg, 'Add at least one friend: their name and phone number.', rows()[0].querySelector('[data-f="name"]'));
+    for (var i = 0; i < list.length; i++) {
+      var v = rowVal(list[i]), n = i + 1;
+      if (!v.name) return shout(friendsMsg, 'Friend ' + n + ' needs a name.', list[i].querySelector('[data-f="name"]'));
+      if (digits(v.phone).length < 10) return shout(friendsMsg, 'Friend ' + n + '&rsquo;s phone number looks too short. Include the area code.', list[i].querySelector('[data-f="phone"]'));
+      if (v.note.length < 2) return shout(friendsMsg, 'Add a few words on why you recommended friend ' + n + '.', list[i].querySelector('[data-f="note"]'));
+    }
+    if (!F.q2name.value.trim()) return shout(friendsMsg, 'Add your name, so we can tell them who sent us.', F.q2name);
+    if (!EMAIL_RE.test(F.q2email.value.trim())) return shout(friendsMsg, 'That email address doesn&rsquo;t look right. We use it to tell you about your rewards.', F.q2email);
+
+    var friends = list.map(function (r) { var v = rowVal(r); return { name: v.name, contact: v.phone, note: v.note }; });
+    busy.friends = true;
+    busyBtn(friendsBtn, true);
     post({
-      kind: 'review',
-      name: F.q1name.value.trim(),
-      email: F.q1email.value.trim(),
-      company: F.company.value,
-      fields: fields,
-      referrals: []
-    }).then(function (r) {
-      if (!r.ok) {
-        if (window.console) console.warn('rewards: review send failed —', (r.data && r.data.reason) || r.status);
-        throw new Error((r.data && r.data.error) || 'send failed');
-      }
-      q1sent = true;
-      /* the claim form asks again; save them typing it twice */
-      if (!F.yourname.value.trim()) F.yourname.value = F.q1name.value.trim();
-      if (!F.email.value.trim()) F.email.value = F.q1email.value.trim();
-      say(reviewMsg, '<b>Review sent. Thank you!</b> Quest 1 is done. On to Quest 2.', true);
-      update();
-      saveDraft();
-    }).catch(function (err) { say(reviewMsg, sendError(err), false); })
-      .then(function () { reviewBusy = false; reviewBtn.disabled = false; update(true); });
+      kind: 'intro', name: F.q2name.value.trim(), email: F.q2email.value.trim(), company: F.company.value,
+      fields: [{ key: 'source', label: 'From', value: 'Unlock Rewards page, Quest 2' }],
+      referrals: friends
+    }).then(function () {
+      sentFriends += friends.length;
+      list.forEach(function (r) { r.remove(); });
+      if (!rows().length) addRow();
+      renumber();
+      if (!F.email.value.trim()) F.email.value = F.q2email.value.trim();
+      say(friendsMsg, '<b>Thank you!</b> We&rsquo;ll text ' + (friends.length > 1 ? 'them' : esc(friends[0].name.split(/\s+/)[0])) +
+        ' and email you each time a friend&rsquo;s order unlocks a reward.', true);
+    }).catch(function (err) { say(friendsMsg, sendError(err), false); })
+      .then(function () { busy.friends = false; friendsBtn.disabled = false; update(); saveDraft(); });
   });
 
   /* ---------- claim ---------- */
-  var busy = false;
   /* The message moves to sit right above whatever still needs doing, so it is on
      screen after the scroll; send errors put it back under the button. */
   function stop(text, el) {
@@ -1053,30 +1071,28 @@ mycatscratcher.com #ad</p>
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (busy) return;
+    if (busy.claim) return;
 
-    if (!rating()) { return stop('<b>Quest 1 isn&rsquo;t done yet.</b> Pick how many stars.', form.querySelector('#qr1')); }
-    if (F.feedback.value.trim().length < 2) { flag(F.feedback, true); return stop('<b>Quest 1 isn&rsquo;t done yet.</b> Tell us what your cat thinks.', F.feedback); }
-    if (!q1sent) { return stop('<b>Quest 1 isn&rsquo;t done yet.</b> Press &ldquo;Submit review&rdquo; to send it.', reviewBtn); }
-    if (!q2Done()) {
-      flag(F.postlink, true);
-      return stop(F.postlink.value.trim()
-        ? '<b>That link doesn&rsquo;t look right.</b> Copy it from the post&rsquo;s Share button, or tick &ldquo;I&rsquo;ll email a photo&rdquo;.'
-        : '<b>Quest 2 isn&rsquo;t done yet.</b> Paste your post link, or tick &ldquo;I&rsquo;ll email a photo&rdquo;.', F.postlink);
-    }
+    if (!q1sent) return stop('<b>Quest 1 isn&rsquo;t done yet.</b> Press &ldquo;Submit review&rdquo; to send it.', reviewBtn);
+    if (!sentFriends) return stop('<b>Quest 2 isn&rsquo;t done yet.</b> Add a friend and press &ldquo;Send my friends&rdquo;.', friendsBtn);
     if (!F.yourname.value.trim()) { flag(F.yourname, true); return stop('Please add your name.', F.yourname); }
     if (!EMAIL_RE.test(F.email.value.trim())) { flag(F.email, true); return stop('That email address doesn&rsquo;t look right.', F.email); }
     if (F.address.value.trim().length < 8) { flag(F.address, true); return stop('Please add the address for your refills.', F.address); }
 
-    var link = F.postlink.value.trim();
-    if (link && !/^https?:\/\//i.test(link)) F.postlink.value = 'https://' + link;
+    var fields = [{ key: 'claim', label: 'Reward claim', value: 'Both quests done. Ship a free 3-pad refill pack.' }];
+    ['feedback', 'rating', 'review'].forEach(function (k) {
+      var node = k === 'rating' ? form.querySelector('[name="rating"]:checked') : F[k];
+      var v = node ? (node.value || '').trim() : '';
+      if (v) fields.push({ key: k, label: node.getAttribute('data-label') || k, value: v });
+    });
+    fields.push({ key: 'friends', label: 'Friends sent (Quest 2)', value: String(sentFriends) });
+    fields.push({ key: 'address', label: 'Ship refills to', value: F.address.value.trim() });
 
-    busy = true;
-    btn.disabled = true;
+    busy.claim = true;
     var label = btn.innerHTML;
-    btn.textContent = 'Sending…';
-
-    send('reward', form, [{ key: 'claim', label: 'Reward claim', value: 'Both quests done. Ship a free 3-pad refill pack.' }])
+    busyBtn(btn, true);
+    msg.hidden = true;
+    post({ kind: 'reward', name: F.yourname.value.trim(), email: F.email.value.trim(), company: F.company.value, fields: fields, referrals: [] })
       .then(function () {
         var name = F.yourname.value.trim().split(/\s+/)[0];
         reward.querySelector('[data-win-name]').textContent = name ? ', ' + name : '';
@@ -1092,59 +1108,8 @@ mycatscratcher.com #ad</p>
         clearDraft();
       })
       .catch(function (err) { btn.insertAdjacentElement('afterend', msg); say(msg, sendError(err), false); })
-      .then(function () {
-        busy = false;
-        btn.disabled = false;
-        btn.innerHTML = label;
-      });
+      .then(function () { busy.claim = false; busyBtn(btn, false, label); });
   });
-
-  var openBonus = reward.querySelector('[data-open-bonus]');
-  if (openBonus) openBonus.addEventListener('click', function () { document.querySelector('[data-bonus]').open = true; });
-
-  /* ================= bonus: referral code ================= */
-  var join = document.querySelector('form[data-join]');
-  if (join) {
-    var J = join.elements;
-    var jmsg = join.querySelector('[data-msg]');
-    var jbtn = join.querySelector('button[type="submit"]');
-    var codeBox = join.querySelector('[data-code-box]');
-    var jbusy = false;
-    join.addEventListener('input', function (e) { if (e.target.hasAttribute('aria-invalid')) flag(e.target, false); });
-    join.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (jbusy) return;
-      jmsg.hidden = true;
-      var need = [[J.yourname, 'Please add your name.'], [J.email, 'That email address doesn&rsquo;t look right.'],
-        [J.catname, 'Please add your cat&rsquo;s name.'], [J.handles, 'Tell us where you&rsquo;ll share your code.']];
-      for (var i = 0; i < need.length; i++) {
-        var el = need[i][0], v = el.value.trim();
-        if (!v || (el === J.email && !EMAIL_RE.test(v))) { flag(el, true); el.focus(); return say(jmsg, need[i][1], false); }
-      }
-      if (!J.agree.checked) { J.agree.focus(); return say(jmsg, 'Please tick the box about adding #ad.', false); }
-
-      jbusy = true;
-      jbtn.disabled = true;
-      var label = jbtn.innerHTML;
-      jbtn.textContent = 'Sending…';
-      send('join', join).then(function (d) {
-        if (d.code) {
-          join.querySelector('[data-code-val]').textContent = d.code;
-          join.querySelector('[data-code-email]').textContent = J.email.value.trim();
-          codeBox.hidden = false;
-          join.querySelector('[data-join-fields]').hidden = true;
-          burst(codeBox);
-        } else {
-          say(jmsg, '<b>You&rsquo;re in!</b> We&rsquo;ll email your code to ' + esc(J.email.value.trim()) + ' within 1 business day.', true);
-          join.reset();
-        }
-      }).catch(function (err) { say(jmsg, sendError(err), false); })
-        .then(function () { jbusy = false; jbtn.disabled = false; jbtn.innerHTML = label; });
-    });
-    join.querySelector('[data-copy-code]').addEventListener('click', function () {
-      copyText(join.querySelector('[data-code-val]').textContent, this);
-    });
-  }
 })();
 </script>
 <script src="assets/catalog.js"></script>
