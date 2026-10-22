@@ -265,5 +265,11 @@ module.exports = async (req, res) => {
     }
     /* emailed / stored say where this submission can be found (the shop inbox,
        the Supabase submissions table), so a test post can be checked end to end. */
-    return res.status(200).json({ ok: true, emailed: !!sent.sent, stored: !!stored.ok, ...(code ? { code } : {}) });
+    return res.status(200).json({
+        ok: true, emailed: !!sent.sent, stored: !!stored.ok,
+        /* why the database copy failed, as a bare code: 404 = table missing (run
+           supabase/schema.sql), 401/403 = wrong key, 'off' = env vars not set */
+        ...(stored.ok ? {} : { db: stored.skipped ? 'off' : (stored.status || 'error') }),
+        ...(code ? { code } : {}),
+    });
 };
